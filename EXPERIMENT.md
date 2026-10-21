@@ -10,7 +10,9 @@ operators are evaluated under soft routing; routing is not compute skipping.
 
 Necessary integration changes: graph-specific COM corrections in disconnected
 batches; Vesin linked-cell periodic edges including multiple images and skew
-cells; source-indexed true intermediate targets; full segment and autonomous
+cells; smooth cutoff on complete messages and weighted-degree normalization
+(cutoff on RBF inputs alone leaves a message/degree discontinuity);
+source-indexed true intermediate targets; full segment and autonomous
 training; explicit failure handling and streamed trajectory output. No experts,
 physics modes, gate regularizers, forces or implicit solvers were introduced.
 
@@ -70,7 +72,12 @@ variation. Failed thermalization diagnostics are not production statistics.
 ## Commands
 
 Server checkout: `/data1/wyd/research/foundation_mlip_adaptation/smdp`.
-Current run: `/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022`.
+Current run: `/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r1`.
+The preceding `quartz16_20261022` run was stopped after 19 segment epochs when
+the cutoff discontinuity was found. It is preserved with `STOP_REASON.json`,
+is not a completed experiment, and supplied no test or autonomous results.
+The corrected run restarts model/optimizer from the same fixed seed and reuses
+only the exact reference-segment cache. It does not warm-start aborted weights.
 
 ```bash
 cd /data1/wyd/research/foundation_mlip_adaptation/smdp

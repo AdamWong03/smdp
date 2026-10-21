@@ -38,3 +38,17 @@ def test_disjoint_batch_and_all_module_gradients():
     for g in range(2):
         dv=out['velocities'][-1,g*len(q):(g+1)*len(q)]-vs[g]
         torch.testing.assert_close((dv*m[:,None]).sum(0),torch.zeros(3,dtype=q.dtype),atol=1e-10,rtol=0)
+
+
+def test_messages_continuous_when_edge_crosses_cutoff():
+    model,_,_,_,_,_=make_fixture()
+    cell=torch.eye(3,dtype=torch.float64)[None]*20
+    q=torch.tensor([[[2.,2.,2.],[6.5,2.,2.],[2.,3.5,2.]]],dtype=torch.float64)
+    v=torch.tensor([[[.002,0.,0.],[0.,.004,0.],[0.,0.,.003]]],dtype=torch.float64)
+    z=torch.tensor([[14,8,8]]);m=torch.tensor([[28.085,15.999,15.999]],dtype=torch.float64)
+    builder=PeriodicGraphBuilder(4.5)
+    a=q.clone();b=q.clone();a[0,1,0]-=1e-7;b[0,1,0]+=1e-7
+    pa=predict_batch(model,a,v,z,m,cell,[16.],builder)
+    pb=predict_batch(model,b,v,z,m,cell,[16.],builder)
+    torch.testing.assert_close(pa['positions']-a,pb['positions']-b,atol=1e-7,rtol=0)
+    torch.testing.assert_close(pa['velocities'],pb['velocities'],atol=1e-8,rtol=0)

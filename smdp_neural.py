@@ -104,16 +104,21 @@ class EquivariantMP(nn.Module):
         self.vector_gate = nn.Linear(ds, dv)
         self.vector_mix = nn.Linear(dv, dv, bias=False)
 
-    def forward(self, s, v, edge_index, edge_u, rbf, dv_parallel):
+    def forward(self, s, v, edge_index, edge_u, rbf, dv_parallel, edge_weight):
         src, dst = edge_index
         n = s.shape[0]
         feat = torch.cat([s[src], s[dst], rbf, dv_parallel[:, None]], dim=-1)
         msg = self.edge_mlp(feat)
         msg_s, gate = msg[:, :self.ds], msg[:, self.ds:].reshape(-1, 2, self.dv)
         msg_v = gate[:, 0, :, None] * edge_u[:, None, :] + gate[:, 1, :, None] * v[src]
+        # RBF cutoff alone does not suppress feature-dependent MLP messages.
+        # Both messages and their normalization must vanish continuously when
+        # a neighbor leaves the graph; a hard neighbor-count divisor would jump.
+        msg_s = msg_s * edge_weight[:, None]
+        msg_v = msg_v * edge_weight[:, None, None]
         agg_s = torch.zeros_like(s).index_add_(0, dst, msg_s)
         agg_v = torch.zeros_like(v).index_add_(0, dst, msg_v)
-        degree = torch.zeros((n, 1), device=s.device, dtype=s.dtype).index_add_(0, dst, torch.ones((dst.numel(), 1), device=s.device, dtype=s.dtype))
+        degree = torch.zeros((n, 1), device=s.device, dtype=s.dtype).index_add_(0, dst, edge_weight[:, None])
         inv_degree = degree.clamp_min(1.0).reciprocal()
         agg_s = agg_s * inv_degree
         agg_v = agg_v * inv_degree[:, :, None]
@@ -144,10 +149,13 @@ class MotionEncoder(nn.Module):
         vectors = self.velocity_embed(z)[:, :, None] * vel_scaled[:, None, :]
         dr, distance, unit = period_edge_displacements(q, edge_index, edge_shift)
         rbf = self.rbf(distance)
+        edge_weight = torch.where(distance < self.cfg.cutoff_angstrom,
+            .5 * (torch.cos(math.pi * distance / self.cfg.cutoff_angstrom) + 1),
+            torch.zeros_like(distance))
         src, dst = edge_index
         dv_parallel = ((vel_scaled[src] - vel_scaled[dst]) * unit).sum(-1)
         for layer in self.layers:
-            s, vectors = layer(s, vectors, edge_index, unit, rbf, dv_parallel)
+            s, vectors = layer(s, vectors, edge_index, unit, rbf, dv_parallel, edge_weight)
         return s, vectors
 
 
