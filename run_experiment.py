@@ -14,6 +14,7 @@ def main():
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--after-training',action='store_true')
     p.add_argument('--wait-training-pid',type=int)
+    p.add_argument('--publish-summary',action='store_true')
     args=p.parse_args();args.output.mkdir(parents=True,exist_ok=True)
     repo=Path(__file__).resolve().parent
     failures=[]
@@ -48,6 +49,8 @@ def main():
     if output.exists(): run('analyze_nvt','analyze_quartz.py','--candidate',output,'--reference',initial,'--output',args.output/'nvt_analysis')
     run('report','summarize_experiment.py','--output',args.output)
     (args.output/'pipeline_finished.json').write_text(json.dumps({'finished':True,'software_failures':failures},indent=2))
+    if args.publish_summary:
+        run('publish_summary','publish_summary.py','--output',args.output)
 
 
 if __name__=='__main__': main()

@@ -18,7 +18,7 @@ def main():
         ax.semilogy([i for i,r in rows],[r['train']['loss'] for i,r in rows],alpha=.5,label=phase+' train')
     ax.legend();ax.set(xlabel='epoch',ylabel='normalized supervised loss');fig.tight_layout();fig.savefig(out/'training.png',dpi=160);plt.close(fig)
     lines=['# Quartz 16 fs: observed first-run results','',f'Server artifacts: `{out}`','',
-           'Model: frozen motion tokens, mode-conditioned recurrent/temporal routing, mid-evolution cross-mode exchange, equivariant segment decoding.',
+           'Model: fixed architecture with learned motion tokens, mode-conditioned recurrent/temporal routing, mid-evolution cross-mode exchange, equivariant segment decoding.',
            'All comparisons below use BKS reference MD. No claim of named physical modes follows from routing weights.','',
            '## Training','',f'Completed epoch records: {len(history)}. Training wall time: {history[-1]["elapsed_s"]/3600:.3f} h.','',
            '## Independent endpoint test','']
@@ -35,6 +35,11 @@ def main():
     for name in ['nve_test_09','nve_test_10','nvt']:
         path=out/f'{name}_analysis/metrics.json'
         if path.exists():lines+=['',f'## {name}: quantitative physical comparison','','```json',json.dumps(json.loads(path.read_text()),indent=2),'```']
+    weights=history[-1]['mode_statistics']['fusion_weights']
+    lines+=['','## Observed mechanism and cost limitations','',f'Final validation mean fusion weights: {weights}.']
+    if max(weights)>.98:
+        lines.append('Fusion is dominated by one mode (>98%). This run does not establish useful heterogeneous modal specialization; no balancing regularizer was added to disguise it.')
+    lines.append('Soft routing evaluates both recurrent and temporal operators. Inference cost includes all 16 time queries; a learned route does not save expert computation. No matched-hardware BKS speedup is claimed without a measured baseline.')
     lines+=['','## Interpretation boundaries','','Only completed production frames are production evidence. Failed thermalization statistics are diagnostics, not 15 ns NVT results.',
             '16 fs spectra compare identically downsampled outputs. Queried 1 fs spectra compare dense velocities separately and include endpoint thermostat kicks; output cadence alone does not establish high-frequency fidelity.',
             'This experiment stops after these evaluations; there is no automatic architecture change or second training run.']

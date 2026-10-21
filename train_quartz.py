@@ -64,6 +64,8 @@ def main():
     p.add_argument('--resume', type=Path)
     args = p.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
+    if (args.output/'history.jsonl').exists() and args.resume is None:
+        raise FileExistsError('Existing run: supply --resume or choose a new output directory')
     torch.set_num_threads(4)
     random.seed(args.seed); np.random.seed(args.seed); torch.manual_seed(args.seed)
     torch.set_float32_matmul_precision('highest')

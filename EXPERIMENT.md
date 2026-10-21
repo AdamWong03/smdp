@@ -88,6 +88,11 @@ For the current already-running training, `run_experiment.py --after-training`
 is queued with `--wait-training-pid` and the existing output path. It exits if
 training fails; it never evaluates an unfinished checkpoint. After training it
 runs the fixed test/NVE/NVT/analysis sequence once. No automatic model search.
+The queued runner also has `--publish-summary`: after evaluation it commits only
+a size-limited whitelist of metrics, configuration, plots and the generated
+report under `reports/quartz16_first`. No raw logs or binary trajectories are
+published. Push conflicts or unrelated local changes stop publication rather
+than being overwritten. `publish_summary.log` records publication failures.
 
 Artifacts: `config.json`, `history.jsonl`, `best_segment.pt`, `best_rollout.pt`,
 `last.pt` (optimizer/scheduler/RNG included), `test/query_errors.csv`,
