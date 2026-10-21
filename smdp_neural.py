@@ -269,7 +269,7 @@ class EquivariantSegmentDecoder(nn.Module):
         nn.init.normal_(self.coeffs[-1].weight, std=1e-3)
         nn.init.zeros_(self.coeffs[-1].bias)
 
-    def forward(self, s, v, q, vel, mass, times_fs):
+    def forward(self, s, v, q, vel, mass, times_fs, graph_index=None):
         t, n, k, ds = s.shape
         weights = self.mode_weights(s).softmax(dim=2)
         s_fused = (weights * s).sum(dim=2)
@@ -283,9 +283,16 @@ class EquivariantSegmentDecoder(nn.Module):
         delta_q = times_fs[:, None, None] * self.cfg.velocity_scale * move_q
         delta_v = a[:, None, None] * self.cfg.velocity_scale * move_v
         if self.cfg.enforce_center_of_mass:
-            m = mass[None, :, None]
-            delta_q = delta_q - (delta_q * m).sum(dim=1, keepdim=True) / mass.sum()
-            delta_v = delta_v - (delta_v * m).sum(dim=1, keepdim=True) / mass.sum()
+            if graph_index is None:
+                graph_index = torch.zeros(n, dtype=torch.long, device=mass.device)
+            # Each disconnected sample conserves its own initial COM motion.
+            ng = int(graph_index.max()) + 1
+            total_mass = mass.new_zeros(ng).index_add(0, graph_index, mass)
+            def remove_com(delta):
+                sums = delta.new_zeros(t, ng, 3).index_add(
+                    1, graph_index, delta * mass[None, :, None])
+                return delta - (sums / total_mass[None, :, None])[:, graph_index]
+            delta_q, delta_v = remove_com(delta_q), remove_com(delta_v)
         pred_q = q[None, :, :] + times_fs[:, None, None] * vel[None, :, :] + delta_q
         pred_v = vel[None, :, :] + delta_v
         return pred_q, pred_v, weights
@@ -304,7 +311,7 @@ class NeuralSMDP(nn.Module):
         self.decode = EquivariantSegmentDecoder(cfg)
 
     def forward(self, positions, velocities, atomic_numbers, masses,
-                edge_index, edge_shift, times_fs):
+                edge_index, edge_shift, times_fs, graph_index=None):
         times_fs = torch.as_tensor(times_fs, dtype=positions.dtype, device=positions.device).reshape(-1)
         if torch.any(times_fs < 0) or torch.any(times_fs > self.config.horizon_fs + 1e-6):
             raise ValueError('times_fs must fall in [0, horizon_fs]')
@@ -321,7 +328,8 @@ class NeuralSMDP(nn.Module):
         s1, v1, router_1 = self.propagate(sm, vm, half)
         s2, v2, attention = self.couple(s1, v1)
         s3, v3, router_2 = self.propagate(s2, v2, half)
-        next_pos, next_vel, fusion_weights = self.decode(s3, v3, positions, velocities, masses, times_fs)
+        next_pos, next_vel, fusion_weights = self.decode(
+            s3, v3, positions, velocities, masses, times_fs, graph_index)
         return {
             'positions': next_pos,
             'velocities': next_vel,

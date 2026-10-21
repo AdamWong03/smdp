@@ -1,4 +1,11 @@
-# SMDP – Neural Motion-Mode Propagation (implementation core)
+# SMDP – Neural Motion-Mode Propagation
+
+Formal quartz integration is now available. See [EXPERIMENT.md](EXPERIMENT.md)
+for the frozen configuration, independent data splits, commands and server
+artifact paths. `train_quartz.py`, `evaluate_quartz.py`, `rollout_quartz.py` and
+`analyze_quartz.py` implement training and physical evaluation. The first formal
+run is in progress; implementation and passing unit tests are not experimental
+evidence of long-time stability.
 
 This package contains an **implemented and unit-checked neural model core** for the frozen research route:
 
@@ -50,7 +57,10 @@ The `build_periodic_edges` reference helper is `O(N²)` and uses minimum image: 
 ## Requirements and honest limits
 
 - Package currently requires PyTorch, with optional `vesin` supplied by the project for large-scale PBC neighbor handling.
-- This is a **functional model core**, not a project-integrated, fully trained benchmark. The remote private data and repository are not mounted in this execution environment, so dataset reader/training orchestration/CSVR/LAMMPS post-processing/15ns rollout cannot be checked or claimed done here.
+- The core has been integrated with the server's formal dataset, a batched
+  periodic graph adapter, training, CSVR rollout and offline BKS evaluation.
+  Completed training and physical results must be read from actual run artifacts;
+  the requested 15 ns duration is not a claim of completion.
 - Unit tests verify the final decoder for nonzero output weights, so equivariance checks are not trivially passing due to zero-initialized initial predictions.
 - The model is a useful faithful realization of the fixed algorithm idea, but final parameter choices should be measured through full official runs rather than assumed optimal.
 
