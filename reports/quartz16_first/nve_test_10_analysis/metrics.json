@@ -1,0 +1,217 @@
+{
+  "candidate": "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r1/nve_test_10.h5",
+  "reference": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_10/trajectory.h5",
+  "stable": true,
+  "failure": "",
+  "production_available": true,
+  "evaluation_phase": "production",
+  "duration_ps": 100.0,
+  "requested_production_ps": 100.0,
+  "minimum_distance_A": 1.4166399240493774,
+  "temperature_K": {
+    "SMDP": {
+      "mean": 707.7278678269296,
+      "std": 98.20230314542871,
+      "variance": 9643.69234306668,
+      "block_mean_std": 29.14061323732776,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 302.7117153987662,
+      "std": 13.544567609039127,
+      "variance": 183.4553117158319,
+      "block_mean_std": 0.47524526242154613,
+      "blocks": 8
+    },
+    "mean_difference": 405.01615242816337,
+    "wasserstein": 405.01615242816337
+  },
+  "kinetic_energy_eV": {
+    "SMDP": {
+      "mean": 14.728425453772589,
+      "std": 2.0436743655541965,
+      "variance": 4.176604912423347,
+      "block_mean_std": 0.6064412173863386,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 6.299691077481552,
+      "std": 0.28187409794367413,
+      "variance": 0.07945300709155999,
+      "block_mean_std": 0.009890262540214223,
+      "blocks": 8
+    },
+    "mean_difference": 8.428734376291036,
+    "wasserstein": 8.428734376291036
+  },
+  "element_kinetic_energy_eV": {
+    "8": {
+      "SMDP": {
+        "mean": 10.361380238348001,
+        "std": 1.5914348324743397,
+        "variance": 2.5326648260126294,
+        "block_mean_std": 0.4321165988779356,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 4.2171512847601225,
+        "std": 0.26756697380678646,
+        "variance": 0.07159208547212154,
+        "block_mean_std": 0.02948678633418148,
+        "blocks": 8
+      },
+      "mean_difference": 6.144228953587879,
+      "wasserstein": 6.144228953587881
+    },
+    "14": {
+      "SMDP": {
+        "mean": 4.367045215424587,
+        "std": 0.7697611556440551,
+        "variance": 0.5925322367384713,
+        "block_mean_std": 0.2008811855076454,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 2.082539792721431,
+        "std": 0.21225893510662974,
+        "variance": 0.045053855532600454,
+        "block_mean_std": 0.029218059545168873,
+        "blocks": 8
+      },
+      "mean_difference": 2.284505422703156,
+      "wasserstein": 2.2845054227031563
+    }
+  },
+  "energy_evaluation": "Identical offline BKS on exact sampled configurations for candidate and reference; raw coul/dsf convention",
+  "potential_energy_eV": {
+    "SMDP": {
+      "mean": -3127.374445120835,
+      "std": 2.021346684704532,
+      "variance": 4.085842419766004,
+      "block_mean_std": 0.5806314277834748,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": -3135.704982468285,
+      "std": 0.2832842864854356,
+      "variance": 0.08024998696956234,
+      "block_mean_std": 0.011870085262314306,
+      "blocks": 8
+    },
+    "mean_difference": 8.33053734744999,
+    "wasserstein": 8.330537347450408
+  },
+  "total_energy_drift_meV_atom_ps": {
+    "SMDP": 0.1447015814070018,
+    "reference": -0.00047076049092033913
+  },
+  "energy_change_eV": {
+    "SMDP": 19.111451112087707,
+    "reference": 0.003283001652562234
+  },
+  "segment_join_derivative_RMS_A_fs": {
+    "mean": 0.0009105021552004098,
+    "std": 6.488958771888343e-05,
+    "variance": 4.210658594326667e-09,
+    "block_mean_std": 1.6825926647454108e-05,
+    "blocks": 8
+  },
+  "VDOS": {
+    "macro_16fs": {
+      "nyquist_THz": 31.25,
+      "elements": {
+        "8": {
+          "overlap": 0.7301604023565964,
+          "block_overlap": {
+            "mean": 0.7268645945012441,
+            "std": 0.006208110060327355,
+            "variance": 3.8540630521137716e-05,
+            "block_mean_std": 0.006208110060327355,
+            "blocks": 6
+          },
+          "reference_split_half_overlap": 0.9739188229434805
+        },
+        "14": {
+          "overlap": 0.7958643828733072,
+          "block_overlap": {
+            "mean": 0.7935557461807807,
+            "std": 0.0036204125583150673,
+            "variance": 1.3107387092405452e-05,
+            "block_mean_std": 0.0036204125583150673,
+            "blocks": 6
+          },
+          "reference_split_half_overlap": 0.9758987867209087
+        }
+      }
+    },
+    "queried_1fs": {
+      "nyquist_THz": 500.0,
+      "elements": {
+        "8": {
+          "overlap": 0.7348608381104262,
+          "block_overlap": {
+            "mean": 0.7311623760629767,
+            "std": 0.0077110368249616555,
+            "variance": 5.9460088915914734e-05,
+            "block_mean_std": 0.0077110368249616555,
+            "blocks": 6
+          },
+          "reference_split_half_overlap": 0.9729947939441181
+        },
+        "14": {
+          "overlap": 0.7921053266822665,
+          "block_overlap": {
+            "mean": 0.7884817507052769,
+            "std": 0.003972677684517986,
+            "variance": 1.5782167985067184e-05,
+            "block_mean_std": 0.003972677684517986,
+            "blocks": 6
+          },
+          "reference_split_half_overlap": 0.9755400287991051
+        }
+      }
+    }
+  },
+  "RDF": {
+    "14-8": {
+      "RMSE": 1.2134816020435613,
+      "peak_position_A": {
+        "SMDP": 1.6033405657411766,
+        "reference": 1.6033405657411766,
+        "difference": 0.0
+      },
+      "peak_height": {
+        "SMDP": 23.024969834993676,
+        "reference": 34.6474984533892,
+        "difference": -11.62252861839552
+      },
+      "block_curve_RMSE": {
+        "mean": 1.216054923774208,
+        "std": 0.0885814407432735,
+        "variance": 0.007846671644154073,
+        "block_mean_std": 0.0885814407432735,
+        "blocks": 8
+      }
+    },
+    "8-8": {
+      "RMSE": 0.38724508593335166,
+      "peak_position_A": {
+        "SMDP": 2.624727889102222,
+        "reference": 2.6009746955356867,
+        "difference": 0.02375319356653538
+      },
+      "peak_height": {
+        "SMDP": 6.654586666109493,
+        "reference": 9.071304469266204,
+        "difference": -2.416717803156711
+      },
+      "block_curve_RMSE": {
+        "mean": 0.3895832059977467,
+        "std": 0.028877341147791433,
+        "variance": 0.0008339008317659283,
+        "block_mean_std": 0.028877341147791433,
+        "blocks": 8
+      }
+    }
+  }
+}
