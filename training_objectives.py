@@ -50,6 +50,41 @@ def supervised_segment_loss(
     return {'loss': lq+lv, 'position': lq, 'velocity': lv}
 
 
+def physical_segment_objectives(output, reference_q, reference_v, times, z, mass, stats, graphs=1):
+    """Dimensionless, reference-targeted kinematics and species dynamics.
+
+    No temperature target: species KE and VACF refer to this actual NVE window.
+    Kinematic targets retain the finite-difference defect of the real 1 fs data.
+    """
+    pq, pv = output['positions'], output['velocities']
+    adjacent = (times[1:] - times[:-1]) == 1
+    if adjacent.any():
+        pred = (pq[1:]-pq[:-1]) - .5*(pv[1:]+pv[:-1])
+        ref = (reference_q[1:]-reference_q[:-1]) - .5*(reference_v[1:]+reference_v[:-1])
+        kin = ((pred[adjacent]-ref[adjacent])/stats.velocity_delta_rms).square().mean()
+    else:
+        kin = pv.sum()*0
+    velocity, kinetic, vacf = [], [], []
+    for element in torch.unique(z):
+        mask = z == element
+        # Current quartz batches have identical atom ordering/counts, but each
+        # sample's species moments are separate: no cross-system cancellation.
+        pr = pv[:,mask].reshape(len(pv),graphs,-1,3)
+        tr = reference_v[:,mask].reshape_as(pr)
+        velocity.append(((pr-tr)/stats.velocity_delta_rms).square().mean())
+        weights = mass[mask].reshape(graphs,-1)[None,:,:,None]
+        # Units cancel in the normalized species kinetic-energy comparison.
+        ep, er = (weights*pr.square()).mean((2,3)), (weights*tr.square()).mean((2,3))
+        scale = weights.mean()*stats.velocity_delta_rms**2
+        kinetic.append(((ep-er)/scale).square().mean())
+        # All sampled lags, not just correlations with an initial velocity.
+        cp = torch.einsum('tbac,sbac->bts',pr,pr)/pr[0,0].numel()
+        cr = torch.einsum('tbac,sbac->bts',tr,tr)/tr[0,0].numel()
+        vacf.append(((cp-cr)/stats.velocity_delta_rms**2).square().mean())
+    return dict(kinematics=kin, species_velocity=torch.stack(velocity).mean(),
+                species_kinetic=torch.stack(kinetic).mean(), vacf=torch.stack(vacf).mean())
+
+
 def predict_one_step(
     model: NeuralSMDP,
     q: torch.Tensor, v: torch.Tensor, z: torch.Tensor, masses: torch.Tensor,

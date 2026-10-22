@@ -52,3 +52,37 @@ def test_messages_continuous_when_edge_crosses_cutoff():
     pb=predict_batch(model,b,v,z,m,cell,[16.],builder)
     torch.testing.assert_close(pa['positions']-a,pb['positions']-b,atol=1e-7,rtol=0)
     torch.testing.assert_close(pa['velocities'],pb['velocities'],atol=1e-8,rtol=0)
+
+
+def test_additive_attribution_and_no_self_exchange():
+    model,q,v,z,m,cell=make_fixture()
+    out=predict_batch(model,q[None],v[None],z[None],m[None],cell[None],[0.,1.,16.],PeriodicGraphBuilder(4.5))
+    assert out['fusion_weights'] is None
+    assert torch.count_nonzero(out['coupling_attention'].diagonal(dim1=-2,dim2=-1))==0
+    torch.testing.assert_close(out['positions']-q[None]-torch.tensor([0.,1.,16.])[:,None,None]*v[None],
+                               out['mode_delta_q'].sum(2),atol=1e-12,rtol=1e-8)
+    torch.testing.assert_close(out['velocities']-v[None],out['mode_delta_v'].sum(2),atol=1e-12,rtol=1e-8)
+
+
+def test_reference_kinematics_and_species_targets():
+    from training_objectives import SegmentStats, physical_segment_objectives
+    q=torch.randn(4,6,3,dtype=torch.float64);v=torch.randn_like(q)
+    result=physical_segment_objectives({'positions':q,'velocities':v},q,v,torch.tensor([0.,1.,2.,16.]),
+        torch.tensor([8,8,8,8,14,14]),torch.ones(6),SegmentStats(1.,1.))
+    assert all(float(x)==0 for x in result.values())
+
+
+def test_pushforward_long_rollout_backward():
+    from train_quartz import loss_for
+    from training_objectives import SegmentStats
+    from reference_data import QuartzSegments
+    model,q,v,z,m,cell=make_fixture()
+    t=torch.tensor(QuartzSegments.offsets,dtype=q.dtype)
+    batch=dict(q=(q[None]+t[:,None,None]*v[None])[None],v=v[None,None].expand(1,len(t),-1,-1),
+        z=z[None],mass=m[None],cell=cell[None])
+    result,_=loss_for(model,batch,torch.tensor([0.,1.,4.,8.,15.,16.],dtype=q.dtype),
+                       SegmentStats(.1,.01),PeriodicGraphBuilder(4.5),16)
+    assert all(torch.isfinite(x) for x in result.values())
+    result['loss'].backward()
+    assert model.couple.exchange_gate.weight.grad.abs().sum()>0
+    assert model.propagate.recurrent.parameters().__next__().grad.abs().sum()>0

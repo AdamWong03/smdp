@@ -38,6 +38,8 @@ class SMDPConfig:
     velocity_scale: float = 0.01  # Angstrom/fs, a fixed input/output unit scale
     recurrent_substeps: int = 2  # per half-stage, 4 per full propagation
     enforce_center_of_mass: bool = True
+    additive_modes: bool = False  # False loads the unmodified first-run checkpoint.
+    exclude_self_exchange: bool = False
 
 
 def mlp(in_dim: int, hidden: int, out_dim: int) -> nn.Sequential:
@@ -252,16 +254,24 @@ class CrossModeExchange(nn.Module):
         self.vector_gate = nn.Linear(ds, dv)
         self.vector_linear = nn.Linear(dv, dv, bias=False)
         self.norm = nn.LayerNorm(ds)
+        self.exclude_self = cfg.exclude_self_exchange
+        if self.exclude_self:
+            self.exchange_gate = nn.Linear(2 * ds, 2)
 
     def forward(self, s, v):
         sn = self.norm(s)
         scores = torch.einsum('tnkd,tnjd->tnkj', self.q(sn), self.k(sn)) / math.sqrt(sn.shape[-1])
+        if self.exclude_self:
+            if s.shape[2] < 2:
+                raise ValueError('Cross-mode exchange requires at least two modes')
+            scores = scores.masked_fill(torch.eye(s.shape[2], device=s.device, dtype=torch.bool), -torch.inf)
         attention = scores.softmax(dim=-1)
         s_message = torch.einsum('tnkj,tnjd->tnkd', attention, self.value(sn))
         v_message = torch.einsum('tnkj,tnjdc->tnkdc', attention, v)
-        s_out = s + self.s_proj(s_message)
+        gates = torch.sigmoid(self.exchange_gate(torch.cat([sn, s_message], -1))) if self.exclude_self else None
+        s_out = s + self.s_proj(s_message) * (gates[..., :1] if gates is not None else 1.)
         v_message = self.vector_linear(v_message.transpose(-1, -2)).transpose(-1, -2)
-        v_out = v + torch.tanh(self.vector_gate(s_out))[..., None] * v_message
+        v_out = v + torch.tanh(self.vector_gate(s_out))[..., None] * v_message * (gates[..., 1:, None] if gates is not None else 1.)
         return s_out, v_out, attention
 
 
@@ -269,7 +279,8 @@ class EquivariantSegmentDecoder(nn.Module):
     def __init__(self, cfg: SMDPConfig):
         super().__init__()
         self.cfg = cfg
-        self.mode_weights = nn.Linear(cfg.scalar_dim, 1)
+        if not cfg.additive_modes:
+            self.mode_weights = nn.Linear(cfg.scalar_dim, 1)
         self.scalar_norm = nn.LayerNorm(cfg.scalar_dim)
         self.coeffs = mlp(cfg.scalar_dim + 2, cfg.scalar_dim, 2 * cfg.vector_dim)
         # Small nonzero initialization is essential: unlike an all-zero head,
@@ -279,17 +290,27 @@ class EquivariantSegmentDecoder(nn.Module):
 
     def forward(self, s, v, q, vel, mass, times_fs, graph_index=None):
         t, n, k, ds = s.shape
-        weights = self.mode_weights(s).softmax(dim=2)
-        s_fused = (weights * s).sum(dim=2)
-        v_fused = (weights[..., None] * v).sum(dim=2)
         a = times_fs / self.cfg.horizon_fs
-        emb = torch.stack([a, torch.sin(math.pi * a)], dim=-1)[:, None, :].expand(t, n, 2)
-        coeff = self.coeffs(torch.cat([self.scalar_norm(s_fused), emb], dim=-1))
-        cq, cv = coeff.chunk(2, dim=-1)
-        move_q = (cq[..., None] * v_fused).sum(dim=-2) / math.sqrt(v_fused.shape[-2])
-        move_v = (cv[..., None] * v_fused).sum(dim=-2) / math.sqrt(v_fused.shape[-2])
-        delta_q = times_fs[:, None, None] * self.cfg.velocity_scale * move_q
-        delta_v = a[:, None, None] * self.cfg.velocity_scale * move_v
+        emb = torch.stack([a, torch.sin(math.pi * a)], dim=-1)
+        if self.cfg.additive_modes:
+            # Shared equivariant readout acts on each token independently. No
+            # competitive normalization, gate, or enforced equal contribution.
+            coeff = self.coeffs(torch.cat([self.scalar_norm(s), emb[:, None, None].expand(t, n, k, 2)], -1))
+            cq, cv = coeff.chunk(2, -1)
+            move_q = (cq[..., None] * v).sum(-2) / math.sqrt(v.shape[-2])
+            move_v = (cv[..., None] * v).sum(-2) / math.sqrt(v.shape[-2])
+            weights = None
+        else:
+            weights = self.mode_weights(s).softmax(dim=2)
+            s_fused = (weights * s).sum(dim=2)
+            coeff = self.coeffs(torch.cat([self.scalar_norm(s_fused), emb[:, None].expand(t, n, 2)], -1))
+            cq, cv = coeff.chunk(2, -1)
+            # Exact vector-path attribution with the original scalar coefficients
+            # held fixed, not a causal attribution of all scalar pathways.
+            move_q = (cq[:, :, None, :, None] * weights[..., None] * v).sum(-2) / math.sqrt(v.shape[-2])
+            move_v = (cv[:, :, None, :, None] * weights[..., None] * v).sum(-2) / math.sqrt(v.shape[-2])
+        mode_q = times_fs[:, None, None, None] * self.cfg.velocity_scale * move_q
+        mode_v = a[:, None, None, None] * self.cfg.velocity_scale * move_v
         if self.cfg.enforce_center_of_mass:
             if graph_index is None:
                 graph_index = torch.zeros(n, dtype=torch.long, device=mass.device)
@@ -297,13 +318,14 @@ class EquivariantSegmentDecoder(nn.Module):
             ng = int(graph_index.max()) + 1
             total_mass = mass.new_zeros(ng).index_add(0, graph_index, mass)
             def remove_com(delta):
-                sums = delta.new_zeros(t, ng, 3).index_add(
-                    1, graph_index, delta * mass[None, :, None])
-                return delta - (sums / total_mass[None, :, None])[:, graph_index]
-            delta_q, delta_v = remove_com(delta_q), remove_com(delta_v)
+                sums = delta.new_zeros(t, ng, k, 3).index_add(
+                    1, graph_index, delta * mass[None, :, None, None])
+                return delta - (sums / total_mass[None, :, None, None])[:, graph_index]
+            mode_q, mode_v = remove_com(mode_q), remove_com(mode_v)
+        delta_q, delta_v = mode_q.sum(2), mode_v.sum(2)
         pred_q = q[None, :, :] + times_fs[:, None, None] * vel[None, :, :] + delta_q
         pred_v = vel[None, :, :] + delta_v
-        return pred_q, pred_v, weights
+        return pred_q, pred_v, weights, mode_q, mode_v
 
 
 class NeuralSMDP(nn.Module):
@@ -336,7 +358,7 @@ class NeuralSMDP(nn.Module):
         s1, v1, router_1 = self.propagate(sm, vm, half)
         s2, v2, attention = self.couple(s1, v1)
         s3, v3, router_2 = self.propagate(s2, v2, half)
-        next_pos, next_vel, fusion_weights = self.decode(
+        next_pos, next_vel, fusion_weights, mode_q, mode_v = self.decode(
             s3, v3, positions, velocities, masses, times_fs, graph_index)
         return {
             'positions': next_pos,
@@ -346,4 +368,6 @@ class NeuralSMDP(nn.Module):
             'operator_routing': torch.stack([router_1, router_2], dim=0),
             'coupling_attention': attention,
             'fusion_weights': fusion_weights,
+            'mode_delta_q': mode_q,
+            'mode_delta_v': mode_v,
         }

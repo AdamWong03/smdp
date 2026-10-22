@@ -7,13 +7,15 @@ import subprocess
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);args=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--report-name',default='quartz16_first');args=p.parse_args()
     repo=Path(__file__).resolve().parent
     # Refuse to bundle unrelated edits made while the experiment was running.
     subprocess.run(['git','diff','--exit-code'],cwd=repo,check=True)
     subprocess.run(['git','diff','--cached','--exit-code'],cwd=repo,check=True)
-    target=repo/'reports/quartz16_first'
-    names=['RESULTS.md','config.json','training.png','training_complete.json','pipeline_finished.json',
+    if Path(args.report_name).name!=args.report_name: raise ValueError('report-name must be a directory basename')
+    target=repo/'reports'/args.report_name
+    names=['RESULTS.md','COMPARISON.md','comparison.json','diagnosis/previous_diagnosis.json','config.json','training.png','training_complete.json','pipeline_finished.json',
            'test/test_metrics.json','test/query_errors.csv']
     for run in ['nve_test_09','nve_test_10','nvt']:
         names.append(run+'.summary.json')
@@ -29,7 +31,7 @@ def main():
         copied.append(str(dest.relative_to(repo)))
     subprocess.run(['git','add','--',*copied],cwd=repo,check=True)
     subprocess.run(['git','-c','user.name=Codex','-c','user.email=codex@localhost','commit','-m',
-                    'Report observed first quartz experiment including incomplete or failed rollouts'],cwd=repo,check=True)
+                    'Report observed quartz experiment including incomplete or failed rollouts'],cwd=repo,check=True)
     # Normal push only; never pull/rebase/reset or force over another contributor.
     subprocess.run(['git','push','origin','HEAD'],cwd=repo,check=True)
 

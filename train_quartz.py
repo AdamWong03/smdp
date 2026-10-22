@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, Subset
 from smdp_neural import NeuralSMDP, SMDPConfig
-from training_objectives import SegmentStats, supervised_segment_loss
+from training_objectives import SegmentStats, supervised_segment_loss, physical_segment_objectives
 from periodic import PeriodicGraphBuilder, predict_batch
 from reference_data import QuartzSegments, validate_split_manifest
 
@@ -18,7 +18,10 @@ def batch_to(batch, device):
     return {k: v.to(device, non_blocking=True) for k, v in batch.items()}
 
 
-def loss_for(model, batch, times, stats, builder, rollout=False):
+OBJECTIVE_WEIGHTS = dict(kinematics=.2, species_velocity=.25, species_kinetic=.1, vacf=.1, join=.2)
+
+
+def loss_for(model, batch, times, stats, builder, rollout_steps=0):
     q, v = batch['q'], batch['v']
     out = predict_batch(model, q[:, 0], v[:, 0], batch['z'], batch['mass'], batch['cell'], times, builder)
     target_q = q[:, times.long()].transpose(0, 1).flatten(1, 2)
@@ -28,27 +31,67 @@ def loss_for(model, batch, times, stats, builder, rollout=False):
     result['segment_loss'] = result['loss']
     result['endpoint_q_mse'] = (out['positions'][-1]-target_q[-1]).square().mean()
     result['endpoint_v_mse'] = (out['velocities'][-1]-target_v[-1]).square().mean()
-    if rollout:
-        qnext, vnext = out['positions'][-1].reshape_as(q[:, 0]), out['velocities'][-1].reshape_as(v[:, 0])
-        losses = []
-        for frame in [17, 18]:  # actual t+32 and t+48, not interpolated
-            step = predict_batch(model, qnext, vnext, batch['z'], batch['mass'], batch['cell'], [16.], builder)
-            qnext, vnext = step['positions'][0].reshape_as(qnext), step['velocities'][0].reshape_as(vnext)
-            losses.append(((qnext-q[:, frame])/stats.displacement_residual_rms).square().mean()
-                          + ((vnext-v[:, frame])/stats.velocity_delta_rms).square().mean())
+    extra = physical_segment_objectives(out,target_q,target_v,times,batch['z'].flatten(),batch['mass'].flatten(),stats,graphs=len(q))
+    result.update(extra)
+    result['loss'] = result['loss'] + sum(OBJECTIVE_WEIGHTS[k]*x for k,x in extra.items())
+    if rollout_steps:
+        # Pushforward: all prefix states are autonomous; only the last two
+        # segments retain gradients. No reference state is injected into rollout.
+        qnext = out['positions'][-1].reshape_as(q[:,0]).detach()
+        vnext = out['velocities'][-1].reshape_as(v[:,0]).detach()
+        left = (out['positions'][-1]-out['positions'][torch.where(times==15)[0][0]]).detach()
+        losses, joins, predicted_v, reference_v = [], [], [], []
+        offset_index = {int(t):i for i,t in enumerate(QuartzSegments.offsets)}
+        for index in range(1,rollout_steps):
+            differentiable = torch.is_grad_enabled() and index >= rollout_steps-2
+            with torch.set_grad_enabled(differentiable):
+                step = predict_batch(model,qnext,vnext,batch['z'],batch['mass'],batch['cell'],[1.,15.,16.],builder)
+                right = step['positions'][0]-qnext.flatten(0,1)
+                # Compare the junction defect with the true trajectory, rather
+                # than forcing a finite-difference derivative jump to zero.
+                center = offset_index[index*16]
+                ref_join = (q[:,offset_index[index*16+1]]-2*q[:,center]+q[:,offset_index[index*16-1]]).flatten(0,1)
+                join = ((right-left-ref_join)/stats.velocity_delta_rms).square().mean()
+                left = step['positions'][-1]-step['positions'][-2]
+                qnext, vnext = step['positions'][-1].reshape_as(qnext), step['velocities'][-1].reshape_as(vnext)
+                frame = offset_index[(index+1)*16]
+                endpoint = ((qnext-q[:,frame])/stats.displacement_residual_rms).square().mean() + ((vnext-v[:,frame])/stats.velocity_delta_rms).square().mean()
+                predicted_v.append(vnext); reference_v.append(v[:,frame])
+                if index >= rollout_steps-2:
+                    losses.append(endpoint); joins.append(join)
+            if not differentiable:
+                qnext,vnext,left = qnext.detach(),vnext.detach(),left.detach()
         result['rollout_loss'] = torch.stack(losses).mean()
-        result['loss'] = 0.5 * (result['loss'] + result['rollout_loss'])
+        result['join'] = torch.stack(joins).mean()
+        # Species amplitude and temporal correlations along the autonomous path.
+        pred = torch.stack(predicted_v).flatten(1,2)
+        ref = torch.stack(reference_v).flatten(1,2)
+        temporal = physical_segment_objectives({'positions':pred*0,'velocities':pred},ref*0,ref,
+                    torch.arange(len(pred),device=q.device)*16,batch['z'].flatten(),batch['mass'].flatten(),stats,graphs=len(q))
+        result['rollout_species_kinetic'] = temporal['species_kinetic']
+        result['rollout_vacf'] = temporal['vacf']
+        result['loss'] = result['loss'] + result['rollout_loss'] + OBJECTIVE_WEIGHTS['join']*result['join'] + .1*(temporal['species_kinetic']+temporal['vacf'])
     return result, out
 
 
 def diagnostics(out):
-    return {
+    result = {
         'scalar_allocation': out['mode_scalar_allocation'].detach().mean((0, 2)).cpu().tolist(),
         'vector_allocation': out['mode_vector_allocation'].detach().mean((0, 2)).cpu().tolist(),
         'recurrent_route_by_mode': out['operator_routing'][..., 0].detach().mean((0, 1, 2)).cpu().tolist(),
         'cross_mode_attention': out['coupling_attention'].detach().mean((0, 1)).cpu().tolist(),
-        'fusion_weights': out['fusion_weights'].detach().mean((0, 1)).flatten().cpu().tolist(),
     }
+    if out['fusion_weights'] is not None:
+        result['fusion_weights'] = out['fusion_weights'].detach().mean((0,1)).flatten().cpu().tolist()
+    for key in ['mode_delta_q','mode_delta_v']:
+        contributions=out[key][-1].detach()
+        rms=contributions.square().mean((0,2)).sqrt()
+        result[key+'_rms']=rms.cpu().tolist()
+        result[key+'_rms_share']=(rms/rms.sum().clamp_min(1e-20)).cpu().tolist()
+        total=contributions.sum(1)
+        denom=total.square().sum().clamp_min(1e-20)
+        result[key+'_signed_projection']=(torch.einsum('nkc,nc->k',contributions,total)/denom).cpu().tolist()
+    return result
 
 
 def main():
@@ -58,7 +101,7 @@ def main():
     p.add_argument('--device', default='cuda')
     p.add_argument('--batch-size', type=int, default=8)
     p.add_argument('--segment-epochs', type=int, default=100)
-    p.add_argument('--rollout-epochs', type=int, default=24)
+    p.add_argument('--rollout-epochs', type=int, default=12, help='epochs for EACH of the 4/8/16-step phases')
     p.add_argument('--patience', type=int, default=15)
     p.add_argument('--seed', type=int, default=20261022)
     p.add_argument('--resume', type=Path)
@@ -74,17 +117,22 @@ def main():
     train = QuartzSegments(args.data_root, 'train', args.output/'cache')
     val = QuartzSegments(args.data_root, 'val', args.output/'cache')
     stats = SegmentStats(**train.scales)
-    cfg = SMDPConfig()
+    cfg = SMDPConfig(additive_modes=True, exclude_self_exchange=True)
     model = NeuralSMDP(cfg).to(device)
     builder = PeriodicGraphBuilder(cfg.cutoff_angstrom)
     optimizer = torch.optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-6)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.5, patience=5, min_lr=2e-6)
     config = dict(model=asdict(cfg), stats=asdict(stats), arguments={k:str(v) if isinstance(v,Path) else v for k,v in vars(args).items()},
                   source_trajectories=sources, parameters=sum(p.numel() for p in model.parameters()),
-                  training_queries='4,8,16 plus two random distinct internal integer times',
-                  validation_queries=[1,4,8,12,16], rollout_steps=3,
+                  training_queries='0,1,4,8,15,16 plus one random adjacent triplet',
+                  validation_queries=[0,1,4,8,12,15,16], rollout_steps=[4,8,16],
+                  loss_weights=OBJECTIVE_WEIGHTS, pushforward_gradient_segments=2,
+                  selection='complete validation split; 16-step autonomous metric in all rollout phases; no test selection',
                   hardware=torch.cuda.get_device_name(device) if device.type=='cuda' else 'CPU',
                   torch_version=torch.__version__, units={'position':'Angstrom','velocity':'Angstrom/fs','cell':'row vectors','mass':'u'})
+    import subprocess
+    config['code_commit']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=Path(__file__).parent,text=True).strip()
+    config['rollout_valid_samples']={'train':int(train.valid.sum()),'val':int(val.valid.sum())}
     (args.output/'config.json').write_text(json.dumps(config, indent=2))
     start_phase, start_epoch, best, stale, elapsed_prior = 'segment', 0, float('inf'), 0, 0.
     if args.resume:
@@ -95,12 +143,15 @@ def main():
         torch.set_rng_state(state['torch_rng'].cpu()); random.setstate(state['python_rng']); np.random.set_state(state['numpy_rng'])
         if device.type == 'cuda': torch.cuda.set_rng_state(state['cuda_rng'].cpu(), device)
     started = time.perf_counter()
-    for phase, epochs in [('segment', args.segment_epochs), ('rollout', args.rollout_epochs)]:
-        if start_phase=='rollout' and phase=='segment': continue
-        is_rollout = phase=='rollout'
-        if is_rollout and start_phase!='rollout':
-            model.load_state_dict(torch.load(args.output/'best_segment.pt',map_location=device,weights_only=False)['model'])
-            optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5, weight_decay=1e-6)
+    phases=[('segment',args.segment_epochs),('rollout4',args.rollout_epochs),('rollout8',args.rollout_epochs),('rollout16',args.rollout_epochs)]
+    for phase_index,(phase, epochs) in enumerate(phases):
+        if phase_index < [x[0] for x in phases].index(start_phase): continue
+        is_rollout = phase!='segment'
+        steps = int(phase.replace('rollout','')) if is_rollout else 0
+        if is_rollout and phase!=start_phase:
+            previous=phases[phase_index-1][0]
+            model.load_state_dict(torch.load(args.output/f'best_{previous}.pt',map_location=device,weights_only=False)['model'])
+            optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5 if steps==4 else 2e-5, weight_decay=1e-6)
             scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer,factor=0.5,patience=4,min_lr=1e-6)
             best, stale, start_epoch = float('inf'), 0, 0
         td = Subset(train, torch.where(train.valid)[0].tolist()) if is_rollout else train
@@ -111,10 +162,10 @@ def main():
             model.train(); sums={}; count=0; gradient_norms={}
             for batch in train_loader:
                 batch=batch_to(batch,device)
-                extra=random.sample([i for i in range(1,16) if i not in [4,8]],2)
-                times=torch.tensor(sorted([4,8,16]+extra),device=device,dtype=torch.float32)
+                center=random.randint(2,14)
+                times=torch.tensor(sorted({0,1,4,8,15,16,center-1,center,center+1}),device=device,dtype=torch.float32)
                 optimizer.zero_grad(set_to_none=True)
-                losses,out=loss_for(model,batch,times,stats,builder,is_rollout)
+                losses,out=loss_for(model,batch,times,stats,builder,steps)
                 if not torch.isfinite(losses['loss']): raise FloatingPointError('Nonfinite training loss')
                 losses['loss'].backward()
                 if count==0:
@@ -130,7 +181,7 @@ def main():
             with torch.no_grad():
                 for batch in val_loader:
                     batch=batch_to(batch,device)
-                    losses,out=loss_for(model,batch,torch.tensor([1.,4.,8.,12.,16.],device=device),stats,builder,is_rollout)
+                    losses,out=loss_for(model,batch,torch.tensor([0.,1.,4.,8.,12.,15.,16.],device=device),stats,builder,16 if is_rollout else 0)
                     n=len(batch['q']); nval+=n
                     for k,v in losses.items(): val_sums[k]=val_sums.get(k,0.)+float(v)*n
                     for k,v in diagnostics(out).items(): diag_sum[k]=diag_sum.get(k,0.)+np.array(v)*n
@@ -153,6 +204,9 @@ def main():
             if improved: torch.save(state,args.output/f'best_{phase}.pt')
             if stale>=args.patience and epoch>=19: break
         start_epoch=0
+    # Final checkpoint is selected only within the completed 16-step phase.
+    import shutil
+    shutil.copyfile(args.output/'best_rollout16.pt',args.output/'best_rollout.pt')
     (args.output/'training_complete.json').write_text(json.dumps(dict(best_checkpoint='best_rollout.pt',elapsed_s=elapsed_prior+time.perf_counter()-started)))
 
 

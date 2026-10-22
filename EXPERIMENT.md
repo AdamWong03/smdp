@@ -107,3 +107,41 @@ Artifacts: `config.json`, `history.jsonl`, `best_segment.pt`, `best_rollout.pt`,
 `.summary.json`, analysis directories, plots and `RESULTS.md`. Large artifacts
 and raw logs stay outside Git. This document specifies the experiment; it is
 not a claim that training or any requested trajectory has completed.
+# Targeted additive-mode / long-rollout iteration (2026-10-22)
+
+Branch: `improvement/additive-modes-long-rollout`. Previous artifacts remain at
+`/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r1`.
+New artifacts use sibling `quartz16_20261022_r2_additive`.
+
+The architecture retains four tokens and the same recurrent/temporal operators.
+Only final reconstruction and cross-mode exchange change: shared equivariant
+readout is applied independently per token and contributions are summed; diagonal
+cross-attention is masked, with separate sigmoid-gated scalar/vector residuals.
+No equal-contribution regularizer or extra propagation expert is used. Old
+checkpoints load with the two new config flags absent/false.
+
+Training from scratch: seed 20261022; batch 8; at most 100 segment epochs,
+then 12 epochs each at 4/8/16 autonomous steps. Pushforward retains gradients
+through the final two segments while all earlier states remain self-generated.
+All 5000 endpoint samples are used; only source windows with sufficient 256 fs
+continuation participate in rollout. Validation in every rollout stage uses
+16 steps; `best_rollout.pt` is selected within the final stage, never on test.
+Actual 1 fs reference samples supervise neighboring-query kinematics and junction
+defects. Species velocity, kinetic-energy moments and VACF target reference NVE
+windows, not a prescribed temperature. Weights are frozen in `OBJECTIVE_WEIGHTS`.
+
+```bash
+CUDA_VISIBLE_DEVICES=2 /data1/wyd/envs/mlip/bin/python run_experiment.py \
+  --data-root /data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1 \
+  --output /data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive \
+  --previous /data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r1 \
+  --publish-summary --report-name quartz16_additive_long_rollout
+```
+
+The pipeline runs one training, full test evaluation, both 100 ps NVE trajectories,
+and the unchanged CSVR protocol (100 fs coupling time; 1.5 ns thermalization and
+15 ns production), then publishes bounded results on the same branch. It never
+automatically changes architecture or retrains. BKS is evaluated offline only.
+`COMPARISON.md`/`comparison.json` report previous/current/BKS values. Trajectories,
+weights, optimizer states, raw logs and caches stay on the server. A non-triggered
+termination threshold is NOT a claim of physical stability.

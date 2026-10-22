@@ -15,6 +15,8 @@ def main():
     p.add_argument('--after-training',action='store_true')
     p.add_argument('--wait-training-pid',type=int)
     p.add_argument('--publish-summary',action='store_true')
+    p.add_argument('--previous',type=Path)
+    p.add_argument('--report-name',default='quartz16_additive_long_rollout')
     args=p.parse_args();args.output.mkdir(parents=True,exist_ok=True)
     repo=Path(__file__).resolve().parent
     failures=[]
@@ -47,10 +49,12 @@ def main():
     run('nvt','rollout_quartz.py','--checkpoint',checkpoint,'--initial',initial,'--output',output,'--ensemble','nvt',
         '--steps',937500,'--thermalization-steps',93750,'--thermostat-metadata',initial.parent/'metadata.json')
     if output.exists(): run('analyze_nvt','analyze_quartz.py','--candidate',output,'--reference',initial,'--output',args.output/'nvt_analysis')
-    run('report','summarize_experiment.py','--output',args.output)
+    report_options=['--output',args.output]
+    if args.previous: report_options+=['--previous',args.previous]
+    run('report','summarize_experiment.py',*report_options)
     (args.output/'pipeline_finished.json').write_text(json.dumps({'finished':True,'software_failures':failures},indent=2))
     if args.publish_summary:
-        run('publish_summary','publish_summary.py','--output',args.output)
+        run('publish_summary','publish_summary.py','--output',args.output,'--report-name',args.report_name)
 
 
 if __name__=='__main__': main()

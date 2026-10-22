@@ -8,14 +8,15 @@ from torch.utils.data import Dataset
 
 
 class QuartzSegments(Dataset):
-    offsets = np.array(list(range(17)) + [32, 48], dtype=np.int64)
+    offsets = np.array(list(range(17)) + [32, 48] + sorted(
+        {16*k+j for k in range(1,16) for j in [0,1,15,16]} - set(range(17)) - {32,48}), dtype=np.int64)
 
     def __init__(self, root, split, cache):
         root, cache = Path(root), Path(cache)
         cache.mkdir(parents=True, exist_ok=True)
         source = root / 'quartz/transitions/16fs' / (split + '.h5')
         expected = {'train': 5000, 'val': 1250, 'test': 1000}[split]
-        cached = cache / (split + '_segments_v1.pt')
+        cached = cache / (split + '_segments_256fs.pt')
         with h5py.File(source) as f:
             assert f.attrs['horizon_fs'] == 16 and f.attrs['source_dt_fs'] == 1
             assert f.attrs['split'] == split and f.attrs['n_samples'] == expected
@@ -44,7 +45,7 @@ class QuartzSegments(Dataset):
                     np.testing.assert_array_equal(raw['masses_u'][:], m)
                     np.testing.assert_array_equal(raw['atom_ids'][:], np.arange(1, len(z)+1))
                     indices = frames[selected, None] + self.offsets[None]
-                    valid[selected] = indices[:, -1] < len(raw['time_fs'])
+                    valid[selected] = indices.max(axis=1) < len(raw['time_fs'])
                     # Invalid continuation is never used for rollout; all endpoint samples remain.
                     indices = np.minimum(indices, len(raw['time_fs']) - 1)
                     for key, dst in [('positions_unwrapped_A', q), ('velocities_A_per_fs', v)]:

@@ -32,6 +32,9 @@ def main():
     builder=PeriodicGraphBuilder(model.config.cutoff_angstrom)
     sums={k:np.zeros(17) for k in ['q_mae','q_mse','v_mae','v_mse']}; n=0; diag={}
     derivative=[]; ref_derivative=[]; joins=[]; second=[]
+    multi={k:dict(q=0.,v=0.,count=0) for k in [2,4,8,16]}
+    ref_joins=[]
+    offset_index={int(t):i for i,t in enumerate(QuartzSegments.offsets)}
     with torch.inference_mode():
         for b in DataLoader(data,batch_size=4,shuffle=False):
             b=batch_to(b,args.device); q,v=b['q'],b['v']
@@ -47,8 +50,19 @@ def main():
             torch.testing.assert_close(nextout['positions'][0],pq[-1],rtol=0,atol=0)
             torch.testing.assert_close(nextout['velocities'][0],pv[-1],rtol=0,atol=0)
             joins.append(((nextout['positions'][1]-pq[-1]-(pq[-1]-pq[-2])).square().mean()).item())
+            ref_joins.append(((q[:,offset_index[17]]-2*q[:,16]+q[:,15]).square().mean()).item())
             valid=b['rollout_valid']
             if valid.any(): second.append(((nextout['positions'][-1].reshape_as(q[:,0])[valid]-q[valid,17]).square().mean()).item())
+            qn=nextout['positions'][-1].reshape_as(q[:,0]);vn=nextout['velocities'][-1].reshape_as(v[:,0])
+            for step in range(2,17):
+                if step>2:
+                    mo=predict_batch(model,qn,vn,b['z'],b['mass'],b['cell'],[16.],builder)
+                    qn=mo['positions'][0].reshape_as(qn);vn=mo['velocities'][0].reshape_as(vn)
+                if step in multi and valid.any():
+                    count=int(valid.sum());target=offset_index[16*step]
+                    multi[step]['q']+=float((qn[valid]-q[valid,target]).square().mean())*count
+                    multi[step]['v']+=float((vn[valid]-v[valid,target]).square().mean())*count
+                    multi[step]['count']+=count
             n+=len(q)
             for k,x in diagnostics(out).items(): diag[k]=diag.get(k,0.)+np.array(x)*len(q)
     rows=[]
@@ -63,6 +77,9 @@ def main():
                 reference_finite_difference_RMSE_A_fs=float(np.sqrt(np.mean(ref_derivative))),
                 join_position_derivative_jump_RMS_A_fs=float(np.sqrt(np.mean(joins))),
                 join_state_discontinuity=0.,two_step_position_RMSE_A=float(np.sqrt(np.mean(second))),
+                reference_join_derivative_jump_RMS_A_fs=float(np.sqrt(np.mean(ref_joins))),
+                multi_step={str(k):dict(time_fs=16*k,samples=x['count'],position_RMSE_A=float(np.sqrt(x['q']/max(1,x['count']))),
+                    velocity_RMSE_A_fs=float(np.sqrt(x['v']/max(1,x['count'])))) for k,x in multi.items()},
                 mode_statistics={k:(x/n).tolist() for k,x in diag.items()})
     (args.output/'test_metrics.json').write_text(json.dumps(result,indent=2)); print(json.dumps(result),flush=True)
 

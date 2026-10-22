@@ -76,16 +76,23 @@ def main():
                    checkpoint=str(args.checkpoint),initial_trajectory=str(args.initial),dense_sample_dt_fs=1.,
                    dense_endpoint_velocity='post-CSVR at macro boundaries; pre-CSVR in NVE',thermostat_metadata=json.dumps(metadata))
     f.create_dataset('atomic_numbers',data=z);f.create_dataset('masses_u',data=m);f.create_dataset('cell',data=cell)
+    species=np.unique(z);f.create_dataset('kinetic_species',data=species)
     def ds(name,shape,dtype='f4'):
         return f.create_dataset(name,shape=(0,*shape),maxshape=(None,*shape),chunks=(256,*shape),dtype=dtype,compression='lzf')
     stores={k:ds(k,(len(z),3)) for k in ['positions','velocities']}
     for k in ['time_fs','temperature_K','pre_thermostat_temperature_K','minimum_distance_A','thermostat_alpha','segment_join_derivative_RMS_A_fs']:
         stores[k]=ds(k,())
+    for k in ['pre_thermostat_species_KE_eV','post_thermostat_species_KE_eV']:
+        stores[k]=ds(k,(len(species),))
     dense=ds('dense/velocities',(len(z),3))
     buffers={k:[] for k in stores}; dense_buffer=[]
     def append(qn,vn,tm,pre,minimum,alpha,join):
         values=[qn,vn,tm,temperature(vn,m),pre,minimum,alpha,join]
-        for key,value in zip(stores,values): buffers[key].append(value)
+        for key,value in zip(list(stores)[:8],values): buffers[key].append(value)
+        com=(vn*m[:,None]).sum(0)/m.sum();internal=vn-com
+        after=np.array([.5*KINETIC_TO_EV*np.sum(m[z==s,None]*internal[z==s]**2) for s in species])
+        buffers['post_thermostat_species_KE_eV'].append(after)
+        buffers['pre_thermostat_species_KE_eV'].append(after/(alpha**2) if alpha!=0 else np.full_like(after,np.nan))
     def flush():
         for k,d in stores.items():
             if buffers[k]:

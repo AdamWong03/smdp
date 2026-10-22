@@ -12,7 +12,8 @@ def make_fixture():
     z = torch.tensor([14, 8, 8, 14, 8, 8, 14, 8, 8])
     mass = torch.where(z == 8, torch.tensor(15.999), torch.tensor(28.085))
     cell = torch.eye(3) * 12.0
-    cfg = SMDPConfig(scalar_dim=32, vector_dim=8, encoder_layers=2, rbf_dim=8, modes=3)
+    cfg = SMDPConfig(scalar_dim=32, vector_dim=8, encoder_layers=2, rbf_dim=8, modes=3,
+                     additive_modes=True, exclude_self_exchange=True)
     model = NeuralSMDP(cfg).double().eval()
     # Avoid trivially passing equivariance checks with zero-initialized heads.
     with torch.no_grad():
