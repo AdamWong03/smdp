@@ -4,8 +4,10 @@ Formal quartz integration is now available. See [EXPERIMENT.md](EXPERIMENT.md)
 for the frozen configuration, independent data splits, commands and server
 artifact paths. `train_quartz.py`, `evaluate_quartz.py`, `rollout_quartz.py` and
 `analyze_quartz.py` implement training and physical evaluation. The first formal
-run is in progress; implementation and passing unit tests are not experimental
-evidence of long-time stability.
+run is complete (see `reports/quartz16_first`): it ran 15 ns NVT but failed physical
+fidelity, including NVE heating and mode concentration. The targeted additive-mode
+iteration is described at the top of `EXPERIMENT.md`; implementation and passing
+unit tests are not experimental evidence of long-time stability.
 
 This package contains an **implemented and unit-checked neural model core** for the frozen research route:
 
@@ -31,7 +33,7 @@ This verifies **mathematical/software invariants only**. It is not a physical MD
 import torch
 from smdp_neural import NeuralSMDP, SMDPConfig, build_periodic_edges
 
-model = NeuralSMDP(SMDPConfig(horizon_fs=16.0))
+model = NeuralSMDP(SMDPConfig(horizon_fs=16.0, additive_modes=True, exclude_self_exchange=True))
 # q: [N,3] Angstrom, velocity: [N,3] Angstrom/fs
 # atomic_numbers: [N] int64, masses: [N] amu, cell: [3,3] row lattice vectors
 edge_index, edge_shift = build_periodic_edges(q, cell, cutoff=4.5)

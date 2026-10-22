@@ -76,12 +76,19 @@ def compare_runs(previous,current):
                 add(name,key+'_'+stat,old.get(key,{}).get('SMDP',{}).get(stat),new[key]['SMDP'][stat],new[key]['reference'][stat])
         for key in ['energy_change_eV','total_energy_drift_meV_atom_ps']:
             add(name,key,old.get(key,{}).get('SMDP'),new[key]['SMDP'],new[key]['reference'])
+        add(name,'minimum_distance_A',old.get('minimum_distance_A'),new.get('minimum_distance_A'))
+        for z in ['8','14']:
+            add(name,'species_KE_eV_Z'+z,old.get('element_kinetic_energy_eV',{}).get(z,{}).get('SMDP',{}).get('mean'),
+                new['element_kinetic_energy_eV'][z]['SMDP']['mean'],new['element_kinetic_energy_eV'][z]['reference']['mean'])
         for cadence in ['macro_16fs','queried_1fs']:
             for z in ['8','14']:
                 add(name,cadence+'_VDOS_overlap_Z'+z,old.get('VDOS',{}).get(cadence,{}).get('elements',{}).get(z,{}).get('overlap'),
                     new.get('VDOS',{}).get(cadence,{}).get('elements',{}).get(z,{}).get('overlap'),1.)
         for pair in ['14-8','8-8']:
             add(name,'RDF_RMSE_'+pair,old.get('RDF',{}).get(pair,{}).get('RMSE'),new.get('RDF',{}).get(pair,{}).get('RMSE'),0.)
+            for key in ['peak_position_A','peak_height']:
+                add(name,'RDF_'+pair+'_'+key,old.get('RDF',{}).get(pair,{}).get(key,{}).get('SMDP'),
+                    new['RDF'][pair][key]['SMDP'],new['RDF'][pair][key]['reference'])
         for key in ['production_ps','ns_day_end_to_end','ms_per_step','peak_gpu_bytes']:
             add(name,key,read(previous,name+'.summary.json').get(key),read(current,name+'.summary.json').get(key))
     (current/'comparison.json').write_text(json.dumps(rows,indent=2))
