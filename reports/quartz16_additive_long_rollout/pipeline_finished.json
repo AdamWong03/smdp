@@ -1,0 +1,17 @@
+{
+  "finished": true,
+  "software_failures": [
+    {
+      "stage": "analyze_nve_test_09",
+      "returncode": 1
+    },
+    {
+      "stage": "analyze_nve_test_10",
+      "returncode": 1
+    },
+    {
+      "stage": "analyze_nvt",
+      "returncode": 1
+    }
+  ]
+}
