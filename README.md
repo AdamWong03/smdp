@@ -1,3 +1,9 @@
+> **R3 implementation (not yet trained):** [R3_DESIGN.md](R3_DESIGN.md) records the
+> paired R3-A (8+8/16 fs composition) and R3-B (the same plus one spatial
+> equivariant mode exchange) experiments. Run
+> `bash scripts/run_r3_pair.sh` on the server for independent, matched
+> training and validation. Historical R1/R2 checkpoints and reports are untouched.
+>
 # SMDP – Neural Motion-Mode Propagation
 
 Formal quartz integration is now available. See [EXPERIMENT.md](EXPERIMENT.md)
