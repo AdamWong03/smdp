@@ -14,12 +14,19 @@ from analysis_tasks import save_json
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--r1',type=Path,required=True);p.add_argument('--r2',type=Path,required=True)
+    p=argparse.ArgumentParser();p.add_argument('--r1',type=Path);p.add_argument('--r2',type=Path)
+    p.add_argument('--checkpoints',type=Path,nargs='+');p.add_argument('--labels',nargs='+')
     p.add_argument('--data-root',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True);torch.set_num_threads(4)
-    data=QuartzSegments(a.data_root,'val',a.r2/'cache')
+    if a.checkpoints:
+        if not a.labels or len(a.labels)!=len(a.checkpoints) or len(set(a.labels))!=len(a.labels):
+            p.error('Provide one unique --labels entry per checkpoint')
+        models=dict(zip(a.labels,a.checkpoints))
+    else:
+        if not a.r1 or not a.r2:p.error('Provide --checkpoints/--labels or --r1/--r2')
+        models={'R1_final':a.r1/'best_rollout.pt',**{k:a.r2/f'best_{k}.pt' for k in ['segment','rollout4','rollout8','rollout16']}}
+    data=QuartzSegments(a.data_root,'val',a.output/'cache')
     lookup={int(t):i for i,t in enumerate(data.offsets)}
-    models={'R1_final':a.r1/'best_rollout.pt',**{k:a.r2/f'best_{k}.pt' for k in ['segment','rollout4','rollout8','rollout16']}}
     for label,path in models.items():
         if (a.output/(label+'.json')).exists(): continue
         started=time.perf_counter();model,cfg=load_model(path,'cuda');builder=PeriodicGraphBuilder(model.config.cutoff_angstrom)
@@ -64,6 +71,10 @@ def main():
                             row[f'predicted_KE_Z{z}']=float((weight[i,mask]*vn[i,mask]**2).sum())
                             row[f'reference_KE_Z{z}']=float((weight[i,mask]*v[i,target,mask]**2).sum())
                             row[f'velocity_mse_Z{z}']=float((vn[i,mask]-v[i,target,mask]).square().mean())
+                            initial=v[i,0,mask]
+                            scale=initial.square().mean().clamp_min(1e-20)
+                            row[f'predicted_vacf_Z{z}']=float((vn[i,mask]*initial).mean()/scale)
+                            row[f'reference_vacf_Z{z}']=float((v[i,target,mask]*initial).mean()/scale)
                         records.append(row)
                     if step==2:
                         jump=out['positions'][0].reshape(size,n,3)-current_q-left
@@ -82,7 +93,10 @@ def main():
                 predicted_KE_eV=float(group.predicted_KE_eV.mean()),reference_KE_eV=float(group.reference_KE_eV.mean()),
                 KE_bias_eV=float((group.predicted_KE_eV-group.reference_KE_eV).mean()),delta_KE_error_eV=float(group.delta_KE_error_eV.mean()),
                 species={str(z):dict(predicted_KE_eV=float(group[f'predicted_KE_Z{z}'].mean()),reference_KE_eV=float(group[f'reference_KE_Z{z}'].mean()),
-                    velocity_RMSE_A_fs=float(np.sqrt(group[f'velocity_mse_Z{z}'].mean()))) for z in [8,14]},routing_correlations={})
+                    velocity_RMSE_A_fs=float(np.sqrt(group[f'velocity_mse_Z{z}'].mean())),
+                    predicted_vacf=float(group[f'predicted_vacf_Z{z}'].mean()),
+                    reference_vacf=float(group[f'reference_vacf_Z{z}'].mean()),
+                    vacf_window_RMSE=float(np.sqrt(((group[f'predicted_vacf_Z{z}']-group[f'reference_vacf_Z{z}'])**2).mean()))) for z in [8,14]},routing_correlations={})
             for k in range(4):
                 route=group[f'recurrent_{k+1}'];corr=route.corr(group.delta_KE_error_eV)
                 result['routing_correlations'][str(k+1)]=dict(mean=float(route.mean()),std=float(route.std()),

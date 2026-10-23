@@ -18,21 +18,30 @@ def synchronize(device):
         torch.cuda.synchronize(device)
 
 
-def bench(model, builder, data, device, times, steps, warmup):
+def bench(model, builder, data, device, times, steps, warmup, autonomous=False):
     sample=data[0]
     q=sample['q'][0].to(device).unsqueeze(0)
     v=sample['v'][0].to(device).unsqueeze(0)
     z=sample['z'].to(device).unsqueeze(0)
     m=sample['mass'].to(device).unsqueeze(0)
     cell=sample['cell'].to(device).unsqueeze(0)
+    initial_q,initial_v=q,v
     def step():
-        return predict_batch(model,q,v,z,m,cell,times,builder)
+        nonlocal q,v
+        out=predict_batch(model,q,v,z,m,cell,times,builder)
+        if autonomous:
+            q=out['positions'][-1].unsqueeze(0)
+            v=out['velocities'][-1].unsqueeze(0)
+        return out
     with torch.inference_mode():
-        for _ in range(warmup):
+        for i in range(warmup):
+            if i%16==0:q,v=initial_q,initial_v
             step()
         synchronize(device)
+        if device.type=='cuda':torch.cuda.reset_peak_memory_stats(device)
         t=time.perf_counter()
-        for _ in range(steps):
+        for i in range(steps):
+            if i%16==0:q,v=initial_q,initial_v
             step()
         synchronize(device)
         elapsed=time.perf_counter()-t
@@ -40,7 +49,10 @@ def bench(model, builder, data, device, times, steps, warmup):
                 ms_per_macrostep=1000*elapsed/steps,
                 ns_per_day=steps*16*1e-6*86400/elapsed,
                 includes=['periodic_graph_rebuild','network','CPU/GPU_transfer'],
-                caveat='Fixed input phase-space state, throughput microbenchmark; no I/O or thermostat')
+                peak_gpu_allocated_bytes=torch.cuda.max_memory_allocated(device) if device.type=='cuda' else None,
+                autonomous=autonomous,
+                caveat=('Repeated 16-step autonomous validation blocks, reset only between blocks; no I/O or thermostat'
+                        if autonomous else 'Fixed input phase-space state, throughput microbenchmark; no I/O or thermostat'))
 
 
 def main():
@@ -60,9 +72,14 @@ def main():
     data=QuartzSegments(args.data_root,'val',args.output.parent/'benchmark_cache')
     values=[bench(model,builder,data,device,[16.],args.steps,args.warmup),
             bench(model,builder,data,device,list(range(1,17)),args.steps,args.warmup)]
+    autoregressive=[bench(model,builder,data,device,times,args.steps,args.warmup,autonomous=True)
+                    for times in ([16.],list(range(1,17)))]
     args.output.parent.mkdir(parents=True,exist_ok=True)
     result=dict(checkpoint=str(args.checkpoint),hardware=torch.cuda.get_device_name(device) if device.type=='cuda' else 'CPU',
-                results=values,endpoint_to_dense_time_ratio=values[1]['elapsed_s']/values[0]['elapsed_s'])
+                results=values,autonomous_results=autoregressive,
+                parameters=sum(p.numel() for p in model.parameters()),
+                endpoint_to_dense_time_ratio=values[1]['elapsed_s']/values[0]['elapsed_s'],
+                autonomous_dense_over_endpoint_time_ratio=autoregressive[1]['elapsed_s']/autoregressive[0]['elapsed_s'])
     args.output.write_text(json.dumps(result,indent=2))
     print(json.dumps(result,indent=2))
 

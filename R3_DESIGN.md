@@ -160,3 +160,27 @@ must be reported; there is no predicted performance claim.
 
 **Do not interpret implementation and unit tests as a completed experimental
 result.** Frozen experiment metrics must be filled only after server runs.
+
+## Server execution corrections (2026-10-23)
+
+Before training, 14 correctness tests passed. Fixed a test-fixture RNG issue
+(the fixture re-randomized the shared decoder after the optional module consumed
+RNG; model initialization itself was correct), and separated checkpoint minimum
+tracking from the early-stopping tolerance so saved weights match their metric.
+The spatial module now participates in the epoch-start nonzero-gradient check.
+No architecture, loss term, or coefficient was changed.
+
+The pair script additionally evaluates the frozen R2 checkpoint under the same
+validation and timing protocol. Post-training composition is measured on all
+1245 valid validation starts, independently of the bounded training subset.
+The reference-supervised objective excluding composition is reported separately.
+The existing frozen-stage diagnostic is reused for endpoint/256 fs errors,
+species velocity correlations and kinetic statistics, mode signed contributions,
+and decoder-only mode deletion (not a causal removal of upstream modes).
+Timing separates fixed-input calls from repeated 16-step autonomous validation
+blocks, and endpoint-only from dense queries. Neither is a long MD trajectory
+nor includes thermostat or disk-output costs. Shared GPU load must be disclosed.
+
+Both arms retain 5000 training samples, 1250 segment-validation samples,
+seed 20261022, batch size 8, at most 100 segment epochs and 12 epochs each
+for rollout4/rollout8. No test-set tuning or production NVE/NVT is launched.

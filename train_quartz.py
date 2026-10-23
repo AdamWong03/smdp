@@ -193,7 +193,10 @@ def main():
                 if not torch.isfinite(losses['loss']): raise FloatingPointError('Nonfinite training loss')
                 losses['loss'].backward()
                 if count==0:
-                    for name,module in [('encoder',model.encoder),('modes',model.decompose),('recurrent',model.propagate.recurrent),('temporal',model.propagate.direct),('router',model.propagate.router),('interaction',model.couple),('decoder',model.decode)]:
+                    modules = [('encoder',model.encoder),('modes',model.decompose),('recurrent',model.propagate.recurrent),('temporal',model.propagate.direct),('router',model.propagate.router),('interaction',model.couple),('decoder',model.decode)]
+                    if model.spatial_exchange is not None:
+                        modules.append(('spatial_interaction', model.spatial_exchange))
+                    for name,module in modules:
                         norm=sum(float(p.grad.detach().square().sum()) for p in module.parameters() if p.grad is not None)**0.5
                         gradient_norms[name]=norm
                         if not np.isfinite(norm) or norm==0: raise FloatingPointError(f'No finite nonzero gradient for {name}')
@@ -213,8 +216,11 @@ def main():
             metric=val_sums['loss']/nval
             if not np.isfinite(metric): raise FloatingPointError('Nonfinite validation loss')
             scheduler.step(metric)
-            improved=metric<best*(1-1e-4)
-            best=min(best,metric); stale=0 if improved else stale+1
+            # Store the true minimum, not a lower scalar with different weights.
+            # The tolerance only controls patience, not checkpoint identity.
+            significant=metric<best*(1-1e-4)
+            improved=metric<best
+            best=min(best,metric); stale=0 if significant else stale+1
             row=dict(phase=phase,epoch=epoch,train={k:v/count for k,v in sums.items()},validation={k:v/nval for k,v in val_sums.items()},
                      mode_statistics={k:(v/nval).tolist() for k,v in diag_sum.items()},gradient_norms=gradient_norms,
                      lr=optimizer.param_groups[0]['lr'],elapsed_s=elapsed_prior+time.perf_counter()-started,

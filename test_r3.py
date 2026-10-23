@@ -17,6 +17,9 @@ def fixture(spatial):
                      additive_modes=True, exclude_self_exchange=True,
                      spatial_mode_exchange=spatial)
     model = NeuralSMDP(cfg).double()
+    # The optional spatial module consumes RNG after the shared model. Reset
+    # only fixture perturbations so they do not invalidate the initialization test.
+    torch.manual_seed(1708)
     with torch.no_grad():
         model.decode.coeffs[-1].weight.normal_(0.0, .02)
     q = torch.tensor([[1.,1.,1.],[2.,1.,1.],[1.,2.,1.],

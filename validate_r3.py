@@ -19,8 +19,9 @@ def evaluate_checkpoint(checkpoint: Path, dataset, device, batch_size):
     loader = DataLoader(Subset(dataset, valid_indices), batch_size=batch_size,
                         shuffle=False, num_workers=0)
     stats = SegmentStats(**config['stats'])
-    weight = float(config.get('r3_composition_weight', 0.0))
-    samples = int(config.get('r3_composition_samples', 2))
+    # Common evaluation even for R2, whose training did not contain this term.
+    weight = 0.05
+    samples = batch_size  # measure composition on EVERY validation start
     times = torch.tensor([0., 1., 4., 8., 12., 15., 16.], device=device)
     totals, n_total = {}, 0
     model.eval()
@@ -37,8 +38,14 @@ def evaluate_checkpoint(checkpoint: Path, dataset, device, batch_size):
             n_total += n
     if not n_total:
         raise RuntimeError('No valid independent validation windows')
+    metrics={k:v/n_total for k,v in totals.items()}
+    metrics['reference_objective_without_composition']=metrics['loss']-weight*metrics['composition']
+    metrics['endpoint_position_RMSE_A']=metrics['endpoint_q_mse']**0.5
+    metrics['endpoint_velocity_RMSE_A_fs']=metrics['endpoint_v_mse']**0.5
+    metrics['composition_position_RMS_A']=metrics['composition_q']**0.5*stats.displacement_residual_rms
+    metrics['composition_velocity_RMS_A_fs']=metrics['composition_v']**0.5*stats.velocity_delta_rms
     return dict(checkpoint=str(checkpoint), model_config=config['model'],
-                validation_samples=n_total, metrics={k:v/n_total for k,v in totals.items()},
+                validation_samples=n_total, metrics=metrics,
                 query_times_fs=times.tolist(), comparison_rollout_steps=16,
                 composition_weight=weight, checkpoint_selection=config.get('selection'))
 
