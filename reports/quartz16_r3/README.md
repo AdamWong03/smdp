@@ -39,15 +39,17 @@ Base: `/data1/wyd/research/foundation_mlip_adaptation`.
   `history.jsonl`; phase checkpoints and optimizer state are also retained.
 - Logs: `quartz16_r3_pair/pipeline.log`, `train_a.log`, `train_b.log`.
 
-Both arms run sequentially on physical GPU 1, NVIDIA L40S, UUID
-`GPU-e021d5a1-42fd-70cc-8dd1-08de8f1d8987`. Other users' workloads were already
+Both arms run sequentially on NVIDIA L40S, UUID
+`GPU-83ddba27-1ec6-70a3-41f5-4b8a1d4e7900` (physical `nvidia-smi` index 2;
+CUDA ordinal 1 on this host; the two orderings differ). Other users' workloads were already
 active at launch. Runtime figures must disclose this contention and must not
 be presented as isolated-hardware speedups against older production timings.
 
 Reproducible launch from the repository (refuses to overwrite existing runs):
 
 ```bash
-CUDA_VISIBLE_DEVICES=1 OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=1 \
+CUDA_VISIBLE_DEVICES=GPU-83ddba27-1ec6-70a3-41f5-4b8a1d4e7900 \
+  OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=1 \
   PYTHON=/data1/wyd/envs/mlip/bin/python bash scripts/run_r3_pair.sh
 ```
 
