@@ -11,6 +11,7 @@ from torch.utils.data import DataLoader, Subset
 from smdp_neural import NeuralSMDP, SMDPConfig
 from training_objectives import SegmentStats, supervised_segment_loss, physical_segment_objectives
 from periodic import PeriodicGraphBuilder, predict_batch
+from r3_consistency import composition_consistency
 from reference_data import QuartzSegments, validate_split_manifest
 
 
@@ -21,7 +22,7 @@ def batch_to(batch, device):
 OBJECTIVE_WEIGHTS = dict(kinematics=.2, species_velocity=.25, species_kinetic=.1, vacf=.1, join=.2)
 
 
-def loss_for(model, batch, times, stats, builder, rollout_steps=0):
+def loss_for(model, batch, times, stats, builder, rollout_steps=0, composition_weight=0.0, composition_samples=2):
     q, v = batch['q'], batch['v']
     out = predict_batch(model, q[:, 0], v[:, 0], batch['z'], batch['mass'], batch['cell'], times, builder)
     target_q = q[:, times.long()].transpose(0, 1).flatten(1, 2)
@@ -71,6 +72,10 @@ def loss_for(model, batch, times, stats, builder, rollout_steps=0):
         result['rollout_species_kinetic'] = temporal['species_kinetic']
         result['rollout_vacf'] = temporal['vacf']
         result['loss'] = result['loss'] + result['rollout_loss'] + OBJECTIVE_WEIGHTS['join']*result['join'] + .1*(temporal['species_kinetic']+temporal['vacf'])
+    if composition_weight:
+        terms = composition_consistency(model, batch, out, times, stats, builder, samples=composition_samples)
+        result.update(terms)
+        result['loss'] = result['loss'] + composition_weight * terms['composition']
     return result, out
 
 
@@ -105,7 +110,13 @@ def main():
     p.add_argument('--patience', type=int, default=15)
     p.add_argument('--seed', type=int, default=20261022)
     p.add_argument('--resume', type=Path)
+    p.add_argument('--r3-composition-weight', type=float, default=0.0)
+    p.add_argument('--r3-composition-samples', type=int, default=2)
+    p.add_argument('--spatial-mode-exchange', action='store_true')
+    p.add_argument('--max-rollout-steps', type=int, choices=[8,16], default=16)
     args = p.parse_args()
+    if args.r3_composition_weight < 0 or args.r3_composition_samples < 1:
+        p.error('Invalid R3 composition weight or samples')
     args.output.mkdir(parents=True, exist_ok=True)
     if (args.output/'history.jsonl').exists() and args.resume is None:
         raise FileExistsError('Existing run: supply --resume or choose a new output directory')
@@ -117,8 +128,14 @@ def main():
     train = QuartzSegments(args.data_root, 'train', args.output/'cache')
     val = QuartzSegments(args.data_root, 'val', args.output/'cache')
     stats = SegmentStats(**train.scales)
-    cfg = SMDPConfig(additive_modes=True, exclude_self_exchange=True)
+    cfg = SMDPConfig(additive_modes=True, exclude_self_exchange=True,
+                     spatial_mode_exchange=args.spatial_mode_exchange)
     model = NeuralSMDP(cfg).to(device)
+    # Preserve identical subsequent data/shuffle RNG for R3-A and R3-B.
+    # The shared encoder/propagator/decoder are initialized before the optional
+    # spatial module, so their initial weights match under the same seed.
+    if args.r3_composition_weight:
+        torch.manual_seed(args.seed + 41)
     builder = PeriodicGraphBuilder(cfg.cutoff_angstrom)
     optimizer = torch.optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-6)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.5, patience=5, min_lr=2e-6)
@@ -127,6 +144,9 @@ def main():
                   training_queries='0,1,4,8,15,16 plus one random adjacent triplet',
                   validation_queries=[0,1,4,8,12,15,16], rollout_steps=[4,8,16],
                   loss_weights=OBJECTIVE_WEIGHTS, pushforward_gradient_segments=2,
+                  r3_composition_weight=args.r3_composition_weight,
+                  r3_composition_samples=args.r3_composition_samples,
+                  r3_spatial_mode_exchange=args.spatial_mode_exchange,
                   selection='complete validation split; 16-step autonomous metric in all rollout phases; no test selection',
                   hardware=torch.cuda.get_device_name(device) if device.type=='cuda' else 'CPU',
                   torch_version=torch.__version__, units={'position':'Angstrom','velocity':'Angstrom/fs','cell':'row vectors','mass':'u'})
@@ -143,7 +163,9 @@ def main():
         torch.set_rng_state(state['torch_rng'].cpu()); random.setstate(state['python_rng']); np.random.set_state(state['numpy_rng'])
         if device.type == 'cuda': torch.cuda.set_rng_state(state['cuda_rng'].cpu(), device)
     started = time.perf_counter()
-    phases=[('segment',args.segment_epochs),('rollout4',args.rollout_epochs),('rollout8',args.rollout_epochs),('rollout16',args.rollout_epochs)]
+    phases=[('segment',args.segment_epochs),('rollout4',args.rollout_epochs),('rollout8',args.rollout_epochs)]
+    if args.max_rollout_steps == 16:
+        phases.append(('rollout16',args.rollout_epochs))
     for phase_index,(phase, epochs) in enumerate(phases):
         if phase_index < [x[0] for x in phases].index(start_phase): continue
         is_rollout = phase!='segment'
@@ -165,7 +187,8 @@ def main():
                 center=random.randint(2,14)
                 times=torch.tensor(sorted({0,1,4,8,15,16,center-1,center,center+1}),device=device,dtype=torch.float32)
                 optimizer.zero_grad(set_to_none=True)
-                losses,out=loss_for(model,batch,times,stats,builder,steps)
+                losses,out=loss_for(model,batch,times,stats,builder,steps,
+                                    args.r3_composition_weight,args.r3_composition_samples)
                 if not torch.isfinite(losses['loss']): raise FloatingPointError('Nonfinite training loss')
                 losses['loss'].backward()
                 if count==0:
@@ -181,7 +204,8 @@ def main():
             with torch.no_grad():
                 for batch in val_loader:
                     batch=batch_to(batch,device)
-                    losses,out=loss_for(model,batch,torch.tensor([0.,1.,4.,8.,12.,15.,16.],device=device),stats,builder,16 if is_rollout else 0)
+                    losses,out=loss_for(model,batch,torch.tensor([0.,1.,4.,8.,12.,15.,16.],device=device),stats,builder,16 if is_rollout else 0,
+                                        args.r3_composition_weight,args.r3_composition_samples)
                     n=len(batch['q']); nval+=n
                     for k,v in losses.items(): val_sums[k]=val_sums.get(k,0.)+float(v)*n
                     for k,v in diagnostics(out).items(): diag_sum[k]=diag_sum.get(k,0.)+np.array(v)*n
@@ -204,10 +228,24 @@ def main():
             if improved: torch.save(state,args.output/f'best_{phase}.pt')
             if stale>=args.patience and epoch>=19: break
         start_epoch=0
-    # Final checkpoint is selected only within the completed 16-step phase.
+    # All rollout phases use exactly the same 16-step validation objective;
+    # R3 selects across stages instead of forcing the final stage to win.
     import shutil
-    shutil.copyfile(args.output/'best_rollout16.pt',args.output/'best_rollout.pt')
-    (args.output/'training_complete.json').write_text(json.dumps(dict(best_checkpoint='best_rollout.pt',elapsed_s=elapsed_prior+time.perf_counter()-started)))
+    if args.r3_composition_weight:
+        candidates=[]
+        for phase,_ in phases:
+            if not phase.startswith('rollout'): continue
+            ckpt=torch.load(args.output/f'best_{phase}.pt',map_location='cpu',weights_only=False)
+            candidates.append((float(ckpt['best']),phase))
+        winner_metric,winner_phase=min(candidates)
+    else:
+        winner_phase=phases[-1][0]
+        winner_metric=None
+    shutil.copyfile(args.output/f'best_{winner_phase}.pt',args.output/'best_rollout.pt')
+    (args.output/'training_complete.json').write_text(json.dumps(dict(
+        best_checkpoint='best_rollout.pt',selection_phase=winner_phase,
+        selection_validation_loss=winner_metric,
+        elapsed_s=elapsed_prior+time.perf_counter()-started)))
 
 
 if __name__=='__main__': main()
