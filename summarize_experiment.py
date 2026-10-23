@@ -52,9 +52,10 @@ def main():
         compare_runs(args.previous,out)
 
 
-def compare_runs(previous,current):
+def compare_runs(previous,current,report_output=None,analysis_root=None):
     """Publish observed numbers and their differences, without hiding failures."""
-    rows=[]
+    rows=[];statuses={}
+    destination=report_output or current
     def add(run,metric,old,new,reference=None):
         rows.append(dict(run=run,metric=metric,old=old,new=new,reference=reference,
                          new_minus_old=new-old if old is not None and new is not None else None))
@@ -67,9 +68,17 @@ def compare_runs(previous,current):
     for key in ['position_velocity_consistency_RMSE_A_fs','join_position_derivative_jump_RMS_A_fs','two_step_position_RMSE_A']:
         add('test',key,oldtest.get(key),newtest.get(key))
     for name in ['nve_test_09','nve_test_10','nvt']:
-        old=read(previous,f'{name}_analysis/metrics.json');new=read(current,f'{name}_analysis/metrics.json')
-        if not new.get('production_available',False):
-            add(name,'production_available',int(old.get('production_available',False)),0)
+        old=read(previous,f'{name}_analysis/metrics.json');new=read(analysis_root or current,f'{name}_analysis/metrics.json')
+        trajectory=read(current,name+'.summary.json')
+        legacy_complete=all(k in new for k in ['temperature_K','kinetic_energy_eV','potential_energy_eV','RDF','VDOS'])
+        legacy_complete=legacy_complete and all(k in new.get('VDOS',{}) for k in ['macro_16fs','queried_1fs'])
+        analysis_complete=bool(new.get('physical_analysis_completed',legacy_complete))
+        statuses[name]=dict(trajectory_completed=bool(trajectory and trajectory.get('production_ps',0)>=trajectory.get('requested_production_ps',float('inf'))),
+            production_ps=trajectory.get('production_ps'),physical_analysis_completed=analysis_complete,
+            analysis_failure_reason=new.get('analysis_failure_reason',None if analysis_complete else 'Physical analysis missing or incomplete; trajectory completion is independent'))
+        for key in ['production_ps','ns_day_end_to_end','ms_per_step','peak_gpu_bytes']:
+            add(name,key,read(previous,name+'.summary.json').get(key),trajectory.get(key))
+        if not statuses[name]['physical_analysis_completed']:
             continue
         for key in ['temperature_K','kinetic_energy_eV','potential_energy_eV']:
             for stat in ['mean','std']:
@@ -89,15 +98,15 @@ def compare_runs(previous,current):
             for key in ['peak_position_A','peak_height']:
                 add(name,'RDF_'+pair+'_'+key,old.get('RDF',{}).get(pair,{}).get(key,{}).get('SMDP'),
                     new['RDF'][pair][key]['SMDP'],new['RDF'][pair][key]['reference'])
-        for key in ['production_ps','ns_day_end_to_end','ms_per_step','peak_gpu_bytes']:
-            add(name,key,read(previous,name+'.summary.json').get(key),read(current,name+'.summary.json').get(key))
-    (current/'comparison.json').write_text(json.dumps(rows,indent=2))
+    (destination/'comparison.json').write_text(json.dumps(rows,indent=2))
+    (destination/'run_status.json').write_text(json.dumps(statuses,indent=2))
     lines=['# Previous / additive-mode iteration / BKS comparison','',f'Previous: `{previous}`',f'Current: `{current}`','',
         'Evaluation cadence, stopping thresholds, CSVR parameters and BKS are unchanged. A completed trajectory need not be physically accurate. Partial trajectories are not equivalent 15 ns evidence. Check recorded hardware before interpreting throughput differences.','',
+        'Trajectory generation and physical analysis are separate states:', '','```json',json.dumps(statuses,indent=2),'```','',
         '| Run | Metric | Previous | Current | BKS | Current − previous |','|---|---|---:|---:|---:|---:|']
     def fmt(x): return 'unavailable' if x is None else f'{x:.7g}'
     for r in rows: lines.append('| '+' | '.join([r['run'],r['metric'],*[fmt(r[x]) for x in ['old','new','reference','new_minus_old']]])+' |')
-    (current/'COMPARISON.md').write_text('\n'.join(lines)+'\n')
+    (destination/'COMPARISON.md').write_text('\n'.join(lines)+'\n')
 
 
 if __name__=='__main__': main()

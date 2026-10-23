@@ -1,0 +1,11 @@
+{
+  "seed": 2026102201,
+  "seed_source": "Default --seed in the frozen rollout_quartz.py used by run_experiment.py; checked by full-sequence replay",
+  "steps": 1031250,
+  "max_alpha_abs_error": 6.511753780635843e-08,
+  "mean_alpha_abs_error": 2.4316389306199207e-08,
+  "matched_with_float32_storage": true,
+  "expected_finite_random_sequence_innovation_mean_K": -0.02471641007173464,
+  "measured_innovation_mean_K": -0.024716407655050385,
+  "caveat": "Temperature is stored float32 and includes the preserved, negligible initial COM energy."
+}

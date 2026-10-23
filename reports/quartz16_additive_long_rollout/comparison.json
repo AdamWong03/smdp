@@ -41,26 +41,602 @@
   },
   {
     "run": "nve_test_09",
-    "metric": "production_available",
-    "old": 1,
-    "new": 0,
+    "metric": "production_ps",
+    "old": 100.0,
+    "new": 100.0,
     "reference": null,
-    "new_minus_old": -1
+    "new_minus_old": 0.0
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "ns_day_end_to_end",
+    "old": 162.2259952931669,
+    "new": 109.00800359469699,
+    "reference": null,
+    "new_minus_old": -53.217991698469916
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "ms_per_step",
+    "old": 8.521445638239383,
+    "new": 12.68163762671873,
+    "reference": null,
+    "new_minus_old": 4.1601919884793475
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "peak_gpu_bytes",
+    "old": 124251648,
+    "new": 124459520,
+    "reference": null,
+    "new_minus_old": 207872
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "temperature_K_mean",
+    "old": 700.5481749315527,
+    "new": 254.28398382600292,
+    "reference": 287.90947598928165,
+    "new_minus_old": -446.2641911055498
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "temperature_K_std",
+    "old": 96.99214487172651,
+    "new": 44.55164289028765,
+    "reference": 12.809218392126452,
+    "new_minus_old": -52.44050198143886
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "kinetic_energy_eV_mean",
+    "old": 14.579009871318236,
+    "new": 5.291868343928862,
+    "reference": 5.991643747989079,
+    "new_minus_old": -9.287141527389373
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "kinetic_energy_eV_std",
+    "old": 2.0184899313503877,
+    "new": 0.9271579953004803,
+    "reference": 0.26657084846581564,
+    "new_minus_old": -1.0913319360499074
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "potential_energy_eV_mean",
+    "old": -3127.568626979543,
+    "new": -3136.7907942224815,
+    "reference": -3136.0119745813377,
+    "new_minus_old": -9.222167242938667
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "potential_energy_eV_std",
+    "old": 1.9678731021825988,
+    "new": 0.8801856284203616,
+    "reference": 0.26786188351394535,
+    "new_minus_old": -1.0876874737622373
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "energy_change_eV",
+    "old": 17.429389199546677,
+    "new": 0.1394123553100144,
+    "reference": 0.004781890219874185,
+    "new_minus_old": -17.289976844236662
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "total_energy_drift_meV_atom_ps",
+    "old": 0.1389062866730689,
+    "new": 0.11258551451101698,
+    "reference": 0.0005761529654454583,
+    "new_minus_old": -0.02632077216205192
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "minimum_distance_A",
+    "old": 1.4010207653045654,
+    "new": 1.4896186590194702,
+    "reference": null,
+    "new_minus_old": 0.08859789371490479
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "species_KE_eV_Z8",
+    "old": 10.193822122094808,
+    "new": 3.5633629317314592,
+    "reference": 3.99525855929746,
+    "new_minus_old": -6.630459190363348
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "species_KE_eV_Z14",
+    "old": 4.385187749223429,
+    "new": 1.7285054121974035,
+    "reference": 1.9963851886916182,
+    "new_minus_old": -2.6566823370260257
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "macro_16fs_VDOS_overlap_Z8",
+    "old": 0.7344079556206102,
+    "new": 0.6883081947972907,
+    "reference": 1.0,
+    "new_minus_old": -0.04609976082331957
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "macro_16fs_VDOS_overlap_Z14",
+    "old": 0.7947465418966826,
+    "new": 0.7149274667430391,
+    "reference": 1.0,
+    "new_minus_old": -0.0798190751536435
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "queried_1fs_VDOS_overlap_Z8",
+    "old": 0.7331087899491009,
+    "new": 0.7015093505672579,
+    "reference": 1.0,
+    "new_minus_old": -0.03159943938184295
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "queried_1fs_VDOS_overlap_Z14",
+    "old": 0.7859661533258806,
+    "new": 0.7146762660351293,
+    "reference": 1.0,
+    "new_minus_old": -0.07128988729075125
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "RDF_RMSE_14-8",
+    "old": 1.3086306578139808,
+    "new": 0.6863298930435293,
+    "reference": 0.0,
+    "new_minus_old": -0.6223007647704515
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "RDF_14-8_peak_position_A",
+    "old": 1.6033405657411766,
+    "new": 1.6033405657411766,
+    "reference": 1.6033405657411766,
+    "new_minus_old": 0.0
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "RDF_14-8_peak_height",
+    "old": 22.73502860566931,
+    "new": 43.10842369987808,
+    "reference": 35.364217861851046,
+    "new_minus_old": 20.37339509420877
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "RDF_RMSE_8-8",
+    "old": 0.39486326453309467,
+    "new": 0.07114615040759016,
+    "reference": 0.0,
+    "new_minus_old": -0.3237171141255045
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "RDF_8-8_peak_position_A",
+    "old": 2.624727889102222,
+    "new": 2.624727889102222,
+    "reference": 2.6009746955356867,
+    "new_minus_old": 0.0
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "RDF_8-8_peak_height",
+    "old": 6.692429582050862,
+    "new": 8.995441323625835,
+    "reference": 9.24784183169206,
+    "new_minus_old": 2.3030117415749727
   },
   {
     "run": "nve_test_10",
-    "metric": "production_available",
-    "old": 1,
-    "new": 0,
+    "metric": "production_ps",
+    "old": 100.0,
+    "new": 100.0,
     "reference": null,
-    "new_minus_old": -1
+    "new_minus_old": 0.0
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "ns_day_end_to_end",
+    "old": 165.6799075949595,
+    "new": 116.30901515788547,
+    "reference": null,
+    "new_minus_old": -49.37089243707403
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "ms_per_step",
+    "old": 8.343799921590835,
+    "new": 11.885579102560877,
+    "reference": null,
+    "new_minus_old": 3.5417791809700425
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "peak_gpu_bytes",
+    "old": 124251648,
+    "new": 124459520,
+    "reference": null,
+    "new_minus_old": 207872
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "temperature_K_mean",
+    "old": 707.7278678269296,
+    "new": 274.82346830089494,
+    "reference": 302.7117153987662,
+    "new_minus_old": -432.90439952603464
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "temperature_K_std",
+    "old": 98.20230314542871,
+    "new": 63.229609278893584,
+    "reference": 13.544567609039127,
+    "new_minus_old": -34.97269386653513
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "kinetic_energy_eV_mean",
+    "old": 14.728425453772589,
+    "new": 5.719312676276878,
+    "reference": 6.299691077481552,
+    "new_minus_old": -9.009112777495712
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "kinetic_energy_eV_std",
+    "old": 2.0436743655541965,
+    "new": 1.315862535687359,
+    "reference": 0.28187409794367413,
+    "new_minus_old": -0.7278118298668375
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "potential_energy_eV_mean",
+    "old": -3127.374445120835,
+    "new": -3136.3762383968924,
+    "reference": -3135.704982468285,
+    "new_minus_old": -9.00179327605747
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "potential_energy_eV_std",
+    "old": 2.021346684704532,
+    "new": 1.2842909734168508,
+    "reference": 0.28328428648540965,
+    "new_minus_old": -0.7370557112876812
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "energy_change_eV",
+    "old": 19.111451112087707,
+    "new": -2.2499796486958985,
+    "reference": 0.0032830016507432447,
+    "new_minus_old": -21.361430760783605
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "total_energy_drift_meV_atom_ps",
+    "old": 0.1447015814070018,
+    "new": 0.21577484222991503,
+    "reference": -0.00047076049085076,
+    "new_minus_old": 0.07107326082291324
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "minimum_distance_A",
+    "old": 1.4166399240493774,
+    "new": 1.5008293390274048,
+    "reference": null,
+    "new_minus_old": 0.08418941497802734
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "species_KE_eV_Z8",
+    "old": 10.361380238348001,
+    "new": 3.960274120964784,
+    "reference": 4.2171512847601225,
+    "new_minus_old": -6.401106117383217
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "species_KE_eV_Z14",
+    "old": 4.367045215424587,
+    "new": 1.7590385553120942,
+    "reference": 2.082539792721431,
+    "new_minus_old": -2.6080066601124923
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "macro_16fs_VDOS_overlap_Z8",
+    "old": 0.7301604023565964,
+    "new": 0.6608273994307087,
+    "reference": 1.0,
+    "new_minus_old": -0.06933300292588773
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "macro_16fs_VDOS_overlap_Z14",
+    "old": 0.7958643828733072,
+    "new": 0.7190893225281166,
+    "reference": 1.0,
+    "new_minus_old": -0.07677506034519055
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "queried_1fs_VDOS_overlap_Z8",
+    "old": 0.7348608381104262,
+    "new": 0.6752904295800466,
+    "reference": 1.0,
+    "new_minus_old": -0.05957040853037965
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "queried_1fs_VDOS_overlap_Z14",
+    "old": 0.7921053266822665,
+    "new": 0.716282435805733,
+    "reference": 1.0,
+    "new_minus_old": -0.07582289087653349
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "RDF_RMSE_14-8",
+    "old": 1.2134816020435613,
+    "new": 0.7007439622588226,
+    "reference": 0.0,
+    "new_minus_old": -0.5127376397847386
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "RDF_14-8_peak_position_A",
+    "old": 1.6033405657411766,
+    "new": 1.6033405657411766,
+    "reference": 1.6033405657411766,
+    "new_minus_old": 0.0
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "RDF_14-8_peak_height",
+    "old": 23.024969834993676,
+    "new": 42.25678114509685,
+    "reference": 34.6474984533892,
+    "new_minus_old": 19.231811310103176
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "RDF_RMSE_8-8",
+    "old": 0.38724508593335166,
+    "new": 0.0753839696742455,
+    "reference": 0.0,
+    "new_minus_old": -0.3118611162591062
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "RDF_8-8_peak_position_A",
+    "old": 2.624727889102222,
+    "new": 2.624727889102222,
+    "reference": 2.6009746955356867,
+    "new_minus_old": 0.0
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "RDF_8-8_peak_height",
+    "old": 6.654586666109493,
+    "new": 8.912907726001325,
+    "reference": 9.071304469266204,
+    "new_minus_old": 2.2583210598918324
   },
   {
     "run": "nvt",
-    "metric": "production_available",
-    "old": 1,
-    "new": 0,
+    "metric": "production_ps",
+    "old": 15000.0,
+    "new": 15000.0,
     "reference": null,
-    "new_minus_old": -1
+    "new_minus_old": 0.0
+  },
+  {
+    "run": "nvt",
+    "metric": "ns_day_end_to_end",
+    "old": 163.25223029437538,
+    "new": 104.90990977757893,
+    "reference": null,
+    "new_minus_old": -58.34232051679645
+  },
+  {
+    "run": "nvt",
+    "metric": "ms_per_step",
+    "old": 8.467878187680899,
+    "new": 13.177020196956104,
+    "reference": null,
+    "new_minus_old": 4.7091420092752045
+  },
+  {
+    "run": "nvt",
+    "metric": "peak_gpu_bytes",
+    "old": 124250112,
+    "new": 124461056,
+    "reference": null,
+    "new_minus_old": 210944
+  },
+  {
+    "run": "nvt",
+    "metric": "temperature_K_mean",
+    "old": 361.3443900516864,
+    "new": 280.7478073591276,
+    "reference": 299.1839998544485,
+    "new_minus_old": -80.5965826925588
+  },
+  {
+    "run": "nvt",
+    "metric": "temperature_K_std",
+    "old": 28.766068989284378,
+    "new": 19.711808246886804,
+    "reference": 18.658345123931916,
+    "new_minus_old": -9.054260742397574
+  },
+  {
+    "run": "nvt",
+    "metric": "kinetic_energy_eV_mean",
+    "old": 7.5198874510289295,
+    "new": 5.842603265991782,
+    "reference": 6.226276283775414,
+    "new_minus_old": -1.6772841850371476
+  },
+  {
+    "run": "nvt",
+    "metric": "kinetic_energy_eV_std",
+    "old": 0.5986466295408935,
+    "new": 0.4102196783839646,
+    "reference": 0.38829620499809836,
+    "new_minus_old": -0.18842695115692892
+  },
+  {
+    "run": "nvt",
+    "metric": "potential_energy_eV_mean",
+    "old": -3134.6822155737327,
+    "new": -3136.1636516044828,
+    "reference": -3135.7729840013926,
+    "new_minus_old": -1.4814360307500465
+  },
+  {
+    "run": "nvt",
+    "metric": "potential_energy_eV_std",
+    "old": 0.5775837326127798,
+    "new": 0.40318902074642343,
+    "reference": 0.40106456900875515,
+    "new_minus_old": -0.1743947118663564
+  },
+  {
+    "run": "nvt",
+    "metric": "energy_change_eV",
+    "old": -0.8342772727974079,
+    "new": 0.11373544621756082,
+    "reference": -1.2183689951684755,
+    "new_minus_old": 0.9480127190149688
+  },
+  {
+    "run": "nvt",
+    "metric": "total_energy_drift_meV_atom_ps",
+    "old": -2.1249821436384444e-05,
+    "new": -3.2992658397709145e-06,
+    "reference": -8.948068398594515e-06,
+    "new_minus_old": 1.795055559661353e-05
+  },
+  {
+    "run": "nvt",
+    "metric": "minimum_distance_A",
+    "old": 1.4701242446899414,
+    "new": 1.4785569906234741,
+    "reference": null,
+    "new_minus_old": 0.008432745933532715
+  },
+  {
+    "run": "nvt",
+    "metric": "species_KE_eV_Z8",
+    "old": 6.0536095824359055,
+    "new": 3.9685410938946744,
+    "reference": 4.1504345011315,
+    "new_minus_old": -2.085068488541231
+  },
+  {
+    "run": "nvt",
+    "metric": "species_KE_eV_Z14",
+    "old": 1.4662778685930251,
+    "new": 1.8740621720971071,
+    "reference": 2.0758417826439146,
+    "new_minus_old": 0.407784303504082
+  },
+  {
+    "run": "nvt",
+    "metric": "macro_16fs_VDOS_overlap_Z8",
+    "old": 0.44967180080085783,
+    "new": 0.8109381528013508,
+    "reference": 1.0,
+    "new_minus_old": 0.361266352000493
+  },
+  {
+    "run": "nvt",
+    "metric": "macro_16fs_VDOS_overlap_Z14",
+    "old": 0.6281193433339972,
+    "new": 0.8313440165982858,
+    "reference": 1.0,
+    "new_minus_old": 0.2032246732642886
+  },
+  {
+    "run": "nvt",
+    "metric": "queried_1fs_VDOS_overlap_Z8",
+    "old": 0.45773409264546233,
+    "new": 0.8188459407918991,
+    "reference": 1.0,
+    "new_minus_old": 0.36111184814643676
+  },
+  {
+    "run": "nvt",
+    "metric": "queried_1fs_VDOS_overlap_Z14",
+    "old": 0.6196627440373232,
+    "new": 0.8339805653915945,
+    "reference": 1.0,
+    "new_minus_old": 0.21431782135427124
+  },
+  {
+    "run": "nvt",
+    "metric": "RDF_RMSE_14-8",
+    "old": 0.24015275193869992,
+    "new": 0.5703149877241941,
+    "reference": 0.0,
+    "new_minus_old": 0.3301622357854942
+  },
+  {
+    "run": "nvt",
+    "metric": "RDF_14-8_peak_position_A",
+    "old": 1.6033405657411766,
+    "new": 1.6033405657411766,
+    "reference": 1.6033405657411766,
+    "new_minus_old": 0.0
+  },
+  {
+    "run": "nvt",
+    "metric": "RDF_14-8_peak_height",
+    "old": 36.92970911985332,
+    "new": 41.06639537189711,
+    "reference": 34.76711117175737,
+    "new_minus_old": 4.136686252043788
+  },
+  {
+    "run": "nvt",
+    "metric": "RDF_RMSE_8-8",
+    "old": 0.3096487856862614,
+    "new": 0.056850321897883686,
+    "reference": 0.0,
+    "new_minus_old": -0.2527984637883777
+  },
+  {
+    "run": "nvt",
+    "metric": "RDF_8-8_peak_position_A",
+    "old": 2.6484810826687584,
+    "new": 2.6009746955356867,
+    "reference": 2.6009746955356867,
+    "new_minus_old": -0.04750638713307165
+  },
+  {
+    "run": "nvt",
+    "metric": "RDF_8-8_peak_height",
+    "old": 7.931827561015302,
+    "new": 8.757684560341314,
+    "reference": 9.167464113664485,
+    "new_minus_old": 0.8258569993260121
   }
 ]

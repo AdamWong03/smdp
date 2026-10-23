@@ -1,0 +1,19 @@
+{
+  "base_commit": "ed4780d5cd80ffe9ff38ad14a54d4eea658a3d13",
+  "note": "Source hashes identify working-tree analysis code, including uncommitted changes at report generation. No model/training changes in this reanalysis.",
+  "sha256": {
+    "analyze_quartz.py": "82b6a02dda852b1b22bdcecc2eac6a149ac73e2d32cc83f4be16db28e5a14d6d",
+    "analysis_tasks.py": "93527b5a25e4d0647d8e1f658d45cedff35423457554a54eb2c07113fd0912c3",
+    "analyze_training_stages.py": "e5a3bef75c657f427ebcbfb528586072704a866d274a58cc317a1200e4d08559",
+    "verify_bks_runtime.py": "b8bfa755968a2d7266ba85f47eab52cc5b4034cc1143335db75f96197da00cf8",
+    "verify_csvr_replay.py": "a3f153d9ef2f55ef6cd2fd8c606628ed877bfd6ac7acd61167d2cc326b22a98c",
+    "report_r2_reanalysis.py": "f1d1d6f84be3e5036d5b0a6c912662ff2bbfd354da262b9a891c360bc94c406f",
+    "summarize_experiment.py": "27d81b9e7c617dc1695b1d7f58473d0afcd9733ab54b3039918163dc18921e55",
+    "physics/bks.py": "2ba1fde9b322ada80836ac87f6c5ec24c1dcde437eec84a47d2f49d2ce6238f4",
+    "physics/metrics.py": "b171e8b43b2b47203b1b0177f2c4b2815d9bedb283e7249f68668cdd44475e72",
+    "train_quartz.py": "67d84db2ad8c050d1406608cd945e6797b813b0de2ff71a1c75fdb3e87f39eb3",
+    "training_objectives.py": "0f792349278051c32a4f05104be6878b859ea549b1c4a222e246fda2258cd09d",
+    "smdp_neural.py": "65e9ed00855daf182d1cc765fcdeac1314c2170adf5f6cf9c87a5cc301aadb44",
+    "rollout_quartz.py": "046056d20a5738c7507646b1aaf479dd04673b86833150ab1f4cf3f714b15f1e"
+  }
+}

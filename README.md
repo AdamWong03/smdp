@@ -6,8 +6,14 @@ artifact paths. `train_quartz.py`, `evaluate_quartz.py`, `rollout_quartz.py` and
 `analyze_quartz.py` implement training and physical evaluation. The first formal
 run is complete (see `reports/quartz16_first`): it ran 15 ns NVT but failed physical
 fidelity, including NVE heating and mode concentration. The targeted additive-mode
-iteration is described at the top of `EXPERIMENT.md`; implementation and passing
-unit tests are not experimental evidence of long-time stability.
+iteration is described in `EXPERIMENT.md`. Its completed frozen-trajectory
+reanalysis is reported in
+[R2 physical report](reports/quartz16_additive_long_rollout/PHYSICS_REPORT.md)
+and the [R1/R2/BKS table](reports/quartz16_additive_long_rollout/COMPARISON.md).
+[REANALYSIS.md](REANALYSIS.md) documents the MPI runtime fix, independently
+resumable physical tasks and frozen-checkpoint validation. No R3 or new MD
+trajectory was run for this analysis. Implementation and passing unit tests
+are not experimental evidence of long-time physical fidelity.
 
 This package contains an **implemented and unit-checked neural model core** for the frozen research route:
 

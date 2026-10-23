@@ -1,0 +1,66 @@
+[
+  {
+    "run": "test",
+    "metric": "position_RMSE_A",
+    "old": 0.0020959168448181757,
+    "new": 0.0028069344272189005,
+    "reference": null,
+    "new_minus_old": 0.0007110175824007249
+  },
+  {
+    "run": "test",
+    "metric": "velocity_RMSE_A_fs",
+    "old": 0.00032856055277849045,
+    "new": 0.0003871678234989092,
+    "reference": null,
+    "new_minus_old": 5.8607270720418755e-05
+  },
+  {
+    "run": "test",
+    "metric": "position_velocity_consistency_RMSE_A_fs",
+    "old": 0.00011442304736482255,
+    "new": 0.00010062719949219023,
+    "reference": null,
+    "new_minus_old": -1.3795847872632319e-05
+  },
+  {
+    "run": "test",
+    "metric": "join_position_derivative_jump_RMS_A_fs",
+    "old": 0.000570044386408495,
+    "new": 0.0004886632994872442,
+    "reference": null,
+    "new_minus_old": -8.138108692125074e-05
+  },
+  {
+    "run": "test",
+    "metric": "two_step_position_RMSE_A",
+    "old": 0.004233009617755802,
+    "new": 0.005569565278678313,
+    "reference": null,
+    "new_minus_old": 0.0013365556609225117
+  },
+  {
+    "run": "nve_test_09",
+    "metric": "production_available",
+    "old": 1,
+    "new": 0,
+    "reference": null,
+    "new_minus_old": -1
+  },
+  {
+    "run": "nve_test_10",
+    "metric": "production_available",
+    "old": 1,
+    "new": 0,
+    "reference": null,
+    "new_minus_old": -1
+  },
+  {
+    "run": "nvt",
+    "metric": "production_available",
+    "old": 1,
+    "new": 0,
+    "reference": null,
+    "new_minus_old": -1
+  }
+]

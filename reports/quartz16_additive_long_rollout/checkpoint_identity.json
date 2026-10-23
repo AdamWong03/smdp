@@ -1,0 +1,26 @@
+{
+  "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r1/best_rollout.pt": {
+    "size_bytes": 10934054,
+    "sha256": "440e49ad057f51cfd2ad82797eccf41fcc8de5dd17d72af1c2cc4a4d2a990f4d"
+  },
+  "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive/best_segment.pt": {
+    "size_bytes": 10939302,
+    "sha256": "ae6484cc14a70d09b650c4bc043fc501efdd2425913c9a8f231b94095dd4c90a"
+  },
+  "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive/best_rollout4.pt": {
+    "size_bytes": 10939695,
+    "sha256": "9359f281df9371a867a21e2d8522c2f99f193d74e02f621eabdfd41bb5eb6fa2"
+  },
+  "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive/best_rollout8.pt": {
+    "size_bytes": 10939695,
+    "sha256": "b95b5306fcd5f9c095cc8d99f6f1ac51f13291f77a21aea4e7a8517adcf1910d"
+  },
+  "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive/best_rollout16.pt": {
+    "size_bytes": 10940088,
+    "sha256": "27830d6772fc064c2e74a7db3b4ee995c14acad0d06e0c48a3e21b1bac6f3211"
+  },
+  "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive/best_rollout.pt": {
+    "size_bytes": 10940088,
+    "sha256": "27830d6772fc064c2e74a7db3b4ee995c14acad0d06e0c48a3e21b1bac6f3211"
+  }
+}

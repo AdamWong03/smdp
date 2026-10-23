@@ -1,0 +1,74 @@
+[
+  {
+    "run": "nve_test_09",
+    "model": "R1",
+    "end_change_eV": 17.429389199546677,
+    "rms_change_eV": 17.345453169740523,
+    "minimum_change_eV": -0.8745203831822437,
+    "maximum_change_eV": 23.75760428775493,
+    "range_eV": 24.632124670937174,
+    "minimum_energy_time_ps": 0.4,
+    "maximum_energy_time_ps": 78.288,
+    "fitted_drift_meV_atom_ps": 0.1389062866730689
+  },
+  {
+    "run": "nve_test_09",
+    "model": "R2",
+    "end_change_eV": 0.13941235530955964,
+    "rms_change_eV": 2.0032197005812016,
+    "minimum_change_eV": -5.181846553915875,
+    "maximum_change_eV": 1.5083053604998895,
+    "range_eV": 6.690151914415765,
+    "minimum_energy_time_ps": 3.344,
+    "maximum_energy_time_ps": 17.248,
+    "fitted_drift_meV_atom_ps": 0.11258551451101698
+  },
+  {
+    "run": "nve_test_09",
+    "model": "BKS",
+    "end_change_eV": 0.004781890219874185,
+    "rms_change_eV": 0.004111082601292771,
+    "minimum_change_eV": -0.011302004968911206,
+    "maximum_change_eV": 0.012600449184901663,
+    "range_eV": 0.02390245415381287,
+    "minimum_energy_time_ps": 7.392,
+    "maximum_energy_time_ps": 95.936,
+    "fitted_drift_meV_atom_ps": 0.0005761529654454583
+  },
+  {
+    "run": "nve_test_10",
+    "model": "R1",
+    "end_change_eV": 19.111451112087707,
+    "rms_change_eV": 17.11802230519036,
+    "minimum_change_eV": -0.8432464943984996,
+    "maximum_change_eV": 25.410031816207265,
+    "range_eV": 26.253278310605765,
+    "minimum_energy_time_ps": 0.336,
+    "maximum_energy_time_ps": 56.464,
+    "fitted_drift_meV_atom_ps": 0.1447015814070018
+  },
+  {
+    "run": "nve_test_10",
+    "model": "R2",
+    "end_change_eV": -2.2499796486958985,
+    "rms_change_eV": 2.3481589036356416,
+    "minimum_change_eV": -6.172536292867335,
+    "maximum_change_eV": 2.3875688798525516,
+    "range_eV": 8.560105172719886,
+    "minimum_energy_time_ps": 3.248,
+    "maximum_energy_time_ps": 21.2,
+    "fitted_drift_meV_atom_ps": 0.21577484222996002
+  },
+  {
+    "run": "nve_test_10",
+    "model": "BKS",
+    "end_change_eV": 0.0032830016507432447,
+    "rms_change_eV": 0.005880114684985996,
+    "minimum_change_eV": -0.0178830334803024,
+    "maximum_change_eV": 0.006794087093567214,
+    "range_eV": 0.024677120573869615,
+    "minimum_energy_time_ps": 78.384,
+    "maximum_energy_time_ps": 23.296,
+    "fitted_drift_meV_atom_ps": -0.0004707604907811809
+  }
+]

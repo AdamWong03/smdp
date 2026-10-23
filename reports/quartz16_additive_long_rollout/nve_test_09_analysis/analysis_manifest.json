@@ -1,0 +1,12 @@
+{
+  "candidate": {
+    "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive/nve_test_09.h5",
+    "size": 219043062,
+    "mtime_ns": 1792666928833421973
+  },
+  "reference": {
+    "path": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_09/trajectory.h5",
+    "size": 1204964800,
+    "mtime_ns": 1792487247304713650
+  }
+}

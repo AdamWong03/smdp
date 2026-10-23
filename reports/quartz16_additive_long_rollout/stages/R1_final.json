@@ -1,0 +1,843 @@
+{
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r1/best_rollout.pt",
+  "checkpoint_epoch_zero_based": 23,
+  "checkpoint_phase": "rollout",
+  "validation_samples": 1250,
+  "valid_long_windows": 1245,
+  "steps": {
+    "1": {
+      "samples": 1250,
+      "position_RMSE_A": 0.002066993907950634,
+      "velocity_RMSE_A_fs": 0.00032301106232935836,
+      "predicted_KE_eV": 6.016782055282593,
+      "reference_KE_eV": 5.968530380249024,
+      "KE_bias_eV": 0.048251675033569336,
+      "delta_KE_error_eV": 0.048251675033569336,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 4.041542363357544,
+          "reference_KE_eV": 3.990237024497986,
+          "velocity_RMSE_A_fs": 0.00036410845591796135
+        },
+        "14": {
+          "predicted_KE_eV": 1.9752396891593933,
+          "reference_KE_eV": 1.9782933522224426,
+          "velocity_RMSE_A_fs": 0.00021876589309384432
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6117979710578918,
+          "std": 0.003646560672738855,
+          "correlation_with_step_KE_error": -0.06847814357493226
+        },
+        "2": {
+          "mean": 0.6494912744998932,
+          "std": 0.0033199456277039447,
+          "correlation_with_step_KE_error": -0.02276321816824419
+        },
+        "3": {
+          "mean": 0.6868375975131988,
+          "std": 0.0034809591465042086,
+          "correlation_with_step_KE_error": -0.0675768576260316
+        },
+        "4": {
+          "mean": 0.08878559327125549,
+          "std": 0.004804051229124765,
+          "correlation_with_step_KE_error": 0.043946234241029475
+        }
+      }
+    },
+    "2": {
+      "samples": 1245,
+      "position_RMSE_A": 0.004173092404331395,
+      "velocity_RMSE_A_fs": 0.0003984071379428404,
+      "predicted_KE_eV": 5.9121784252335265,
+      "reference_KE_eV": 5.968425878655001,
+      "KE_bias_eV": -0.056247453421473984,
+      "delta_KE_error_eV": -0.10458953428459933,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9520620560550306,
+          "reference_KE_eV": 3.9856995356609546,
+          "velocity_RMSE_A_fs": 0.00044067831234293446
+        },
+        "14": {
+          "predicted_KE_eV": 1.960116373966018,
+          "reference_KE_eV": 1.9827263462495612,
+          "velocity_RMSE_A_fs": 0.0002962937927664075
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.611986578468338,
+          "std": 0.0035937492055238057,
+          "correlation_with_step_KE_error": 0.014604244122849502
+        },
+        "2": {
+          "mean": 0.649765238800202,
+          "std": 0.0033287023223888042,
+          "correlation_with_step_KE_error": 0.012346982661883096
+        },
+        "3": {
+          "mean": 0.6871239934101641,
+          "std": 0.003382394532067025,
+          "correlation_with_step_KE_error": 0.03419796535561548
+        },
+        "4": {
+          "mean": 0.0881003829010998,
+          "std": 0.004795870119328649,
+          "correlation_with_step_KE_error": -0.013627545300287335
+        }
+      }
+    },
+    "3": {
+      "samples": 1245,
+      "position_RMSE_A": 0.006448620340207159,
+      "velocity_RMSE_A_fs": 0.0004667056289367863,
+      "predicted_KE_eV": 5.905742146595415,
+      "reference_KE_eV": 5.95772709712446,
+      "KE_bias_eV": -0.05198495052904489,
+      "delta_KE_error_eV": 0.004262502892429091,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.966955961664039,
+          "reference_KE_eV": 3.982541809311832,
+          "velocity_RMSE_A_fs": 0.0005132217651507272
+        },
+        "14": {
+          "predicted_KE_eV": 1.938786195559674,
+          "reference_KE_eV": 1.9751852835996084,
+          "velocity_RMSE_A_fs": 0.0003558782070103401
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6118946390937131,
+          "std": 0.0036072954849792295,
+          "correlation_with_step_KE_error": -0.0386391690433322
+        },
+        "2": {
+          "mean": 0.6497333645820618,
+          "std": 0.0032413045518480004,
+          "correlation_with_step_KE_error": -0.037140821618359854
+        },
+        "3": {
+          "mean": 0.6871547550082685,
+          "std": 0.003397382688178534,
+          "correlation_with_step_KE_error": 0.02431345911240973
+        },
+        "4": {
+          "mean": 0.08797132982666712,
+          "std": 0.004623311518807058,
+          "correlation_with_step_KE_error": 0.03171982073460371
+        }
+      }
+    },
+    "4": {
+      "samples": 1245,
+      "position_RMSE_A": 0.008793290535815653,
+      "velocity_RMSE_A_fs": 0.0005452604840457947,
+      "predicted_KE_eV": 5.896135519403051,
+      "reference_KE_eV": 5.969096979271456,
+      "KE_bias_eV": -0.07296145986840429,
+      "delta_KE_error_eV": -0.020976509339359392,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9575645975319738,
+          "reference_KE_eV": 3.983298299207266,
+          "velocity_RMSE_A_fs": 0.0005953895618135636
+        },
+        "14": {
+          "predicted_KE_eV": 1.9385709297226137,
+          "reference_KE_eV": 1.9857986904052367,
+          "velocity_RMSE_A_fs": 0.0004277260368349667
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.611917706282742,
+          "std": 0.0036322417099852577,
+          "correlation_with_step_KE_error": -0.05861491154122592
+        },
+        "2": {
+          "mean": 0.6498684533149842,
+          "std": 0.003292410631182846,
+          "correlation_with_step_KE_error": -0.034112431772769916
+        },
+        "3": {
+          "mean": 0.6870016437457748,
+          "std": 0.00339052814495172,
+          "correlation_with_step_KE_error": -0.060964588532724635
+        },
+        "4": {
+          "mean": 0.08796436331837053,
+          "std": 0.004684098171785149,
+          "correlation_with_step_KE_error": 0.05476264172789827
+        }
+      }
+    },
+    "5": {
+      "samples": 1245,
+      "position_RMSE_A": 0.011232807852110767,
+      "velocity_RMSE_A_fs": 0.0006132630033322611,
+      "predicted_KE_eV": 5.869827757686018,
+      "reference_KE_eV": 5.954569178508468,
+      "KE_bias_eV": -0.08474142082244995,
+      "delta_KE_error_eV": -0.011779960954045675,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.956451453549795,
+          "reference_KE_eV": 3.9840648354296704,
+          "velocity_RMSE_A_fs": 0.0006642439735415056
+        },
+        "14": {
+          "predicted_KE_eV": 1.9133763151475225,
+          "reference_KE_eV": 1.9705043403020346,
+          "velocity_RMSE_A_fs": 0.0004958169652207086
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6116289494985557,
+          "std": 0.0036370057456502052,
+          "correlation_with_step_KE_error": -0.060363405120151176
+        },
+        "2": {
+          "mean": 0.6498111792836323,
+          "std": 0.0032904769226508868,
+          "correlation_with_step_KE_error": -0.03483338472694033
+        },
+        "3": {
+          "mean": 0.6869134180517081,
+          "std": 0.003441079606795013,
+          "correlation_with_step_KE_error": -0.021896257494630842
+        },
+        "4": {
+          "mean": 0.08759144642147194,
+          "std": 0.004838454722291865,
+          "correlation_with_step_KE_error": 0.0060733739643971975
+        }
+      }
+    },
+    "6": {
+      "samples": 1245,
+      "position_RMSE_A": 0.01367382596353343,
+      "velocity_RMSE_A_fs": 0.0006785471321213835,
+      "predicted_KE_eV": 5.879255234285531,
+      "reference_KE_eV": 5.974212147050115,
+      "KE_bias_eV": -0.09495691276458372,
+      "delta_KE_error_eV": -0.010215491942133769,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9559554224512183,
+          "reference_KE_eV": 3.9963091844535734,
+          "velocity_RMSE_A_fs": 0.0007326586716621798
+        },
+        "14": {
+          "predicted_KE_eV": 1.9232998158558305,
+          "reference_KE_eV": 1.9779029655648044,
+          "velocity_RMSE_A_fs": 0.0005547082384351004
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6118395186332335,
+          "std": 0.0037734206761442643,
+          "correlation_with_step_KE_error": -0.02058466645268076
+        },
+        "2": {
+          "mean": 0.6502029611882436,
+          "std": 0.0034375715276255664,
+          "correlation_with_step_KE_error": -0.01557143036036175
+        },
+        "3": {
+          "mean": 0.6869488295781085,
+          "std": 0.0034971395669488895,
+          "correlation_with_step_KE_error": -0.03907427095010748
+        },
+        "4": {
+          "mean": 0.08718195807742307,
+          "std": 0.004805775730260801,
+          "correlation_with_step_KE_error": 0.027772104193875966
+        }
+      }
+    },
+    "7": {
+      "samples": 1245,
+      "position_RMSE_A": 0.016110887833322714,
+      "velocity_RMSE_A_fs": 0.0007350260470563539,
+      "predicted_KE_eV": 5.853989829021286,
+      "reference_KE_eV": 5.966555689233374,
+      "KE_bias_eV": -0.11256586021208859,
+      "delta_KE_error_eV": -0.017608947447504863,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9380640334393604,
+          "reference_KE_eV": 3.9875385261443723,
+          "velocity_RMSE_A_fs": 0.0007895646579443256
+        },
+        "14": {
+          "predicted_KE_eV": 1.915925792517911,
+          "reference_KE_eV": 1.9790171547587139,
+          "velocity_RMSE_A_fs": 0.0006115269666138477
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6122845967131925,
+          "std": 0.003654779481810265,
+          "correlation_with_step_KE_error": -0.0806269594035199
+        },
+        "2": {
+          "mean": 0.650703876420676,
+          "std": 0.0033899514629455313,
+          "correlation_with_step_KE_error": -0.07506999686585004
+        },
+        "3": {
+          "mean": 0.6871298224092967,
+          "std": 0.003406675557700148,
+          "correlation_with_step_KE_error": -0.05632531300698685
+        },
+        "4": {
+          "mean": 0.08681187974401267,
+          "std": 0.00475072842902029,
+          "correlation_with_step_KE_error": 0.07740427637753931
+        }
+      }
+    },
+    "8": {
+      "samples": 1245,
+      "position_RMSE_A": 0.018509196419543197,
+      "velocity_RMSE_A_fs": 0.0007968843571498297,
+      "predicted_KE_eV": 5.843528416262094,
+      "reference_KE_eV": 5.971042797747386,
+      "KE_bias_eV": -0.12751438148529176,
+      "delta_KE_error_eV": -0.014948521273203164,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9338561004424193,
+          "reference_KE_eV": 3.9954694533443833,
+          "velocity_RMSE_A_fs": 0.0008543156064173686
+        },
+        "14": {
+          "predicted_KE_eV": 1.9096723095001467,
+          "reference_KE_eV": 1.9755733275509264,
+          "velocity_RMSE_A_fs": 0.0006673558259405828
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.612249320817281,
+          "std": 0.0035679546234544846,
+          "correlation_with_step_KE_error": -0.02434027348765043
+        },
+        "2": {
+          "mean": 0.650793122766487,
+          "std": 0.0032880015086211153,
+          "correlation_with_step_KE_error": 0.0040791659186519775
+        },
+        "3": {
+          "mean": 0.6870503918234124,
+          "std": 0.00328453570490777,
+          "correlation_with_step_KE_error": -0.019626594299209318
+        },
+        "4": {
+          "mean": 0.08655095999260025,
+          "std": 0.004638859297299621,
+          "correlation_with_step_KE_error": -0.0067235179801010585
+        }
+      }
+    },
+    "9": {
+      "samples": 1245,
+      "position_RMSE_A": 0.020930817763315058,
+      "velocity_RMSE_A_fs": 0.0008613725734856491,
+      "predicted_KE_eV": 5.841567754553982,
+      "reference_KE_eV": 5.970139020513818,
+      "KE_bias_eV": -0.12857126595983542,
+      "delta_KE_error_eV": -0.0010568844745436825,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9372224553043105,
+          "reference_KE_eV": 3.9867325893846384,
+          "velocity_RMSE_A_fs": 0.0009248963806713927
+        },
+        "14": {
+          "predicted_KE_eV": 1.9043452917811383,
+          "reference_KE_eV": 1.9834064315121815,
+          "velocity_RMSE_A_fs": 0.0007176500437974297
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6119790254826527,
+          "std": 0.0036108450102865608,
+          "correlation_with_step_KE_error": -0.12465776513665715
+        },
+        "2": {
+          "mean": 0.6506349605250071,
+          "std": 0.0033197945314369015,
+          "correlation_with_step_KE_error": -0.08776105477440144
+        },
+        "3": {
+          "mean": 0.686977632744724,
+          "std": 0.0034018875864553163,
+          "correlation_with_step_KE_error": -0.09532579036931604
+        },
+        "4": {
+          "mean": 0.08648551726436998,
+          "std": 0.0046689887769676185,
+          "correlation_with_step_KE_error": 0.1005660660185915
+        }
+      }
+    },
+    "10": {
+      "samples": 1245,
+      "position_RMSE_A": 0.023347173523864475,
+      "velocity_RMSE_A_fs": 0.0009258305992776544,
+      "predicted_KE_eV": 5.819557612009317,
+      "reference_KE_eV": 5.970415515976258,
+      "KE_bias_eV": -0.150857903966942,
+      "delta_KE_error_eV": -0.022286638007106552,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9198062779912988,
+          "reference_KE_eV": 3.9896690282476954,
+          "velocity_RMSE_A_fs": 0.0009932745202278516
+        },
+        "14": {
+          "predicted_KE_eV": 1.899751343114309,
+          "reference_KE_eV": 1.9807465087936584,
+          "velocity_RMSE_A_fs": 0.0007734975497708693
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6122710242328874,
+          "std": 0.0037259876356030915,
+          "correlation_with_step_KE_error": -0.08643836747856934
+        },
+        "2": {
+          "mean": 0.6508726011797128,
+          "std": 0.0033530124865962145,
+          "correlation_with_step_KE_error": -0.05937981312206017
+        },
+        "3": {
+          "mean": 0.6870227198524169,
+          "std": 0.0034212053677048814,
+          "correlation_with_step_KE_error": -0.08761861061269159
+        },
+        "4": {
+          "mean": 0.08636951350782769,
+          "std": 0.004763574921714947,
+          "correlation_with_step_KE_error": 0.07180191086715842
+        }
+      }
+    },
+    "11": {
+      "samples": 1245,
+      "position_RMSE_A": 0.025791416255199474,
+      "velocity_RMSE_A_fs": 0.0009885107824384796,
+      "predicted_KE_eV": 5.8303986671937995,
+      "reference_KE_eV": 5.969091395872185,
+      "KE_bias_eV": -0.13869272867838542,
+      "delta_KE_error_eV": 0.01216517528855657,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.938688059695753,
+          "reference_KE_eV": 3.9955216986108497,
+          "velocity_RMSE_A_fs": 0.001060155161094317
+        },
+        "14": {
+          "predicted_KE_eV": 1.8917106012742682,
+          "reference_KE_eV": 1.9735696960165798,
+          "velocity_RMSE_A_fs": 0.0008268028061987029
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6126933875811627,
+          "std": 0.003722793018587842,
+          "correlation_with_step_KE_error": -0.1324608494503881
+        },
+        "2": {
+          "mean": 0.6513122059733992,
+          "std": 0.0034187850992192367,
+          "correlation_with_step_KE_error": -0.10494574807343679
+        },
+        "3": {
+          "mean": 0.6871910657269887,
+          "std": 0.0033437485409685943,
+          "correlation_with_step_KE_error": -0.10170345210255055
+        },
+        "4": {
+          "mean": 0.08617462320739486,
+          "std": 0.004834342980142233,
+          "correlation_with_step_KE_error": 0.08711971270806573
+        }
+      }
+    },
+    "12": {
+      "samples": 1245,
+      "position_RMSE_A": 0.02825777144379876,
+      "velocity_RMSE_A_fs": 0.0010515727353407388,
+      "predicted_KE_eV": 5.812382235392988,
+      "reference_KE_eV": 5.962465231485635,
+      "KE_bias_eV": -0.15008299609264694,
+      "delta_KE_error_eV": -0.011390267414261539,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9146078534873134,
+          "reference_KE_eV": 3.97896676159288,
+          "velocity_RMSE_A_fs": 0.001126607287293957
+        },
+        "14": {
+          "predicted_KE_eV": 1.89777436323434,
+          "reference_KE_eV": 1.9834984756377807,
+          "velocity_RMSE_A_fs": 0.00088256887774595
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.612921729193155,
+          "std": 0.003621391819820337,
+          "correlation_with_step_KE_error": -0.04541496854800531
+        },
+        "2": {
+          "mean": 0.6516002469752208,
+          "std": 0.0033323095215106735,
+          "correlation_with_step_KE_error": -0.023009128149130847
+        },
+        "3": {
+          "mean": 0.6874729478215597,
+          "std": 0.003244778032854329,
+          "correlation_with_step_KE_error": -0.01908493727295158
+        },
+        "4": {
+          "mean": 0.08560772436450284,
+          "std": 0.00474048182835038,
+          "correlation_with_step_KE_error": 0.023220674238646186
+        }
+      }
+    },
+    "13": {
+      "samples": 1245,
+      "position_RMSE_A": 0.03080061191560045,
+      "velocity_RMSE_A_fs": 0.001111174852142571,
+      "predicted_KE_eV": 5.796435051653758,
+      "reference_KE_eV": 5.958049820513132,
+      "KE_bias_eV": -0.16161476885937304,
+      "delta_KE_error_eV": -0.011531772766726085,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.911694480712155,
+          "reference_KE_eV": 3.979840342586778,
+          "velocity_RMSE_A_fs": 0.0011903204735687369
+        },
+        "14": {
+          "predicted_KE_eV": 1.8847405709416034,
+          "reference_KE_eV": 1.978209479745612,
+          "velocity_RMSE_A_fs": 0.0009329539806009777
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6130926313170467,
+          "std": 0.0037105776001268667,
+          "correlation_with_step_KE_error": -0.09097159024082513
+        },
+        "2": {
+          "mean": 0.6516750520012944,
+          "std": 0.003386189168881922,
+          "correlation_with_step_KE_error": -0.07515887277151857
+        },
+        "3": {
+          "mean": 0.6877196848631862,
+          "std": 0.003404187099044556,
+          "correlation_with_step_KE_error": -0.08216607965020288
+        },
+        "4": {
+          "mean": 0.0852996042693954,
+          "std": 0.004682808924486042,
+          "correlation_with_step_KE_error": 0.09210272315431083
+        }
+      }
+    },
+    "14": {
+      "samples": 1245,
+      "position_RMSE_A": 0.033397772305595985,
+      "velocity_RMSE_A_fs": 0.001174506074472437,
+      "predicted_KE_eV": 5.798193823956103,
+      "reference_KE_eV": 5.9506180104481645,
+      "KE_bias_eV": -0.152424186492062,
+      "delta_KE_error_eV": 0.00919058236731104,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9243907872931545,
+          "reference_KE_eV": 3.977111485875754,
+          "velocity_RMSE_A_fs": 0.0012572499045655034
+        },
+        "14": {
+          "predicted_KE_eV": 1.87380303484369,
+          "reference_KE_eV": 1.973506530604688,
+          "velocity_RMSE_A_fs": 0.000988452861369061
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6133584145082528,
+          "std": 0.0038135240698366026,
+          "correlation_with_step_KE_error": -0.09347655571919794
+        },
+        "2": {
+          "mean": 0.6519088823632543,
+          "std": 0.003453625552642609,
+          "correlation_with_step_KE_error": -0.06267628540273117
+        },
+        "3": {
+          "mean": 0.6878027470236322,
+          "std": 0.0033714087780447838,
+          "correlation_with_step_KE_error": -0.08935848178110233
+        },
+        "4": {
+          "mean": 0.08528362780091274,
+          "std": 0.004621555504856066,
+          "correlation_with_step_KE_error": 0.08613556252659627
+        }
+      }
+    },
+    "15": {
+      "samples": 1245,
+      "position_RMSE_A": 0.036130889698619814,
+      "velocity_RMSE_A_fs": 0.0012270482977360048,
+      "predicted_KE_eV": 5.796075793729728,
+      "reference_KE_eV": 5.967533800209383,
+      "KE_bias_eV": -0.17145800647965398,
+      "delta_KE_error_eV": -0.01903381998759197,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9215265270217836,
+          "reference_KE_eV": 3.9918865889430526,
+          "velocity_RMSE_A_fs": 0.001314105290886796
+        },
+        "14": {
+          "predicted_KE_eV": 1.874549271591217,
+          "reference_KE_eV": 1.9756472072448117,
+          "velocity_RMSE_A_fs": 0.0010311145954077336
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6136571931551738,
+          "std": 0.0036954310100557036,
+          "correlation_with_step_KE_error": -0.1424233232995518
+        },
+        "2": {
+          "mean": 0.6521907733626156,
+          "std": 0.0033862058136910453,
+          "correlation_with_step_KE_error": -0.10128711302896401
+        },
+        "3": {
+          "mean": 0.6879853832195083,
+          "std": 0.0032961898911888156,
+          "correlation_with_step_KE_error": -0.10355415405062021
+        },
+        "4": {
+          "mean": 0.08510719701707603,
+          "std": 0.004715104683330986,
+          "correlation_with_step_KE_error": 0.05731915979001426
+        }
+      }
+    },
+    "16": {
+      "samples": 1245,
+      "position_RMSE_A": 0.038937908247824914,
+      "velocity_RMSE_A_fs": 0.0012868716275497058,
+      "predicted_KE_eV": 5.797989758334485,
+      "reference_KE_eV": 5.9752584453567446,
+      "KE_bias_eV": -0.17726868702225895,
+      "delta_KE_error_eV": -0.00581068054260499,
+      "species": {
+        "8": {
+          "predicted_KE_eV": 3.9271048632012793,
+          "reference_KE_eV": 3.99194587148337,
+          "velocity_RMSE_A_fs": 0.001378960346723877
+        },
+        "14": {
+          "predicted_KE_eV": 1.8708848991547244,
+          "reference_KE_eV": 1.9833125731073709,
+          "velocity_RMSE_A_fs": 0.0010793760591736017
+        }
+      },
+      "routing_correlations": {
+        "1": {
+          "mean": 0.6136260274423653,
+          "std": 0.0037568126624071556,
+          "correlation_with_step_KE_error": -0.13067778446868022
+        },
+        "2": {
+          "mean": 0.6521882493333165,
+          "std": 0.0033693241246409342,
+          "correlation_with_step_KE_error": -0.0786477162020094
+        },
+        "3": {
+          "mean": 0.6879829152999632,
+          "std": 0.0033265194501039897,
+          "correlation_with_step_KE_error": -0.08343809571647305
+        },
+        "4": {
+          "mean": 0.08487217268311834,
+          "std": 0.004793789781479353,
+          "correlation_with_step_KE_error": 0.0480820896756627
+        }
+      }
+    }
+  },
+  "kinematics_RMSE_A_fs": 0.00011267758061100423,
+  "reference_kinematics_RMSE_A_fs": 8.696915324465478e-06,
+  "join_derivative_jump_RMS_A_fs": 0.0005573321370854921,
+  "reference_join_RMS_A_fs": 0.0004826096570224706,
+  "mode_statistics": {
+    "scalar_allocation": [
+      0.17233920068740843,
+      0.1832449738740921,
+      0.1952634979724884,
+      0.44915233516693115
+    ],
+    "vector_allocation": [
+      0.1467743735551834,
+      0.1467915107488632,
+      0.2037080472946167,
+      0.5027260799407959
+    ],
+    "recurrent_route_by_mode": [
+      0.5877976959228516,
+      0.603644912815094,
+      0.5850134514808655,
+      0.08038329360485078
+    ],
+    "cross_mode_attention": [
+      [
+        0.039341806054115296,
+        0.283123469209671,
+        0.6036079791069031,
+        0.07392674406766891
+      ],
+      [
+        0.05280684558153152,
+        0.5355865236282349,
+        0.36846338653564453,
+        0.04314324571490288
+      ],
+      [
+        0.058965427309274676,
+        0.1987001529455185,
+        0.2998966585636139,
+        0.44243776221275327
+      ],
+      [
+        1.8282984200050124e-05,
+        6.3168868960929106e-06,
+        0.0004614857208449393,
+        0.9995139147758484
+      ]
+    ],
+    "fusion_weights": [
+      8.014970935182646e-05,
+      5.5930042377440256e-05,
+      0.01499519781023264,
+      0.9848687255859375
+    ],
+    "mode_delta_q_rms": [
+      9.06896031810902e-06,
+      4.617558755853679e-07,
+      2.1597395825665444e-05,
+      0.04790806599855423
+    ],
+    "mode_delta_q_rms_share": [
+      0.00018944941952358932,
+      9.640395428868942e-06,
+      0.0004510078167077154,
+      0.9993499017715454
+    ],
+    "mode_delta_q_signed_projection": [
+      7.309536146567552e-06,
+      3.502307985763764e-06,
+      0.00013689065296202898,
+      0.9998522986412048
+    ],
+    "mode_delta_v_rms": [
+      1.3713765393731591e-06,
+      5.8052846520695314e-08,
+      3.7075918324262603e-06,
+      0.005190510113537311
+    ],
+    "mode_delta_v_rms_share": [
+      0.00026419132114388047,
+      1.1180483060888946e-05,
+      0.0007138199564069509,
+      0.9990108085632324
+    ],
+    "mode_delta_v_signed_projection": [
+      1.0593938719739526e-05,
+      3.875016277015675e-06,
+      0.0002169499059440568,
+      0.9997685705184937
+    ]
+  },
+  "velocity_mode_cosine_matrix": [
+    [
+      1.0,
+      -0.08342050760984421,
+      -0.09695281833410263,
+      0.04266846552491188
+    ],
+    [
+      -0.08342050760984421,
+      1.0,
+      0.5257612466812134,
+      0.34781742095947266
+    ],
+    [
+      -0.09695281833410263,
+      0.5257612466812134,
+      1.0,
+      0.3089117407798767
+    ],
+    [
+      0.04266846552491188,
+      0.34781742095947266,
+      0.3089117407798767,
+      1.0
+    ]
+  ],
+  "mode_deletion_scope": "Only final decoder contribution is removed; upstream context held fixed. Not an identification of physically independent modes.",
+  "mode_deletions": {
+    "1": {
+      "position_RMSE_A": 0.0020667382702690535,
+      "velocity_RMSE_A_fs": 0.0003230169999208846,
+      "removed_position_rms_A": 7.128337103858939e-06,
+      "removed_velocity_rms_A_fs": 1.0416000226541654e-06
+    },
+    "2": {
+      "position_RMSE_A": 0.002066968260317339,
+      "velocity_RMSE_A_fs": 0.0003230114069679949,
+      "removed_position_rms_A": 4.567631504187375e-07,
+      "removed_velocity_rms_A_fs": 5.709480191455896e-08
+    },
+    "3": {
+      "position_RMSE_A": 0.00206682499242453,
+      "velocity_RMSE_A_fs": 0.0003230155142002067,
+      "removed_position_rms_A": 2.0178869591472905e-05,
+      "removed_velocity_rms_A_fs": 3.505435962051706e-06
+    },
+    "4": {
+      "position_RMSE_A": 0.0476571178689478,
+      "velocity_RMSE_A_fs": 0.00518311968835483,
+      "removed_position_rms_A": 0.047890881997346875,
+      "removed_velocity_rms_A_fs": 0.005188705691695213
+    }
+  },
+  "elapsed_s": 117.28712286206428
+}

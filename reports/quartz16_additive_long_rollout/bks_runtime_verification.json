@@ -1,0 +1,206 @@
+{
+  "passed": true,
+  "max_abs_error_eV": 1.7280399333685637e-11,
+  "tolerance_eV": 1e-07,
+  "mpi_version": "MPICH Version:      5.0.2\nMPICH Release date: Fri Sep 25 20:45:26 UTC 2026\nMPICH ABI:          18:2:6\nMPICH Device:       ch4:ucx ofi\nMPICH configure:    --prefix=/data1/wyd/envs/lammps-runtime --disable-doc --disable-dependency-tracking --enable-cxx --enable-fortran --enable-f08 --enable-mpi-abi --with-wrapper-dl-type=none --disable-static --with-device=ch4:ucx,ofi --with-ucx=/data1/wyd/envs/lammps-runtime --with-libfabric=/data1/wyd/envs/lammps-runtime --with-hwloc=/data1/wyd/envs/lammps-runtime --with-yaksa=embedded --with-pm=hydra:gforker\nMPICH CC:           x86_64-conda-linux-gnu-cc   \nMPICH CXX:          x86_64-conda-linux-gnu-c++   \nMPICH F77:          x86_64-conda-linux-gnu-gfortran   \nMPICH FC:           x86_64-conda-linux-gnu-gfortran   \nMPICH features:     threadcomm\n",
+  "lammps_version": 20250722,
+  "samples": [
+    {
+      "run": "nve_test_09",
+      "time_fs": 0,
+      "source": "SMDP",
+      "expected_eV": -3135.7856758626717,
+      "observed_eV": -3135.7856758626713,
+      "error_eV": 4.547473508864641e-13
+    },
+    {
+      "run": "nve_test_09",
+      "time_fs": 0,
+      "source": "reference",
+      "expected_eV": -3135.7856758626717,
+      "observed_eV": -3135.7856758626713,
+      "error_eV": 4.547473508864641e-13
+    },
+    {
+      "run": "nve_test_09",
+      "time_fs": 48,
+      "source": "SMDP",
+      "expected_eV": -3136.089701719815,
+      "observed_eV": -3136.089701719815,
+      "error_eV": 0.0
+    },
+    {
+      "run": "nve_test_09",
+      "time_fs": 48,
+      "source": "reference",
+      "expected_eV": -3136.0495440241893,
+      "observed_eV": -3136.0495440241893,
+      "error_eV": 0.0
+    },
+    {
+      "run": "nve_test_09",
+      "time_fs": 50016,
+      "source": "SMDP",
+      "expected_eV": -3127.99997962228,
+      "observed_eV": -3127.9999796222887,
+      "error_eV": -8.640199666842818e-12
+    },
+    {
+      "run": "nve_test_09",
+      "time_fs": 50016,
+      "source": "reference",
+      "expected_eV": -3136.0717168398983,
+      "observed_eV": -3136.071716839884,
+      "error_eV": 1.4097167877480388e-11
+    },
+    {
+      "run": "nve_test_09",
+      "time_fs": 100000,
+      "source": "SMDP",
+      "expected_eV": -3127.119238623076,
+      "observed_eV": -3127.1192386230787,
+      "error_eV": -2.7284841053187847e-12
+    },
+    {
+      "run": "nve_test_09",
+      "time_fs": 100000,
+      "source": "reference",
+      "expected_eV": -3136.468327727041,
+      "observed_eV": -3136.4683277270433,
+      "error_eV": -2.2737367544323206e-12
+    },
+    {
+      "run": "nve_test_10",
+      "time_fs": 0,
+      "source": "SMDP",
+      "expected_eV": -3135.462743926585,
+      "observed_eV": -3135.462743926585,
+      "error_eV": 0.0
+    },
+    {
+      "run": "nve_test_10",
+      "time_fs": 0,
+      "source": "reference",
+      "expected_eV": -3135.462743926585,
+      "observed_eV": -3135.462743926585,
+      "error_eV": 0.0
+    },
+    {
+      "run": "nve_test_10",
+      "time_fs": 48,
+      "source": "SMDP",
+      "expected_eV": -3135.797601156457,
+      "observed_eV": -3135.7976011564474,
+      "error_eV": 9.549694368615746e-12
+    },
+    {
+      "run": "nve_test_10",
+      "time_fs": 48,
+      "source": "reference",
+      "expected_eV": -3135.801231570319,
+      "observed_eV": -3135.8012315703186,
+      "error_eV": 4.547473508864641e-13
+    },
+    {
+      "run": "nve_test_10",
+      "time_fs": 50016,
+      "source": "SMDP",
+      "expected_eV": -3125.424511093391,
+      "observed_eV": -3125.424511093377,
+      "error_eV": 1.4097167877480388e-11
+    },
+    {
+      "run": "nve_test_10",
+      "time_fs": 50016,
+      "source": "reference",
+      "expected_eV": -3135.663783947422,
+      "observed_eV": -3135.6637839474247,
+      "error_eV": -2.7284841053187847e-12
+    },
+    {
+      "run": "nve_test_10",
+      "time_fs": 100000,
+      "source": "SMDP",
+      "expected_eV": -3126.579392131947,
+      "observed_eV": -3126.5793921319455,
+      "error_eV": 1.3642420526593924e-12
+    },
+    {
+      "run": "nve_test_10",
+      "time_fs": 100000,
+      "source": "reference",
+      "expected_eV": -3135.7819962007866,
+      "observed_eV": -3135.7819962007848,
+      "error_eV": 1.8189894035458565e-12
+    },
+    {
+      "run": "nvt",
+      "time_fs": 0,
+      "source": "SMDP",
+      "expected_eV": -3134.6340905881434,
+      "observed_eV": -3134.6340905881525,
+      "error_eV": -9.094947017729282e-12
+    },
+    {
+      "run": "nvt",
+      "time_fs": 0,
+      "source": "reference",
+      "expected_eV": -3135.2810206952745,
+      "observed_eV": -3135.2810206952777,
+      "error_eV": -3.183231456205249e-12
+    },
+    {
+      "run": "nvt",
+      "time_fs": 7488,
+      "source": "SMDP",
+      "expected_eV": -3134.663922141317,
+      "observed_eV": -3134.6639221413134,
+      "error_eV": 3.637978807091713e-12
+    },
+    {
+      "run": "nvt",
+      "time_fs": 7488,
+      "source": "reference",
+      "expected_eV": -3135.561556323231,
+      "observed_eV": -3135.561556323248,
+      "error_eV": -1.7280399333685637e-11
+    },
+    {
+      "run": "nvt",
+      "time_fs": 7503744,
+      "source": "SMDP",
+      "expected_eV": -3135.635860710228,
+      "observed_eV": -3135.6358607102284,
+      "error_eV": -4.547473508864641e-13
+    },
+    {
+      "run": "nvt",
+      "time_fs": 7503744,
+      "source": "reference",
+      "expected_eV": -3135.789837255841,
+      "observed_eV": -3135.7898372558398,
+      "error_eV": 1.3642420526593924e-12
+    },
+    {
+      "run": "nvt",
+      "time_fs": 15000000,
+      "source": "SMDP",
+      "expected_eV": -3134.5389164924068,
+      "observed_eV": -3134.538916492396,
+      "error_eV": 1.0913936421275139e-11
+    },
+    {
+      "run": "nvt",
+      "time_fs": 15000000,
+      "source": "reference",
+      "expected_eV": -3136.232560732959,
+      "observed_eV": -3136.2325607329567,
+      "error_eV": 2.2737367544323206e-12
+    }
+  ],
+  "python": "/data1/wyd/envs/mlip/bin/python",
+  "library_path": "/data1/wyd/envs/lammps-runtime/lib:/data1/wyd/envs/mlip/lib",
+  "lammps_library": "/data1/wyd/envs/mlip/lib/python3.12/site-packages/lammps/liblammps.so",
+  "ldd": "\tlinux-vdso.so.1 (0x00007ffffab9f000)\n\tlibjpeg-e87d2658.so.62.2.0 => /data1/wyd/envs/mlip/lib/python3.12/site-packages/lammps/../lammps.libs/libjpeg-e87d2658.so.62.2.0 (0x00007a5d09600000)\n\tlibz.so.1 => /data1/wyd/envs/lammps-runtime/lib/libz.so.1 (0x00007a5d0c4ed000)\n\tlibdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007a5d0c4cd000)\n\tlibmpi.so.12 => /data1/wyd/envs/lammps-runtime/lib/libmpi.so.12 (0x00007a5d08400000)\n\tlibgomp-e985bcbb.so.1.0.0 => /data1/wyd/envs/mlip/lib/python3.12/site-packages/lammps/../lammps.libs/libgomp-e985bcbb.so.1.0.0 (0x00007a5d08000000)\n\tlibrt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007a5d0c4c6000)\n\tlibstdc++.so.6 => /data1/wyd/envs/lammps-runtime/lib/libstdc++.so.6 (0x00007a5d07c00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007a5d0c3dd000)\n\tlibgcc_s.so.1 => /data1/wyd/envs/lammps-runtime/lib/libgcc_s.so.1 (0x00007a5d0c3af000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007a5d0c3aa000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007a5d07800000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007a5d0c50a000)\n\tlibhwloc.so.15 => /data1/wyd/envs/lammps-runtime/lib/libhwloc.so.15 (0x00007a5d0999e000)\n\tlibfabric.so.1 => /data1/wyd/envs/lammps-runtime/lib/libfabric.so.1 (0x00007a5d09442000)\n\tlibucp.so.0 => /data1/wyd/envs/lammps-runtime/lib/libucp.so.0 (0x00007a5d0989b000)\n\tlibucs.so.0 => /data1/wyd/envs/lammps-runtime/lib/libucs.so.0 (0x00007a5d08390000)\n\tlibxml2.so.16 => /data1/wyd/envs/lammps-runtime/lib/./libxml2.so.16 (0x00007a5d0824a000)\n\tlibrdmacm.so.1 => /data1/wyd/envs/lammps-runtime/lib/./librdmacm.so.1 (0x00007a5d0c384000)\n\tlibefa.so.1 => /data1/wyd/envs/lammps-runtime/lib/./libefa.so.1 (0x00007a5d0c372000)\n\tlibibverbs.so.1 => /data1/wyd/envs/lammps-runtime/lib/./libibverbs.so.1 (0x00007a5d09876000)\n\tlibnl-3.so.200 => /data1/wyd/envs/lammps-runtime/lib/./libnl-3.so.200 (0x00007a5d07fdb000)\n\tlibnl-route-3.so.200 => /data1/wyd/envs/lammps-runtime/lib/./libnl-route-3.so.200 (0x00007a5d07f43000)\n\tlibatomic.so.1 => /data1/wyd/envs/lammps-runtime/lib/./libatomic.so.1 (0x00007a5d0c364000)\n\tlibuct.so.0 => /data1/wyd/envs/lammps-runtime/lib/./libuct.so.0 (0x00007a5d07f03000)\n\tlibucm.so.0 => /data1/wyd/envs/lammps-runtime/lib/./libucm.so.0 (0x00007a5d07ee8000)\n\tlibiconv.so.2 => /data1/wyd/envs/lammps-runtime/lib/././libiconv.so.2 (0x00007a5d07aed000)\n\tlibicuuc.so.78 => /data1/wyd/envs/lammps-runtime/lib/././libicuuc.so.78 (0x00007a5d07400000)\n\tlibicudata.so.78 => /data1/wyd/envs/lammps-runtime/lib/././libicudata.so.78 (0x00007a5d05400000)\n",
+  "readelf_dynamic": "\nDynamic section at offset 0x27c4000 contains 37 entries:\n  Tag        Type                         Name/Value\n 0x000000000000000f (RPATH)              Library rpath: [$ORIGIN:$ORIGIN/../lammps.libs]\n 0x0000000000000001 (NEEDED)             Shared library: [libjpeg-e87d2658.so.62.2.0]\n 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]\n 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]\n 0x0000000000000001 (NEEDED)             Shared library: [libmpi.so.12]\n 0x0000000000000001 (NEEDED)             Shared library: [libgomp-e985bcbb.so.1.0.0]\n 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]\n 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]\n 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]\n 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]\n 0x000000000000000e (SONAME)             Library soname: [liblammps.so.0]\n 0x000000000000000c (INIT)               0x526000\n 0x000000000000000d (FINI)               0x1fc7110\n 0x0000000000000019 (INIT_ARRAY)         0x2500d58\n 0x000000000000001b (INIT_ARRAYSZ)       192 (bytes)\n 0x000000000000001a (FINI_ARRAY)         0x2500e18\n 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)\n 0x000000006ffffef5 (GNU_HASH)           0x277e2c8\n 0x0000000000000005 (STRTAB)             0x27c82a0\n 0x0000000000000006 (SYMTAB)             0x498f8\n 0x000000000000000a (STRSZ)              1647332 (bytes)\n 0x000000000000000b (SYMENT)             24 (bytes)\n 0x0000000000000003 (PLTGOT)             0x25cffe8\n 0x0000000000000002 (PLTRELSZ)           274176 (bytes)\n 0x0000000000000014 (PLTREL)             RELA\n 0x0000000000000017 (JMPREL)             0x4e2508\n 0x0000000000000007 (RELA)               0x2b8000\n 0x0000000000000008 (RELASZ)             2270472 (bytes)\n 0x0000000000000009 (RELAENT)            24 (bytes)\n 0x000000006ffffffe (VERNEED)            0x2b7d50\n 0x000000006fffffff (VERNEEDNUM)         10\n 0x000000006ffffff0 (VERSYM)             0x2a6e68\n 0x000000006ffffff9 (RELACOUNT)          1753\n 0x0000000000000000 (NULL)               0x0\n"
+}
