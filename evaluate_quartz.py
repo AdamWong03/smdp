@@ -2,6 +2,7 @@
 import argparse
 import csv
 import json
+import hashlib
 from pathlib import Path
 import numpy as np
 import torch
@@ -26,13 +27,15 @@ def main():
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--device',default='cuda')
     args=p.parse_args(); args.output.mkdir(parents=True,exist_ok=True)
+    if (args.output/'test_metrics.json').exists():
+        raise FileExistsError('Existing test metrics; use an explicitly new output directory')
     torch.set_num_threads(4)
     model,cfg=load_model(args.checkpoint,args.device)
     data=QuartzSegments(args.data_root,'test',args.output/'cache')
     builder=PeriodicGraphBuilder(model.config.cutoff_angstrom)
     sums={k:np.zeros(17) for k in ['q_mae','q_mse','v_mae','v_mse']}; n=0; diag={}
     derivative=[]; ref_derivative=[]; joins=[]; second=[]
-    multi={k:dict(q=0.,v=0.,count=0) for k in [2,4,8,16]}
+    multi={k:dict(q=0.,v=0.,count=0) for k in range(2,17)}
     ref_joins=[]
     offset_index={int(t):i for i,t in enumerate(QuartzSegments.offsets)}
     with torch.inference_mode():
@@ -72,6 +75,7 @@ def main():
     with (args.output/'query_errors.csv').open('w') as f:
         w=csv.DictWriter(f,fieldnames=rows[0]);w.writeheader();w.writerows(rows)
     result=dict(checkpoint=str(args.checkpoint),test_samples=n,endpoint=rows[-1],
+                checkpoint_sha256=hashlib.sha256(args.checkpoint.read_bytes()).hexdigest(),
                 normalized_endpoint_loss=float(sums['q_mse'][-1]/n/cfg['stats']['displacement_residual_rms']**2+sums['v_mse'][-1]/n/cfg['stats']['velocity_delta_rms']**2),
                 position_velocity_consistency_RMSE_A_fs=float(np.sqrt(np.mean(derivative))),
                 reference_finite_difference_RMSE_A_fs=float(np.sqrt(np.mean(ref_derivative))),

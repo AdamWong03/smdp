@@ -2,6 +2,7 @@
 import argparse
 import json
 import math
+import hashlib
 import time
 from pathlib import Path
 import h5py
@@ -51,6 +52,9 @@ def main():
     p.add_argument('--seed',type=int,default=2026102201)
     p.add_argument('--device',default='cuda')
     args=p.parse_args(); args.output.parent.mkdir(parents=True,exist_ok=True)
+    if args.output.exists() or args.output.with_suffix('.summary.json').exists():
+        raise FileExistsError(f'Refusing to overwrite trajectory or summary: {args.output}')
+    checkpoint_sha256=hashlib.sha256(args.checkpoint.read_bytes()).hexdigest()
     torch.set_num_threads(4)
     device=torch.device(args.device)
     model,cfg=load_model(args.checkpoint,device)
@@ -71,9 +75,10 @@ def main():
         metadata=json.loads(args.thermostat_metadata.read_text())
         assert metadata['ensemble']=='NVT-CSVR' and metadata['temperature_K']==300
         thermo=CSVR(m,16.,metadata['thermostat_tau_fs'],args.seed)
-    f=h5py.File(args.output,'w')
+    f=h5py.File(args.output,'x')
     f.attrs.update(ensemble=args.ensemble,timestep_fs=16.,requested_steps=args.steps,thermalization_steps=args.thermalization_steps,
-                   checkpoint=str(args.checkpoint),initial_trajectory=str(args.initial),dense_sample_dt_fs=1.,
+                   checkpoint=str(args.checkpoint),checkpoint_sha256=checkpoint_sha256,
+                   initial_trajectory=str(args.initial),dense_sample_dt_fs=1.,seed=args.seed,
                    dense_endpoint_velocity='post-CSVR at macro boundaries; pre-CSVR in NVE',thermostat_metadata=json.dumps(metadata))
     f.create_dataset('atomic_numbers',data=z);f.create_dataset('masses_u',data=m);f.create_dataset('cell',data=cell)
     species=np.unique(z);f.create_dataset('kinetic_species',data=species)
@@ -112,8 +117,10 @@ def main():
     try:
         with torch.inference_mode():
             for step in range(1,args.thermalization_steps+args.steps+1):
-                t=time.perf_counter(); edges,shifts,graphs=builder.batch(q,cs);graph_seconds+=time.perf_counter()-t
                 if device.type=='cuda': torch.cuda.synchronize(device)
+                t=time.perf_counter(); edges,shifts,graphs=builder.batch(q,cs)
+                if device.type=='cuda': torch.cuda.synchronize(device)
+                graph_seconds+=time.perf_counter()-t
                 t=time.perf_counter()
                 out=model(q[0],v[0],zs[0],ms[0],edges,shifts,list(range(1,17)),graph_index=graphs)
                 if device.type=='cuda': torch.cuda.synchronize(device)
@@ -149,6 +156,7 @@ def main():
         f.attrs.update(completed_steps=completed,stable=failure is None,failure_reason=failure or '')
         f.close()
         result=dict(completed_steps=completed,production_steps=max(0,completed-args.thermalization_steps),
+                    checkpoint_sha256=checkpoint_sha256,seed=args.seed,
                     simulated_ps=completed*.016,production_ps=max(0,completed-args.thermalization_steps)*.016,
                     requested_production_ps=args.steps*.016,stable=failure is None,failure_reason=failure,
                     elapsed_s=elapsed,model_seconds=model_seconds,neighbor_seconds=graph_seconds,

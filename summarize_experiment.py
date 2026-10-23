@@ -68,7 +68,8 @@ def compare_runs(previous,current,report_output=None,analysis_root=None):
     for key in ['position_velocity_consistency_RMSE_A_fs','join_position_derivative_jump_RMS_A_fs','two_step_position_RMSE_A']:
         add('test',key,oldtest.get(key),newtest.get(key))
     for name in ['nve_test_09','nve_test_10','nvt']:
-        old=read(previous,f'{name}_analysis/metrics.json');new=read(analysis_root or current,f'{name}_analysis/metrics.json')
+        previous_analysis=previous/'reanalysis_v1' if (previous/'reanalysis_v1'/f'{name}_analysis/metrics.json').exists() else previous
+        old=read(previous_analysis,f'{name}_analysis/metrics.json');new=read(analysis_root or current,f'{name}_analysis/metrics.json')
         trajectory=read(current,name+'.summary.json')
         legacy_complete=all(k in new for k in ['temperature_K','kinetic_energy_eV','potential_energy_eV','RDF','VDOS'])
         legacy_complete=legacy_complete and all(k in new.get('VDOS',{}) for k in ['macro_16fs','queried_1fs'])

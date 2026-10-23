@@ -16,11 +16,17 @@ def main():
     if Path(args.report_name).name!=args.report_name: raise ValueError('report-name must be a directory basename')
     target=repo/'reports'/args.report_name
     names=['RESULTS.md','COMPARISON.md','comparison.json','diagnosis/previous_diagnosis.json','config.json','training.png','training_complete.json','pipeline_finished.json',
-           'test/test_metrics.json','test/query_errors.csv']
+           'test/test_metrics.json','test/query_errors.csv','PHYSICS_COMPARISON.md','physical_comparison.json',
+           'physical_comparison.csv','physical_run_status.json','nve_window_comparison.json',
+           'production_efficiency_benchmark.json','evaluation_config.json','runtime_verification/bks_runtime_verification.json',
+           'nve_test_09_comparison.png','nve_test_10_comparison.png','nvt_macro_16fs_comparison.png',
+           'nvt_queried_1fs_comparison.png','nvt_structure_comparison.png','run_status.json']
     for run in ['nve_test_09','nve_test_10','nvt']:
         names.append(run+'.summary.json')
         for name in ['metrics.json','energy.png','rdf.png','rdf.csv','vdos_macro_16fs.png','vdos_queried_1fs.png',
-                     'vdos_macro_16fs.csv','vdos_queried_1fs.csv','nve_trajectory_error.csv']:
+                     'vdos_macro_16fs.csv','vdos_queried_1fs.csv','nve_trajectory_error.csv',
+                     'thermodynamics.csv','energy_partition.png','thermostat.json','thermostat_blocks.csv',
+                     'thermo.json','energy.json','rdf.json','vdos_macro.json','vdos_dense.json']:
             names.append(run+'_analysis/'+name)
     copied=[]
     for name in names:
