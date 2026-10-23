@@ -142,12 +142,13 @@ def main():
     config = dict(model=asdict(cfg), stats=asdict(stats), arguments={k:str(v) if isinstance(v,Path) else v for k,v in vars(args).items()},
                   source_trajectories=sources, parameters=sum(p.numel() for p in model.parameters()),
                   training_queries='0,1,4,8,15,16 plus one random adjacent triplet',
-                  validation_queries=[0,1,4,8,12,15,16], rollout_steps=[4,8,16],
+                  validation_queries=[0,1,4,8,12,15,16],
+                  rollout_steps=[4,8] if args.max_rollout_steps==8 else [4,8,16],
                   loss_weights=OBJECTIVE_WEIGHTS, pushforward_gradient_segments=2,
                   r3_composition_weight=args.r3_composition_weight,
                   r3_composition_samples=args.r3_composition_samples,
                   r3_spatial_mode_exchange=args.spatial_mode_exchange,
-                  selection='complete validation split; 16-step autonomous metric in all rollout phases; no test selection',
+                  selection='R3 cross-stage minimum: same 16-step validation metric' if args.r3_composition_weight else 'legacy final rollout stage',
                   hardware=torch.cuda.get_device_name(device) if device.type=='cuda' else 'CPU',
                   torch_version=torch.__version__, units={'position':'Angstrom','velocity':'Angstrom/fs','cell':'row vectors','mass':'u'})
     import subprocess
