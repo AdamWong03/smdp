@@ -40,6 +40,7 @@ class SMDPConfig:
     enforce_center_of_mass: bool = True
     additive_modes: bool = False  # False loads the unmodified first-run checkpoint.
     exclude_self_exchange: bool = False
+    spatial_mode_exchange: bool = False  # R3-B only; R3-A preserves R2 topology
 
 
 def mlp(in_dim: int, hidden: int, out_dim: int) -> nn.Sequential:
@@ -275,6 +276,62 @@ class CrossModeExchange(nn.Module):
         return s_out, v_out, attention
 
 
+class SpatialModeExchange(nn.Module):
+    """One sparse, O(3)-equivariant interatomic message pass at mid-propagation.
+
+    Sends mode k of neighboring atom j to mode k of atom i. The existing
+    atom-local CrossModeExchange mixes different k before this operator, so
+    these operations jointly couple (atom, mode) states without K^2 edges.
+    The input graph and edge vectors are from the START of the requested
+    segment; the caller rebuilds the graph at every autonomous macrostep.
+    """
+    def __init__(self, cfg: SMDPConfig):
+        super().__init__()
+        ds, dv = cfg.scalar_dim, cfg.vector_dim
+        self.cutoff = cfg.cutoff_angstrom
+        self.rbf = RBF(cfg.rbf_dim, cfg.cutoff_angstrom)
+        self.edge_mlp = mlp(2 * ds + cfg.rbf_dim, ds, ds + 2 * dv)
+        self.scalar_update = nn.Linear(ds, ds, bias=False)
+        self.vector_update = nn.Linear(dv, dv, bias=False)
+        self.scalar_gate = nn.Linear(ds, ds)
+        self.vector_gate = nn.Linear(ds, dv)
+        # Small gated updates rather than a second expensive encoder.
+        self.residual_scale = 0.1
+
+    def forward(self, s, v, positions, edge_index, edge_shift):
+        # s [T,N,K,Ds], v [T,N,K,Dv,3], edges [2,E].
+        if edge_index.shape[1] == 0:
+            return s, v
+        dr, distance, direction = period_edge_displacements(positions, edge_index, edge_shift)
+        src, dst = edge_index
+        t, _, k, _ = s.shape
+        rbf = self.rbf(distance)
+        envelope = torch.where(
+            distance < self.cutoff,
+            0.5 * (torch.cos(math.pi * distance / self.cutoff) + 1),
+            torch.zeros_like(distance),
+        )
+        radial = rbf[None, :, None, :].expand(t, -1, k, -1)
+        features = torch.cat((s[:, src], s[:, dst], radial), dim=-1)
+        coeff = self.edge_mlp(features)
+        ds, dv = s.shape[-1], v.shape[-2]
+        msg_s = coeff[..., :ds] * envelope[None, :, None, None]
+        coeff_v, coeff_r = coeff[..., ds:].split(dv, dim=-1)
+        msg_v = (coeff_v[..., None] * v[:, src]
+                 + coeff_r[..., None] * direction[None, :, None, None, :])
+        msg_v = msg_v * envelope[None, :, None, None, None]
+        agg_s = torch.zeros_like(s).index_add_(1, dst, msg_s)
+        agg_v = torch.zeros_like(v).index_add_(1, dst, msg_v)
+        degree = positions.new_zeros((positions.shape[0],)).index_add_(0, dst, envelope)
+        norm = degree.clamp_min(1.0).reciprocal()
+        agg_s = agg_s * norm[None, :, None, None]
+        agg_v = agg_v * norm[None, :, None, None, None]
+        s_new = s + self.residual_scale * torch.sigmoid(self.scalar_gate(s)) * self.scalar_update(agg_s)
+        vec = self.vector_update(agg_v.transpose(-1, -2)).transpose(-1, -2)
+        v_new = v + self.residual_scale * torch.tanh(self.vector_gate(s_new))[..., None] * vec
+        return s_new, v_new
+
+
 class EquivariantSegmentDecoder(nn.Module):
     def __init__(self, cfg: SMDPConfig):
         super().__init__()
@@ -339,6 +396,8 @@ class NeuralSMDP(nn.Module):
         self.propagate = ModeConditionedPropagation(cfg)
         self.couple = CrossModeExchange(cfg)
         self.decode = EquivariantSegmentDecoder(cfg)
+        # Instantiate after the R2 modules: shared-parameter initialization stays matched.
+        self.spatial_exchange = SpatialModeExchange(cfg) if cfg.spatial_mode_exchange else None
 
     def forward(self, positions, velocities, atomic_numbers, masses,
                 edge_index, edge_shift, times_fs, graph_index=None):
@@ -357,6 +416,8 @@ class NeuralSMDP(nn.Module):
         half = times_fs * 0.5
         s1, v1, router_1 = self.propagate(sm, vm, half)
         s2, v2, attention = self.couple(s1, v1)
+        if self.spatial_exchange is not None:
+            s2, v2 = self.spatial_exchange(s2, v2, positions, edge_index, edge_shift)
         s3, v3, router_2 = self.propagate(s2, v2, half)
         next_pos, next_vel, fusion_weights, mode_q, mode_v = self.decode(
             s3, v3, positions, velocities, masses, times_fs, graph_index)
