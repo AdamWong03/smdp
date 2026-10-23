@@ -1,6 +1,8 @@
 # R3: Dynamics-consistent learned motion modes
 
-**Status: implementation committed, training NOT run.**
+**Status: R3-A/B training and matched validation completed on 2026-10-23.**
+Results: [reports/quartz16_r3/RESULTS.md](reports/quartz16_r3/RESULTS.md).
+No new production NVE/NVT was run; this document records the frozen design.
 Base commit: R2 reanalysis `7db6313`. Branch:
 `experiment/r3-dynamics-consistent-modes`. All R1/R2 checkpoints,
 trajectories, BKS physics definitions, original data splits and historical

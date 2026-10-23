@@ -1,6 +1,9 @@
 # Quartz 16 fs R3 paired experiment
 
-Status at launch, 2026-10-23: **R3-A running; R3-B queued; no R3 results yet.**
+Status, 2026-10-23: **R3-A/B training, matched validation and timing completed.**
+See [RESULTS.md](RESULTS.md), [comparison.csv](comparison.csv),
+[validation curves](validation.png) and [training curves](training.png).
+No production NVE/NVT or final test evaluation was performed in this round.
 Training/evaluation code: `0cfbb21`, branch
 `experiment/r3-dynamics-consistent-modes`. Correctness checks: 14 passed.
 No new reference MD, production NVE/NVT, test-set tuning, or R4 is scheduled.
@@ -34,7 +37,7 @@ Base: `/data1/wyd/research/foundation_mlip_adaptation`.
 - B: `experiments/motion_modes/quartz16_r3b_spatial_composition`.
 - Pair logs/diagnostics: `experiments/motion_modes/quartz16_r3_pair`.
 - Common validation: `experiments/motion_modes/quartz16_r3_pair_validation.json`
-  (created after training, not present at launch).
+  (completed after training).
 - Per-arm checkpoints/config/history: `best_rollout.pt`, `config.json`,
   `history.jsonl`; phase checkpoints and optimizer state are also retained.
 - Logs: `quartz16_r3_pair/pipeline.log`, `train_a.log`, `train_b.log`.
@@ -53,6 +56,8 @@ CUDA_VISIBLE_DEVICES=GPU-83ddba27-1ec6-70a3-41f5-4b8a1d4e7900 \
   PYTHON=/data1/wyd/envs/mlip/bin/python bash scripts/run_r3_pair.sh
 ```
 
-Large weights, trajectory caches and raw logs stay on the server. This page is
-a launch record, not a completed experiment report. Actual validation metrics,
-curves, costs and conclusions will be added after both runs finish.
+Large weights, trajectory caches and raw logs stay on the server. Configurations,
+bounded training CSVs, validation metrics, costs and conclusions are published
+alongside this record. Checkpoint hashes are recorded in provenance.json.
+The trained A/B checkpoints record commits df4885f/dbe23e9 respectively; those
+commits differ only in the launch documentation, not training/model code.

@@ -1,0 +1,14 @@
+{
+  "R2": {
+    "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive/best_rollout.pt",
+    "sha256": "27830d6772fc064c2e74a7db3b4ee995c14acad0d06e0c48a3e21b1bac6f3211"
+  },
+  "R3_A": {
+    "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_r3a_composition/best_rollout.pt",
+    "sha256": "c54f9a2d98076553ddc90fb737c9d092dfb06881f12870e01bb3f483bcc426d0"
+  },
+  "R3_B": {
+    "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_r3b_spatial_composition/best_rollout.pt",
+    "sha256": "667dcbc8a3989b4eea1204e5455724e0b1a9105a5574cb6df0ffddf5579b58ba"
+  }
+}

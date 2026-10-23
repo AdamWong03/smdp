@@ -1,0 +1,71 @@
+{
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive/best_rollout.pt",
+  "hardware": "NVIDIA L40S",
+  "results": [
+    {
+      "queries": 1,
+      "steps": 300,
+      "elapsed_s": 1.806024847086519,
+      "ms_per_macrostep": 6.02008282362173,
+      "ns_per_day": 229.63139220871003,
+      "includes": [
+        "periodic_graph_rebuild",
+        "network",
+        "CPU/GPU_transfer"
+      ],
+      "peak_gpu_allocated_bytes": 27696128,
+      "autonomous": false,
+      "caveat": "Fixed input phase-space state, throughput microbenchmark; no I/O or thermostat"
+    },
+    {
+      "queries": 16,
+      "steps": 300,
+      "elapsed_s": 1.8200959009118378,
+      "ms_per_macrostep": 6.066986336372793,
+      "ns_per_day": 227.85612548889986,
+      "includes": [
+        "periodic_graph_rebuild",
+        "network",
+        "CPU/GPU_transfer"
+      ],
+      "peak_gpu_allocated_bytes": 123400192,
+      "autonomous": false,
+      "caveat": "Fixed input phase-space state, throughput microbenchmark; no I/O or thermostat"
+    }
+  ],
+  "autonomous_results": [
+    {
+      "queries": 1,
+      "steps": 300,
+      "elapsed_s": 1.8389472169801593,
+      "ms_per_macrostep": 6.129824056600531,
+      "ns_per_day": 225.5203391215521,
+      "includes": [
+        "periodic_graph_rebuild",
+        "network",
+        "CPU/GPU_transfer"
+      ],
+      "peak_gpu_allocated_bytes": 27739136,
+      "autonomous": true,
+      "caveat": "Repeated 16-step autonomous validation blocks, reset only between blocks; no I/O or thermostat"
+    },
+    {
+      "queries": 16,
+      "steps": 300,
+      "elapsed_s": 1.8536312349606305,
+      "ms_per_macrostep": 6.1787707832021015,
+      "ns_per_day": 223.73382158118858,
+      "includes": [
+        "periodic_graph_rebuild",
+        "network",
+        "CPU/GPU_transfer"
+      ],
+      "peak_gpu_allocated_bytes": 123464192,
+      "autonomous": true,
+      "caveat": "Repeated 16-step autonomous validation blocks, reset only between blocks; no I/O or thermostat"
+    }
+  ],
+  "parameters": 900324,
+  "endpoint_to_dense_time_ratio": 1.0077911739963148,
+  "autonomous_dense_over_endpoint_time_ratio": 1.0079850132972195
+}

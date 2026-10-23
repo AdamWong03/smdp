@@ -1,0 +1,94 @@
+{
+  "model": {
+    "scalar_dim": 128,
+    "vector_dim": 32,
+    "modes": 4,
+    "encoder_layers": 4,
+    "rbf_dim": 16,
+    "cutoff_angstrom": 4.5,
+    "horizon_fs": 16.0,
+    "velocity_scale": 0.01,
+    "recurrent_substeps": 2,
+    "enforce_center_of_mass": true,
+    "additive_modes": true,
+    "exclude_self_exchange": true,
+    "spatial_mode_exchange": false
+  },
+  "stats": {
+    "displacement_residual_rms": 0.04903175309300423,
+    "velocity_delta_rms": 0.005316194612532854
+  },
+  "arguments": {
+    "data_root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
+    "output": "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_r3a_composition",
+    "device": "cuda",
+    "batch_size": 8,
+    "segment_epochs": 100,
+    "rollout_epochs": 12,
+    "patience": 15,
+    "seed": 20261022,
+    "resume": null,
+    "r3_composition_weight": 0.05,
+    "r3_composition_samples": 2,
+    "spatial_mode_exchange": false,
+    "max_rollout_steps": 8
+  },
+  "source_trajectories": {
+    "train": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_02/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_03/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_04/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_05/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_06/trajectory.h5"
+    ],
+    "val": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_07/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_08/trajectory.h5"
+    ],
+    "test": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_09/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_10/trajectory.h5"
+    ]
+  },
+  "parameters": 900324,
+  "training_queries": "0,1,4,8,15,16 plus one random adjacent triplet",
+  "validation_queries": [
+    0,
+    1,
+    4,
+    8,
+    12,
+    15,
+    16
+  ],
+  "rollout_steps": [
+    4,
+    8
+  ],
+  "loss_weights": {
+    "kinematics": 0.2,
+    "species_velocity": 0.25,
+    "species_kinetic": 0.1,
+    "vacf": 0.1,
+    "join": 0.2
+  },
+  "pushforward_gradient_segments": 2,
+  "r3_composition_weight": 0.05,
+  "r3_composition_samples": 2,
+  "r3_spatial_mode_exchange": false,
+  "selection": "R3 cross-stage minimum: same 16-step validation metric",
+  "hardware": "NVIDIA L40S",
+  "torch_version": "2.13.0+cu130",
+  "units": {
+    "position": "Angstrom",
+    "velocity": "Angstrom/fs",
+    "cell": "row vectors",
+    "mass": "u"
+  },
+  "code_commit": "df4885fe1e7dc26e4c6e3aaf921dade1425e6b1f",
+  "rollout_valid_samples": {
+    "train": 4989,
+    "val": 1245
+  }
+}
