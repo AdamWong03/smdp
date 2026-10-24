@@ -48,6 +48,13 @@ def test_zero_step_and_translation():
                                atol=2e-11, rtol=2e-11)
 
 
+def test_cached_queries_cannot_bypass_time_limit():
+    model, x, v = make_model()
+    for times in ([48., 50.], [float("nan")], [float("inf")]):
+        with pytest.raises(ValueError):
+            model(x, v, times)
+
+
 def test_com_and_time_reverse():
     model, x, v = make_model()
     out = model(x, v, [8.])

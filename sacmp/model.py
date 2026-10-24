@@ -298,6 +298,9 @@ class SACMP(nn.Module):
             times = list(times_fs)
         if not times:
             raise ValueError("At least one query time is required")
+        if any(not math.isfinite(float(t)) or
+               abs(float(t)) > self.cfg.max_query_fs + 1e-8 for t in times):
+            raise ValueError("Requested time is nonfinite or exceeds max_query_fs")
         W = self.modes()
         initial = self._encode(x, v, W)
         geometry = self.geometry()

@@ -10,6 +10,7 @@ import argparse
 import json
 import math
 import time
+import hashlib
 from pathlib import Path
 
 import h5py
@@ -55,7 +56,7 @@ def main():
     p.add_argument("--dense", action="store_true",
                    help="Query 1..16 fs for reference-compatible dense VDOS")
     args = p.parse_args()
-    if args.output.exists():
+    if args.output.exists() or args.output.with_suffix(".summary.json").exists():
         raise FileExistsError("Preserve any previous rollout; choose new output")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(4)
@@ -88,11 +89,13 @@ def main():
     q = torch.from_numpy(q0).to(device).unsqueeze(0)
     v = torch.from_numpy(v0).to(device).unsqueeze(0)
     times = list(range(1, 17)) if args.dense else [16]
-    f = h5py.File(args.output, "w")
+    checkpoint_hash = hashlib.sha256(args.checkpoint.read_bytes()).hexdigest()
+    f = h5py.File(args.output, "x")
     f.attrs.update(ensemble=args.ensemble, timestep_fs=16.,
                    requested_steps=args.steps,
                    thermalization_steps=args.thermalization_steps,
                    checkpoint=str(args.checkpoint),
+                   checkpoint_sha256=checkpoint_hash, seed=args.seed,
                    initial_trajectory=str(args.initial),
                    dense_sample_dt_fs=1. if args.dense else -1.,
                    dense_endpoint_velocity="post-CSVR at macro boundaries; pre-CSVR otherwise",
@@ -172,7 +175,8 @@ def main():
             if args.dense:
                 left = qsegment[-1]-qsegment[-2]
             else:
-                left = nq-q[0].detach().cpu().numpy()
+                current_right = current_right/16.
+                left = (nq-q[0].detach().cpu().numpy())/16.
             join = 0. if prev_left is None else float(
                 np.sqrt(np.mean((current_right-prev_left)**2)))
             prev_left = left
@@ -190,6 +194,7 @@ def main():
                 flush()
                 f.attrs["completed_steps"] = completed
                 print(json.dumps(dict(step=step, temperature_K=pre,
+                                      elapsed_s=time.monotonic()-start,
                                       minimum_distance_A=mind,
                                       failure=failure)), flush=True)
             if failure:
@@ -207,6 +212,10 @@ def main():
                       production_steps=max(0, completed-args.thermalization_steps),
                       stable=failure is None, failure_reason=failure,
                       simulated_ps=completed*.016,
+                      production_ps=max(0, completed-args.thermalization_steps)*.016,
+                      requested_production_ps=args.steps*.016,
+                      checkpoint_sha256=checkpoint_hash,
+                      hardware=torch.cuda.get_device_name(device) if device.type=="cuda" else "CPU",
                       elapsed_s=elapsed, model_seconds=kernel_seconds,
                       ns_day_end_to_end=completed*16e-6/max(elapsed, 1e-9)*86400,
                       dense_queries=args.dense,

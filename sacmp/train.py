@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 import random
 import time
+import os
+import subprocess
 
 import numpy as np
 import torch
@@ -92,6 +94,11 @@ def run_epoch(model, loader, optimizer, scales, do_rollout, device, train, seed)
             if not bool(torch.isfinite(norm)):
                 raise FloatingPointError("Nonfinite parameter gradient norm")
             optimizer.step()
+        if step % 250 == 0:
+            print(json.dumps(dict(event="batch_progress", training=train,
+                                  rollout=do_rollout, batch=step,
+                                  batches=len(loader), loss=float(losses["loss"].detach()))),
+                  flush=True)
         count = batch["q"].shape[0]
         observed += count
         for key, value in losses.items():
@@ -134,7 +141,8 @@ def main():
         scales = old["scales"]
     elif args.anchor:
         bootstrap = torch.load(args.anchor, weights_only=False, map_location="cpu")
-        report = dict(external_training_anchor=str(args.anchor))
+        report = json.loads(args.anchor.with_name("anchor_report.json").read_text())
+        report["external_training_anchor"] = str(args.anchor)
         scales = trainset.scales
     else:
         bootstrap, report = prepare_training_anchor(
@@ -142,6 +150,12 @@ def main():
         scales = trainset.scales
         torch.save(bootstrap, args.output/"anchor_train_only.pt")
         (args.output/"anchor_report.json").write_text(json.dumps(report, indent=2))
+    capture = report["captured_mass_weighted_acceleration_variance"]
+    if capture < .8:
+        (args.output/"structural_failure.json").write_text(json.dumps(dict(
+            reason="Train acceleration capture below pre-registered 0.8 threshold",
+            anchor=report), indent=2))
+        raise RuntimeError("Insufficient train acceleration capture; do not silently increase rank")
     model = make_model(bootstrap, device)
     if not args.resume:
         (args.output/"config.json").write_text(json.dumps(
@@ -149,6 +163,13 @@ def main():
                  train_scales=scales, anchor=report,
                  parameter_count=sum(x.numel() for x in model.parameters()),
                  seed=args.seed, independent_splits=True,
+                 training_arguments={k: str(v) if isinstance(v, Path) else v
+                                     for k, v in vars(args).items()},
+                 code_commit=subprocess.check_output(
+                     ["git", "rev-parse", "HEAD"], text=True).strip(),
+                 torch_version=torch.__version__,
+                 gpu=torch.cuda.get_device_name(device) if device.type=="cuda" else None,
+                 cuda_visible_devices=os.environ.get("CUDA_VISIBLE_DEVICES"),
                  external_BKS_forces_during_training=False), indent=2))
     phase0, epoch0, best, stale = "segment", 0, float("inf"), 0
     optimizer = torch.optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-6)
@@ -204,6 +225,8 @@ def main():
                          validation=validation, best=best,
                          lr=optimizer.param_groups[0]["lr"],
                          elapsed_s=time.monotonic()-started)
+            entry["peak_gpu_bytes"] = (torch.cuda.max_memory_allocated(device)
+                                       if device.type == "cuda" else 0)
             with (args.output/"history.jsonl").open("a") as stream:
                 stream.write(json.dumps(entry)+"\n")
             print(json.dumps(entry), flush=True)
