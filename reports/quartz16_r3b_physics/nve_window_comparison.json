@@ -1,0 +1,1058 @@
+[
+  {
+    "model": "R1",
+    "run": "nve_test_09",
+    "start_ps": 0,
+    "end_ps": 1,
+    "samples": 21,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 5.754134233740669,
+        "change_eV": 1.0653902267674766,
+        "mean_change_from_initial_eV": -0.012249367849281476
+      },
+      "PE": {
+        "mean_eV": -3136.1240725486937,
+        "change_eV": -0.3326535374890227,
+        "mean_change_from_initial_eV": -0.33839668602182166
+      },
+      "total": {
+        "mean_eV": -3130.369938314953,
+        "change_eV": 0.7327366892786813,
+        "mean_change_from_initial_eV": -0.35064605387110315
+      },
+      "temperature_K": 276.4967080301259
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 5.949216012167459,
+        "change_eV": 0.2022673497871592,
+        "mean_change_from_initial_eV": 0.18283241057750793
+      },
+      "PE": {
+        "mean_eV": -3135.9701571446203,
+        "change_eV": -0.20406274440802008,
+        "mean_change_from_initial_eV": -0.18448128194889554
+      },
+      "total": {
+        "mean_eV": -3130.020941132453,
+        "change_eV": -0.0017953946207853733,
+        "mean_change_from_initial_eV": -0.0016488713713875942
+      },
+      "temperature_K": 285.8707454335919
+    }
+  },
+  {
+    "model": "R1",
+    "run": "nve_test_09",
+    "start_ps": 1,
+    "end_ps": 5,
+    "samples": 80,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 11.897794400848522,
+        "change_eV": 5.586061186697558,
+        "mean_change_from_initial_eV": 6.131410799258572
+      },
+      "PE": {
+        "mean_eV": -3130.215494166163,
+        "change_eV": 5.150411693698061,
+        "mean_change_from_initial_eV": 5.570181696508945
+      },
+      "total": {
+        "mean_eV": -3118.3176997653145,
+        "change_eV": 10.736472880395468,
+        "mean_change_from_initial_eV": 11.701592495767517
+      },
+      "temperature_K": 571.7108518887122
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 5.966091527776245,
+        "change_eV": 0.19501941432198056,
+        "mean_change_from_initial_eV": 0.19970792618629502
+      },
+      "PE": {
+        "mean_eV": -3135.988409114914,
+        "change_eV": -0.19961974579973685,
+        "mean_change_from_initial_eV": -0.20273325224221708
+      },
+      "total": {
+        "mean_eV": -3130.0223175871374,
+        "change_eV": -0.004600331477831787,
+        "mean_change_from_initial_eV": -0.003025326055922051
+      },
+      "temperature_K": 286.6816449230047
+    }
+  },
+  {
+    "model": "R1",
+    "run": "nve_test_09",
+    "start_ps": 5,
+    "end_ps": 20,
+    "samples": 299,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 14.890454741887007,
+        "change_eV": -0.7465115573185503,
+        "mean_change_from_initial_eV": 9.124071140297056
+      },
+      "PE": {
+        "mean_eV": -3127.283581393818,
+        "change_eV": 1.6000967618610957,
+        "mean_change_from_initial_eV": 8.502094468853688
+      },
+      "total": {
+        "mean_eV": -3112.3931266519307,
+        "change_eV": 0.853585204542469,
+        "mean_change_from_initial_eV": 17.626165609150746
+      },
+      "temperature_K": 715.5136724238068
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.014966852122374,
+        "change_eV": 0.07261718468271283,
+        "mean_change_from_initial_eV": 0.2485832505324235
+      },
+      "PE": {
+        "mean_eV": -3136.037434548437,
+        "change_eV": -0.0723554965106814,
+        "mean_change_from_initial_eV": -0.2517586857653201
+      },
+      "total": {
+        "mean_eV": -3130.022467696315,
+        "change_eV": 0.0002616881720314268,
+        "mean_change_from_initial_eV": -0.003175435232896596
+      },
+      "temperature_K": 289.03019393779346
+    }
+  },
+  {
+    "model": "R1",
+    "run": "nve_test_09",
+    "start_ps": 20,
+    "end_ps": 100,
+    "samples": 1600,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 14.770695877397383,
+        "change_eV": 2.8580121038044126,
+        "mean_change_from_initial_eV": 9.004312275807434
+      },
+      "PE": {
+        "mean_eV": -3127.3772612909497,
+        "change_eV": 2.248582321525646,
+        "mean_change_from_initial_eV": 8.408414571722405
+      },
+      "total": {
+        "mean_eV": -3112.606565413552,
+        "change_eV": 5.106594425330059,
+        "mean_change_from_initial_eV": 17.41272684752984
+      },
+      "temperature_K": 709.7590392429111
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 5.989119717947469,
+        "change_eV": 0.21752980580004078,
+        "mean_change_from_initial_eV": 0.22273611635751847
+      },
+      "PE": {
+        "mean_eV": -3136.008943877163,
+        "change_eV": -0.20661387765085237,
+        "mean_change_from_initial_eV": -0.22326801449175435
+      },
+      "total": {
+        "mean_eV": -3130.0198241592166,
+        "change_eV": 0.010915928149188403,
+        "mean_change_from_initial_eV": -0.0005318981342358598
+      },
+      "temperature_K": 287.78819171451073
+    }
+  },
+  {
+    "model": "R2",
+    "run": "nve_test_09",
+    "start_ps": 0,
+    "end_ps": 1,
+    "samples": 21,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 4.65575933977713,
+        "change_eV": -1.7307290500182262,
+        "mean_change_from_initial_eV": -1.110624261812821
+      },
+      "PE": {
+        "mean_eV": -3137.2921261598262,
+        "change_eV": -2.3355002313828663,
+        "mean_change_from_initial_eV": -1.5064502971539522
+      },
+      "total": {
+        "mean_eV": -3132.636366820049,
+        "change_eV": -4.06622928140132,
+        "mean_change_from_initial_eV": -2.6170745589667734
+      },
+      "temperature_K": 223.71777899800998
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 5.9492160121675015,
+        "change_eV": 0.2022673497871592,
+        "mean_change_from_initial_eV": 0.18283241057755126
+      },
+      "PE": {
+        "mean_eV": -3135.970157144621,
+        "change_eV": -0.20406274440802008,
+        "mean_change_from_initial_eV": -0.1844812819491121
+      },
+      "total": {
+        "mean_eV": -3130.0209411324536,
+        "change_eV": -0.0017953946207853733,
+        "mean_change_from_initial_eV": -0.0016488713715608313
+      },
+      "temperature_K": 285.8707454335919
+    }
+  },
+  {
+    "model": "R2",
+    "run": "nve_test_09",
+    "start_ps": 1,
+    "end_ps": 5,
+    "samples": 80,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 3.636839999977167,
+        "change_eV": -0.07450764299088997,
+        "mean_change_from_initial_eV": -2.1295436016127836
+      },
+      "PE": {
+        "mean_eV": -3138.422592016254,
+        "change_eV": -0.34397371777140506,
+        "mean_change_from_initial_eV": -2.636916153581967
+      },
+      "total": {
+        "mean_eV": -3134.7857520162765,
+        "change_eV": -0.4184813607621436,
+        "mean_change_from_initial_eV": -4.7664597551947505
+      },
+      "temperature_K": 174.7568351342166
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 5.9660915277762285,
+        "change_eV": 0.19501941432190506,
+        "mean_change_from_initial_eV": 0.19970792618627797
+      },
+      "PE": {
+        "mean_eV": -3135.9884091149142,
+        "change_eV": -0.1996197458001916,
+        "mean_change_from_initial_eV": -0.2027332522423933
+      },
+      "total": {
+        "mean_eV": -3130.022317587138,
+        "change_eV": -0.0046003314782865345,
+        "mean_change_from_initial_eV": -0.003025326056115318
+      },
+      "temperature_K": 286.6816449230047
+    }
+  },
+  {
+    "model": "R2",
+    "run": "nve_test_09",
+    "start_ps": 5,
+    "end_ps": 20,
+    "samples": 299,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 5.012156478856996,
+        "change_eV": 2.5824068904484343,
+        "mean_change_from_initial_eV": -0.7542271227329544
+      },
+      "PE": {
+        "mean_eV": -3137.09917740662,
+        "change_eV": 2.273521915983565,
+        "mean_change_from_initial_eV": -1.3135015439488142
+      },
+      "total": {
+        "mean_eV": -3132.0870209277637,
+        "change_eV": 4.855928806432075,
+        "mean_change_from_initial_eV": -2.0677286666817687
+      },
+      "temperature_K": 240.8433154738745
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.01496685212238,
+        "change_eV": 0.07261718468278833,
+        "mean_change_from_initial_eV": 0.24858325053242958
+      },
+      "PE": {
+        "mean_eV": -3136.037434548437,
+        "change_eV": -0.07235549651295514,
+        "mean_change_from_initial_eV": -0.25175868576537636
+      },
+      "total": {
+        "mean_eV": -3130.022467696315,
+        "change_eV": 0.00026168816975769005,
+        "mean_change_from_initial_eV": -0.0031754352329467854
+      },
+      "temperature_K": 289.03019393779346
+    }
+  },
+  {
+    "model": "R2",
+    "run": "nve_test_09",
+    "start_ps": 20,
+    "end_ps": 100,
+    "samples": 1600,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 5.435239846591243,
+        "change_eV": 0.1635314640307115,
+        "mean_change_from_initial_eV": -0.33114375499870763
+      },
+      "PE": {
+        "mean_eV": -3136.6449952435796,
+        "change_eV": -0.39533727298976373,
+        "mean_change_from_initial_eV": -0.8593193809077926
+      },
+      "total": {
+        "mean_eV": -3131.2097553969884,
+        "change_eV": -0.23180580895905223,
+        "mean_change_from_initial_eV": -1.1904631359065
+      },
+      "temperature_K": 261.1732475972637
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 5.989119717947469,
+        "change_eV": 0.21752980580049552,
+        "mean_change_from_initial_eV": 0.22273611635751847
+      },
+      "PE": {
+        "mean_eV": -3136.008943877163,
+        "change_eV": -0.20661387765130712,
+        "mean_change_from_initial_eV": -0.22326801449170147
+      },
+      "total": {
+        "mean_eV": -3130.0198241592157,
+        "change_eV": 0.010915928149188403,
+        "mean_change_from_initial_eV": -0.0005318981341829954
+      },
+      "temperature_K": 287.7881917145108
+    }
+  },
+  {
+    "model": "R3-B",
+    "run": "nve_test_09",
+    "start_ps": 0,
+    "end_ps": 1,
+    "samples": 21,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 5.478471512767837,
+        "change_eV": 0.054339338903143464,
+        "mean_change_from_initial_eV": -0.28791208882211367
+      },
+      "PE": {
+        "mean_eV": -3136.4128313629863,
+        "change_eV": -1.341673835097481,
+        "mean_change_from_initial_eV": -0.6271555003139015
+      },
+      "total": {
+        "mean_eV": -3130.934359850218,
+        "change_eV": -1.2873344961940347,
+        "mean_change_from_initial_eV": -0.9150675891360152
+      },
+      "temperature_K": 263.25060848161405
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 5.9492160121675015,
+        "change_eV": 0.2022673497871592,
+        "mean_change_from_initial_eV": 0.18283241057755126
+      },
+      "PE": {
+        "mean_eV": -3135.970157144621,
+        "change_eV": -0.20406274440802008,
+        "mean_change_from_initial_eV": -0.18448128194900382
+      },
+      "total": {
+        "mean_eV": -3130.020941132453,
+        "change_eV": -0.0017953946207853733,
+        "mean_change_from_initial_eV": -0.001648871371452558
+      },
+      "temperature_K": 285.8707454335919
+    }
+  },
+  {
+    "model": "R3-B",
+    "run": "nve_test_09",
+    "start_ps": 1,
+    "end_ps": 5,
+    "samples": 80,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 8.118634077840756,
+        "change_eV": 5.322392584219339,
+        "mean_change_from_initial_eV": 2.3522504762508047
+      },
+      "PE": {
+        "mean_eV": -3133.8151962521633,
+        "change_eV": 3.6156522414808023,
+        "mean_change_from_initial_eV": 1.9704796105084768
+      },
+      "total": {
+        "mean_eV": -3125.6965621743225,
+        "change_eV": 8.938044825699762,
+        "mean_change_from_initial_eV": 4.3227300867592815
+      },
+      "temperature_K": 390.11526409332043
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 5.966091527776205,
+        "change_eV": 0.19501941432198056,
+        "mean_change_from_initial_eV": 0.19970792618625524
+      },
+      "PE": {
+        "mean_eV": -3135.988409114914,
+        "change_eV": -0.19961974580064634,
+        "mean_change_from_initial_eV": -0.20273325224216024
+      },
+      "total": {
+        "mean_eV": -3130.0223175871374,
+        "change_eV": -0.004600331478741282,
+        "mean_change_from_initial_eV": -0.0030253260559049977
+      },
+      "temperature_K": 286.6816449230047
+    }
+  },
+  {
+    "model": "R3-B",
+    "run": "nve_test_09",
+    "start_ps": 5,
+    "end_ps": 20,
+    "samples": 299,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 10.982004307425438,
+        "change_eV": 0.941146293693615,
+        "mean_change_from_initial_eV": 5.215620705835487
+      },
+      "PE": {
+        "mean_eV": -3131.1768104785847,
+        "change_eV": 3.7773905493781967,
+        "mean_change_from_initial_eV": 4.608865384087635
+      },
+      "total": {
+        "mean_eV": -3120.1948061711582,
+        "change_eV": 4.718536843071888,
+        "mean_change_from_initial_eV": 9.824486089923122
+      },
+      "temperature_K": 527.7054575422754
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.01496685212235,
+        "change_eV": 0.07261718468271283,
+        "mean_change_from_initial_eV": 0.24858325053239916
+      },
+      "PE": {
+        "mean_eV": -3136.037434548437,
+        "change_eV": -0.0723554965125004,
+        "mean_change_from_initial_eV": -0.25175868576549043
+      },
+      "total": {
+        "mean_eV": -3130.022467696315,
+        "change_eV": 0.0002616881702124374,
+        "mean_change_from_initial_eV": -0.0031754352330912706
+      },
+      "temperature_K": 289.03019393779346
+    }
+  },
+  {
+    "model": "R3-B",
+    "run": "nve_test_09",
+    "start_ps": 20,
+    "end_ps": 100,
+    "samples": 1600,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 10.503403389840756,
+        "change_eV": 0.4698788775849607,
+        "mean_change_from_initial_eV": 4.737019788250807
+      },
+      "PE": {
+        "mean_eV": -3131.4461717496365,
+        "change_eV": -2.1270942929818375,
+        "mean_change_from_initial_eV": 4.339504113035543
+      },
+      "total": {
+        "mean_eV": -3120.9427683597955,
+        "change_eV": -1.6572154153968768,
+        "mean_change_from_initial_eV": 9.076523901286349
+      },
+      "temperature_K": 504.7078052809837
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 5.989119717947476,
+        "change_eV": 0.21752980580095027,
+        "mean_change_from_initial_eV": 0.2227361163575253
+      },
+      "PE": {
+        "mean_eV": -3136.008943877163,
+        "change_eV": -0.2066138776549451,
+        "mean_change_from_initial_eV": -0.22326801449170489
+      },
+      "total": {
+        "mean_eV": -3130.0198241592157,
+        "change_eV": 0.010915928146005172,
+        "mean_change_from_initial_eV": -0.0005318981341795848
+      },
+      "temperature_K": 287.7881917145108
+    }
+  },
+  {
+    "model": "R1",
+    "run": "nve_test_10",
+    "start_ps": 0,
+    "end_ps": 1,
+    "samples": 21,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 6.115089757930231,
+        "change_eV": 0.89184959507035,
+        "mean_change_from_initial_eV": 0.05362973056682157
+      },
+      "PE": {
+        "mean_eV": -3135.9196043322086,
+        "change_eV": -0.8358685989842343,
+        "mean_change_from_initial_eV": -0.45686040562380487
+      },
+      "total": {
+        "mean_eV": -3129.804514574279,
+        "change_eV": 0.05598099608596385,
+        "mean_change_from_initial_eV": -0.4032306750569833
+      },
+      "temperature_K": 293.84128327456386
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.2606529771807065,
+        "change_eV": 0.30304014178439775,
+        "mean_change_from_initial_eV": 0.19919294981729677
+      },
+      "PE": {
+        "mean_eV": -3135.6615341435336,
+        "change_eV": -0.30394746117008253,
+        "mean_change_from_initial_eV": -0.19879021694855292
+      },
+      "total": {
+        "mean_eV": -3129.4008811663525,
+        "change_eV": -0.0009073193855329009,
+        "mean_change_from_initial_eV": 0.00040273286874383175
+      },
+      "temperature_K": 300.8358630493965
+    }
+  },
+  {
+    "model": "R1",
+    "run": "nve_test_10",
+    "start_ps": 1,
+    "end_ps": 5,
+    "samples": 80,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 11.919216785110104,
+        "change_eV": 11.077454011440295,
+        "mean_change_from_initial_eV": 5.857756757746694
+      },
+      "PE": {
+        "mean_eV": -3129.9643431012837,
+        "change_eV": 9.623398236038156,
+        "mean_change_from_initial_eV": 5.498400825301121
+      },
+      "total": {
+        "mean_eV": -3118.045126316174,
+        "change_eV": 20.70085224747845,
+        "mean_change_from_initial_eV": 11.356157583047814
+      },
+      "temperature_K": 572.7402367598086
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.3416506282197815,
+        "change_eV": -0.09707309237205664,
+        "mean_change_from_initial_eV": 0.28019060085637193
+      },
+      "PE": {
+        "mean_eV": -3135.743087330758,
+        "change_eV": 0.09632933741158922,
+        "mean_change_from_initial_eV": -0.2803434041730156
+      },
+      "total": {
+        "mean_eV": -3129.4014367025384,
+        "change_eV": -0.0007437549606947869,
+        "mean_change_from_initial_eV": -0.0001528033166437126
+      },
+      "temperature_K": 304.7279488021371
+    }
+  },
+  {
+    "model": "R1",
+    "run": "nve_test_10",
+    "start_ps": 5,
+    "end_ps": 20,
+    "samples": 299,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 14.969613058160213,
+        "change_eV": -4.773706765110699,
+        "mean_change_from_initial_eV": 8.908153030796802
+      },
+      "PE": {
+        "mean_eV": -3127.125047352821,
+        "change_eV": -2.635800125280639,
+        "mean_change_from_initial_eV": 8.337696573764202
+      },
+      "total": {
+        "mean_eV": -3112.1554342946606,
+        "change_eV": -7.409506890391185,
+        "mean_change_from_initial_eV": 17.245849604561005
+      },
+      "temperature_K": 719.317374766098
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.287557078350124,
+        "change_eV": 0.030863639423766465,
+        "mean_change_from_initial_eV": 0.22609705098671462
+      },
+      "PE": {
+        "mean_eV": -3135.6904397997455,
+        "change_eV": -0.027306431611123116,
+        "mean_change_from_initial_eV": -0.22769587316059395
+      },
+      "total": {
+        "mean_eV": -3129.4028827213956,
+        "change_eV": 0.0035572078127188433,
+        "mean_change_from_initial_eV": -0.0015988221738793267
+      },
+      "temperature_K": 302.1286544761668
+    }
+  },
+  {
+    "model": "R1",
+    "run": "nve_test_10",
+    "start_ps": 20,
+    "end_ps": 100,
+    "samples": 1600,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 14.93686398464371,
+        "change_eV": 3.032502476049558,
+        "mean_change_from_initial_eV": 8.875403957280302
+      },
+      "PE": {
+        "mean_eV": -3127.1794012150613,
+        "change_eV": 2.731622282864919,
+        "mean_change_from_initial_eV": 8.283342711524302
+      },
+      "total": {
+        "mean_eV": -3112.2425372304174,
+        "change_eV": 5.764124758914477,
+        "mean_change_from_initial_eV": 17.158746668804604
+      },
+      "temperature_K": 717.7437216932783
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.300373016098778,
+        "change_eV": 0.08570458701797179,
+        "mean_change_from_initial_eV": 0.23891298873536812
+      },
+      "PE": {
+        "mean_eV": -3135.7063651456074,
+        "change_eV": -0.08432771883190071,
+        "mean_change_from_initial_eV": -0.24362121902229233
+      },
+      "total": {
+        "mean_eV": -3129.4059921295084,
+        "change_eV": 0.0013768681860710785,
+        "mean_change_from_initial_eV": -0.0047082302869242195
+      },
+      "temperature_K": 302.7444838005939
+    }
+  },
+  {
+    "model": "R2",
+    "run": "nve_test_10",
+    "start_ps": 0,
+    "end_ps": 1,
+    "samples": 21,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 4.863601743478306,
+        "change_eV": -2.0942025358446394,
+        "mean_change_from_initial_eV": -1.1978582838851035
+      },
+      "PE": {
+        "mean_eV": -3137.163900699217,
+        "change_eV": -2.463863020253484,
+        "mean_change_from_initial_eV": -1.701156772632246
+      },
+      "total": {
+        "mean_eV": -3132.300298955739,
+        "change_eV": -4.558065556097972,
+        "mean_change_from_initial_eV": -2.89901505651735
+      },
+      "temperature_K": 233.70498786002705
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.2606529771807065,
+        "change_eV": 0.30304014178439775,
+        "mean_change_from_initial_eV": 0.19919294981729677
+      },
+      "PE": {
+        "mean_eV": -3135.661534143534,
+        "change_eV": -0.30394746117008253,
+        "mean_change_from_initial_eV": -0.19879021694859625
+      },
+      "total": {
+        "mean_eV": -3129.4008811663525,
+        "change_eV": -0.0009073193855329009,
+        "mean_change_from_initial_eV": 0.0004027328687005225
+      },
+      "temperature_K": 300.8358630493965
+    }
+  },
+  {
+    "model": "R2",
+    "run": "nve_test_10",
+    "start_ps": 1,
+    "end_ps": 5,
+    "samples": 80,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 3.4333015918354532,
+        "change_eV": -0.4493528897080523,
+        "mean_change_from_initial_eV": -2.6281584355279564
+      },
+      "PE": {
+        "mean_eV": -3138.584211963305,
+        "change_eV": -0.9766965668936791,
+        "mean_change_from_initial_eV": -3.1214680367198637
+      },
+      "total": {
+        "mean_eV": -3135.1509103714698,
+        "change_eV": -1.4260494566019588,
+        "mean_change_from_initial_eV": -5.7496264722478205
+      },
+      "temperature_K": 164.97644115611394
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.341650628219787,
+        "change_eV": -0.09707309237205664,
+        "mean_change_from_initial_eV": 0.2801906008563776
+      },
+      "PE": {
+        "mean_eV": -3135.743087330758,
+        "change_eV": 0.09632933741158922,
+        "mean_change_from_initial_eV": -0.2803434041729872
+      },
+      "total": {
+        "mean_eV": -3129.4014367025384,
+        "change_eV": -0.0007437549606947869,
+        "mean_change_from_initial_eV": -0.00015280331660960655
+      },
+      "temperature_K": 304.7279488021371
+    }
+  },
+  {
+    "model": "R2",
+    "run": "nve_test_10",
+    "start_ps": 5,
+    "end_ps": 20,
+    "samples": 299,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 4.58069279230934,
+        "change_eV": 4.09940326455982,
+        "mean_change_from_initial_eV": -1.48076723505407
+      },
+      "PE": {
+        "mean_eV": -3137.411719809142,
+        "change_eV": 2.525113908957337,
+        "mean_change_from_initial_eV": -1.94897588255719
+      },
+      "total": {
+        "mean_eV": -3132.8310270168326,
+        "change_eV": 6.6245171735172335,
+        "mean_change_from_initial_eV": -3.4297431176112596
+      },
+      "temperature_K": 220.1106936546899
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.287557078350161,
+        "change_eV": 0.030863639423311717,
+        "mean_change_from_initial_eV": 0.22609705098675112
+      },
+      "PE": {
+        "mean_eV": -3135.690439799746,
+        "change_eV": -0.027306431611577864,
+        "mean_change_from_initial_eV": -0.22769587316094375
+      },
+      "total": {
+        "mean_eV": -3129.4028827213956,
+        "change_eV": 0.0035572078118093486,
+        "mean_change_from_initial_eV": -0.001598822174192631
+      },
+      "temperature_K": 302.1286544761668
+    }
+  },
+  {
+    "model": "R2",
+    "run": "nve_test_10",
+    "start_ps": 20,
+    "end_ps": 100,
+    "samples": 1600,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 6.057624027308373,
+        "change_eV": -2.0601732918548805,
+        "mean_change_from_initial_eV": -0.0038360000550366636
+      },
+      "PE": {
+        "mean_eV": -3136.0619960619397,
+        "change_eV": -0.8302085176583205,
+        "mean_change_from_initial_eV": -0.5992521353546019
+      },
+      "total": {
+        "mean_eV": -3130.004372034631,
+        "change_eV": -2.890381809513201,
+        "mean_change_from_initial_eV": -0.6030881354096386
+      },
+      "temperature_K": 291.07994947593
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.30037301609877,
+        "change_eV": 0.08570458701842654,
+        "mean_change_from_initial_eV": 0.23891298873535988
+      },
+      "PE": {
+        "mean_eV": -3135.7063651456074,
+        "change_eV": -0.08432771883326495,
+        "mean_change_from_initial_eV": -0.2436212190222247
+      },
+      "total": {
+        "mean_eV": -3129.4059921295084,
+        "change_eV": 0.0013768681851615838,
+        "mean_change_from_initial_eV": -0.004708230286864818
+      },
+      "temperature_K": 302.74448380059385
+    }
+  },
+  {
+    "model": "R3-B",
+    "run": "nve_test_10",
+    "start_ps": 0,
+    "end_ps": 1,
+    "samples": 21,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 5.772886899689183,
+        "change_eV": -0.2744576869104849,
+        "mean_change_from_initial_eV": -0.28857312767422627
+      },
+      "PE": {
+        "mean_eV": -3136.1589107113223,
+        "change_eV": -0.9174981142409706,
+        "mean_change_from_initial_eV": -0.6961667847370423
+      },
+      "total": {
+        "mean_eV": -3130.3860238116335,
+        "change_eV": -1.19195580115138,
+        "mean_change_from_initial_eV": -0.9847399124112686
+      },
+      "temperature_K": 277.39780803768934
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.260652977180685,
+        "change_eV": 0.30304014178439775,
+        "mean_change_from_initial_eV": 0.19919294981727512
+      },
+      "PE": {
+        "mean_eV": -3135.6615341435336,
+        "change_eV": -0.30394746117008253,
+        "mean_change_from_initial_eV": -0.19879021694840135
+      },
+      "total": {
+        "mean_eV": -3129.4008811663525,
+        "change_eV": -0.0009073193855329009,
+        "mean_change_from_initial_eV": 0.00040273286887375955
+      },
+      "temperature_K": 300.8358630493965
+    }
+  },
+  {
+    "model": "R3-B",
+    "run": "nve_test_10",
+    "start_ps": 1,
+    "end_ps": 5,
+    "samples": 80,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 6.763590547200335,
+        "change_eV": 3.5262068846413213,
+        "mean_change_from_initial_eV": 0.7021305198369248
+      },
+      "PE": {
+        "mean_eV": -3135.1356651961023,
+        "change_eV": 3.789618207305921,
+        "mean_change_from_initial_eV": 0.3270787304826854
+      },
+      "total": {
+        "mean_eV": -3128.3720746489025,
+        "change_eV": 7.315825091947318,
+        "mean_change_from_initial_eV": 1.0292092503196102
+      },
+      "temperature_K": 325.002936114829
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.341650628219748,
+        "change_eV": -0.097073092372435,
+        "mean_change_from_initial_eV": 0.28019060085633785
+      },
+      "PE": {
+        "mean_eV": -3135.743087330758,
+        "change_eV": 0.09632933741204397,
+        "mean_change_from_initial_eV": -0.2803434041728906
+      },
+      "total": {
+        "mean_eV": -3129.4014367025384,
+        "change_eV": -0.0007437549606947869,
+        "mean_change_from_initial_eV": -0.00015280331655276314
+      },
+      "temperature_K": 304.7279488021371
+    }
+  },
+  {
+    "model": "R3-B",
+    "run": "nve_test_10",
+    "start_ps": 5,
+    "end_ps": 20,
+    "samples": 299,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 11.231904905399075,
+        "change_eV": 0.36992993455366197,
+        "mean_change_from_initial_eV": 5.170444878035664
+      },
+      "PE": {
+        "mean_eV": -3130.716819716946,
+        "change_eV": 0.82049551787577,
+        "mean_change_from_initial_eV": 4.745924209639526
+      },
+      "total": {
+        "mean_eV": -3119.4849148115463,
+        "change_eV": 1.190425452429281,
+        "mean_change_from_initial_eV": 9.91636908767519
+      },
+      "temperature_K": 539.7136398104801
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.2875570783501376,
+        "change_eV": 0.03086363942414483,
+        "mean_change_from_initial_eV": 0.2260970509867283
+      },
+      "PE": {
+        "mean_eV": -3135.690439799746,
+        "change_eV": -0.02730643160703039,
+        "mean_change_from_initial_eV": -0.22769587316086162
+      },
+      "total": {
+        "mean_eV": -3129.4028827213956,
+        "change_eV": 0.003557207817266317,
+        "mean_change_from_initial_eV": -0.001598822174133316
+      },
+      "temperature_K": 302.1286544761668
+    }
+  },
+  {
+    "model": "R3-B",
+    "run": "nve_test_10",
+    "start_ps": 20,
+    "end_ps": 100,
+    "samples": 1600,
+    "endpoint_convention": "interpolated between identical sampled energy frames",
+    "SMDP": {
+      "KE": {
+        "mean_eV": 10.654878886095707,
+        "change_eV": 2.633324338251896,
+        "mean_change_from_initial_eV": 4.593418858732299
+      },
+      "PE": {
+        "mean_eV": -3131.2985222128323,
+        "change_eV": -1.3766963612924883,
+        "mean_change_from_initial_eV": 4.164221713752187
+      },
+      "total": {
+        "mean_eV": -3120.643643326737,
+        "change_eV": 1.2566279769594075,
+        "mean_change_from_initial_eV": 8.757640572484485
+      },
+      "temperature_K": 511.98648081415786
+    },
+    "reference": {
+      "KE": {
+        "mean_eV": 6.300373016098772,
+        "change_eV": 0.08570458701797179,
+        "mean_change_from_initial_eV": 0.2389129887353627
+      },
+      "PE": {
+        "mean_eV": -3135.7063651456074,
+        "change_eV": -0.08432771884008616,
+        "mean_change_from_initial_eV": -0.24362121902227954
+      },
+      "total": {
+        "mean_eV": -3129.4059921295084,
+        "change_eV": 0.0013768681778856262,
+        "mean_change_from_initial_eV": -0.0047082302869168305
+      },
+      "temperature_K": 302.74448380059385
+    }
+  }
+]

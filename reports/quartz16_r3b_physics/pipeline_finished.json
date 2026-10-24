@@ -1,0 +1,20 @@
+{
+  "finished": true,
+  "all_requested_completed": true,
+  "software_failures": [],
+  "run_status": {
+    "nve_test_09": {
+      "trajectory_completed": true,
+      "physical_analysis_completed": true
+    },
+    "nve_test_10": {
+      "trajectory_completed": true,
+      "physical_analysis_completed": true
+    },
+    "nvt": {
+      "trajectory_completed": true,
+      "physical_analysis_completed": true
+    }
+  },
+  "checkpoint_sha256": "667dcbc8a3989b4eea1204e5455724e0b1a9105a5574cb6df0ffddf5579b58ba"
+}

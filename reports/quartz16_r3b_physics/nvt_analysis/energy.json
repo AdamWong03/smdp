@@ -1,0 +1,34 @@
+{
+  "completed": true,
+  "failure_reason": null,
+  "metrics": {
+    "potential_energy_eV": {
+      "SMDP": {
+        "mean": -3135.328127885682,
+        "std": 0.5288544976009021,
+        "variance": 0.27968707963270256,
+        "block_mean_std": 0.024825211393323034,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": -3135.7729840013926,
+        "std": 0.4010645690089914,
+        "variance": 0.16085278851436804,
+        "block_mean_std": 0.027322190507312053,
+        "blocks": 8
+      },
+      "mean_difference": 0.44485611571053596,
+      "wasserstein": 0.4448561157105753
+    },
+    "energy_evaluation": "Unchanged raw BKS buck/coul-dsf energy; offline only",
+    "total_energy_drift_meV_atom_ps": {
+      "SMDP": -6.191673410005282e-06,
+      "reference": -8.94806839869057e-06
+    },
+    "energy_change_eV": {
+      "SMDP": -0.2576006361059626,
+      "reference": -1.2183689951662018
+    }
+  },
+  "elapsed_s": 120.51865372795146
+}

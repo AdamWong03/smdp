@@ -1,0 +1,204 @@
+{
+  "completed": true,
+  "failure_reason": null,
+  "metrics": {
+    "potential_energy_eV": {
+      "SMDP": {
+        "mean": -3131.416077488262,
+        "std": 1.5475719642122554,
+        "variance": 2.3949789844157783,
+        "block_mean_std": 0.5111573141914226,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": -3135.704982468285,
+        "std": 0.2832842864853621,
+        "variance": 0.08024998696952068,
+        "block_mean_std": 0.011870085262351367,
+        "blocks": 8
+      },
+      "mean_difference": 4.288904980022835,
+      "wasserstein": 4.289784575788792
+    },
+    "energy_evaluation": "Unchanged raw BKS buck/coul-dsf energy; offline only",
+    "total_energy_drift_meV_atom_ps": {
+      "SMDP": 0.10208091171882433,
+      "reference": -0.0004707604907260122
+    },
+    "energy_change_eV": {
+      "SMDP": 8.570922720184171,
+      "reference": 0.0032830016489242553
+    },
+    "nve_windows": [
+      {
+        "start_ps": 0,
+        "end_ps": 1,
+        "samples": 21,
+        "endpoint_convention": "interpolated between identical sampled energy frames",
+        "SMDP": {
+          "KE": {
+            "mean_eV": 5.772886899689166,
+            "change_eV": -0.27445768691076733,
+            "mean_change_from_initial_eV": -0.2885731276745024
+          },
+          "PE": {
+            "mean_eV": -3136.1589107113223,
+            "change_eV": -0.9174981142405159,
+            "mean_change_from_initial_eV": -0.6961667847365443
+          },
+          "total": {
+            "mean_eV": -3130.3860238116335,
+            "change_eV": -1.19195580115138,
+            "mean_change_from_initial_eV": -0.9847399124112469
+          },
+          "temperature_K": 277.39780803768934
+        },
+        "reference": {
+          "KE": {
+            "mean_eV": 6.260652977180645,
+            "change_eV": 0.3030401417840576,
+            "mean_change_from_initial_eV": 0.1991929498169767
+          },
+          "PE": {
+            "mean_eV": -3135.6615341435336,
+            "change_eV": -0.3039474611696278,
+            "mean_change_from_initial_eV": -0.19879021694785998
+          },
+          "total": {
+            "mean_eV": -3129.4008811663525,
+            "change_eV": -0.0009073193855329009,
+            "mean_change_from_initial_eV": 0.0004027328689603781
+          },
+          "temperature_K": 300.8358630493965
+        }
+      },
+      {
+        "start_ps": 1,
+        "end_ps": 5,
+        "samples": 80,
+        "endpoint_convention": "interpolated between identical sampled energy frames",
+        "SMDP": {
+          "KE": {
+            "mean_eV": 6.763590547200343,
+            "change_eV": 3.5262068846410086,
+            "mean_change_from_initial_eV": 0.702130519836675
+          },
+          "PE": {
+            "mean_eV": -3135.1356651961023,
+            "change_eV": 3.789618207305921,
+            "mean_change_from_initial_eV": 0.3270787304831629
+          },
+          "total": {
+            "mean_eV": -3128.372074648902,
+            "change_eV": 7.315825091946863,
+            "mean_change_from_initial_eV": 1.0292092503196215
+          },
+          "temperature_K": 325.002936114829
+        },
+        "reference": {
+          "KE": {
+            "mean_eV": 6.3416506282198,
+            "change_eV": -0.09707309237203976,
+            "mean_change_from_initial_eV": 0.28019060085613257
+          },
+          "PE": {
+            "mean_eV": -3135.7430873307576,
+            "change_eV": 0.09632933741204397,
+            "mean_change_from_initial_eV": -0.2803434041724017
+          },
+          "total": {
+            "mean_eV": -3129.4014367025384,
+            "change_eV": -0.0007437549602400395,
+            "mean_change_from_initial_eV": -0.00015280331647886668
+          },
+          "temperature_K": 304.7279488021371
+        }
+      },
+      {
+        "start_ps": 5,
+        "end_ps": 20,
+        "samples": 299,
+        "endpoint_convention": "interpolated between identical sampled energy frames",
+        "SMDP": {
+          "KE": {
+            "mean_eV": 11.231904905399086,
+            "change_eV": 0.36992993455386625,
+            "mean_change_from_initial_eV": 5.170444878035419
+          },
+          "PE": {
+            "mean_eV": -3130.716819716946,
+            "change_eV": 0.82049551787577,
+            "mean_change_from_initial_eV": 4.745924209639994
+          },
+          "total": {
+            "mean_eV": -3119.4849148115463,
+            "change_eV": 1.1904254524297357,
+            "mean_change_from_initial_eV": 9.916369087675209
+          },
+          "temperature_K": 539.7136398104801
+        },
+        "reference": {
+          "KE": {
+            "mean_eV": 6.287557078350105,
+            "change_eV": 0.030863639423835743,
+            "mean_change_from_initial_eV": 0.22609705098643748
+          },
+          "PE": {
+            "mean_eV": -3135.690439799746,
+            "change_eV": -0.02730643160703039,
+            "mean_change_from_initial_eV": -0.2276958731603734
+          },
+          "total": {
+            "mean_eV": -3129.4028827213956,
+            "change_eV": 0.0035572078168115695,
+            "mean_change_from_initial_eV": -0.0015988221741226698
+          },
+          "temperature_K": 302.1286544761668
+        }
+      },
+      {
+        "start_ps": 20,
+        "end_ps": 100,
+        "samples": 1600,
+        "endpoint_convention": "interpolated between identical sampled energy frames",
+        "SMDP": {
+          "KE": {
+            "mean_eV": 10.654878886095721,
+            "change_eV": 2.633324338251583,
+            "mean_change_from_initial_eV": 4.5934188587320515
+          },
+          "PE": {
+            "mean_eV": -3131.2985222128323,
+            "change_eV": -1.3766963612924883,
+            "mean_change_from_initial_eV": 4.1642217137526645
+          },
+          "total": {
+            "mean_eV": -3120.643643326737,
+            "change_eV": 1.2566279769589528,
+            "mean_change_from_initial_eV": 8.757640572484513
+          },
+          "temperature_K": 511.98648081415786
+        },
+        "reference": {
+          "KE": {
+            "mean_eV": 6.300373016098779,
+            "change_eV": 0.08570458701778882,
+            "mean_change_from_initial_eV": 0.2389129887351122
+          },
+          "PE": {
+            "mean_eV": -3135.7063651456074,
+            "change_eV": -0.08432771884008616,
+            "mean_change_from_initial_eV": -0.2436212190218069
+          },
+          "total": {
+            "mean_eV": -3129.4059921295084,
+            "change_eV": 0.0013768681778856262,
+            "mean_change_from_initial_eV": -0.004708230286895798
+          },
+          "temperature_K": 302.74448380059385
+        }
+      }
+    ]
+  },
+  "elapsed_s": 38.476267814054154
+}

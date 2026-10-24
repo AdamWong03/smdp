@@ -1,0 +1,90 @@
+{
+  "completed": true,
+  "failure_reason": null,
+  "metrics": {
+    "temperature_K": {
+      "SMDP": {
+        "mean": 501.0269520801469,
+        "std": 71.85561484788425,
+        "variance": 5163.229385167485,
+        "block_mean_std": 22.91204525230041,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 287.90947598928165,
+        "std": 12.809218392126452,
+        "variance": 164.07607581719057,
+        "block_mean_std": 0.2654719089685282,
+        "blocks": 8
+      },
+      "mean_difference": 213.11747609086524,
+      "wasserstein": 213.16136023502494
+    },
+    "kinetic_energy_eV": {
+      "SMDP": {
+        "mean": 10.426801669830397,
+        "std": 1.4953771284598665,
+        "variance": 2.2361527563208763,
+        "block_mean_std": 0.47681936212026327,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 5.991643747989079,
+        "std": 0.26657084846581564,
+        "variance": 0.07106001725178485,
+        "block_mean_std": 0.0055246986858367925,
+        "blocks": 8
+      },
+      "mean_difference": 4.435157921841317,
+      "wasserstein": 4.436071188614099
+    },
+    "element_kinetic_energy_eV": {
+      "8": {
+        "SMDP": {
+          "mean": 7.636763456395682,
+          "std": 1.2592824506406557,
+          "variance": 1.5857922904915354,
+          "block_mean_std": 0.3441999090429332,
+          "blocks": 8
+        },
+        "reference": {
+          "mean": 3.99525855929746,
+          "std": 0.25656418700238043,
+          "variance": 0.06582518205219244,
+          "block_mean_std": 0.019453746893190658,
+          "blocks": 8
+        },
+        "mean_difference": 3.6415048970982222,
+        "wasserstein": 3.641504897098222
+      },
+      "14": {
+        "SMDP": {
+          "mean": 2.7900382134347117,
+          "std": 0.41944113032271024,
+          "variance": 0.1759308618063928,
+          "block_mean_std": 0.1456161767634691,
+          "blocks": 8
+        },
+        "reference": {
+          "mean": 1.9963851886916182,
+          "std": 0.19749555049054793,
+          "variance": 0.03900449246356456,
+          "block_mean_std": 0.023461047705324648,
+          "blocks": 8
+        },
+        "mean_difference": 0.7936530247430935,
+        "wasserstein": 0.794215648160279
+      }
+    },
+    "segment_join_derivative_RMS_A_fs": {
+      "mean": 0.0006711774299019485,
+      "std": 4.970060286573873e-05,
+      "variance": 2.4701499252178767e-09,
+      "block_mean_std": 1.614497819519286e-05,
+      "blocks": 8
+    },
+    "minimum_distance_A": 1.431251883506775,
+    "thermodynamic_sampling": "2000 uniform production frames, matching R1"
+  },
+  "elapsed_s": 0.21864020894281566
+}

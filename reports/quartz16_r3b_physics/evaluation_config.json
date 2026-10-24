@@ -1,0 +1,37 @@
+{
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_r3b_spatial_composition/best_rollout.pt",
+  "checkpoint_sha256": "667dcbc8a3989b4eea1204e5455724e0b1a9105a5574cb6df0ffddf5579b58ba",
+  "code_commit": "86ce650e6105f70d803107104cbd73c2d925ccd0",
+  "argv": [
+    "run_experiment.py",
+    "--after-training",
+    "--data-root",
+    "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
+    "--output",
+    "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_r3b_spatial_composition",
+    "--previous",
+    "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r2_additive",
+    "--r1",
+    "/data1/wyd/research/foundation_mlip_adaptation/experiments/motion_modes/quartz16_20261022_r1",
+    "--spectral-workers",
+    "6",
+    "--publish-summary",
+    "--report-name",
+    "quartz16_r3b_physics"
+  ],
+  "python": "/data1/wyd/envs/mlip/bin/python",
+  "data_root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
+  "nve_initials": [
+    "test_09",
+    "test_10"
+  ],
+  "nve_steps": 6250,
+  "nvt_steps": 937500,
+  "thermalization_steps": 93750,
+  "horizon_fs": 16,
+  "seed": 2026102201,
+  "cuda_visible_devices": "GPU-ed405bf3-4069-2d20-0432-9ecda26de366",
+  "ld_library_path": "/data1/wyd/envs/lammps-runtime/lib:/data1/wyd/envs/mlip/lib::/usr/local/cuda/lib64:/usr/local/cuda/lib64",
+  "analysis_sampling": "unchanged 2000 thermodynamic frames / 512 RDF frames / full spectral blocks",
+  "timestamp_unix": 1792765010.151488
+}

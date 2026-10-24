@@ -1,0 +1,36 @@
+{
+  "completed": true,
+  "failure_reason": null,
+  "metrics": {
+    "VDOS": {
+      "queried_1fs": {
+        "nyquist_THz": 500.0,
+        "elements": {
+          "8": {
+            "overlap": 0.6070198437881021,
+            "block_overlap": {
+              "mean": 0.603208262394555,
+              "std": 0.018496845815989923,
+              "variance": 0.0003421333051405039,
+              "block_mean_std": 0.002974591879450844,
+              "blocks": 8
+            },
+            "reference_split_half_overlap": 0.9986130057655248
+          },
+          "14": {
+            "overlap": 0.7280543236715831,
+            "block_overlap": {
+              "mean": 0.7204657328217495,
+              "std": 0.017128557270186175,
+              "variance": 0.00029338747415804767,
+              "block_mean_std": 0.002761253504307661,
+              "blocks": 8
+            },
+            "reference_split_half_overlap": 0.9984999858738758
+          }
+        }
+      }
+    }
+  },
+  "elapsed_s": 693.8409150199732
+}
