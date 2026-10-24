@@ -57,27 +57,6 @@ def test_com_and_time_reverse():
     cm1 = (v1*mass).sum(0)/mass.sum()
     torch.testing.assert_close(cm1, cm0, atol=5e-12, rtol=5e-12)
     reverse = model(x1, v1, [-8.])
-    W = model.modes()
-    initial = model._encode(x, v, W)
-    internal_forward = model._propagate(initial, 8., W, model.geometry())
-    internal_back = model._propagate(internal_forward, -8., W, model.geometry())
-    reencoded = model._encode(x1, v1, W)
-    qf,pf,qs,ps=initial[:4]
-    fastq,fastp=model._fast(qf,pf,2.)
-    fastbq,fastbp=model._fast(fastq,fastp,-2.)
-    kickp,kicks=model._kick(qf,qs,pf,ps,1.,W,model.geometry())
-    kickbp,kickbs=model._kick(qf,qs,kickp,kicks,-1.,W,model.geometry())
-    once = model._propagate(initial, 2., W, model.geometry())
-    oncer = model._propagate(once, -2., W, model.geometry())
-    print("SACMP ELEMENTARY",
-          "fast",max(float((a-b).abs().max()) for a,b in [(fastbq,qf),(fastbp,pf)]),
-          "kick",max(float((a-b).abs().max()) for a,b in [(kickbp,pf),(kickbs,ps)]),
-          "one",max(float((a-b).abs().max()) for a,b in zip(oncer,initial[:4])))
-    print("SACMP DIAGNOSTIC",
-          "internal_reverse_max", max(float((a-b).abs().max()) for a,b in zip(internal_back, initial[:4])),
-          "reencode_max", max(float((a-b).abs().max()) for a,b in zip(reencoded[:4], internal_forward)),
-          "slow_orthogonality", float((internal_forward[2]@W).abs().max()),
-          "slow_momentum_orthogonality", float((internal_forward[3]@W).abs().max()))
     torch.testing.assert_close(reverse["positions"][0], x,
                                atol=3e-10, rtol=3e-10)
     torch.testing.assert_close(reverse["velocities"][0], v,
@@ -139,3 +118,18 @@ def test_no_grad_rollout_requires_only_local_force_autograd():
         out = model(x, v, [1., 16.])
     assert torch.isfinite(out["positions"]).all()
     assert torch.isfinite(out["velocities"]).all()
+
+
+def test_potential_kick_is_independent_of_encoder_graph_history():
+    model, x, v = make_model()
+    model.train()
+    W = model.modes()
+    qf, pf, qs, ps = model._encode(x, v, W)[:4]
+    # qs has an autograd path through qf in _encode. The kick is a
+    # Hamiltonian derivative in *independent* modal coordinates.
+    first = model._kick(qf, qs, pf, ps, .3, W, model.geometry())
+    independent = model._kick(qf.detach().clone().requires_grad_(True),
+                              qs.detach().clone().requires_grad_(True),
+                              pf, ps, .3, W, model.geometry())
+    for a, b in zip(first, independent):
+        torch.testing.assert_close(a, b, atol=1e-12, rtol=1e-12)

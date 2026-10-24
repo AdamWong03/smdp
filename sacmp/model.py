@@ -251,10 +251,16 @@ class SACMP(nn.Module):
         # momentum kicks requires differentiation of a scalar neural energy.
         tracing = torch.is_grad_enabled()
         with torch.enable_grad():
-            fq = qf if tracing else qf.detach()
-            sq = qs if tracing else qs.detach()
-            fq = fq.requires_grad_(True)
-            sq = sq.requires_grad_(True)
+            # IMPORTANT: the canonical qf and qs are mathematically
+            # independent chart coordinates, but qs = Q-W@qf in the
+            # encoding autograd graph. Differentiating U directly wrt
+            # the original qf would incorrectly include a path through
+            # qs, so the kick would depend on computation history and
+            # cease to be reversible/symplectic. Clones create two
+            # independent differentiation INPUT nodes while preserving
+            # their paths to original coordinates for higher derivatives.
+            fq = (qf.clone() if tracing else qf.detach().clone()).requires_grad_(True)
+            sq = (qs.clone() if tracing else qs.detach().clone()).requires_grad_(True)
             scalar = self.potential(fq, sq, W, geometry).sum()
             gf, gs = torch.autograd.grad(
                 scalar, (fq, sq), create_graph=tracing)

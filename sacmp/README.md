@@ -40,6 +40,10 @@ P=M^(1/2)(v-v_cm). The COM drifts independently.
    (p_f,p_s) <- (p_f,p_s)-h*grad_(q_f,q_s) U_theta.
    The same scalar energy supplies reciprocal fast/slow momentum
    transfer. Slow gradients are projected to the canonical complement.
+   **Implementation invariant:** compute partial derivatives wrt independent
+   clones of q_f and q_s; using the original qs=Q-Wq_f tensor lets
+   autograd include a spurious q_f -> q_s ancestry term and destroys the
+   reversible/symplectic property even though U is scalar.
 5. The slow kinetic drift q_s <- q_s+h*p_s is an exact Hamiltonian
    subflow. A substep of duration h is
    fast_phase(h/2), kick(h/2), slow_drift(h), kick(h/2),
