@@ -26,25 +26,24 @@ P=M^(1/2)(v-v_cm). The COM drifts independently.
    during each call and all rollout steps.
 2. Canonical decomposition:
    q_f=W^T Q, p_f=W^T P, q_s=(I-WW^T)Q, p_s=(I-WW^T)P.
-3. **Learned exact fast twist.** Each mode has frequency omega_k,
-   action I_k=(omega_k q_f,k^2 + p_f,k^2/omega_k)/2 and
-   beta_k. The explicit fast Hamiltonian is
-   H_f=sum(omega_k I_k+beta_k I_k^2/2).
-   Evolve with the analytic angle theta_k=h*(omega_k+beta_k I_k):
+3. **Exact learned-frequency harmonic phase.** Each mode has trainable
+   frequency omega_k and Hamiltonian
+   H_f=sum_k (p_f,k^2 + omega_k^2 q_f,k^2)/2.
+   Evolve with the exact linear angle theta_k=h*omega_k:
    q'=cos(theta)q+sin(theta)p/omega,
    p'=cos(theta)p-omega*sin(theta)q.
 4. **Single learned scalar potential** U_theta(q_f,q_s; reference graph),
    made from O(3)-invariant reference-bond projection/magnitude/cross
-   features. It has a positive slow-on-site term, a positive slow
-   bond term, and a genuinely **mixed** term proportional to
-   fast-bond x slow-bond invariants. A Hamiltonian kick is
+   features. It has a positive slow-on-site and slow
+   bond term, a learnable fast anharmonic bond term, and a genuinely
+   **mixed** term proportional to fast-bond x slow-bond invariants. A Hamiltonian kick is
    (p_f,p_s) <- (p_f,p_s)-h*grad_(q_f,q_s) U_theta.
    The same scalar energy supplies reciprocal fast/slow momentum
    transfer. Slow gradients are projected to the canonical complement.
 5. The slow kinetic drift q_s <- q_s+h*p_s is an exact Hamiltonian
    subflow. A substep of duration h is
-   fast_twist(h/2), kick(h/2), slow_drift(h), kick(h/2),
-   fast_twist(h/2).
+   fast_phase(h/2), kick(h/2), slow_drift(h), kick(h/2),
+   fast_phase(h/2).
    At query time t, use n=ceil(|t|/4 fs) palindromic substeps.
    This is reversible and symplectic in exact arithmetic for fixed
    modal frame; it is **not** an exact flow of the external BKS system,
@@ -147,7 +146,7 @@ These are **historical reference numbers**, not SACMP results.
    VDOS matched at 16 fs and queried 1 fs, RDF, temperature, diffusion
    or structural failures. No fabricated numbers or replacement reference.
 5. **Ablations, only after primary run:** zero mixed energy coefficients,
-   beta=0 (harmonic twist), random-orthonormal vs PCA-initialized W,
+   frozen pure-fast anharmonic term, random-orthonormal vs PCA-initialized W,
    no end-to-end W learning, and exact same time-query substep budget.
    Hold train/val/test trajectories and compute fixed; do not pick
    favorable seeds after seeing test.
@@ -163,7 +162,7 @@ gradient expense and crystal-specific basis remain primary risks.
 - TrajCast (Nature Machine Intelligence 2026): direct learned segment
   dynamics/physical projections, the task baseline.
 - FlashMD (NeurIPS 2025): neural finite-time MD stepping; its optional
-  symplectic stepper uses implicit midpoint, unlike our explicit twist
+  symplectic stepper uses implicit midpoint, unlike our explicit mode phase
   and canonical split.
 - Hamiltonian Flow Maps (ICML 2026): learned finite-time mean velocity/
   force flow map, generally not an exactly symplectic map.
@@ -171,8 +170,10 @@ gradient expense and crystal-specific basis remain primary risks.
   propagation; prior art to cite explicitly rather than claiming
   generic structure preservation as new.
 - Integrable Building Blocks for Symplectic Neural Networks (2026):
-  explicit action-dependent twists, important prior art for our fast
-  layer. Novelty cannot rest on the twist by itself.
+  explicit action-dependent twists. We deliberately do NOT use a
+  nonlinear action twist: it would make instantaneous q_dot unequal to
+  physical p and invalidate the v=dx/dt condition for MD. The paper
+  still delineates the existing symplectic-layer design space.
 
 The research claim to validate is a **learned, data-anchored canonical
 fast/slow modal chart with reciprocal neural inter-mode energy exchange

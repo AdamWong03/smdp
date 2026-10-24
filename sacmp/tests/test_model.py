@@ -30,7 +30,6 @@ def make_model(dtype=torch.float64):
     with torch.no_grad():
         model.potential.mixed_net[-1].weight.normal_(std=.03)
         model.potential.mixed_net[-1].bias.normal_(std=.01)
-        model.raw_beta[:] = .1
     x = xref.to(dtype)+torch.randn(4, 3, dtype=dtype)*.03
     v = torch.randn(4, 3, dtype=dtype)*.007
     return model, x, v
@@ -101,7 +100,7 @@ def test_gradients_reach_all_operators():
     loss.backward()
     for name, obj in [("basis", model.basis_raw),
                       ("phase", model.log_omega),
-                      ("anharmonicity", model.raw_beta),
+                      ("fast anharmonic potential", model.potential.fast_net[-1].weight),
                       ("slow potential", model.potential.slow_net[-1].weight),
                       ("coupling", model.potential.mixed_net[-1].weight)]:
         assert obj.grad is not None, name

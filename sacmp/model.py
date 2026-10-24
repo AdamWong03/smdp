@@ -23,7 +23,6 @@ class SACMPConfig:
     cutoff_a: float = 4.5
     max_substep_fs: float = 4.0
     max_query_fs: float = 48.0
-    beta_limit: float = 0.10
     coupling_scale: float = 0.004
     slow_edge_scale: float = 0.003
     fast_edge_scale: float = 0.001
@@ -132,10 +131,10 @@ class CanonicalPotential(nn.Module):
 
 
 class SACMP(nn.Module):
-    """Orthogonal modal chart + nonlinear fast twist + neural Hamiltonian kick.
+    """Orthogonal modal chart + exact harmonic fast phase + neural potential kick.
 
     For any fixed W, each propagation substep is a composition of exact
-    symplectic flows (fast action twist, learned potential kick, slow drift).
+    symplectic flows (fast harmonic rotation, learned potential kick, slow drift).
     It is self-adjoint: Phi(-h) = inverse(Phi(h)), to solver precision.
     This statement does NOT imply conservation of the external BKS energy.
     """
@@ -165,7 +164,6 @@ class SACMP(nn.Module):
         self.register_buffer("basis_seed", basis)
         self.basis_raw = nn.Parameter(basis.clone(), requires_grad=cfg.mode_trainable)
         self.log_omega = nn.Parameter(freq.clamp(.002, .4).log())
-        self.raw_beta = nn.Parameter(torch.zeros_like(freq))
         self.potential = CanonicalPotential(cfg)
         # Vesin returns directed full-list edges. Use ONE orientation to avoid
         # counting a physical pair twice; distinct periodic images are retained.
@@ -242,9 +240,9 @@ class SACMP(nn.Module):
 
     def _fast(self, qf, pf, h):
         omega = self.log_omega.exp().clamp(.002, .4)
-        beta = self.cfg.beta_limit*torch.tanh(self.raw_beta)
-        action = .5*(omega*qf.square()+pf.square()/omega)
-        theta = h*(omega+beta*action)
+        # Nonlinear action-dependent twists make d(x)/dt != decoded
+        # physical velocity. Harmonic phase flow keeps q_dot=p exactly.
+        theta = h*omega
         c, s = torch.cos(theta), torch.sin(theta)
         return c*qf+(s/omega)*pf, c*pf-(s*omega)*qf
 
@@ -327,9 +325,7 @@ class SACMP(nn.Module):
         W = self.modes()
         qf, pf, qs, ps, _, cm_vel = self._encode(x, v, W)
         omega = self.log_omega.exp().clamp(.002, .4)
-        beta = self.cfg.beta_limit*torch.tanh(self.raw_beta)
-        action = .5*(omega*qf.square()+pf.square()/omega)
-        energy = (omega*action+.5*beta*action.square()).sum(-1)
+        energy = .5*(pf.square()+omega.square()*qf.square()).sum(-1)
         energy = energy+.5*ps.square().sum(-1)
         energy = energy+self.potential(qf, qs, W, self.geometry())
         energy = energy+.5*self.mass.sum()*cm_vel.squeeze(1).square().sum(-1)
