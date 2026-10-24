@@ -62,6 +62,17 @@ def test_com_and_time_reverse():
     internal_forward = model._propagate(initial, 8., W, model.geometry())
     internal_back = model._propagate(internal_forward, -8., W, model.geometry())
     reencoded = model._encode(x1, v1, W)
+    qf,pf,qs,ps=initial[:4]
+    fastq,fastp=model._fast(qf,pf,2.)
+    fastbq,fastbp=model._fast(fastq,fastp,-2.)
+    kickp,kicks=model._kick(qf,qs,pf,ps,1.,W,model.geometry())
+    kickbp,kickbs=model._kick(qf,qs,kickp,kicks,-1.,W,model.geometry())
+    once = model._propagate(initial, 2., W, model.geometry())
+    oncer = model._propagate(once, -2., W, model.geometry())
+    print("SACMP ELEMENTARY",
+          "fast",max(float((a-b).abs().max()) for a,b in [(fastbq,qf),(fastbp,pf)]),
+          "kick",max(float((a-b).abs().max()) for a,b in [(kickbp,pf),(kickbs,ps)]),
+          "one",max(float((a-b).abs().max()) for a,b in zip(oncer,initial[:4])))
     print("SACMP DIAGNOSTIC",
           "internal_reverse_max", max(float((a-b).abs().max()) for a,b in zip(internal_back, initial[:4])),
           "reencode_max", max(float((a-b).abs().max()) for a,b in zip(reencoded[:4], internal_forward)),
