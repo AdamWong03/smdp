@@ -57,6 +57,16 @@ def test_com_and_time_reverse():
     cm1 = (v1*mass).sum(0)/mass.sum()
     torch.testing.assert_close(cm1, cm0, atol=5e-12, rtol=5e-12)
     reverse = model(x1, v1, [-8.])
+    W = model.modes()
+    initial = model._encode(x, v, W)
+    internal_forward = model._propagate(initial, 8., W, model.geometry())
+    internal_back = model._propagate(internal_forward, -8., W, model.geometry())
+    reencoded = model._encode(x1, v1, W)
+    print("SACMP DIAGNOSTIC",
+          "internal_reverse_max", max(float((a-b).abs().max()) for a,b in zip(internal_back, initial[:4])),
+          "reencode_max", max(float((a-b).abs().max()) for a,b in zip(reencoded[:4], internal_forward)),
+          "slow_orthogonality", float((internal_forward[2]@W).abs().max()),
+          "slow_momentum_orthogonality", float((internal_forward[3]@W).abs().max()))
     torch.testing.assert_close(reverse["positions"][0], x,
                                atol=3e-10, rtol=3e-10)
     torch.testing.assert_close(reverse["velocities"][0], v,
