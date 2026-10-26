@@ -10,6 +10,10 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True)
     p.add_argument('--push',action='store_true');a=p.parse_args()
     repo=Path(__file__).resolve().parents[1]
+    if a.push:
+        for flags in (['diff','--name-only'],['diff','--cached','--name-only']):
+            if subprocess.check_output(['git',*flags],cwd=repo,text=True).strip():
+                raise RuntimeError('Existing changes present; do not bundle unrelated work')
     dest=repo/'reports'/a.output.name
     names=['basis.json','preflight_cost.json','bks_verification.json','bks_verification_initial_failed.json',
            'correctness.json','acceleration_scale.json','experiment_status.json']
@@ -37,8 +41,6 @@ def main():
     text+='\nCompare matched run lengths and cadence only. See metrics JSON for VDOS, RDF and sampled full energy curves; a thermostat is not evidence of energy conservation.\n'
     (dest/'RESULTS.md').write_text(text)
     if a.push:
-        if subprocess.check_output(['git','diff','--name-only'],cwd=repo,text=True).strip():
-            raise RuntimeError('Tracked changes present; do not bundle unrelated work')
         subprocess.run(['git','add','--',str(dest.relative_to(repo))],cwd=repo,check=True)
         if subprocess.run(['git','diff','--cached','--quiet'],cwd=repo).returncode:
             subprocess.run(['git','-c','user.name=Codex','-c','user.email=codex@localhost','commit','-m','Report observed neural segment comparison with completion and failure status'],cwd=repo,check=True)
