@@ -15,6 +15,11 @@ from train_quartz import batch_to, diagnostics
 
 def load_model(path, device):
     state=torch.load(path,map_location=device,weights_only=False)
+    if state['config'].get('model_family') == 'neural_segment':
+        from neural_segment.model import NeuralSegment, SegmentConfig
+        model=NeuralSegment(SegmentConfig(**state['config']['model'])).to(device).eval()
+        model.load_state_dict(state['model'])
+        return model,state['config']
     model=NeuralSMDP(SMDPConfig(**state['config']['model'])).to(device).eval()
     model.load_state_dict(state['model'])
     return model,state['config']
@@ -26,12 +31,13 @@ def main():
     p.add_argument('--data-root',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--device',default='cuda')
+    p.add_argument('--split', choices=['val','test'], default='test')
     args=p.parse_args(); args.output.mkdir(parents=True,exist_ok=True)
     if (args.output/'test_metrics.json').exists():
         raise FileExistsError('Existing test metrics; use an explicitly new output directory')
     torch.set_num_threads(4)
     model,cfg=load_model(args.checkpoint,args.device)
-    data=QuartzSegments(args.data_root,'test',args.output/'cache')
+    data=QuartzSegments(args.data_root,args.split,args.output/'cache')
     builder=PeriodicGraphBuilder(model.config.cutoff_angstrom)
     sums={k:np.zeros(17) for k in ['q_mae','q_mse','v_mae','v_mse']}; n=0; diag={}
     derivative=[]; ref_derivative=[]; joins=[]; second=[]
@@ -74,7 +80,7 @@ def main():
                          velocity_MAE_A_fs=sums['v_mae'][t]/n,velocity_RMSE_A_fs=np.sqrt(sums['v_mse'][t]/n)))
     with (args.output/'query_errors.csv').open('w') as f:
         w=csv.DictWriter(f,fieldnames=rows[0]);w.writeheader();w.writerows(rows)
-    result=dict(checkpoint=str(args.checkpoint),test_samples=n,endpoint=rows[-1],
+    result=dict(checkpoint=str(args.checkpoint),split=args.split,evaluation_samples=n,test_samples=n if args.split=='test' else 0,endpoint=rows[-1],
                 checkpoint_sha256=hashlib.sha256(args.checkpoint.read_bytes()).hexdigest(),
                 normalized_endpoint_loss=float(sums['q_mse'][-1]/n/cfg['stats']['displacement_residual_rms']**2+sums['v_mse'][-1]/n/cfg['stats']['velocity_delta_rms']**2),
                 position_velocity_consistency_RMSE_A_fs=float(np.sqrt(np.mean(derivative))),

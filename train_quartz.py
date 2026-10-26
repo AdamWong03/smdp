@@ -80,13 +80,15 @@ def loss_for(model, batch, times, stats, builder, rollout_steps=0, composition_w
 
 
 def diagnostics(out):
-    result = {
+    result = {} if 'coefficients' in out else {
         'scalar_allocation': out['mode_scalar_allocation'].detach().mean((0, 2)).cpu().tolist(),
         'vector_allocation': out['mode_vector_allocation'].detach().mean((0, 2)).cpu().tolist(),
         'recurrent_route_by_mode': out['operator_routing'][..., 0].detach().mean((0, 1, 2)).cpu().tolist(),
         'cross_mode_attention': out['coupling_attention'].detach().mean((0, 1)).cpu().tolist(),
     }
-    if out['fusion_weights'] is not None:
+    if 'coefficients' in out and out['coupling_attention'] is not None:
+        result['cross_mode_attention']=out['coupling_attention'].detach().mean((0,1)).cpu().tolist()
+    if out.get('fusion_weights') is not None:
         result['fusion_weights'] = out['fusion_weights'].detach().mean((0,1)).flatten().cpu().tolist()
     for key in ['mode_delta_q','mode_delta_v']:
         contributions=out[key][-1].detach()
