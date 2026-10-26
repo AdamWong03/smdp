@@ -1,0 +1,384 @@
+{
+  "candidate": "/data1/wyd/research/foundation_mlip_adaptation/experiments/sacmp/quartz_20261024_v1/nve_screen_test_10.h5",
+  "reference": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_10/trajectory.h5",
+  "production_available": true,
+  "trajectory_completed": true,
+  "stable": true,
+  "failure": "",
+  "evaluation_phase": "production",
+  "duration_ps": 10.0,
+  "requested_production_ps": 10.0,
+  "temperature_K": {
+    "SMDP": {
+      "mean": 300.4376209370177,
+      "std": 13.655654016258486,
+      "variance": 186.47688661175653,
+      "block_mean_std": 0.8130754292656021,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 302.90677481417106,
+      "std": 13.64482372305516,
+      "variance": 186.18121443324884,
+      "block_mean_std": 0.6055778928268879,
+      "blocks": 8
+    },
+    "mean_difference": -2.46915387715336,
+    "wasserstein": 2.469153877153342
+  },
+  "kinetic_energy_eV": {
+    "SMDP": {
+      "mean": 6.25236521640229,
+      "std": 0.2841859015931213,
+      "variance": 0.08076162666429523,
+      "block_mean_std": 0.016920798788102983,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 6.3037504316336905,
+      "std": 0.2839605138793698,
+      "variance": 0.08063357344263579,
+      "block_mean_std": 0.012602596642605178,
+      "blocks": 8
+    },
+    "mean_difference": -0.051385215231400494,
+    "wasserstein": 0.05138521523139998
+  },
+  "element_kinetic_energy_eV": {
+    "8": {
+      "SMDP": {
+        "mean": 4.204573275046449,
+        "std": 0.2716986729948553,
+        "variance": 0.0738201689071653,
+        "block_mean_std": 0.035749177160841854,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 4.236798832495164,
+        "std": 0.2710241686574174,
+        "variance": 0.07345409999644424,
+        "block_mean_std": 0.0455585947385678,
+        "blocks": 8
+      },
+      "mean_difference": -0.032225557448715136,
+      "wasserstein": 0.03427150117501992
+    },
+    "14": {
+      "SMDP": {
+        "mean": 2.0477919413558414,
+        "std": 0.21195635418316888,
+        "variance": 0.04492549607862094,
+        "block_mean_std": 0.03499847141685622,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 2.0669515991385254,
+        "std": 0.2000976386227154,
+        "variance": 0.0400390649823868,
+        "block_mean_std": 0.04843586500354472,
+        "blocks": 8
+      },
+      "mean_difference": -0.019159657782684025,
+      "wasserstein": 0.02574858614905561
+    }
+  },
+  "segment_join_derivative_RMS_A_fs": {
+    "mean": 0.0005939310195650489,
+    "std": 4.08209899356967e-05,
+    "variance": 1.666353219330251e-09,
+    "block_mean_std": 1.2158546500613692e-05,
+    "blocks": 8
+  },
+  "minimum_distance_A": 1.4876384735107422,
+  "thermodynamic_sampling": "2000 uniform production frames, matching R1",
+  "RDF": {
+    "14-8": {
+      "RMSE": 0.0820118536625133,
+      "peak_position_A": {
+        "SMDP": 1.60334050655365,
+        "reference": 1.60334050655365,
+        "difference": 0.0
+      },
+      "peak_height": {
+        "SMDP": 34.949986985258796,
+        "reference": 34.211256562725126,
+        "difference": 0.7387304225336706
+      },
+      "block_curve_RMSE": {
+        "mean": 0.13302605462575057,
+        "std": 0.051654944881254855,
+        "variance": 0.002668233330685477,
+        "block_mean_std": 0.051654944881254855,
+        "blocks": 8
+      }
+    },
+    "8-8": {
+      "RMSE": 0.02783455373181248,
+      "peak_position_A": {
+        "SMDP": 2.6009745597839355,
+        "reference": 2.6009745597839355,
+        "difference": 0.0
+      },
+      "peak_height": {
+        "SMDP": 9.046142603564814,
+        "reference": 9.15716636409138,
+        "difference": -0.1110237605265656
+      },
+      "block_curve_RMSE": {
+        "mean": 0.055620103721340866,
+        "std": 0.004398451289199187,
+        "variance": 1.9346373743457987e-05,
+        "block_mean_std": 0.004398451289199187,
+        "blocks": 8
+      }
+    }
+  },
+  "potential_energy_eV": {
+    "SMDP": {
+      "mean": -3135.4340418255642,
+      "std": 0.30501034323046067,
+      "variance": 0.09303130947756343,
+      "block_mean_std": 0.06364505620333898,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": -3135.706006770569,
+      "std": 0.2852996930804513,
+      "variance": 0.08139591487179969,
+      "block_mean_std": 0.012226703848557272,
+      "blocks": 8
+    },
+    "mean_difference": 0.27196494500458357,
+    "wasserstein": 0.2719649450049868
+  },
+  "energy_evaluation": "Unchanged raw BKS buck/coul-dsf energy; offline only",
+  "total_energy_drift_meV_atom_ps": {
+    "SMDP": 0.13526462524239344,
+    "reference": -0.002241577957705502
+  },
+  "energy_change_eV": {
+    "SMDP": 0.08792197664615742,
+    "reference": -0.002432485886856739
+  },
+  "nve_windows": [
+    {
+      "start_ps": 0,
+      "end_ps": 1,
+      "samples": 63,
+      "endpoint_convention": "interpolated between identical sampled energy frames",
+      "SMDP": {
+        "KE": {
+          "mean_eV": 6.2395360397145945,
+          "change_eV": 0.335901162272199,
+          "mean_change_from_initial_eV": 0.17807601235092566
+        },
+        "PE": {
+          "mean_eV": -3135.5343142413303,
+          "change_eV": -0.2513132675003362,
+          "mean_change_from_initial_eV": -0.0715694733745468
+        },
+        "total": {
+          "mean_eV": -3129.2947782016163,
+          "change_eV": 0.08458789477117534,
+          "mean_change_from_initial_eV": 0.10650653897616957
+        },
+        "temperature_K": 299.8211554572788
+      },
+      "reference": {
+        "KE": {
+          "mean_eV": 6.28965668150799,
+          "change_eV": 0.0909558518173812,
+          "mean_change_from_initial_eV": 0.2281966541443236
+        },
+        "PE": {
+          "mean_eV": -3135.6905322994266,
+          "change_eV": -0.09104527467434309,
+          "mean_change_from_initial_eV": -0.22778753147037015
+        },
+        "total": {
+          "mean_eV": -3129.4008756179187,
+          "change_eV": -8.942285694502061e-05,
+          "mean_change_from_initial_eV": 0.0004091226737655811
+        },
+        "temperature_K": 302.2295442604059
+      }
+    },
+    {
+      "start_ps": 1,
+      "end_ps": 5,
+      "samples": 250,
+      "endpoint_convention": "interpolated between identical sampled energy frames",
+      "SMDP": {
+        "KE": {
+          "mean_eV": 6.250679538758877,
+          "change_eV": -0.14988832660750884,
+          "mean_change_from_initial_eV": 0.18921951139520948
+        },
+        "PE": {
+          "mean_eV": -3135.4592141688086,
+          "change_eV": 0.26191782466594304,
+          "mean_change_from_initial_eV": 0.003530599147636167
+        },
+        "total": {
+          "mean_eV": -3129.208534630049,
+          "change_eV": 0.1120294980592007,
+          "mean_change_from_initial_eV": 0.19275011054263996
+        },
+        "temperature_K": 300.35662103324927
+      },
+      "reference": {
+        "KE": {
+          "mean_eV": 6.316096086865841,
+          "change_eV": 0.21194189254036377,
+          "mean_change_from_initial_eV": 0.25463605950217366
+        },
+        "PE": {
+          "mean_eV": -3135.717529295069,
+          "change_eV": -0.21452616529722945,
+          "mean_change_from_initial_eV": -0.25478452711317184
+        },
+        "total": {
+          "mean_eV": -3129.401433208203,
+          "change_eV": -0.0025842727573035518,
+          "mean_change_from_initial_eV": -0.0001484676112104353
+        },
+        "temperature_K": 303.50000620077105
+      }
+    },
+    {
+      "start_ps": 5,
+      "end_ps": 20,
+      "samples": 313,
+      "endpoint_convention": "interpolated between identical sampled energy frames",
+      "SMDP": {
+        "KE": {
+          "mean_eV": 6.2562938347479085,
+          "change_eV": -0.7761334243713289,
+          "mean_change_from_initial_eV": 0.1948338073842413
+        },
+        "PE": {
+          "mean_eV": -3135.393753493282,
+          "change_eV": 0.6674380081872187,
+          "mean_change_from_initial_eV": 0.06899127467369862
+        },
+        "total": {
+          "mean_eV": -3129.137459658534,
+          "change_eV": -0.10869541618421863,
+          "mean_change_from_initial_eV": 0.26382508205774147
+        },
+        "temperature_K": 300.6263982570359
+      },
+      "reference": {
+        "KE": {
+          "mean_eV": 6.296726445850564,
+          "change_eV": -0.295976205602253,
+          "mean_change_from_initial_eV": 0.23526641848689717
+        },
+        "PE": {
+          "mean_eV": -3135.6999181461506,
+          "change_eV": 0.29621741532946544,
+          "mean_change_from_initial_eV": -0.23717337819493658
+        },
+        "total": {
+          "mean_eV": -3129.4031917003003,
+          "change_eV": 0.00024120972739183344,
+          "mean_change_from_initial_eV": -0.0019069597082388516
+        },
+        "temperature_K": 302.5692594091781
+      }
+    }
+  ],
+  "thermostat": {
+    "applicable": false
+  },
+  "VDOS": {
+    "macro_16fs": {
+      "nyquist_THz": 31.25,
+      "elements": {
+        "8": {
+          "overlap": 0.9177095805461101,
+          "block_overlap": {
+            "mean": 0.9177095805461101,
+            "std": 0.0,
+            "variance": 0.0,
+            "block_mean_std": 0.0,
+            "blocks": 1
+          },
+          "reference_split_half_overlap": null
+        },
+        "14": {
+          "overlap": 0.9203791496076974,
+          "block_overlap": {
+            "mean": 0.9203791496076974,
+            "std": 0.0,
+            "variance": 0.0,
+            "block_mean_std": 0.0,
+            "blocks": 1
+          },
+          "reference_split_half_overlap": null
+        }
+      }
+    },
+    "queried_1fs": {
+      "nyquist_THz": 500.0,
+      "elements": {
+        "8": {
+          "overlap": 0.9141208254458496,
+          "block_overlap": {
+            "mean": 0.9141208254458496,
+            "std": 0.0,
+            "variance": 0.0,
+            "block_mean_std": 0.0,
+            "blocks": 1
+          },
+          "reference_split_half_overlap": null
+        },
+        "14": {
+          "overlap": 0.9170934390176917,
+          "block_overlap": {
+            "mean": 0.9170934390176917,
+            "std": 0.0,
+            "variance": 0.0,
+            "block_mean_std": 0.0,
+            "blocks": 1
+          },
+          "reference_split_half_overlap": null
+        }
+      }
+    }
+  },
+  "task_status": {
+    "thermo": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 0.7277052248828113
+    },
+    "rdf": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 2.3075764819514006
+    },
+    "energy": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 14.270407069008797
+    },
+    "thermostat": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 0.0003198999911546707
+    },
+    "vdos_macro": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 0.24743189197033644
+    },
+    "vdos_dense": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 2.8596093989908695
+    }
+  },
+  "physical_analysis_completed": true,
+  "analysis_failure_reason": {}
+}

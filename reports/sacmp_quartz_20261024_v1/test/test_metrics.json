@@ -1,0 +1,55 @@
+{
+  "test_samples": 1000,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/sacmp/quartz_20261024_v1/best_rollout.pt",
+  "endpoint": {
+    "time_fs": 16,
+    "position_MAE_A": 0.003659131444990635,
+    "position_RMSE_A": 0.004664072134832524,
+    "velocity_MAE_A_fs": 0.0003817612802376971,
+    "velocity_RMSE_A_fs": 0.0004910088023286216
+  },
+  "finite_difference_velocity_RMSE_A_fs": 0.00017826934304083226,
+  "reference_finite_difference_RMSE_A_fs": 8.725477203009129e-06,
+  "reverse_state_RMSE_mixed_units": 3.102108420403539e-07,
+  "semigroup_RMSE_mixed_units": 2.754347699039807e-07,
+  "COM_velocity_RMSE_A_fs": 1.3353966950387223e-10,
+  "learned_energy_relative_RMSE": 0.0038634320759637734,
+  "physical_BKS_energy_evaluated": false,
+  "momentum_structure": "exact COM and canonical mass-weighted modes",
+  "anchor": {
+    "training_samples": 5000,
+    "n_atoms": 162,
+    "rank": 192,
+    "registration_RMS_A": 0.1332020108132114,
+    "captured_mass_weighted_acceleration_variance": 0.8166641077519278,
+    "captured_mass_weighted_velocity_variance": 0.4071433603832933,
+    "initial_omega_rad_fs": {
+      "min": 0.12031639059866199,
+      "median": 0.1981681079512534,
+      "max": 0.25052138697940696
+    },
+    "common_cell": [
+      [
+        15.11329174041748,
+        0.0,
+        0.0
+      ],
+      [
+        -5.037764072418213,
+        8.725663185119629,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        16.626035690307617
+      ]
+    ],
+    "graph_edges": 4788,
+    "train_scaling": {
+      "displacement_residual_rms": 0.04903175309300423,
+      "velocity_delta_rms": 0.005316194612532854
+    },
+    "external_training_anchor": "/data1/wyd/research/foundation_mlip_adaptation/experiments/sacmp/quartz_20261024_v1/anchor_train_only.pt"
+  }
+}

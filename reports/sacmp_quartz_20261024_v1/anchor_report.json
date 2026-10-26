@@ -1,0 +1,35 @@
+{
+  "training_samples": 5000,
+  "n_atoms": 162,
+  "rank": 192,
+  "registration_RMS_A": 0.1332020108132114,
+  "captured_mass_weighted_acceleration_variance": 0.8166641077519278,
+  "captured_mass_weighted_velocity_variance": 0.4071433603832933,
+  "initial_omega_rad_fs": {
+    "min": 0.12031639059866199,
+    "median": 0.1981681079512534,
+    "max": 0.25052138697940696
+  },
+  "common_cell": [
+    [
+      15.11329174041748,
+      0.0,
+      0.0
+    ],
+    [
+      -5.037764072418213,
+      8.725663185119629,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      16.626035690307617
+    ]
+  ],
+  "graph_edges": 4788,
+  "train_scaling": {
+    "displacement_residual_rms": 0.04903175309300423,
+    "velocity_delta_rms": 0.005316194612532854
+  }
+}

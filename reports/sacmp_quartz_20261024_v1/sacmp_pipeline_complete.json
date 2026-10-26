@@ -1,0 +1,5 @@
+{
+  "full": false,
+  "dense": true,
+  "note": "No BKS force during propagation; run physics evaluation offline. Output files are never overwritten."
+}

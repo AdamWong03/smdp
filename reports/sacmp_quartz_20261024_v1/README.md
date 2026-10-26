@@ -1,5 +1,12 @@
 # SACMP Quartz launch — 2026-10-24
 
+**2026-10-26 results update:** formal training, the 1,000-sample held-out test,
+and two 10 ps NVE screens with BKS postprocessing are complete.
+See [RESULTS.md](RESULTS.md), [training curve](training_curve.png), and
+[machine-readable completion status](result_status.json).
+100 ps NVE and 15 ns NVT have **not** been run. The launch record below is
+retained as historical protocol, not the current completion status.
+
 This is the candidate uploaded on `origin/main` through `877517b`, not a
 continuation of the R3-B network. Branch: `experiment/sacmp-quartz-v1`.
 No trained accuracy or long-time physical result is claimed here.

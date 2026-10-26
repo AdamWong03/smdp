@@ -1,0 +1,17 @@
+{
+  "completed_steps": 625,
+  "production_steps": 625,
+  "stable": true,
+  "failure_reason": null,
+  "simulated_ps": 10.0,
+  "production_ps": 10.0,
+  "requested_production_ps": 10.0,
+  "checkpoint_sha256": "037c79794a5b151c54ffb31fb320a2368fb3acf6349874ce106cf28754675c46",
+  "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "elapsed_s": 155.91348821297288,
+  "model_seconds": 148.29207240627147,
+  "ns_day_end_to_end": 5.541534667095662,
+  "dense_queries": true,
+  "parameters": 118951,
+  "peak_gpu_bytes": 79589888
+}

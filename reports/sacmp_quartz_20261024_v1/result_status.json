@@ -1,0 +1,39 @@
+{
+  "checkpoint_sha256": "037c79794a5b151c54ffb31fb320a2368fb3acf6349874ce106cf28754675c46",
+  "server_output": "/data1/wyd/research/foundation_mlip_adaptation/experiments/sacmp/quartz_20261024_v1",
+  "training_completed": true,
+  "independent_test_samples": 1000,
+  "nve_duration_ps": 10,
+  "nve": {
+    "nve_screen_test_09": {
+      "trajectory_completed": true,
+      "physical_analysis_completed": true,
+      "SMDP": {
+        "energy_change_RMS_eV": 0.3480067942370655,
+        "energy_change_min_eV": 0.0,
+        "energy_change_max_eV": 0.6224801713433408
+      },
+      "reference": {
+        "energy_change_RMS_eV": 0.004478960808940868,
+        "energy_change_min_eV": -0.011297676759113529,
+        "energy_change_max_eV": 0.0014268752779571514
+      }
+    },
+    "nve_screen_test_10": {
+      "trajectory_completed": true,
+      "physical_analysis_completed": true,
+      "SMDP": {
+        "energy_change_RMS_eV": 0.250855249803699,
+        "energy_change_min_eV": -0.0980386489563898,
+        "energy_change_max_eV": 0.5677736852744601
+      },
+      "reference": {
+        "energy_change_RMS_eV": 0.002478691312209756,
+        "energy_change_min_eV": -0.00748148754473732,
+        "energy_change_max_eV": 0.004659217104745039
+      }
+    }
+  },
+  "nve_100ps_completed": false,
+  "nvt_15ns_completed": false
+}

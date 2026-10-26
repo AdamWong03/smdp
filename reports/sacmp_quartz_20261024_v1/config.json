@@ -1,0 +1,94 @@
+{
+  "model": {
+    "rank": 192,
+    "hidden": 80,
+    "radial_basis": 12,
+    "cutoff_a": 4.5,
+    "max_substep_fs": 4.0,
+    "max_query_fs": 48.0,
+    "coupling_scale": 0.004,
+    "slow_edge_scale": 0.003,
+    "fast_edge_scale": 0.001,
+    "slow_onsite_freq": 0.025,
+    "mode_trainable": true
+  },
+  "data_manifest": {
+    "train": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_02/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_03/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_04/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_05/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_06/trajectory.h5"
+    ],
+    "val": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_07/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_08/trajectory.h5"
+    ],
+    "test": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_09/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_10/trajectory.h5"
+    ]
+  },
+  "train_scales": {
+    "displacement_residual_rms": 0.04903175309300423,
+    "velocity_delta_rms": 0.005316194612532854
+  },
+  "anchor": {
+    "training_samples": 5000,
+    "n_atoms": 162,
+    "rank": 192,
+    "registration_RMS_A": 0.1332020108132114,
+    "captured_mass_weighted_acceleration_variance": 0.8166641077519278,
+    "captured_mass_weighted_velocity_variance": 0.4071433603832933,
+    "initial_omega_rad_fs": {
+      "min": 0.12031639059866199,
+      "median": 0.1981681079512534,
+      "max": 0.25052138697940696
+    },
+    "common_cell": [
+      [
+        15.11329174041748,
+        0.0,
+        0.0
+      ],
+      [
+        -5.037764072418213,
+        8.725663185119629,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        16.626035690307617
+      ]
+    ],
+    "graph_edges": 4788,
+    "train_scaling": {
+      "displacement_residual_rms": 0.04903175309300423,
+      "velocity_delta_rms": 0.005316194612532854
+    },
+    "external_training_anchor": "/data1/wyd/research/foundation_mlip_adaptation/experiments/sacmp/quartz_20261024_v1/anchor_train_only.pt"
+  },
+  "parameter_count": 118951,
+  "seed": 20261024,
+  "independent_splits": true,
+  "training_arguments": {
+    "data_root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
+    "output": "/data1/wyd/research/foundation_mlip_adaptation/experiments/sacmp/quartz_20261024_v1",
+    "anchor": "/data1/wyd/research/foundation_mlip_adaptation/experiments/sacmp/quartz_20261024_v1/anchor_train_only.pt",
+    "rank": 192,
+    "device": "cuda",
+    "batch_size": 4,
+    "segment_epochs": 80,
+    "rollout_epochs": 20,
+    "seed": 20261024,
+    "patience": 12,
+    "resume": null
+  },
+  "code_commit": "89d76a33c90a80028721d479a929e6ad1d377246",
+  "torch_version": "2.13.0+cu130",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "cuda_visible_devices": "GPU-f48b2c84-f983-64e3-000b-d669b9e64454",
+  "external_BKS_forces_during_training": false
+}
