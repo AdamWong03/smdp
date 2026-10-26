@@ -1,0 +1,11 @@
+{
+  "acceleration_rms": 0.0004965267886023213,
+  "training_samples": 5000,
+  "offsets_fs": [
+    0,
+    4,
+    8,
+    12,
+    16
+  ]
+}

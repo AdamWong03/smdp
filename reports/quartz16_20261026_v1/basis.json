@@ -1,0 +1,41 @@
+{
+  "protocol": "train-only normalized position+velocity least squares, exact initial state",
+  "samples": 5000,
+  "threshold_position_RMSE_A": 0.00025,
+  "threshold_velocity_RMSE_A_fs": 3.43e-05,
+  "split_manifest": {
+    "train": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_02/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_03/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_04/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_05/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_06/trajectory.h5"
+    ],
+    "val": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_07/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_08/trajectory.h5"
+    ],
+    "test": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_09/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_10/trajectory.h5"
+    ]
+  },
+  "train_scales": {
+    "displacement_residual_rms": 0.04903175309300423,
+    "velocity_delta_rms": 0.005316194612532854
+  },
+  "candidates": {
+    "6": {
+      "position_RMSE_A": 6.091757088647427e-05,
+      "velocity_RMSE_A_fs": 5.997111580803309e-06,
+      "passed": true
+    },
+    "8": {
+      "position_RMSE_A": 6.028833321696943e-05,
+      "velocity_RMSE_A_fs": 5.962429200254475e-06,
+      "passed": true
+    }
+  },
+  "selected_basis_count": 6
+}

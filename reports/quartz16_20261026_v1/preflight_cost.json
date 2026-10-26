@@ -1,0 +1,105 @@
+{
+  "hardware": "NVIDIA L40S",
+  "includes": "network only, fixed input graph, no BKS, no I/O; 50 calls per query count",
+  "models": {
+    "direct": {
+      "config": {
+        "scalar_dim": 128,
+        "vector_dim": 32,
+        "modes": 4,
+        "encoder_layers": 4,
+        "rbf_dim": 16,
+        "cutoff_angstrom": 4.5,
+        "horizon_fs": 16.0,
+        "velocity_scale": 0.01,
+        "recurrent_substeps": 2,
+        "enforce_center_of_mass": true,
+        "additive_modes": false,
+        "exclude_self_exchange": true,
+        "spatial_mode_exchange": false,
+        "basis_count": 6,
+        "variant": "direct",
+        "direct_scalar": 192,
+        "direct_vector": 48
+      },
+      "parameters": 1003680,
+      "queries": {
+        "1": {
+          "ms": 3.8753331638872623,
+          "peak_bytes": 28126208
+        },
+        "16": {
+          "ms": 3.7224970990791917,
+          "peak_bytes": 28126208
+        }
+      },
+      "profiled_operator_flops": 2697331673
+    },
+    "independent": {
+      "config": {
+        "scalar_dim": 128,
+        "vector_dim": 32,
+        "modes": 4,
+        "encoder_layers": 4,
+        "rbf_dim": 16,
+        "cutoff_angstrom": 4.5,
+        "horizon_fs": 16.0,
+        "velocity_scale": 0.01,
+        "recurrent_substeps": 2,
+        "enforce_center_of_mass": true,
+        "additive_modes": false,
+        "exclude_self_exchange": true,
+        "spatial_mode_exchange": false,
+        "basis_count": 6,
+        "variant": "independent",
+        "direct_scalar": 192,
+        "direct_vector": 48
+      },
+      "parameters": 864448,
+      "queries": {
+        "1": {
+          "ms": 4.150090175680816,
+          "peak_bytes": 27568640
+        },
+        "16": {
+          "ms": 4.170350320637226,
+          "peak_bytes": 27568640
+        }
+      },
+      "profiled_operator_flops": 3016879589
+    },
+    "full": {
+      "config": {
+        "scalar_dim": 128,
+        "vector_dim": 32,
+        "modes": 4,
+        "encoder_layers": 4,
+        "rbf_dim": 16,
+        "cutoff_angstrom": 4.5,
+        "horizon_fs": 16.0,
+        "velocity_scale": 0.01,
+        "recurrent_substeps": 2,
+        "enforce_center_of_mass": true,
+        "additive_modes": false,
+        "exclude_self_exchange": true,
+        "spatial_mode_exchange": false,
+        "basis_count": 6,
+        "variant": "full",
+        "direct_scalar": 192,
+        "direct_vector": 48
+      },
+      "parameters": 914498,
+      "queries": {
+        "1": {
+          "ms": 4.408897259272635,
+          "peak_bytes": 27769344
+        },
+        "16": {
+          "ms": 4.515850078314543,
+          "peak_bytes": 27769344
+        }
+      },
+      "profiled_operator_flops": 3083110373
+    }
+  }
+}

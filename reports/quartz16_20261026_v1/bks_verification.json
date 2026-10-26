@@ -1,0 +1,20 @@
+{
+  "source": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+  "force_max_error_eV_A": 0.0032514794934426217,
+  "force_relative_RMS": 0.0006664920613310244,
+  "stored_velocity_verlet_relative_RMS": 1.436724776770443e-05,
+  "force_vs_energy_gradient_max_error_eV_A": 8.648483681983343e-08,
+  "regenerated_16fs_position_RMSE_A": 1.4812125966643476e-05,
+  "regenerated_velocity_RMSE_A_fs": 1.0448095666752048e-06,
+  "acceleration_conversion": 0.009648533202185007,
+  "integrator": "ASE velocity-Verlet, 1 fs; existing LAMMPS BKS forces",
+  "reference_precision_note": "Original dump uses ~6 significant digits; positions/forces stored float32. Recomputed force tolerance 0.1% RMS accounts for coordinate rounding, not potential changes.",
+  "thresholds": {
+    "force_relative": 0.001,
+    "velocity_verlet_relative": 0.0001,
+    "energy_gradient": 0.0001,
+    "q": 3e-05,
+    "v": 2e-06
+  },
+  "passed": true
+}
