@@ -1,0 +1,90 @@
+model:
+  precision: 64
+  num_chem_elements: 2
+  edge_cutoff: 4.5
+  num_edge_rbf: 8
+  num_edge_poly_cutoff: 6
+  num_vel_rbf: 8
+  vel_max: 0.035
+  max_rotation_order: 2
+  num_hidden_channels: 64
+  num_mp_layers: 4
+  edge_mlp_kwargs:
+    n_neurons:
+    - 64
+    - 64
+    - 64
+    activation: silu
+  vel_mlp_kwargs:
+    n_neurons:
+    - 64
+    - 64
+    - 64
+    activation: silu
+  nl_gate_kwargs:
+    activation_scalars:
+      o: tanh
+      e: silu
+    activation_gates:
+      e: silu
+  conserve_ang_mom: false
+  o3_backend: e3nn
+  net_lin_mom:
+  - 0.0
+  - 0.0
+  - 0.0
+data:
+  root: /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/independent16
+  name: quartz16_train
+  cutoff_radius: 4.5
+  files: []
+  atom_type_mapper:
+    8: 0
+    14: 1
+  time_reversibility: false
+training:
+  seed: 20261027
+  device: cuda
+  model_type: EfficientTrajCastModel
+  restart_latest: false
+  target_field: target
+  reference_fields:
+  - displacements
+  - update_velocities
+  batch_size: 2
+  num_epochs: 1500
+  criterion: mse
+  optimizer: adam
+  optimizer_settings:
+    lr: 0.01
+    amsgrad: true
+  scheduler:
+  - ReduceLROnPlateau
+  scheduler_settings:
+    ReduceLROnPlateau:
+      factor: 0.8
+      patience: 20
+  chained_scheduler_hp:
+    milestones:
+    - 10000000
+    per_epoch: true
+    monitor_lr_scheduler: false
+  checkpoint_settings:
+    root: /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/original16/checkpoints
+    interval: 10
+    keep_latest: false
+  tensorboard_settings:
+    log_dir: /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/original16/tensorboard
+    loss: true
+    lr: true
+    loss_validation:
+      data:
+        root: /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/independent16
+        name: quartz16_val
+        cutoff_radius: 4.5
+        files: []
+        atom_type_mapper:
+          8: 0
+          14: 1
+        time_reversibility: false
+      batch_size: 2

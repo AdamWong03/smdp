@@ -1,0 +1,12 @@
+{
+  "Original TrajCast": {
+    "status": "configuration_prepared_not_trained",
+    "horizon_fs": 16
+  },
+  "TrajCast + Modes": {
+    "status": "not_implemented_pending_reliable_original16"
+  },
+  "TrajCast + Modes + Segment": {
+    "status": "not_implemented_pending_reliable_original16"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "server_artifacts": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027",
+  "original16_trained": false,
+  "adapter_implemented": false,
+  "segment_implemented": false,
+  "official_test_metrics.json": true,
+  "independent16/adaptation.json": false,
+  "official30_100ps": {
+    "status": "not_started"
+  },
+  "official30_15ns": {
+    "status": "not_started"
+  }
+}

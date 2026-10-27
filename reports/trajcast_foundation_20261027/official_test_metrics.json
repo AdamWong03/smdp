@@ -1,0 +1,21 @@
+{
+  "upstream_commit": "c52f107a02176671b21a420b2d4c67e0327b04f7",
+  "checkpoint_sha256": "8c4f9f25c05ee37f1c7eb64af972fea033a875456301fe6a2d5e88ab50d06786",
+  "test_samples": 1000,
+  "parameters": 2258856,
+  "runtime_s": 82.64305057912134,
+  "architecture": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/models/quartz/config_e3nn.yaml",
+  "rms_targets": [
+    0.07189791223198606,
+    0.003663893685232006
+  ],
+  "displacement_MAE_A": 0.0014124012048418247,
+  "displacement_RMSE_A": 0.0017907078410322843,
+  "velocity_MAE_A_fs": 0.00011370081423587599,
+  "velocity_RMSE_A_fs": 0.00014470826034107542,
+  "paper_table_S1": {
+    "displacement_MAE_A": 0.0014124,
+    "velocity_MAE_A_fs": 0.0001137
+  },
+  "future_adapter_irreps": "64x0o+64x0e+64x1o+64x1e+64x2o+64x2e"
+}

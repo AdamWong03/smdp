@@ -1,0 +1,87 @@
+{
+  "code_commit": "c52f107a02176671b21a420b2d4c67e0327b04f7",
+  "code_license": "Apache-2.0",
+  "assets": [
+    {
+      "repository": "ibm-research/trajcast.models-arxiv2025",
+      "revision": "621f5933a1020c68ab7f9bc5071b1362499bbfa7",
+      "file": "README.md",
+      "license": "apache-2.0",
+      "bytes": 4139,
+      "sha256": "3803fec88f44aab7ce5363d8b37f33667327023c32a7f7ee126d915de10ec692",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/models/README.md"
+    },
+    {
+      "repository": "ibm-research/trajcast.models-arxiv2025",
+      "revision": "621f5933a1020c68ab7f9bc5071b1362499bbfa7",
+      "file": "quartz/config_cueq.yaml",
+      "license": "apache-2.0",
+      "bytes": 1967,
+      "sha256": "13a400f0430dbeada6155b22e1499b9751b0bccf8d9b27fc6a3daebc8f3813a8",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/models/quartz/config_cueq.yaml"
+    },
+    {
+      "repository": "ibm-research/trajcast.models-arxiv2025",
+      "revision": "621f5933a1020c68ab7f9bc5071b1362499bbfa7",
+      "file": "quartz/config_e3nn.yaml",
+      "license": "apache-2.0",
+      "bytes": 565,
+      "sha256": "f77d96711442e73b364c22d418bad49399dd0ff7acd64cfeec464773e291a24c",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/models/quartz/config_e3nn.yaml"
+    },
+    {
+      "repository": "ibm-research/trajcast.models-arxiv2025",
+      "revision": "621f5933a1020c68ab7f9bc5071b1362499bbfa7",
+      "file": "quartz/state_dict_cueq.pt",
+      "license": "apache-2.0",
+      "bytes": 18592343,
+      "sha256": "5ca9f0c5b5c572c65fd798cc821ad35685952f8687c297e525990bf7e6f10635",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/models/quartz/state_dict_cueq.pt"
+    },
+    {
+      "repository": "ibm-research/trajcast.models-arxiv2025",
+      "revision": "621f5933a1020c68ab7f9bc5071b1362499bbfa7",
+      "file": "quartz/state_dict_e3nn.pt",
+      "license": "apache-2.0",
+      "bytes": 18717216,
+      "sha256": "8c4f9f25c05ee37f1c7eb64af972fea033a875456301fe6a2d5e88ab50d06786",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/models/quartz/state_dict_e3nn.pt"
+    },
+    {
+      "repository": "ibm-research/trajcast.datasets-arxiv2025",
+      "revision": "71cdd22807033010bd0d7a852b84520763822e44",
+      "file": "README.md",
+      "license": "apache-2.0",
+      "bytes": 2852,
+      "sha256": "7661d47f550e6389ced2cdf4cbd34e7d7e7b64c1f8439e83ff15c2135cb8d275",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/datasets/README.md"
+    },
+    {
+      "repository": "ibm-research/trajcast.datasets-arxiv2025",
+      "revision": "71cdd22807033010bd0d7a852b84520763822e44",
+      "file": "quartz/test.extxyz",
+      "license": "apache-2.0",
+      "bytes": 33724000,
+      "sha256": "c099d1c97c1ad48240e467173b6e57cf92680d3bae98f0204c3f656991bff404",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/datasets/quartz/test.extxyz"
+    },
+    {
+      "repository": "ibm-research/trajcast.datasets-arxiv2025",
+      "revision": "71cdd22807033010bd0d7a852b84520763822e44",
+      "file": "quartz/train.extxyz",
+      "license": "apache-2.0",
+      "bytes": 168620000,
+      "sha256": "6d7a34a1d9f21245f812a3acbed454194f140be0e5de2e8d71dd0bd8b2239507",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/datasets/quartz/train.extxyz"
+    },
+    {
+      "repository": "ibm-research/trajcast.datasets-arxiv2025",
+      "revision": "71cdd22807033010bd0d7a852b84520763822e44",
+      "file": "quartz/val.extxyz",
+      "license": "apache-2.0",
+      "bytes": 42155000,
+      "sha256": "fcd95e8cad3e231714b2b364187570f29d03738f6ae3c22fe982c8ca710acc60",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official/datasets/quartz/val.extxyz"
+    }
+  ]
+}
