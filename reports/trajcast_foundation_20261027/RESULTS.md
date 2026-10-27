@@ -12,6 +12,16 @@ No adapter/segment training has been launched. Original16 configuration is not a
 | Displacement MAE / Å | 0.0014124012 | 0.0014124 |
 | Velocity MAE / Å/fs | 0.000113700814 | 0.0001137 |
 
+## Independent 16 fs dataset — official loader roundtrip
+
+| Split | Samples | Maximum absolute field difference |
+|---|---:|---:|
+| train | 5000 | 0.0 |
+| val | 1250 | 0.0 |
+| test | 1000 | 0.0 |
+
+No cross-graph neighbor edges. Normalization uses training samples only.
+
 ## official30_100ps
 
 Trajectory completed: True; physics completed: True.
@@ -24,6 +34,20 @@ See energy_conventions.json for raw/DSF-corrected means and absolute differences
 ## official30_15ns
 
 Trajectory completed: False; physics completed: False.
+
+Execution status at publication: interrupted.
+
+The previous foreground job is no longer alive. The log stops at step 2336/550000 during thermalization without a Python traceback; the termination cause is not established. This is not evidence of a model stability failure. The partial trajectory is preserved unchanged. A new persistent-service run starts from the original seed and initial state, not from this partial trajectory.
+
+## official30_15ns_service1
+
+Trajectory completed: False; physics completed: False.
+
+Execution status at publication: running.
+
+## Outstanding physical-protocol limitation
+
+The 100 ps reconstructed Carré-convention potential-energy mean is about 7.63 eV below the published reference mean, even after removing the known DSF self-energy constant. This difference is unresolved; it must not be dismissed as an arbitrary zero-point shift. The original Quartz LAMMPS input deck is not present in the pinned upstream release.
 
 100 ps is a preliminary physical validation, not 15 ns reproduction.
 GPU sharing and host load affect wall time; no uncontended speedup claim is made.

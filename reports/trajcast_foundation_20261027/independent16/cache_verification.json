@@ -1,0 +1,21 @@
+{
+  "train": {
+    "samples": 5000,
+    "roundtrip_max_abs_error": 0.0,
+    "no_cross_graph_edges": true
+  },
+  "training_only_rms": [
+    0.04867563395102334,
+    0.0036157730652716905
+  ],
+  "val": {
+    "samples": 1250,
+    "roundtrip_max_abs_error": 0.0,
+    "no_cross_graph_edges": true
+  },
+  "test": {
+    "samples": 1000,
+    "roundtrip_max_abs_error": 0.0,
+    "no_cross_graph_edges": true
+  }
+}

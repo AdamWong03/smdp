@@ -1,8 +1,10 @@
 """Original TrajCast evaluation and Forecast, without model/thermostat changes."""
 import argparse
 import json
+import os
 import subprocess
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 import ase.io
@@ -81,12 +83,23 @@ def forecast(device, production_steps, warmup_steps, tag):
         angular_note='Paper Gaussian initializer zeros both momenta; periodic rollout conserves linear momentum only, with 3N-3 DOF.',
         cell_A=atoms.cell.array.tolist(),masses_u=atoms.get_masses().tolist(),
         trajectory_completed=False,physical_analysis_completed=False,
-        full_paper_duration=(production_steps==500000 and warmup_steps==50000))
+        full_paper_duration=(production_steps==500000 and warmup_steps==50000),
+        execution_status='running', pid=os.getpid(),
+        started_utc=datetime.now(timezone.utc).isoformat(),
+        cuda_visible_devices=os.environ.get('CUDA_VISIBLE_DEVICES'),
+        service_unit=os.environ.get('SMDP_SERVICE_UNIT'))
     (out/'run.json').write_text(json.dumps(manifest,indent=2)+'\n')
     start=time.perf_counter()
-    engine=Forecast(protocol)
-    engine.generate_trajectory()
-    manifest.update(trajectory_completed=True,wall_seconds=time.perf_counter()-start)
+    try:
+        engine=Forecast(protocol)
+        engine.generate_trajectory()
+    except BaseException as exc:
+        manifest.update(execution_status='failed', failure_reason=repr(exc),
+                        wall_seconds=time.perf_counter()-start)
+        (out/'run.json').write_text(json.dumps(manifest,indent=2)+'\n')
+        raise
+    manifest.update(trajectory_completed=True, execution_status='completed',
+                    wall_seconds=time.perf_counter()-start)
     manifest['ns_per_day_including_initialization_and_extxyz_io']=(production_steps+warmup_steps)*30e-6/manifest['wall_seconds']*86400
     (out/'run.json').write_text(json.dumps(manifest,indent=2)+'\n')
 

@@ -42,6 +42,24 @@ def main():
         p=model(Batch.from_data_list([graph(a)])).target
         errors['periodic_reimage_max_normalized']=float((p-single[0]).abs().max())
         torch.testing.assert_close(p,single[0],atol=1e-9,rtol=1e-8)
+        # Compare true upstream Forecast state advancement to the raw endpoint
+        # output with exactly one de-normalization (no thermostat for this identity).
+        from trajcast.model.forecast import Forecast
+        from trajcast.utils.atomic_computes import wrap_positions_back_to_box_torch
+        a=atoms[0].copy()
+        for key in ['displacements','update_velocities']: a.arrays.pop(key,None)
+        engine=Forecast(dict(device=torch.device('cpu'),seed=20261027,units='real',run=1,
+            timestep=30.,configuration=a,model=model,model_type='EfficientTrajCast',
+            type_mapper={8:0,14:1},extra_dof=3,thermostat=False))
+        state=engine.start_graph.clone()
+        prediction=model(state.clone()).target
+        q=wrap_positions_back_to_box_torch(state.pos+prediction[:,:3]*model.rms_targets[0],state.cell)
+        v=prediction[:,3:]*model.rms_targets[1]
+        actual=engine._make_timestep(state,1)
+        errors['forecast_q_max_A']=float((actual.pos-q).abs().max())
+        errors['forecast_v_max_A_fs']=float((actual.velocities-v).abs().max())
+        torch.testing.assert_close(actual.pos,q,atol=1e-12,rtol=0)
+        torch.testing.assert_close(actual.velocities,v,atol=1e-12,rtol=0)
     errors.update(passed=True,precision=str(torch.get_default_dtype()),
         node_irreps_after_last_mp=str(model._int_out.mp_layer_3.irreps_out['node_features']),
         adapter_insertion='EfficientTrajCastModel._int_out: after mp_layer_3, before LinearCompression',

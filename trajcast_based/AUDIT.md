@@ -96,6 +96,15 @@ batch handling and loss. Train-only normalization; trajectory-disjoint validatio
 and test. Adapter access to test data checks representation integrity only, not
 model selection. No new BKS simulation is required.
 
+The completed official Dataset/DataLoader roundtrip covers all 7,250 samples:
+displacement, initial/final velocities, masses and cells match the exported
+source exactly (maximum absolute field difference zero). Batch neighbor edges
+never cross graphs. Training-only RMS values are 0.04867563395 Å and
+0.003615773065 Å/fs. A separate check also compares the actual unthermostatted
+`Forecast._make_timestep` against the correctly denormalized model output:
+position and velocity differences are both zero. These are interface checks,
+not evidence of a trained 16 fs baseline.
+
 ## Original 16 fs training configuration
 
 Same published Quartz architecture; float64; batch size 2; Adam/AMSGrad at 0.01;
@@ -127,3 +136,11 @@ Only generated JSON and trajectory artifacts constitute results. Loading a
 checkpoint, passing interface checks or preparing a YAML is not a successful
 physical reproduction. `reports/trajcast_foundation_20261027` records observed
 completion and outstanding work; no adapter training is automatically launched.
+
+Observed 100.02 ps results: mean temperature 302.090 K; O/Si VDOS overlaps
+0.948516/0.963277, compared with 0.953798/0.965843 from the published source CSV.
+The reconstructed Carré-convention energy mean is -2472.653867 eV versus
+-2465.026984 eV in the published MD distribution. The -7.626883 eV difference
+remains after removing the DSF self constant; neither its origin nor equality
+of the original force laws is established. Do not claim complete physical
+protocol reproduction or compensate it by an arbitrary fitted energy shift.

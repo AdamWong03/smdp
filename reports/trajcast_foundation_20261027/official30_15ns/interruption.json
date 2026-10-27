@@ -1,0 +1,8 @@
+{
+  "observed_date": "2026-10-27",
+  "reason": "The previous foreground job is no longer alive. The log stops at step 2336/550000 during thermalization without a Python traceback; the termination cause is not established. This is not evidence of a model stability failure. The partial trajectory is preserved unchanged. A new persistent-service run starts from the original seed and initial state, not from this partial trajectory.",
+  "last_logged_step": 2336,
+  "last_logged_elapsed_seconds": 404,
+  "production_started": false,
+  "replacement_tag": "official30_15ns_service1"
+}

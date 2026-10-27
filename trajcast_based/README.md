@@ -30,6 +30,7 @@ PY=/data1/wyd/envs/trajcast-c52f107/bin/python
 export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=1
 $PY -m trajcast_based.check_interfaces
 $PY -m trajcast_based.adapt_data
+$PY -m trajcast_based.verify_cache
 $PY -m trajcast_based.configure
 CUDA_VISIBLE_DEVICES=1 $PY -m trajcast_based.official evaluate
 CUDA_VISIBLE_DEVICES=1 bash scripts/run_trajcast_foundation.sh
@@ -48,6 +49,30 @@ production steps (1.5 + 15 ns), unchanged 75 fs CSVR damping. Existing trajector
 are never overwritten. If a run fails halfway, preserve it and diagnose; do not
 rerun into the same file. Git push failure should be retried independently of
 completed physics. Long trajectories and all weights stay on the server.
+
+For unattended execution, use a persistent user service rather than an
+interactive terminal job. On 2026-10-27 the first long job disappeared during
+thermalization (last logged step 2336, cause undetermined). Its partial output is
+retained under `official30_15ns`, with `interruption.json`. The fresh replacement
+uses the same original seed/initial condition, not a concatenation or restart
+from a state lacking the thermostat RNG state:
+
+```bash
+systemd-run --user --unit=smdp-trajcast-official30-20261027 \
+  --working-directory=/data1/wyd/research/foundation_mlip_adaptation/smdp \
+  --setenv=CUDA_VISIBLE_DEVICES=GPU-18ea7690-4b23-bbfd-b455-f6efe865ab85 \
+  --setenv=SMDP_SERVICE_UNIT=smdp-trajcast-official30-20261027.service \
+  /bin/bash scripts/run_trajcast_official_long.sh official30_15ns_service1
+systemctl --user status smdp-trajcast-official30-20261027.service
+```
+
+This command documents the actual launch. A repeat needs a new unit and output
+tag; existing output is deliberately rejected. GPU UUID is host-specific and
+must be selected from available resources on another host. The service runs
+offline analysis and publishes small results after successful forecasting;
+it never starts training. Logs live at `quartz_20261027/<tag>.log`. If forecasting
+finishes but analysis/publication fails, rerun those modules separately, not the
+trajectory generator.
 
 `analyze_official.py` invokes the preserved `src/evaluate_quartz_trajectory.py` in
 the validated LAMMPS/MPICH environment. It additionally records uncentered energy
