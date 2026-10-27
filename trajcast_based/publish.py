@@ -13,6 +13,7 @@ def main(push):
     out.mkdir(parents=True,exist_ok=True)
     names=['upstream_manifest.json','interface_checks.json','environment.lock.txt',
            'official_test_metrics.json','original16.yaml','experiment_versions.json',
+           'training_scheduler_check.json',
            'independent16/adaptation.json','independent16/cache_verification.json']
     tags=sorted(set(['official30_100ps','official30_15ns']) |
                 {p.name for p in RUN.glob('official30_*') if p.is_dir()})

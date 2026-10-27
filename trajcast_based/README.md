@@ -31,6 +31,7 @@ export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=1
 $PY -m trajcast_based.check_interfaces
 $PY -m trajcast_based.adapt_data
 $PY -m trajcast_based.verify_cache
+$PY -m trajcast_based.check_scheduler
 $PY -m trajcast_based.configure
 CUDA_VISIBLE_DEVICES=1 $PY -m trajcast_based.official evaluate
 CUDA_VISIBLE_DEVICES=1 bash scripts/run_trajcast_foundation.sh
@@ -96,7 +97,9 @@ $PY -m trajcast_based.train_original --approval /path/to/recorded_validation_dec
 ```
 
 The Trainer is upstream. An early-stopping logging hook implements the paper's
-100-epoch patience. It does not change training targets, loss or gradients.
+100-epoch patience. A local scheduler counter adapter reconciles its once-per-
+epoch call with the released wrapper's minibatch counter (see AUDIT.md and
+`training_scheduler_check.json`). Neither changes training targets or loss.
 Do not manufacture an acceptance decision merely because interfaces pass.
 Original16 uses our fixed independent Quartz split, not the official 30 fs pairs.
 

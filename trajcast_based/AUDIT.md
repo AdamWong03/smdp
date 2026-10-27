@@ -111,7 +111,16 @@ Same published Quartz architecture; float64; batch size 2; Adam/AMSGrad at 0.01;
 ReduceLROnPlateau factor 0.8/patience 20; maximum 1500 epochs; equal normalized
 displacement and final-velocity MSE. The released `Trainer` lacks the paper's
 100-epoch early stop; our logging callback adds only that stopping condition.
-No optimizer, model or Forecast source changes. No pretrained 30 fs output head
+One additional integration correction is required: the released Trainer calls
+`CustomChainedScheduler.step` once per epoch, whereas its `per_epoch` path counts
+minibatches and waits for 2,500 calls. Without correction the requested plateau
+schedule never executes in 1,500 epochs. Our entrypoint advances that original
+counter by one epoch's batch count per Trainer call. A 50-epoch constant-loss
+check exactly matches direct PyTorch ReduceLROnPlateau; the unadapted upstream
+wrapper leaves LR fixed at 0.01. This is an explicit training-schedule difference
+from executing the release verbatim, needed to follow the published settings.
+The pinned source, model, optimizer, loss and Forecast remain unchanged.
+No pretrained 30 fs output head
 is added to another model; original16 starts from the upstream initialization.
 Training is blocked until official30 validation is reviewed and recorded.
 

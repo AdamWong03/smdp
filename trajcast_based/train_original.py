@@ -2,6 +2,8 @@
 
 The optional stopping hook implements the paper's 100-epoch patience, absent
 from the released Trainer. It does not alter batches, gradients or updates.
+The epoch scheduler adapter corrects the upstream call-count mismatch without
+changing the Trainer loop or its optimization objective.
 """
 import argparse
 import copy
@@ -11,11 +13,30 @@ import yaml
 from trajcast_based.acquire import RUN
 
 
+def epoch_scheduler_class(base):
+    """Trainer calls step once/epoch; upstream counts it as one minibatch.
+
+    Keep the original scheduler's minibatch-unit counter/milestones and advance
+    it by exactly one epoch per call. The underlying plateau scheduler receives
+    the actual validation loss once each epoch, as specified in Methods.
+    """
+    class EpochScheduler(base):
+        def step(self, val_loss):
+            if self.per_epoch:
+                self.step_count += self.steps_per_epoch - 1
+            return super().step(val_loss)
+    return EpochScheduler
+
+
 def main(config, approval):
     permit=json.loads(approval.read_text())
     if not permit.get('official30_validation_accepted'):
         raise RuntimeError('Official 30 fs validation has not been accepted; no training launched.')
-    from trajcast.model.training import Trainer
+    import trajcast.model.training as upstream_training
+    # Local process only: leave the pinned checkout and inference unchanged.
+    upstream_training.CustomChainedScheduler=epoch_scheduler_class(
+        upstream_training.CustomChainedScheduler)
+    Trainer=upstream_training.Trainer
     cfg=yaml.safe_load(config.read_text())
     if (RUN/'original16').exists():
         raise FileExistsError('Existing original16 experiment is never overwritten')
