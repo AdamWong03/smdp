@@ -1,0 +1,27 @@
+{
+  "trajectory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/official30_100ps/trajectory.h5",
+  "frames_total": 3669,
+  "frames_retained": 3334,
+  "dt_fs": 30.0,
+  "vdos_method": "official-vacf",
+  "welch_nperseg": null,
+  "welch_segments": null,
+  "vdos_overlap_to_published_md": {
+    "8": 0.9485163422849896,
+    "14": 0.9632765508817769
+  },
+  "vdos_overlap_to_local_reference": null,
+  "published_trajcast_overlap_to_published_md": {
+    "8": 0.9537981981519278,
+    "14": 0.9658434337132454
+  },
+  "mean_temperature_k": 302.0900238877801,
+  "std_temperature_k": 19.556711415049246,
+  "minimum_pair_distance_A": 1.4840930512865618,
+  "sampled_structure_frames": 34,
+  "centered_energy_wasserstein_to_published_md_ev": 0.027232994900096345,
+  "energy_wasserstein_to_local_reference_ev": null,
+  "centered_energy_wasserstein_to_local_reference_ev": null,
+  "mean_carre_bks_energy_ev": -2472.6538668791127,
+  "mean_raw_lammps_dsf_energy_ev": -3133.253532013252
+}

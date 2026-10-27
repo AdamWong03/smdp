@@ -6,6 +6,8 @@
   "net_displacement_mass_1": 5.329070518200751e-15,
   "O3_max_normalized": 1.071365218763276e-14,
   "periodic_reimage_max_normalized": 5.040412531798211e-14,
+  "forecast_q_max_A": 0.0,
+  "forecast_v_max_A_fs": 0.0,
   "passed": true,
   "precision": "torch.float64",
   "node_irreps_after_last_mp": "64x0o+64x0e+64x1o+64x1e+64x2o+64x2e",

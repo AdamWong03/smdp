@@ -1,0 +1,146 @@
+{
+  "train": {
+    "samples": 5000,
+    "source": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/transitions/16fs/train.h5",
+    "source_sha256": "6a8c6a3139aaf7d23b9b5aa743744ebf7c44872b3214da5579ca7bbca2378000",
+    "source_paths": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_02/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_03/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_04/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_05/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_06/trajectory.h5"
+    ],
+    "cache": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/independent16/quartz16_train;P:64.pt",
+    "cache_sha256": "134ada63c63712aff24e5f9637003eea300dd23eb4f51f8f0b08296a77769bac",
+    "max_abs_error": {
+      "raw_q": 0.0,
+      "raw_v": 0.0,
+      "cell": 0.0,
+      "dt": 0.0,
+      "momentum": 1.4897901579047357e-08,
+      "stored_displacement": 7.450580596923828e-09,
+      "graph_q1_unwrapped": 8.881784197001252e-16,
+      "graph_v1": 0.0,
+      "graph_mass": 0.0
+    },
+    "all_samples_verified": true,
+    "cell_first": [
+      [
+        15.113291546666321,
+        0.0,
+        0.0
+      ],
+      [
+        -5.037763848888795,
+        8.725662942809123,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        16.626035630732716
+      ]
+    ],
+    "masses": [
+      15.999,
+      28.0855
+    ]
+  },
+  "val": {
+    "samples": 1250,
+    "source": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/transitions/16fs/val.h5",
+    "source_sha256": "dbbbec3b97fb826bcf78247b8a8cd4d0ffba11c719096cf7f2bba3d1f489287c",
+    "source_paths": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_07/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_08/trajectory.h5"
+    ],
+    "cache": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/independent16/quartz16_val;P:64.pt",
+    "cache_sha256": "716db11fe06a23d944abc10de78f9bc27b45c9494bd490c060f2abc426f10e25",
+    "max_abs_error": {
+      "raw_q": 0.0,
+      "raw_v": 0.0,
+      "cell": 0.0,
+      "dt": 0.0,
+      "momentum": 1.48937105981517e-08,
+      "stored_displacement": 7.450580596923828e-09,
+      "graph_q1_unwrapped": 8.881784197001252e-16,
+      "graph_v1": 0.0,
+      "graph_mass": 0.0
+    },
+    "all_samples_verified": true,
+    "cell_first": [
+      [
+        15.113291546666321,
+        0.0,
+        0.0
+      ],
+      [
+        -5.037763848888795,
+        8.725662942809123,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        16.626035630732716
+      ]
+    ],
+    "masses": [
+      15.999,
+      28.0855
+    ]
+  },
+  "test": {
+    "samples": 1000,
+    "source": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/transitions/16fs/test.h5",
+    "source_sha256": "8c0085ea7941158eba6ff5c22c38d9ad498bf2d64a44f0c9b88211900d3de06f",
+    "source_paths": [
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_09/trajectory.h5",
+      "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_10/trajectory.h5"
+    ],
+    "cache": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_based/quartz_20261027/independent16/quartz16_test;P:64.pt",
+    "cache_sha256": "5568e7000fde2e2e04ec800483aad3b1f9d3c32c0b3fd5382146c8d71172c819",
+    "max_abs_error": {
+      "raw_q": 0.0,
+      "raw_v": 0.0,
+      "cell": 0.0,
+      "dt": 0.0,
+      "momentum": 1.4884397381287329e-08,
+      "stored_displacement": 7.450580596923828e-09,
+      "graph_q1_unwrapped": 8.881784197001252e-16,
+      "graph_v1": 0.0,
+      "graph_mass": 0.0
+    },
+    "all_samples_verified": true,
+    "cell_first": [
+      [
+        15.113291546666321,
+        0.0,
+        0.0
+      ],
+      [
+        -5.037763848888795,
+        8.725662942809123,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        16.626035630732716
+      ]
+    ],
+    "masses": [
+      15.999,
+      28.0855
+    ]
+  },
+  "units": {
+    "q": "Angstrom",
+    "v": "Angstrom/fs",
+    "mass": "u",
+    "time": "fs",
+    "cell": "row vectors"
+  },
+  "split_disjoint": true
+}

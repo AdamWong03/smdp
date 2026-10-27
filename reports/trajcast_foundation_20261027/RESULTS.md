@@ -14,7 +14,12 @@ No adapter/segment training has been launched. Original16 configuration is not a
 
 ## official30_100ps
 
-Trajectory completed: False; physics completed: False.
+Trajectory completed: True; physics completed: True.
+
+Temperature: 302.090 K.
+VDOS overlap to published MD: {'8': 0.9485163422849896, '14': 0.9632765508817769}.
+Published TrajCast overlap (source CSV): {'8': 0.9537981981519278, '14': 0.9658434337132454}.
+See energy_conventions.json for raw/DSF-corrected means and absolute differences; centered similarity alone is insufficient.
 
 ## official30_15ns
 
