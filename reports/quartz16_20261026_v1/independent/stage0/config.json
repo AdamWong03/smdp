@@ -1,0 +1,46 @@
+{
+  "model": {
+    "scalar_dim": 128,
+    "vector_dim": 32,
+    "modes": 4,
+    "encoder_layers": 4,
+    "rbf_dim": 16,
+    "cutoff_angstrom": 4.5,
+    "horizon_fs": 16.0,
+    "velocity_scale": 0.01,
+    "recurrent_substeps": 2,
+    "enforce_center_of_mass": true,
+    "additive_modes": false,
+    "exclude_self_exchange": true,
+    "spatial_mode_exchange": false,
+    "basis_count": 6,
+    "variant": "independent",
+    "direct_scalar": 192,
+    "direct_vector": 48
+  },
+  "model_family": "neural_segment",
+  "stats": {
+    "displacement_residual_rms": 0.04903175309300423,
+    "velocity_delta_rms": 0.005316194612532854,
+    "acceleration_rms": 0.0004965267886023213,
+    "training_samples": 5000,
+    "offsets_fs": [
+      0,
+      4,
+      8,
+      12,
+      16
+    ]
+  },
+  "seed": 20261026,
+  "stage": 0,
+  "epochs": 80,
+  "batch_size": 4,
+  "acceleration_weight": 0.1,
+  "original_fraction": 1.0,
+  "original_samples": 5000,
+  "onpolicy_samples": 0,
+  "selection": "all 1250 validation segments + 0.25 * normalized 256fs loss on first 128 valid validation starts",
+  "code_commit": "fe2eeadd6cdedce843c8a07be8cfbaca910c88de",
+  "hardware": "NVIDIA L40S"
+}

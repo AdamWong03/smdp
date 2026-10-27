@@ -1,0 +1,41 @@
+{
+  "completed_steps": 625,
+  "production_steps": 625,
+  "checkpoint_sha256": "1d8f6cd3486f349e33e7c01f01fcb307d1669b53861dba525827c9239b9f0026",
+  "seed": 2026102201,
+  "simulated_ps": 10.0,
+  "production_ps": 10.0,
+  "requested_production_ps": 10.0,
+  "stable": true,
+  "failure_reason": null,
+  "elapsed_s": 26.48872670880519,
+  "model_seconds": 13.049566679401323,
+  "neighbor_seconds": 2.9220399134792387,
+  "ns_day_end_to_end": 32.617649368279956,
+  "ns_day_model_only_with_16_queries": 66.20909500112519,
+  "ms_per_step": 42.381962734088305,
+  "peak_gpu_bytes": 28342784,
+  "hardware": "NVIDIA L40S",
+  "parameters": 1003680,
+  "mode_statistics": {
+    "mode_delta_q_rms": [
+      0.05125524029135704
+    ],
+    "mode_delta_q_rms_share": [
+      1.0
+    ],
+    "mode_delta_q_signed_projection": [
+      1.0000000076293944
+    ],
+    "mode_delta_v_rms": [
+      0.005830580931901932
+    ],
+    "mode_delta_v_rms_share": [
+      1.0
+    ],
+    "mode_delta_v_signed_projection": [
+      1.000000009059906
+    ]
+  },
+  "min_distance_convention": "exact if <3 A; otherwise lower bound 3 A"
+}

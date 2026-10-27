@@ -1,0 +1,20 @@
+{
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/neural_segment/quartz16_20261026_v1/full/stage2/best.pt",
+  "sha256": "ac7a90bcdf7b0f51ac5afb61d81b9dd4c776e5985efbc84c0b93050e6db51beb",
+  "screen": [
+    {
+      "source": "val_07",
+      "passed": false,
+      "energy_RMS_eV": 14.839622175059594,
+      "temperature_difference_K": 294.0595241928702
+    },
+    {
+      "source": "val_08",
+      "passed": false,
+      "energy_RMS_eV": 20.308815714081614,
+      "temperature_difference_K": 394.0990415679365
+    }
+  ],
+  "approved": false,
+  "criteria": "Both validation 10ps: complete; |mean T error| <=30K; BKS energy-change RMS <=1 eV; min distance >=1.2 A"
+}

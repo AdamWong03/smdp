@@ -1,0 +1,151 @@
+{
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/neural_segment/quartz16_20261026_v1/independent/stage2/best.pt",
+  "split": "val",
+  "evaluation_samples": 1250,
+  "test_samples": 0,
+  "endpoint": {
+    "time_fs": 16,
+    "position_MAE_A": 0.0011161926561966539,
+    "position_RMSE_A": 0.001412858399784115,
+    "velocity_MAE_A_fs": 0.0001789999047992751,
+    "velocity_RMSE_A_fs": 0.00023082894308401264
+  },
+  "checkpoint_sha256": "192d5e5552a226b0b1534267449b2b15e203cfecae1250d407a21029c2029054",
+  "normalized_endpoint_loss": 0.0027156068305899317,
+  "position_velocity_consistency_RMSE_A_fs": 1.5493667476177454e-05,
+  "reference_finite_difference_RMSE_A_fs": 8.697105443140303e-06,
+  "join_position_derivative_jump_RMS_A_fs": 0.0004744615780554907,
+  "join_state_discontinuity": 0.0,
+  "two_step_position_RMSE_A": 0.0036200540726699145,
+  "reference_join_derivative_jump_RMS_A_fs": 0.0004826084239341221,
+  "multi_step": {
+    "2": {
+      "time_fs": 32,
+      "samples": 1245,
+      "position_RMSE_A": 0.0036200564008941473,
+      "velocity_RMSE_A_fs": 0.0003143858773735684
+    },
+    "3": {
+      "time_fs": 48,
+      "samples": 1245,
+      "position_RMSE_A": 0.005981973391422311,
+      "velocity_RMSE_A_fs": 0.00037902842920969025
+    },
+    "4": {
+      "time_fs": 64,
+      "samples": 1245,
+      "position_RMSE_A": 0.008327674246854782,
+      "velocity_RMSE_A_fs": 0.00044287470063894953
+    },
+    "5": {
+      "time_fs": 80,
+      "samples": 1245,
+      "position_RMSE_A": 0.010713133241812245,
+      "velocity_RMSE_A_fs": 0.0005028761591845102
+    },
+    "6": {
+      "time_fs": 96,
+      "samples": 1245,
+      "position_RMSE_A": 0.013149657030672383,
+      "velocity_RMSE_A_fs": 0.0005564870691652165
+    },
+    "7": {
+      "time_fs": 112,
+      "samples": 1245,
+      "position_RMSE_A": 0.015614949903413283,
+      "velocity_RMSE_A_fs": 0.000607473969163644
+    },
+    "8": {
+      "time_fs": 128,
+      "samples": 1245,
+      "position_RMSE_A": 0.01807586577213869,
+      "velocity_RMSE_A_fs": 0.0006642600177352151
+    },
+    "9": {
+      "time_fs": 144,
+      "samples": 1245,
+      "position_RMSE_A": 0.020562826245619278,
+      "velocity_RMSE_A_fs": 0.0007213123978372745
+    },
+    "10": {
+      "time_fs": 160,
+      "samples": 1245,
+      "position_RMSE_A": 0.023069973120685355,
+      "velocity_RMSE_A_fs": 0.0007780381962175761
+    },
+    "11": {
+      "time_fs": 176,
+      "samples": 1245,
+      "position_RMSE_A": 0.025593102161721643,
+      "velocity_RMSE_A_fs": 0.0008331920411084332
+    },
+    "12": {
+      "time_fs": 192,
+      "samples": 1245,
+      "position_RMSE_A": 0.028136808700811995,
+      "velocity_RMSE_A_fs": 0.0008888138936031762
+    },
+    "13": {
+      "time_fs": 208,
+      "samples": 1245,
+      "position_RMSE_A": 0.030710353523271793,
+      "velocity_RMSE_A_fs": 0.0009432262794728947
+    },
+    "14": {
+      "time_fs": 224,
+      "samples": 1245,
+      "position_RMSE_A": 0.03330356446485204,
+      "velocity_RMSE_A_fs": 0.0009989234134777972
+    },
+    "15": {
+      "time_fs": 240,
+      "samples": 1245,
+      "position_RMSE_A": 0.03594268061671221,
+      "velocity_RMSE_A_fs": 0.0010505332999314828
+    },
+    "16": {
+      "time_fs": 256,
+      "samples": 1245,
+      "position_RMSE_A": 0.038587091270284486,
+      "velocity_RMSE_A_fs": 0.0011054752691466551
+    }
+  },
+  "mode_statistics": {
+    "mode_delta_q_rms": [
+      0.012921012170612813,
+      0.01848772792816162,
+      0.012296162016689777,
+      0.013627394051849841
+    ],
+    "mode_delta_q_rms_share": [
+      0.2253835576057434,
+      0.3224368773460388,
+      0.21447991814613343,
+      0.2376996482849121
+    ],
+    "mode_delta_q_signed_projection": [
+      0.21441094620227813,
+      0.3472667766094208,
+      0.22641313812732697,
+      0.21190913729667663
+    ],
+    "mode_delta_v_rms": [
+      0.0013184411756694317,
+      0.0028119931403547526,
+      0.001639270544052124,
+      0.0017171218324452638
+    ],
+    "mode_delta_v_rms_share": [
+      0.17614381074905394,
+      0.3755367435932159,
+      0.2189825182914734,
+      0.22933692879676817
+    ],
+    "mode_delta_v_signed_projection": [
+      0.10658282762765885,
+      0.44408116164207456,
+      0.19204293026924132,
+      0.25729308042526244
+    ]
+  }
+}

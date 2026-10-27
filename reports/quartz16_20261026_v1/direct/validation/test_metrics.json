@@ -1,0 +1,133 @@
+{
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/neural_segment/quartz16_20261026_v1/direct/stage2/best.pt",
+  "split": "val",
+  "evaluation_samples": 1250,
+  "test_samples": 0,
+  "endpoint": {
+    "time_fs": 16,
+    "position_MAE_A": 0.001102974160015583,
+    "position_RMSE_A": 0.0013967916615550207,
+    "velocity_MAE_A_fs": 0.00017838163133710624,
+    "velocity_RMSE_A_fs": 0.00023017855572849753
+  },
+  "checkpoint_sha256": "1d8f6cd3486f349e33e7c01f01fcb307d1669b53861dba525827c9239b9f0026",
+  "normalized_endpoint_loss": 0.0026862207831258077,
+  "position_velocity_consistency_RMSE_A_fs": 1.5518404216088874e-05,
+  "reference_finite_difference_RMSE_A_fs": 8.697105443140303e-06,
+  "join_position_derivative_jump_RMS_A_fs": 0.00047720690984538375,
+  "join_state_discontinuity": 0.0,
+  "two_step_position_RMSE_A": 0.003581762067040224,
+  "reference_join_derivative_jump_RMS_A_fs": 0.0004826084239341221,
+  "multi_step": {
+    "2": {
+      "time_fs": 32,
+      "samples": 1245,
+      "position_RMSE_A": 0.0035816394291544595,
+      "velocity_RMSE_A_fs": 0.0003103362701279386
+    },
+    "3": {
+      "time_fs": 48,
+      "samples": 1245,
+      "position_RMSE_A": 0.005869034980550808,
+      "velocity_RMSE_A_fs": 0.00037345229641651425
+    },
+    "4": {
+      "time_fs": 64,
+      "samples": 1245,
+      "position_RMSE_A": 0.008127017665609198,
+      "velocity_RMSE_A_fs": 0.0004381831248135056
+    },
+    "5": {
+      "time_fs": 80,
+      "samples": 1245,
+      "position_RMSE_A": 0.010425011630386736,
+      "velocity_RMSE_A_fs": 0.0005028878788794043
+    },
+    "6": {
+      "time_fs": 96,
+      "samples": 1245,
+      "position_RMSE_A": 0.012784348413921384,
+      "velocity_RMSE_A_fs": 0.0005596344143483198
+    },
+    "7": {
+      "time_fs": 112,
+      "samples": 1245,
+      "position_RMSE_A": 0.015176482801910786,
+      "velocity_RMSE_A_fs": 0.0006147380563019235
+    },
+    "8": {
+      "time_fs": 128,
+      "samples": 1245,
+      "position_RMSE_A": 0.017579885216760543,
+      "velocity_RMSE_A_fs": 0.0006720743985949861
+    },
+    "9": {
+      "time_fs": 144,
+      "samples": 1245,
+      "position_RMSE_A": 0.020029819165436735,
+      "velocity_RMSE_A_fs": 0.0007294454230314351
+    },
+    "10": {
+      "time_fs": 160,
+      "samples": 1245,
+      "position_RMSE_A": 0.022507599682650387,
+      "velocity_RMSE_A_fs": 0.0007875019754213433
+    },
+    "11": {
+      "time_fs": 176,
+      "samples": 1245,
+      "position_RMSE_A": 0.024995174140357776,
+      "velocity_RMSE_A_fs": 0.0008470537473238626
+    },
+    "12": {
+      "time_fs": 192,
+      "samples": 1245,
+      "position_RMSE_A": 0.027505036869528605,
+      "velocity_RMSE_A_fs": 0.0009040965251837646
+    },
+    "13": {
+      "time_fs": 208,
+      "samples": 1245,
+      "position_RMSE_A": 0.030024306435836447,
+      "velocity_RMSE_A_fs": 0.0009610790535283146
+    },
+    "14": {
+      "time_fs": 224,
+      "samples": 1245,
+      "position_RMSE_A": 0.03252798353019084,
+      "velocity_RMSE_A_fs": 0.0010185024992076025
+    },
+    "15": {
+      "time_fs": 240,
+      "samples": 1245,
+      "position_RMSE_A": 0.03505026000682003,
+      "velocity_RMSE_A_fs": 0.0010727893268741952
+    },
+    "16": {
+      "time_fs": 256,
+      "samples": 1245,
+      "position_RMSE_A": 0.03755932467114371,
+      "velocity_RMSE_A_fs": 0.0011272261133180629
+    }
+  },
+  "mode_statistics": {
+    "mode_delta_q_rms": [
+      0.04745457614660263
+    ],
+    "mode_delta_q_rms_share": [
+      1.0
+    ],
+    "mode_delta_q_signed_projection": [
+      1.0000000047683715
+    ],
+    "mode_delta_v_rms": [
+      0.0051583954833447935
+    ],
+    "mode_delta_v_rms_share": [
+      1.0
+    ],
+    "mode_delta_v_signed_projection": [
+      1.000000008392334
+    ]
+  }
+}
