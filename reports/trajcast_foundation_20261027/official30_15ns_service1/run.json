@@ -194,12 +194,14 @@
     15.999,
     15.999
   ],
-  "trajectory_completed": false,
-  "physical_analysis_completed": false,
+  "trajectory_completed": true,
+  "physical_analysis_completed": true,
   "full_paper_duration": true,
-  "execution_status": "running",
+  "execution_status": "completed",
   "pid": 3938385,
   "started_utc": "2026-10-27T06:41:42.265797+00:00",
   "cuda_visible_devices": "GPU-18ea7690-4b23-bbfd-b455-f6efe865ab85",
-  "service_unit": "smdp-trajcast-official30-20261027.service"
+  "service_unit": "smdp-trajcast-official30-20261027.service",
+  "wall_seconds": 31237.115315643838,
+  "ns_per_day_including_initialization_and_extxyz_io": 45.63801700620051
 }

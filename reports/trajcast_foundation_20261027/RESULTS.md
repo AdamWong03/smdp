@@ -41,9 +41,14 @@ The previous foreground job is no longer alive. The log stops at step 2336/55000
 
 ## official30_15ns_service1
 
-Trajectory completed: False; physics completed: False.
+Trajectory completed: True; physics completed: True.
 
-Execution status at publication: running.
+Execution status at publication: completed.
+
+Temperature: 301.215 K.
+VDOS overlap to published MD: {'8': 0.9551794323260134, '14': 0.9667777519260481}.
+Published TrajCast overlap (source CSV): {'8': 0.9537981981519278, '14': 0.9658434337132454}.
+See energy_conventions.json for raw/DSF-corrected means and absolute differences; centered similarity alone is insufficient.
 
 ## Outstanding physical-protocol limitation
 

@@ -1,0 +1,35 @@
+{
+  "warning": "Absolute differences are recorded, not assumed to be a constant zero-point shift.",
+  "raw_lammps_dsf_energy_ev": {
+    "mean_eV": -3133.096047959092,
+    "std_eV": 0.5056067781411248,
+    "MD energy": {
+      "mean_eV": -2465.0269840614837,
+      "std_eV": 0.4169580614882352,
+      "mean_difference_eV": -668.0690638976084,
+      "uncentered_wasserstein_eV": 668.0690638976074
+    },
+    "trajcast energy": {
+      "mean_eV": -2465.0248373403615,
+      "std_eV": 0.41693018916659014,
+      "mean_difference_eV": -668.0712106187307,
+      "uncentered_wasserstein_eV": 668.07121061873
+    }
+  },
+  "carre_bks_energy_ev": {
+    "mean_eV": -2472.4963828249506,
+    "std_eV": 0.505606778141125,
+    "MD energy": {
+      "mean_eV": -2465.0269840614837,
+      "std_eV": 0.4169580614882352,
+      "mean_difference_eV": -7.46939876346687,
+      "uncentered_wasserstein_eV": 7.469398763467615
+    },
+    "trajcast energy": {
+      "mean_eV": -2465.0248373403615,
+      "std_eV": 0.41693018916659014,
+      "mean_difference_eV": -7.4715454845891145,
+      "uncentered_wasserstein_eV": 7.471545484589676
+    }
+  }
+}
