@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "derivative_max_error_A_fs": 3.093364323372705e-18,
+  "E3_max_error": 6.938893903907228e-18,
+  "batch_single_max_error": 0.0,
+  "PBC_reimage_max_error": 1.3877787807814457e-16,
+  "gradient_L1": {
+    "inputs": 8.89712316329012e-06,
+    "embed": 4.131317347816999e-08,
+    "state_gate": 6.822720092182685e-07,
+    "state_update": 1.2705589853608923e-06,
+    "query": 3.101145821109755e-09,
+    "key": 1.4447700750154532e-08,
+    "exchange": 1.0815298667748008e-06,
+    "exchange_gate": 4.946713655996723e-07,
+    "expand": 0.00036605326222001835,
+    "temporal": 1.9588361133764538e-05
+  },
+  "endpoint_constraints": true,
+  "momentum_per_system": true,
+  "official_forecast_identity": true,
+  "two_step_autoregressive_backward": true,
+  "pretrained_weights_used": false,
+  "parameters": 2330824
+}

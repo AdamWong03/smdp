@@ -17,17 +17,17 @@ from trajcast.data.atomic_graph import AtomicGraph
 from trajcast_based.acquire import ROOT, RUN, sha
 
 
-def build(source_root, out):
+def build(source_root, out, horizon=16):
     torch.set_default_dtype(torch.float64)
     out.mkdir(parents=True, exist_ok=True)
     report, sets = {}, {}
     for split, count in [('train', 5000), ('val', 1250), ('test', 1000)]:
-        source = source_root / f'quartz/transitions/16fs/{split}.h5'
-        target = out / f'quartz16_{split};P:64.pt'
+        source = source_root / f'quartz/transitions/{horizon}fs/{split}.h5'
+        target = out / f'quartz{horizon}_{split};P:64.pt'
         if target.exists():
             raise FileExistsError(f'Refusing to overwrite {target}')
         with h5py.File(source) as f, ExitStack() as stack:
-            assert f.attrs['horizon_fs'] == 16 and f.attrs['n_samples'] == count
+            assert f.attrs['horizon_fs'] == horizon and f.attrs['n_samples'] == count
             assert f.attrs['split'] == split and f.attrs['source_dt_fs'] == 1
             paths = [p.decode() if isinstance(p, bytes) else p for p in f['source_paths'][:]]
             sets[split] = set(paths)
@@ -50,11 +50,11 @@ def build(source_root, out):
                 q0, q1 = f['positions_initial_A'][i].astype('float64'), f['positions_final_A'][i].astype('float64')
                 v0, v1 = f['velocities_initial_A_per_fs'][i].astype('float64'), f['velocities_final_A_per_fs'][i].astype('float64')
                 cell = f['cell_A'][i]
-                for t, q, v in [(frame, q0, v0), (frame+16, q1, v1)]:
+                for t, q, v in [(frame, q0, v0), (frame+horizon, q1, v1)]:
                     check('raw_q', q, raw['positions_unwrapped_A'][t])
                     check('raw_v', v, raw['velocities_A_per_fs'][t])
                     check('cell', cell, raw['cell_A'][t])
-                check('dt', raw['time_fs'][frame+16]-raw['time_fs'][frame], 16.)
+                check('dt', raw['time_fs'][frame+horizon]-raw['time_fs'][frame], horizon)
                 check('momentum', f['momenta_initial_u_A_per_fs'][i], mass[:, None]*v0, 5e-8)
                 # Unwrap first, subtract second; never minimum-image a displacement target.
                 disp = q1-q0
@@ -63,7 +63,7 @@ def build(source_root, out):
                 d = dict(positions=torch.tensor(wrapped), cell=torch.tensor(cell),
                     pbc=torch.tensor([True]*3), atomic_numbers=torch.tensor(z.astype('int64')[:, None]),
                     atomic_masses=torch.tensor(mass[:, None]), velocities=torch.tensor(v0),
-                    displacements=torch.tensor(disp), update_velocities=torch.tensor(v1), timestep=torch.tensor([16.]))
+                    displacements=torch.tensor(disp), update_velocities=torch.tensor(v1), timestep=torch.tensor([float(horizon)]))
                 g = AtomicGraph.from_atoms_dict(d, 4.5, {8: 0, 14: 1})
                 check('graph_q1_unwrapped', g.pos.numpy() + g.displacements.numpy() + (q0-wrapped), q1)
                 check('graph_v1', g.update_velocities.numpy(), v1)

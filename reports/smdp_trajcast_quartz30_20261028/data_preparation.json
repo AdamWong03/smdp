@@ -1,0 +1,63 @@
+{
+  "training_only": true,
+  "samples": 5000,
+  "thresholds": {
+    "q_A": 0.0002,
+    "v_A_fs": 2e-05
+  },
+  "fits": {
+    "6": {
+      "position_RMSE_A": 8.834672012921209e-05,
+      "velocity_RMSE_A_fs": 4.402816664703849e-06
+    },
+    "8": {
+      "position_RMSE_A": 8.830882076728882e-05,
+      "velocity_RMSE_A_fs": 3.6322919863227842e-06
+    }
+  },
+  "selected_basis": 6,
+  "rms_displacement_A": 0.07108993560225707,
+  "rms_velocity_A_fs": 0.003614269834020382,
+  "offsets_fs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    60,
+    90,
+    120,
+    150,
+    180,
+    210,
+    240
+  ],
+  "upstream_commit": "c52f107a02176671b21a420b2d4c67e0327b04f7",
+  "pretrained_weights_used": false
+}
