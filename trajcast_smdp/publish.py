@@ -1,6 +1,7 @@
 """Export only small, observed artifacts; never weights, trajectories or raw logs."""
 import argparse,json,shutil,subprocess
 from pathlib import Path
+from datetime import datetime, timezone
 
 RUN=Path('/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028')
 
@@ -8,6 +9,22 @@ RUN=Path('/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_sm
 def main(run,push):
     run=Path(run);repo=Path(__file__).resolve().parents[1]
     out=repo/'reports/smdp_trajcast_quartz30_20261028';out.mkdir(parents=True,exist_ok=True)
+    service=subprocess.run(['systemctl','--user','show','smdp-quartz30-20261028.service',
+        '-p','ActiveState','-p','SubState','-p','MainPID'],capture_output=True,text=True,timeout=10)
+    progress=None
+    if (run/'pipeline.log').exists():
+        for line in reversed((run/'pipeline.log').read_text(errors='replace').splitlines()):
+            try: record=json.loads(line)
+            except json.JSONDecodeError: continue
+            if isinstance(record,dict) and 'stage' in record and ('batch' in record or 'epoch' in record):
+                progress=record;break
+    snapshot=dict(observed_utc=datetime.now(timezone.utc).isoformat(),
+        service=dict(s.split('=',1) for s in service.stdout.splitlines() if '=' in s),
+        latest_logged_training_record=progress,free_disk_GiB=shutil.disk_usage(run).free/1024**3,
+        training_started=(run/'training_started.json').exists(),
+        training_completed=(run/'training_complete.json').exists(),
+        note='Point-in-time execution snapshot, not a live status or a completed evaluation.')
+    (out/'progress_snapshot.json').write_text(json.dumps(snapshot,indent=2)+'\n')
     names=['config.yaml','data_preparation.json','correctness.json','training_started.json','training_complete.json',
            'test_metrics.json','source_version.txt','cache/adaptation.json']
     for tag in ['nve_0','nve_1','nvt_0']:
@@ -37,8 +54,12 @@ def main(run,push):
         'All SMDP parameters start from random initialization. No pretrained weights or additional baseline training.',
         f'Server artifacts: `{run}`.',
         'Method and commands: [README](../../trajcast_smdp/README.md).','',
+        f"Training started: {snapshot['training_started']}.",
         f"Training completed: {(run/'training_complete.json').exists()}.",
         f"Independent test evaluation completed: {(run/'test_metrics.json').exists()}.",'']
+    lines += [f"Execution snapshot: {snapshot['observed_utc']}; service {snapshot['service']}.",
+        f"Free disk at snapshot: {snapshot['free_disk_GiB']:.2f} GiB; dense NVT requires 40 GiB before launch.",
+        'See progress_snapshot.json for the last actual training record. Early training loss is not a physical result.','']
     test=run/'test_metrics.json'
     if test.exists():
         d=json.loads(test.read_text())
