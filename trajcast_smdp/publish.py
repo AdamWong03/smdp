@@ -25,7 +25,9 @@ def main(run,push):
         training_completed=(run/'training_complete.json').exists(),
         note='Point-in-time execution snapshot, not a live status or a completed evaluation.')
     (out/'progress_snapshot.json').write_text(json.dumps(snapshot,indent=2)+'\n')
-    names=['config.yaml','data_preparation.json','correctness.json','training_started.json','training_complete.json',
+    names=['config.yaml','config.batch2.yaml','resumptions.jsonl','batch_scaling.json',
+           'runtime_benchmark.json','runtime_benchmark_products.json',
+           'data_preparation.json','correctness.json','training_started.json','training_complete.json',
            'test_metrics.json','source_version.txt','cache/adaptation.json']
     for tag in ['nve_0','nve_1','nvt_0']:
         names.append(f'{tag}/run.json')
@@ -81,7 +83,7 @@ def main(run,push):
         subprocess.run(['git','add',str(out.relative_to(repo))],cwd=repo,check=True)
         if subprocess.run(['git','diff','--cached','--quiet'],cwd=repo).returncode:
             subprocess.run(['git','-c','user.name=Codex','-c','user.email=codex@localhost','commit','-m','Report observed SMDP Quartz30 progress and physics'],cwd=repo,check=True)
-        subprocess.run(['git','-c','http.proxy=','-c','http.version=HTTP/1.1','push','--ipv4','-u','origin','HEAD'],cwd=repo,check=True,timeout=120)
+        subprocess.run(['git','push','-u','origin','HEAD'],cwd=repo,check=True,timeout=120)
 
 
 if __name__=='__main__':

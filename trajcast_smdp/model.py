@@ -77,8 +77,8 @@ class MotionAdapter(nn.Module):
 
     def gate(self,x,g): return x*g[...,self.component_gate]
 
-    def forward(self,data):
-        original=data.node_features
+    def evolve(self,original):
+        """Tensor-only mode evolution; optionally compiled without changing weights."""
         z=torch.stack([layer(original) for layer in self.inputs],1)
         attention=None
         for step in range(self.updates):
@@ -93,11 +93,22 @@ class MotionAdapter(nn.Module):
             z=z+self.gate(received,torch.sigmoid(self.exchange_gate(inv)))/self.updates
         # Additive, not competitive mode reconstruction. No softmax mode decoder.
         additions=self.expand(z)/math.sqrt(self.modes)
+        coefficients=torch.stack([head(z[:,k]).reshape(len(z),self.basis,3)
+                                  for k,head in enumerate(self.temporal)],1)/math.sqrt(self.modes)
+        return additions,attention,coefficients
+
+    def enable_compilation(self):
+        # Keep the original module and checkpoint names, compiling only tensor
+        # operations, never PyG graph construction or the numerical precision.
+        object.__setattr__(self,'_compiled_evolve',torch.compile(self.evolve,dynamic=False))
+
+    def forward(self,data):
+        original=data.node_features
+        evolve=getattr(self,'_compiled_evolve',self.evolve)
+        additions,attention,coefficients=evolve(original)
         data.node_features=original+additions.sum(1)
         data.mode_feature_contributions=additions
         data.mode_attention=attention
-        coefficients=torch.stack([head(z[:,k]).reshape(len(z),self.basis,3)
-                                  for k,head in enumerate(self.temporal)],1)/math.sqrt(self.modes)
         data.mode_coefficients=center_by_mass(coefficients,data)
         return data
 

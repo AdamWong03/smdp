@@ -71,6 +71,40 @@ at240fs determine a consistent selection score across every stage. The best
 validation checkpoint across **all** stages wins, not automatically the latest
 long-rollout checkpoint. Independent tests are evaluated once after selection.
 
+### User-approved batch-size adjustment (2026-10-28)
+
+After the initial batch-2 epochs, the research lead requested batch size **8**.
+Resume from the last complete epoch, retaining weights, Adam/AMSGrad moments,
+the epoch-based validation learning-rate schedule, and random sampling state.
+The initial LR remains 0.001; later rollout stages retain their original LR.
+The original run configuration is preserved as `config.batch2.yaml`; the active
+`config.yaml` sets training batch size 8. The validation batch size and all
+validation samples, losses, stopping criteria and model-selection rules remain
+unchanged. With 5000 examples, each full epoch now makes **625** optimizer
+updates rather than 2500; this is an explicit optimization-protocol change,
+not an assertion of equivalent convergence. All later training stages use 8.
+
+The last completed checkpoint is archived as `segment/before_batch8.pt`.
+`resumptions.jsonl`, per-epoch `batch_size`/`optimizer_steps_per_epoch`, and
+`resolved_resume_*.yaml` record the transition. Any uncheckpointed partial
+epoch is rerun; wall time includes the interruption. No pretrained model is
+introduced. Runtime compilation experiments are **not enabled** in this run.
+
+Training-only batch measurements are in `batch_scaling.json`. Batch 8 passed
+the actual segment-plus-eight-step backward calculation at approximately
+34.4 GiB peak allocated memory. Its warm timing was about 1.214 s/batch versus
+0.330 s/batch for batch 2; throughput improves about 9%, not fourfold.
+The first batch-2 timing round includes warm-up overhead and must not be used
+to claim a larger speedup. This measurement excludes optimizer updates and
+the full validation pass and is not a prediction of convergence time.
+
+Explicit continuation (only after stopping the previous training process):
+
+```bash
+SMDP_RESUME_CHECKPOINT=/absolute/path/to/segment/before_batch8.pt \
+  bash scripts/run_smdp_trajcast30.sh
+```
+
 ## Execution and physical evaluation
 
 ```bash

@@ -11,7 +11,12 @@ publish_exit() { "$PY" -m trajcast_smdp.publish --push || true; }
 trap publish_exit EXIT
 if [[ ! -f "$RUN/config.yaml" ]]; then "$PY" -m trajcast_smdp.data; fi
 if [[ ! -f "$RUN/correctness.json" ]]; then "$PY" -m trajcast_smdp.check; fi
-if [[ ! -f "$RUN/training_complete.json" ]]; then "$PY" -m trajcast_smdp.train; fi
+if [[ ! -f "$RUN/training_complete.json" ]]; then
+    train_args=()
+    if [[ -n "${SMDP_RESUME_CHECKPOINT:-}" ]]; then train_args+=(--resume "$SMDP_RESUME_CHECKPOINT"); fi
+    if [[ "${SMDP_COMPILE_MODES:-0}" == 1 ]]; then train_args+=(--compile-modes); fi
+    "$PY" -m trajcast_smdp.train "${train_args[@]}"
+fi
 if [[ ! -f "$RUN/test_metrics.json" ]]; then "$PY" -m trajcast_smdp.evaluate; fi
 for ensemble in nve nvt; do
     replicas=0

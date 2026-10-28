@@ -6,12 +6,14 @@ machinery. Only SMDP's necessary trajectory objective replaces endpoint MSE.
 import argparse
 import copy
 import json
+import random
 import shutil
 import subprocess
 import time
 from pathlib import Path
 import torch
 import yaml
+import numpy as np
 from torch_geometric.loader import DataLoader
 import trajcast.model.training as upstream
 from trajcast_smdp.model import SMDP
@@ -61,6 +63,36 @@ def rollout_loss(model,batch,steps,grad_steps=0):
 
 
 class StageFinished(Exception): pass
+
+
+def resume_handler(base,payload,stage_history):
+    """Resume the original Trainer loop at an epoch boundary, not a new fit.
+
+    Our last.pt is saved before upstream calls scheduler.step. Replaying the
+    recorded validation scores restores exactly that schedule, including the
+    final pending step. Never reset Adam moments or the random sampling stream.
+    """
+    class RestoringHandler(base):
+        def load_latest(self,state):
+            state.model.load_state_dict(payload['model'],strict=True)
+            state.optimizer.load_state_dict(payload['optimizer'])
+            sched=state.lr_scheduler
+            if sched is not None:
+                for group in state.optimizer.param_groups:
+                    group['lr']=payload['config']['training']['optimizer_settings']['lr']
+                for row in stage_history:
+                    assert abs(state.optimizer.param_groups[0]['lr']-row['lr'])<1e-15
+                    sched.step(row['selection_score'])
+            torch.set_rng_state(payload['torch_rng'].cpu())
+            torch.cuda.set_rng_state_all([s.cpu() for s in payload['cuda_rng']])
+            if 'numpy_rng' in payload: np.random.set_state(payload['numpy_rng'])
+            if 'python_rng' in payload: random.setstate(payload['python_rng'])
+            score=min(row['selection_score'] for row in stage_history)
+            print(json.dumps(dict(resumed_stage=payload['record']['stage'],
+                next_epoch=payload['record']['epoch']+1,optimizer_restored=True,
+                rng_restored=True,scheduler_replayed=True,lr=state.optimizer.param_groups[0]['lr'])),flush=True)
+            return payload['record']['epoch'],score
+    return RestoringHandler
 
 
 class SegmentTrainer(upstream.Trainer):
@@ -125,40 +157,75 @@ def save_checkpoint(path,trainer,config,record):
         raise OSError('Less than 5 GiB free; stop before checkpoint/trajectory corruption')
     tmp=path.with_suffix('.tmp')
     torch.save(dict(model=trainer.model.state_dict(),optimizer=trainer.optimizer.state_dict(),config=config,
-        record=record,torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all()),tmp)
+        record=record,torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),
+        numpy_rng=np.random.get_state(),python_rng=random.getstate()),tmp)
     tmp.replace(path)
 
 
-def main(run):
+def main(run,resume=None,compile_modes=False):
     # AtomicGraphDataset selects its cache filename from the global dtype,
     # before Trainer has an opportunity to apply model.precision.
     torch.set_default_dtype(torch.float64)
     run=Path(run)
-    if (run/'training_started.json').exists(): raise FileExistsError('Do not overwrite/restart a previous training implicitly')
+    if (run/'training_started.json').exists() and resume is None:
+        raise FileExistsError('Do not overwrite/restart a previous training implicitly; use explicit --resume')
+    if (run/'training_complete.json').exists(): raise FileExistsError('Training is already complete')
     if not json.loads((run/'correctness.json').read_text())['passed']: raise RuntimeError('Correctness checks failed')
     config=yaml.safe_load((run/'config.yaml').read_text());settings=config['smdp']
-    validation=dataset(run,'val');started=time.perf_counter()
-    (run/'source_version.txt').write_text(subprocess.check_output(['git','rev-parse','HEAD'],text=True))
-    (run/'training_started.json').write_text(json.dumps(dict(started_unix=time.time(),pretrained_weights=False,
-        hardware=torch.cuda.get_device_name(),seed=config['training']['seed']),indent=2))
-    global_best=float('inf');previous=None;history=[]
+    validation=dataset(run,'val');started=time.perf_counter();payload=None;history=[]
+    if resume is not None:
+        payload=torch.load(resume,map_location='cpu',weights_only=False)
+        history=[json.loads(line) for line in (run/'training.jsonl').read_text().splitlines() if line.strip()]
+        if not history or history[-1]!=payload['record']:
+            raise RuntimeError('Resume must use the last complete recorded epoch, never roll back published progress')
+        expected=copy.deepcopy(config);got=copy.deepcopy(payload['config'])
+        # Stage-local paths/budgets differ; model and data must remain identical.
+        if expected['model']!=got['model'] or expected['data']!=got['data']:
+            raise RuntimeError('Resume model/data configuration mismatch')
+        elapsed_since_start=time.time()-json.loads((run/'training_started.json').read_text())['started_unix']
+        started-=elapsed_since_start
+        receipt=dict(time_unix=time.time(),checkpoint=str(Path(resume).resolve()),
+            record=payload['record'],compile_modes=compile_modes,hardware=torch.cuda.get_device_name(),
+            previous_batch_size=payload['config']['training']['batch_size'],
+            resumed_batch_size=config['training']['batch_size'],
+            elapsed_since_last_completed_epoch_s=elapsed_since_start-payload['record']['wall_seconds'],
+            source_version=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
+        with (run/'resumptions.jsonl').open('a') as stream: stream.write(json.dumps(receipt)+'\n')
+    else:
+        (run/'source_version.txt').write_text(subprocess.check_output(['git','rev-parse','HEAD'],text=True))
+        (run/'training_started.json').write_text(json.dumps(dict(started_unix=time.time(),pretrained_weights=False,
+            hardware=torch.cuda.get_device_name(),seed=config['training']['seed']),indent=2))
+    global_best=min((r['selection_score'] for r in history),default=float('inf'));previous=None
     stages=[('segment',0,settings['segment_max_epochs'],settings['segment_patience'])]+[
         (f'rollout{k}',k,settings['rollout_stage_epochs'],settings['rollout_patience']) for k in settings['rollout_stages']]
+    original_handler=upstream.CheckpointHandler
+    reached_resume=payload is None
     for stage,steps,epochs,patience in stages:
-        stage_dir=run/stage;stage_dir.mkdir()
+        if not reached_resume:
+            if stage!=payload['record']['stage']: continue
+            reached_resume=True
+        restoring=payload is not None and stage==payload['record']['stage']
+        stage_dir=run/stage;stage_dir.mkdir(exist_ok=restoring)
         cfg=copy.deepcopy(config);cfg['training']['num_epochs']=epochs
         cfg['training']['checkpoint_settings']['root']=str(stage_dir/'checkpoints')
         cfg['training']['tensorboard_settings']['log_dir']=str(stage_dir/'tensorboard')
         if steps: cfg['training']['optimizer_settings']['lr']=.0003
         trainer=SegmentTrainer(copy.deepcopy(cfg));trainer.settings=settings;trainer.stage=stage
         trainer.rollout_steps=steps;trainer.started=started
+        if compile_modes: trainer.model._int_out.MotionModes.enable_compilation()
         if previous is not None: trainer.model.load_state_dict(torch.load(previous,weights_only=False)['model'])
-        trainer.dump_config_to_yaml(str(stage_dir/'resolved.yaml'))
-        stage_best=float('inf');best_epoch=-1
+        if not restoring: trainer.dump_config_to_yaml(str(stage_dir/'resolved.yaml'))
+        else: trainer.dump_config_to_yaml(str(stage_dir/f'resolved_resume_{int(time.time())}.yaml'))
+        prior=[r for r in history if r['stage']==stage]
+        stage_best=min((r['selection_score'] for r in prior),default=float('inf'))
+        best_epoch=next((r['epoch'] for r in prior if r['selection_score']==stage_best),-1)
+        upstream.CheckpointHandler=resume_handler(original_handler,payload,prior) if restoring else original_handler
+        trainer.restart_latest=restoring
         def update(*,epoch,loss,model,lr,maes):
             nonlocal global_best,stage_best,best_epoch
             metrics=validate(model,validation,trainer.device,settings['validation_rollout_samples'])
             record=dict(stage=stage,epoch=epoch,train_loss=loss,train_rollout_loss=trainer.last_rollout_training_loss,
+                batch_size=trainer.batch_size,optimizer_steps_per_epoch=(len(trainer.dataset)+trainer.batch_size-1)//trainer.batch_size,
                 lr=lr,wall_seconds=time.perf_counter()-started,peak_cuda_bytes=torch.cuda.max_memory_allocated(),
                 parameters=sum(p.numel() for p in model.parameters()),**metrics)
             history.append(record)
@@ -177,8 +244,10 @@ def main(run):
             if epoch-best_epoch>=patience: raise StageFinished()
             return score
         trainer.tensorboard.update=update
-        try: trainer.train()
+        try:
+            if not restoring or payload['record']['epoch']-best_epoch<patience: trainer.train()
         except StageFinished: print(f'{stage}: validation early stop',flush=True)
+        finally: upstream.CheckpointHandler=original_handler
         trainer.tensorboard.writer.close()
         previous=stage_dir/'best.pt'
         del trainer;torch.cuda.empty_cache()
@@ -188,4 +257,6 @@ def main(run):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--run',type=Path,default=RUN);a=p.parse_args();main(a.run)
+    p=argparse.ArgumentParser();p.add_argument('--run',type=Path,default=RUN)
+    p.add_argument('--resume',type=Path);p.add_argument('--compile-modes',action='store_true')
+    a=p.parse_args();main(a.run,a.resume,a.compile_modes)
