@@ -1,0 +1,27 @@
+{
+  "checkpoint_epoch": 2,
+  "training_samples": [
+    0,
+    1
+  ],
+  "iterations": 15,
+  "precision": "float64",
+  "same_weights": true,
+  "optimizer_steps": 0,
+  "hardware": "NVIDIA L40S",
+  "shared_gpu": true,
+  "compilation_seconds": 137.90826258715242,
+  "max_gradient_error": 2.7755575615628914e-17,
+  "seconds_per_forward_backward": {
+    "eager": [
+      0.6735548513320585,
+      0.67316848806416
+    ],
+    "compiled_products": [
+      0.4537840697914362,
+      0.4525097741279751
+    ]
+  },
+  "speedup": 1.485967656551765,
+  "peak_cuda_bytes": 3835244544
+}

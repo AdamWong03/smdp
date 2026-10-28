@@ -1,0 +1,108 @@
+model:
+  precision: 64
+  num_chem_elements: 2
+  edge_cutoff: 4.5
+  num_edge_rbf: 8
+  num_edge_poly_cutoff: 6
+  num_vel_rbf: 8
+  vel_max: 0.035
+  max_rotation_order: 2
+  num_hidden_channels: 64
+  num_mp_layers: 4
+  edge_mlp_kwargs:
+    n_neurons:
+    - 64
+    - 64
+    - 64
+    activation: silu
+  vel_mlp_kwargs:
+    n_neurons:
+    - 64
+    - 64
+    - 64
+    activation: silu
+  nl_gate_kwargs:
+    activation_scalars:
+      o: tanh
+      e: silu
+    activation_gates:
+      e: silu
+  conserve_ang_mom: false
+  o3_backend: e3nn
+  net_lin_mom: []
+  horizon_fs: 30.0
+  segment_basis: 6
+data:
+  root: /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028/cache
+  name: smdp30_train
+  cutoff_radius: 4.5
+  files: []
+  atom_type_mapper:
+    8: 0
+    14: 1
+training:
+  seed: 20261028
+  device: cuda
+  model_type: EfficientTrajCastModel
+  reference_fields:
+  - displacements
+  - update_velocities
+  target_field: target
+  batch_size: 2
+  num_epochs: 600
+  restart_latest: false
+  criterion: mse
+  max_grad_norm: 10.0
+  optimizer: adam
+  optimizer_settings:
+    lr: 0.001
+    amsgrad: true
+  scheduler:
+  - ReduceLROnPlateau
+  scheduler_settings:
+    ReduceLROnPlateau:
+      factor: 0.8
+      patience: 20
+  chained_scheduler_hp:
+    milestones:
+    - 10000000
+    per_epoch: true
+    monitor_lr_scheduler: false
+  checkpoint_settings:
+    root: /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028/upstream_checkpoints
+    interval: 10
+    keep_latest: true
+  tensorboard_settings:
+    log_dir: /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028/tensorboard
+    loss: true
+    lr: true
+    loss_validation:
+      data:
+        root: /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028/cache
+        name: smdp30_val
+        cutoff_radius: 4.5
+        files: []
+        atom_type_mapper:
+          8: 0
+          14: 1
+      batch_size: 2
+smdp:
+  run: /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028
+  initialization: random_all_parameters_no_checkpoint_loaded
+  segment_max_epochs: 400
+  segment_patience: 60
+  rollout_stages:
+  - 4
+  - 8
+  rollout_stage_epochs: 100
+  rollout_patience: 30
+  rollout_every_batches: 4
+  rollout_gradient_steps: 2
+  validation_rollout_samples: 128
+  segment_interior_weight: 0.5
+  rollout_loss_weight: 0.5
+  nve_ps: 100.0
+  nvt_thermalization_ps: 1500.0
+  nvt_production_ps: 15000.0
+  nvt_tau_fs: 100.0
+  reference_root: /data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1

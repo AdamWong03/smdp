@@ -48,7 +48,7 @@ training:
   - displacements
   - update_velocities
   target_field: target
-  batch_size: 2
+  batch_size: 8
   num_epochs: 600
   restart_latest: false
   criterion: mse

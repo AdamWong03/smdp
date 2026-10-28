@@ -1,0 +1,76 @@
+{
+  "time_unix": 1793170666.7177036,
+  "checkpoint_epoch": 3,
+  "hardware": "NVIDIA L40S",
+  "precision": "float64",
+  "optimizer_updates": 0,
+  "data_split": "train",
+  "samples": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "queries_fs": [
+    2,
+    5,
+    7,
+    10,
+    15,
+    19,
+    20,
+    25,
+    28,
+    30
+  ],
+  "training_temporarily_paused": true,
+  "results": [
+    {
+      "batch_size": 2,
+      "seconds_per_batch": [
+        1.1439021681901067,
+        0.33026598463766277
+      ],
+      "samples_per_second": 2.713394664188848,
+      "segment_training_epoch_seconds": 1842.710191034712,
+      "segment_peak_allocated_GiB": 3.5357604026794434,
+      "rollout8_peak_allocated_GiB": 8.66599178314209,
+      "rollout8_batch_seconds": 3.423693190095946,
+      "batch_prediction_max_error": 3.7192471324942744e-15,
+      "status": "passed"
+    },
+    {
+      "batch_size": 4,
+      "seconds_per_batch": [
+        0.6119731340091675,
+        0.6138200453948229
+      ],
+      "samples_per_second": 6.5263864528025755,
+      "segment_training_epoch_seconds": 766.1207371274941,
+      "segment_peak_allocated_GiB": 7.02136754989624,
+      "rollout8_peak_allocated_GiB": 17.27537727355957,
+      "rollout8_batch_seconds": 8.495357770938426,
+      "batch_prediction_max_error": 4.010680676458378e-15,
+      "status": "passed"
+    },
+    {
+      "batch_size": 8,
+      "seconds_per_batch": [
+        1.2146571926306933,
+        1.2142859949730336
+      ],
+      "samples_per_second": 6.587226939541882,
+      "segment_training_epoch_seconds": 759.0447461261646,
+      "segment_peak_allocated_GiB": 13.940019607543945,
+      "rollout8_peak_allocated_GiB": 34.395766258239746,
+      "rollout8_batch_seconds": 6.246512103825808,
+      "batch_prediction_max_error": 3.9968028886505635e-15,
+      "status": "passed"
+    }
+  ],
+  "note": "No checkpoint or optimizer changed. Timings include collation, transfer, forward, backward and clipping; exclude Adam and full validation. Existing trainer retains its GPU allocations."
+}
