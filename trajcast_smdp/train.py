@@ -130,6 +130,9 @@ def save_checkpoint(path,trainer,config,record):
 
 
 def main(run):
+    # AtomicGraphDataset selects its cache filename from the global dtype,
+    # before Trainer has an opportunity to apply model.precision.
+    torch.set_default_dtype(torch.float64)
     run=Path(run)
     if (run/'training_started.json').exists(): raise FileExistsError('Do not overwrite/restart a previous training implicitly')
     if not json.loads((run/'correctness.json').read_text())['passed']: raise RuntimeError('Correctness checks failed')
