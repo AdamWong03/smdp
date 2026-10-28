@@ -1,19 +1,19 @@
 {
-  "observed_utc": "2026-10-28T05:32:18.510536+00:00",
+  "observed_utc": "2026-10-28T07:03:35.081584+00:00",
   "service": {
     "MainPID": "3352107",
-    "ActiveState": "active",
-    "SubState": "running"
+    "ActiveState": "deactivating",
+    "SubState": "stop-sigterm"
   },
   "latest_logged_training_record": {
     "stage": "segment",
-    "batch": 250,
+    "batch": 500,
     "batches": 2500,
-    "mean_loss": 1.3409614915497916,
-    "grad_norm": 0.21821857772927988,
-    "wall_s": 124.88797008013353
+    "mean_loss": 0.009790724864449131,
+    "grad_norm": 0.05667730358582201,
+    "wall_s": 5602.183634385001
   },
-  "free_disk_GiB": 31.151268005371094,
+  "free_disk_GiB": 384.06261444091797,
   "training_started": true,
   "training_completed": false,
   "note": "Point-in-time execution snapshot, not a live status or a completed evaluation."
