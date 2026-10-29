@@ -8,8 +8,8 @@ Training started: True.
 Training completed: False.
 Independent test evaluation completed: False.
 
-Execution snapshot: 2026-10-28T07:06:24.004395+00:00; service {'MainPID': '3679034', 'ActiveState': 'active', 'SubState': 'running'}.
-Free disk at snapshot: 383.75 GiB; dense NVT requires 40 GiB before launch.
+Execution snapshot: 2026-10-29T05:28:47.477377+00:00; service {'MainPID': '3679034', 'ActiveState': 'deactivating', 'SubState': 'stop-sigterm'}.
+Free disk at snapshot: 285.44 GiB; dense NVT requires 40 GiB before launch.
 See progress_snapshot.json for the last actual training record. Early training loss is not a physical result.
 
 ## nve_0
