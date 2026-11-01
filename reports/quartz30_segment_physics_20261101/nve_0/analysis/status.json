@@ -1,0 +1,25 @@
+{
+  "trajectory_completed": true,
+  "production_available": true,
+  "physical_analysis_completed": true,
+  "completed_steps": 3333,
+  "actual_production_ps": 99.99,
+  "reference": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_09/trajectory.h5",
+  "tasks": {
+    "thermo": {
+      "completed": true
+    },
+    "energy": {
+      "completed": true
+    },
+    "macro_30fs": {
+      "completed": true
+    },
+    "dense_1fs": {
+      "completed": true
+    },
+    "rdf": {
+      "completed": true
+    }
+  }
+}
