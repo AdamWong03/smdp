@@ -8,11 +8,14 @@ RUN=Path('/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_sm
 
 def main(run,push):
     run=Path(run);repo=Path(__file__).resolve().parents[1]
-    out=repo/'reports/smdp_trajcast_quartz30_20261028';out.mkdir(parents=True,exist_ok=True)
+    report_name='smdp_trajcast_quartz30_20261028' if run.resolve()==RUN.resolve() else run.name
+    out=repo/'reports'/report_name;out.mkdir(parents=True,exist_ok=True)
     units=subprocess.run(['systemctl','--user','list-units','smdp-quartz30-*.service',
         '--state=active','--no-legend','--plain'],capture_output=True,text=True,timeout=10)
     service_names=[line.split()[0] for line in units.stdout.splitlines() if line.strip()]
-    service_name=service_names[0] if service_names else 'smdp-quartz30-20261030-gpu1.service'
+    evaluation=run/'evaluation_manifest.json'
+    evaluation_meta=json.loads(evaluation.read_text()) if evaluation.exists() else None
+    service_name=evaluation_meta['service'] if evaluation_meta else (service_names[0] if service_names else 'smdp-quartz30-20261030-gpu1.service')
     service=subprocess.run(['systemctl','--user','show',service_name,
         '-p','ActiveState','-p','SubState','-p','MainPID'],capture_output=True,text=True,timeout=10)
     progress=None
@@ -30,7 +33,7 @@ def main(run,push):
         training_completed=(run/'training_complete.json').exists(),
         note='Point-in-time execution snapshot, not a live status or a completed evaluation.')
     (out/'progress_snapshot.json').write_text(json.dumps(snapshot,indent=2)+'\n')
-    names=['config.yaml','config.batch2.yaml','resumptions.jsonl','batch_scaling.json',
+    names=['evaluation_manifest.json','reference_energy_check.json','config.yaml','config.batch2.yaml','resumptions.jsonl','batch_scaling.json',
            'runtime_benchmark.json','runtime_benchmark_products.json',
            'data_preparation.json','correctness.json','training_started.json','training_complete.json',
            'test_metrics.json','source_version.txt','cache/adaptation.json']
@@ -74,8 +77,16 @@ def main(run,push):
         f"Training completed: {(run/'training_complete.json').exists()}.",
         f"Independent test evaluation completed: {(run/'test_metrics.json').exists()}.",'']
     lines += [f"Execution snapshot: {snapshot['observed_utc']}; service {snapshot['service']}.",
-        f"Free disk at snapshot: {snapshot['free_disk_GiB']:.2f} GiB; dense NVT requires 40 GiB before launch.",
+        f"Free disk at snapshot: {snapshot['free_disk_GiB']:.2f} GiB; trajectory storage is checked against requested duration before launch.",
         'See progress_snapshot.json for the last actual training record. Early training loss is not a physical result.','']
+    if evaluation_meta:
+        lines += ['## Frozen segment checkpoint evaluation','',
+            f"Source: `{evaluation_meta['source_checkpoint']}`; SHA256 `{evaluation_meta['checkpoint_sha256']}`.",
+            'This run performs no training. It uses the segment-only validation-selected checkpoint, not rollout-trained weights.',
+            'Requested: two 100 ps NVE runs; NVT 1.5 ns thermalization + 1 ns production. This is not a 15 ns result.',
+            'NVT production length is limited by available storage. Dynamics, thermostat and analysis conventions are unchanged.',
+            '30 fs spectra have a 16.67 THz Nyquist limit; 1 fs queried spectra are evaluated separately.',
+            'BKS absolute energies use the same raw DSF convention for predicted and reference configurations; no centering.','']
     if records:
         lines += ['## Training and validation progress','',
             'These are validation results, not independent test or long-time physical results.',
@@ -92,7 +103,9 @@ def main(run,push):
     if test.exists():
         d=json.loads(test.read_text())
         lines += [f"Endpoint position RMSE: {d['endpoint_position_RMSE_A']:.7g} Å.",
+            f"Endpoint position MAE: {d['endpoint_position_MAE_A']:.7g} Å.",
             f"Endpoint velocity RMSE: {d['endpoint_velocity_RMSE_A_fs']:.7g} Å/fs.",
+            f"Endpoint velocity MAE: {d['endpoint_velocity_MAE_A_fs']:.7g} Å/fs.",
             f"Eight-step normalized error: {d['rollout8_loss']:.7g}.",'']
     for tag in ['nve_0','nve_1','nvt_0']:
         p=run/tag/'run.json';lines += [f'## {tag}','']

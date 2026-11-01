@@ -48,8 +48,11 @@ def main(run,ensemble,replica):
         decoder_sampling='Neural segment velocities; boundary frames include the actual CSVR impulse in NVT',
         safety_limits=dict(min_pair_A=.65,max_pre_or_post_temperature_K=3000.),
         reference_forces_used_during_propagation=False)
-    if ensemble=='nvt' and shutil.disk_usage(out).free<40*1024**3:
-        manifest.update(failure_reason='Insufficient disk space: require 40 GiB before dense 15 ns output',
+    # Budget uncompressed output plus headroom; do not assume compression savings.
+    required_bytes=int((steps*32+3)*nat*3*4*1.15+5*1024**3)
+    manifest['required_free_bytes_at_start']=required_bytes
+    if shutil.disk_usage(out).free<required_bytes:
+        manifest.update(failure_reason=f'Insufficient disk space: require {required_bytes/1024**3:.2f} GiB',
                         elapsed_seconds=0.,actual_duration_ps=0.,ns_day=0.)
         (out/'run.json').write_text(json.dumps(manifest,indent=2)+'\n')
         return
