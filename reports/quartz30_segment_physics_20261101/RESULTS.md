@@ -8,8 +8,8 @@ Training started: False.
 Training completed: False.
 Independent test evaluation completed: False.
 
-Execution snapshot: 2026-11-01T14:38:53.366342+00:00; service {'MainPID': '3323649', 'ActiveState': 'active', 'SubState': 'running'}.
-Free disk at snapshot: 15.37 GiB; trajectory storage is checked against requested duration before launch.
+Execution snapshot: 2026-11-01T14:40:34.866028+00:00; service {'MainPID': '3326217', 'ActiveState': 'active', 'SubState': 'running'}.
+Free disk at snapshot: 15.35 GiB; trajectory storage is checked against requested duration before launch.
 See progress_snapshot.json for the last actual training record. Early training loss is not a physical result.
 
 ## Frozen segment checkpoint evaluation

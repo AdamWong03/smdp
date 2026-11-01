@@ -1,0 +1,14 @@
+{
+  "reference": "quartz/transitions/30fs/test.h5",
+  "indices": [0, 100],
+  "recomputed_raw_DSF_eV": [-3135.9124674775117, -3136.43140175715],
+  "stored_potential_energy_eV": [-3135.912220349842, -3136.4317656594135],
+  "difference_eV": [-0.00024712766980883316, 0.0003639022634160938],
+  "stored_positions_dtype": "float32",
+  "parameter_check": "Matched quartz/raw_nve/test_09/in.lammps: buck 5.5; coul/dsf alpha=0 cutoff=10.17; shifted buck; same pair coefficients to printed precision.",
+  "strict_1e-5_eV_check_passed": false,
+  "interpretation": "Small differences to saved MD thermo energies remain; coordinate storage/dump precision is a possible contributor, not proven by this check. No energy shift was applied. Both model and reference stored coordinates will be recomputed with the identical BKS implementation for distribution and drift comparison.",
+  "environment": "mlip Python with lammps-runtime/lib MPICH; calculator initialized successfully",
+  "execution_issue": "Initial neural evaluation on Blackwell failed due to unsupported sm_120 in the existing PyTorch build, before any trajectory generation. Retried on compatible L40S without model or environment changes. Initial attempts remain in pipeline.log.",
+  "timing_caveat": "Evaluation GPU 2 is shared with another user's process; timings must not be claimed as uncontended hardware speedups."
+}

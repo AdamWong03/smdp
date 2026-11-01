@@ -89,7 +89,7 @@
     "selection_score": 0.021154133211221723
   },
   "training_performed": false,
-  "service": "smdp-segment-physics-20261101.service",
+  "service": "smdp-segment-physics-20261101-gpu2.service",
   "source_training_run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028",
   "reference_root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
   "nve_replicas": 2,
