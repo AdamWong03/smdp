@@ -9,7 +9,11 @@ RUN=Path('/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_sm
 def main(run,push):
     run=Path(run);repo=Path(__file__).resolve().parents[1]
     out=repo/'reports/smdp_trajcast_quartz30_20261028';out.mkdir(parents=True,exist_ok=True)
-    service=subprocess.run(['systemctl','--user','show','smdp-quartz30-20261028.service',
+    units=subprocess.run(['systemctl','--user','list-units','smdp-quartz30-*.service',
+        '--state=active','--no-legend','--plain'],capture_output=True,text=True,timeout=10)
+    service_names=[line.split()[0] for line in units.stdout.splitlines() if line.strip()]
+    service_name=service_names[0] if service_names else 'smdp-quartz30-20261030-gpu1.service'
+    service=subprocess.run(['systemctl','--user','show',service_name,
         '-p','ActiveState','-p','SubState','-p','MainPID'],capture_output=True,text=True,timeout=10)
     progress=None
     if (run/'pipeline.log').exists():
@@ -19,6 +23,7 @@ def main(run,push):
             if isinstance(record,dict) and 'stage' in record and ('batch' in record or 'epoch' in record):
                 progress=record;break
     snapshot=dict(observed_utc=datetime.now(timezone.utc).isoformat(),
+        service_name=service_name,
         service=dict(s.split('=',1) for s in service.stdout.splitlines() if '=' in s),
         latest_logged_training_record=progress,free_disk_GiB=shutil.disk_usage(run).free/1024**3,
         training_started=(run/'training_started.json').exists(),
@@ -38,9 +43,18 @@ def main(run,push):
         if source.exists():
             if source.stat().st_size>2_000_000: continue
             dest=out/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,dest)
+    records=[]
     if (run/'training.jsonl').exists():
         import pandas as pd
         records=[json.loads(s) for s in (run/'training.jsonl').read_text().splitlines() if s.strip()]
+        stages={}
+        for stage in dict.fromkeys(r['stage'] for r in records):
+            rows=[r for r in records if r['stage']==stage]
+            stages[stage]=dict(completed_epochs=len(rows),latest=rows[-1],
+                best=min(rows,key=lambda r:r['selection_score']))
+        (out/'validation_progress.json').write_text(json.dumps(dict(
+            observed_utc=snapshot['observed_utc'],evaluation_split='validation',
+            stages=stages),indent=2)+'\n')
         pd.DataFrame([{k:v for k,v in row.items() if not isinstance(v,(dict,list))} for row in records]).to_csv(out/'training_curves.csv',index=False)
         if records:
             import matplotlib
@@ -62,6 +76,18 @@ def main(run,push):
     lines += [f"Execution snapshot: {snapshot['observed_utc']}; service {snapshot['service']}.",
         f"Free disk at snapshot: {snapshot['free_disk_GiB']:.2f} GiB; dense NVT requires 40 GiB before launch.",
         'See progress_snapshot.json for the last actual training record. Early training loss is not a physical result.','']
+    if records:
+        lines += ['## Training and validation progress','',
+            'These are validation results, not independent test or long-time physical results.',
+            'Each row uses the best checkpoint within that stage by the unchanged selection score.',
+            '', '| Stage | Completed epochs | Best epoch (zero-based) | q30 RMSE / Å | v30 RMSE / Å/fs | q240 RMSE / Å | Selection score |',
+            '|---|---:|---:|---:|---:|---:|---:|']
+        for stage,entry in stages.items():
+            r=entry['best']
+            lines += [f"| {stage} | {entry['completed_epochs']} | {r['epoch']} | {r['endpoint_position_RMSE_A']:.7g} | {r['endpoint_velocity_RMSE_A_fs']:.7g} | {r['rollout_trace'][-1]['position_RMSE_A']:.7g} | {r['selection_score']:.7g} |"]
+        lines += ['', 'Full stage-best/latest validation traces: [validation_progress.json](validation_progress.json).',
+            'Server checkpoints: `<server artifacts>/<stage>/best.pt`, `<stage>/last.pt`, and `best.pt`.',
+            'Weights, raw logs and trajectories are not uploaded. Training is still running unless marked complete above.','']
     test=run/'test_metrics.json'
     if test.exists():
         d=json.loads(test.read_text())

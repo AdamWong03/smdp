@@ -1,19 +1,20 @@
 {
-  "observed_utc": "2026-10-29T05:28:47.477377+00:00",
+  "observed_utc": "2026-11-01T14:17:58.297195+00:00",
+  "service_name": "smdp-quartz30-20261030-gpu1.service",
   "service": {
-    "MainPID": "3679034",
-    "ActiveState": "deactivating",
-    "SubState": "stop-sigterm"
+    "MainPID": "90130",
+    "ActiveState": "active",
+    "SubState": "running"
   },
   "latest_logged_training_record": {
-    "stage": "segment",
-    "batch": 250,
+    "stage": "rollout4",
+    "batch": 500,
     "batches": 625,
-    "mean_loss": 0.0032655581103992956,
-    "grad_norm": 0.04235408051326191,
-    "wall_s": 86180.23446550919
+    "mean_loss": 0.00490445129381795,
+    "grad_norm": 0.35954050309358176,
+    "wall_s": 377336.0592367155
   },
-  "free_disk_GiB": 285.43565368652344,
+  "free_disk_GiB": 15.447986602783203,
   "training_started": true,
   "training_completed": false,
   "note": "Point-in-time execution snapshot, not a live status or a completed evaluation."
