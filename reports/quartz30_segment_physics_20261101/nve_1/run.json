@@ -1,0 +1,33 @@
+{
+  "ensemble": "nve",
+  "reference_path": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_10/trajectory.h5",
+  "timestep_fs": 30,
+  "seed": 2026102801,
+  "thermostat_tau_fs": null,
+  "thermalization_steps": 0,
+  "requested_steps": 3333,
+  "completed_steps": 3333,
+  "trajectory_completed": true,
+  "units": {
+    "q": "Angstrom",
+    "v": "Angstrom/fs",
+    "mass": "u"
+  },
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_segment_physics_20261101/best.pt",
+  "decoder_sampling": "Neural segment velocities; boundary frames include the actual CSVR impulse in NVT",
+  "safety_limits": {
+    "min_pair_A": 0.65,
+    "max_pre_or_post_temperature_K": 3000.0
+  },
+  "reference_forces_used_during_propagation": false,
+  "required_free_bytes_at_start": 5607155980,
+  "failure_reason": null,
+  "elapsed_seconds": 385.5897398759844,
+  "propagation_seconds": 361.30631118200836,
+  "query_seconds": 10.29415872140089,
+  "io_seconds": 3.4049025841231924,
+  "peak_cuda_bytes": 649533440,
+  "hardware": "NVIDIA L40S",
+  "actual_duration_ps": 99.99,
+  "ns_day": 22.404994496945303
+}

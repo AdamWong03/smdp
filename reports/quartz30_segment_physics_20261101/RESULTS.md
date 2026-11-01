@@ -8,8 +8,8 @@ Training started: False.
 Training completed: False.
 Independent test evaluation completed: True.
 
-Execution snapshot: 2026-11-01T15:04:21.195292+00:00; service {'MainPID': '3326217', 'ActiveState': 'active', 'SubState': 'running'}.
-Free disk at snapshot: 12.51 GiB; trajectory storage is checked against requested duration before launch.
+Execution snapshot: 2026-11-01T15:14:02.530348+00:00; service {'MainPID': '3326217', 'ActiveState': 'active', 'SubState': 'running'}.
+Free disk at snapshot: 16.00 GiB; trajectory storage is checked against requested duration before launch.
 See progress_snapshot.json for the last actual training record. Early training loss is not a physical result.
 
 ## Frozen segment checkpoint evaluation
@@ -242,7 +242,216 @@ Failure: None.
 
 ## nve_1
 
-Not completed; no physical results claimed.
+Trajectory completed: True; duration 99.99 ps (includes any thermalization).
+End-to-end throughput: 22.4 ns/day.
+Failure: None.
+
+### thermo
+
+```json
+{
+  "temperature_K": {
+    "SMDP": {
+      "mean": 261.86028262211323,
+      "std": 36.67290064647685,
+      "variance": 1344.901641826362,
+      "block_mean_std": 18.848395734751204,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 303.1415476462189,
+      "std": 13.588414696060214,
+      "variance": 184.64501395210522,
+      "block_mean_std": 0.888523313995721,
+      "blocks": 8
+    },
+    "mean_difference": -41.281265024105664,
+    "wasserstein": 42.63524583115615
+  },
+  "kinetic_energy_eV": {
+    "SMDP": {
+      "mean": 5.449537636190371,
+      "std": 0.7631945948429564,
+      "variance": 0.5824659895975043,
+      "block_mean_std": 0.3922513216200998,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 6.30863625613288,
+      "std": 0.28278659352553964,
+      "variance": 0.07996825747777879,
+      "block_mean_std": 0.018490934141546424,
+      "blocks": 8
+    },
+    "mean_difference": -0.8590986199425092,
+    "wasserstein": 0.8872761247279488
+  },
+  "minimum_distance_A": 1.4892433116349162,
+  "per_element": {
+    "8": {
+      "SMDP": {
+        "mean": 3.532903519243804,
+        "std": 0.48627378068990473,
+        "variance": 0.23646218978645356,
+        "block_mean_std": 0.22981770100056195,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 4.223022582320726,
+        "std": 0.27224803410260695,
+        "variance": 0.07411899207273423,
+        "block_mean_std": 0.038462269888584644,
+        "blocks": 8
+      },
+      "mean_difference": -0.6901190630769221,
+      "wasserstein": 0.6929451770362266
+    },
+    "14": {
+      "SMDP": {
+        "mean": 1.9166341169465664,
+        "std": 0.3598714907958494,
+        "variance": 0.12950748988762711,
+        "block_mean_std": 0.1727267162818886,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 2.085613673812154,
+        "std": 0.21081542029634515,
+        "variance": 0.04444314143472465,
+        "block_mean_std": 0.029753007222714012,
+        "blocks": 8
+      },
+      "mean_difference": -0.16897955686558763,
+      "wasserstein": 0.19153699567277954
+    }
+  }
+}
+```
+
+### energy
+
+```json
+{
+  "potential_energy_eV": {
+    "SMDP": {
+      "mean": -3136.5946956921985,
+      "std": 0.7764718905489364,
+      "variance": 0.6029085968126394,
+      "block_mean_std": 0.4147784150119534,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": -3135.7140455769218,
+      "std": 0.28413218461123263,
+      "variance": 0.08073109833195159,
+      "block_mean_std": 0.019449037765867046,
+      "blocks": 8
+    },
+    "mean_difference": -0.8806501152766941,
+    "wasserstein": 0.9129593425262716
+  },
+  "energy_convention": "raw BKS DSF, same parameters/units as own MD",
+  "energy_change_eV": {
+    "SMDP": -1.5610895380614238,
+    "reference": 0.0019395575977796398
+  },
+  "drift_meV_atom_ps": {
+    "SMDP": 0.04560879289003397,
+    "reference": -0.0004723316865160373
+  }
+}
+```
+
+### macro_30fs
+
+```json
+{
+  "dt_fs": 30,
+  "nyquist_THz": 16.666666666666668,
+  "elements": {
+    "8": {
+      "overlap": 0.8986408105079806,
+      "block_overlap": {
+        "mean": 0.891488650202736,
+        "std": 0.014126126607030422,
+        "variance": 0.00019954745291785283,
+        "block_mean_std": 0.014126126607030422,
+        "blocks": 6
+      }
+    },
+    "14": {
+      "overlap": 0.8369503403481827,
+      "block_overlap": {
+        "mean": 0.83351973127652,
+        "std": 0.031715609788466076,
+        "variance": 0.0010058799042542454,
+        "block_mean_std": 0.031715609788466076,
+        "blocks": 6
+      }
+    }
+  }
+}
+```
+
+### dense_1fs
+
+```json
+{
+  "dt_fs": 1,
+  "nyquist_THz": 500.0,
+  "elements": {
+    "8": {
+      "overlap": 0.8773343257806502,
+      "block_overlap": {
+        "mean": 0.8701082549963539,
+        "std": 0.010983337121851813,
+        "variance": 0.00012063369433224805,
+        "block_mean_std": 0.010983337121851813,
+        "blocks": 6
+      }
+    },
+    "14": {
+      "overlap": 0.813269158293816,
+      "block_overlap": {
+        "mean": 0.8079776912759941,
+        "std": 0.029027650807092645,
+        "variance": 0.0008426045113785062,
+        "block_mean_std": 0.029027650807092645,
+        "blocks": 6
+      }
+    }
+  }
+}
+```
+
+### rdf
+
+```json
+{
+  "14-8": {
+    "RMSE": 0.26003844117981895,
+    "peak_position_A": {
+      "SMDP": 1.6033405657411766,
+      "reference": 1.6033405657411766
+    },
+    "peak_height": {
+      "SMDP": 37.37753913742365,
+      "reference": 34.60156716953583
+    }
+  },
+  "8-8": {
+    "RMSE": 0.10697350357099757,
+    "peak_position_A": {
+      "SMDP": 2.6009746955356867,
+      "reference": 2.6009746955356867
+    },
+    "peak_height": {
+      "SMDP": 9.815257137950573,
+      "reference": 9.054788499808485
+    }
+  }
+}
+```
 
 ## nvt_0
 

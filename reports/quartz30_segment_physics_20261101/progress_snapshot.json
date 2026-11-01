@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-01T15:04:21.195292+00:00",
+  "observed_utc": "2026-11-01T15:14:02.530348+00:00",
   "service_name": "smdp-segment-physics-20261101-gpu2.service",
   "service": {
     "MainPID": "3326217",
@@ -7,7 +7,7 @@
     "SubState": "running"
   },
   "latest_logged_training_record": null,
-  "free_disk_GiB": 12.511966705322266,
+  "free_disk_GiB": 16.00415802001953,
   "training_started": false,
   "training_completed": false,
   "note": "Point-in-time execution snapshot, not a live status or a completed evaluation."
