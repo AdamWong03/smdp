@@ -1,0 +1,29 @@
+{
+  "potential_energy_eV": {
+    "SMDP": {
+      "mean": -3136.405461145453,
+      "std": 0.5101032499039969,
+      "variance": 0.2602053255626195,
+      "block_mean_std": 0.10479162823048656,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": -3135.7448294306023,
+      "std": 0.40729146784481324,
+      "variance": 0.16588633977918255,
+      "block_mean_std": 0.02556066032627556,
+      "blocks": 8
+    },
+    "mean_difference": -0.6606317148507515,
+    "wasserstein": 0.6606317148504128
+  },
+  "energy_convention": "raw BKS DSF, same parameters/units as own MD",
+  "energy_change_eV": {
+    "SMDP": 0.05348877783990247,
+    "reference": -0.6689150750776207
+  },
+  "drift_meV_atom_ps": {
+    "SMDP": 0.0005474432643121667,
+    "reference": -0.0003020126543275998
+  }
+}

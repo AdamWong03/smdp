@@ -8,8 +8,8 @@ Training started: False.
 Training completed: False.
 Independent test evaluation completed: True.
 
-Execution snapshot: 2026-11-01T15:14:02.530348+00:00; service {'MainPID': '3326217', 'ActiveState': 'active', 'SubState': 'running'}.
-Free disk at snapshot: 16.00 GiB; trajectory storage is checked against requested duration before launch.
+Execution snapshot: 2026-11-01T18:04:47.901149+00:00; service {'MainPID': '3326217', 'ActiveState': 'active', 'SubState': 'running'}.
+Free disk at snapshot: 123.85 GiB; trajectory storage is checked against requested duration before launch.
 See progress_snapshot.json for the last actual training record. Early training loss is not a physical result.
 
 ## Frozen segment checkpoint evaluation
@@ -455,7 +455,253 @@ Failure: None.
 
 ## nvt_0
 
-Not completed; no physical results claimed.
+Trajectory completed: True; duration 2499.99 ps (includes any thermalization).
+End-to-end throughput: 21.62 ns/day.
+Failure: None.
+
+### thermo
+
+```json
+{
+  "temperature_K": {
+    "SMDP": {
+      "mean": 299.96833604533,
+      "std": 21.585748819837672,
+      "variance": 465.94455211312345,
+      "block_mean_std": 1.5373991157568903,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 300.1475864595428,
+      "std": 19.435038141367244,
+      "variance": 377.72070755639953,
+      "block_mean_std": 1.3264888199589764,
+      "blocks": 8
+    },
+    "mean_difference": -0.17925041421284504,
+    "wasserstein": 1.8542540173162654
+  },
+  "kinetic_energy_eV": {
+    "SMDP": {
+      "mean": 6.242598994301941,
+      "std": 0.4492179929737981,
+      "variance": 0.20179680521140733,
+      "block_mean_std": 0.03199459749783174,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 6.246329349546249,
+      "std": 0.40445985451339395,
+      "variance": 0.16358777391299578,
+      "block_mean_std": 0.027605372895681747,
+      "blocks": 8
+    },
+    "mean_difference": -0.0037303552443077592,
+    "wasserstein": 0.03858862044002416
+  },
+  "minimum_distance_A": 1.4724357853893952,
+  "per_element": {
+    "8": {
+      "SMDP": {
+        "mean": 3.9491208436101743,
+        "std": 0.3365455416120037,
+        "variance": 0.11326290157891689,
+        "block_mean_std": 0.028187776249492525,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 4.172364344850763,
+        "std": 0.328335027179757,
+        "variance": 0.10780389007313176,
+        "block_mean_std": 0.03100114572619307,
+        "blocks": 8
+      },
+      "mean_difference": -0.22324350124058867,
+      "wasserstein": 0.2232435012405882
+    },
+    "14": {
+      "SMDP": {
+        "mean": 2.293478150691767,
+        "std": 0.27300066910780413,
+        "variance": 0.07452936533330876,
+        "block_mean_std": 0.02578897135364604,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 2.0739650046954865,
+        "std": 0.23325344136454196,
+        "variance": 0.05440716790840181,
+        "block_mean_std": 0.010401260139657746,
+        "blocks": 8
+      },
+      "mean_difference": 0.21951314599628047,
+      "wasserstein": 0.21951314599628016
+    }
+  },
+  "thermostat": {
+    "pre_temperature": {
+      "mean": 300.27305133069535,
+      "std": 23.898088225058306,
+      "variance": 571.1186208126704,
+      "block_mean_std": 0.8641822903176342,
+      "blocks": 8
+    },
+    "post_temperature": {
+      "mean": 300.1175998863011,
+      "std": 21.863879705008614,
+      "variance": 478.0292357550875,
+      "block_mean_std": 0.8253519113636564,
+      "blocks": 8
+    },
+    "alpha": {
+      "mean": 1.0002833324526628,
+      "std": 0.023903332227115128,
+      "variance": 0.0005713692915598407,
+      "block_mean_std": 9.274782115406892e-05,
+      "blocks": 8
+    },
+    "network_delta_KE_eV": {
+      "mean": 0.0032320586091986216,
+      "std": 0.6506544937751255,
+      "variance": 0.4233512702697648,
+      "block_mean_std": 0.0016964918981436778,
+      "blocks": 8
+    },
+    "csvr_delta_KE_eV": {
+      "mean": -0.003235078219361179,
+      "std": 0.29773500583259904,
+      "variance": 0.0886461336981378,
+      "block_mean_std": 0.0017132495905191356,
+      "blocks": 8
+    }
+  }
+}
+```
+
+### energy
+
+```json
+{
+  "potential_energy_eV": {
+    "SMDP": {
+      "mean": -3136.405461145453,
+      "std": 0.5101032499039969,
+      "variance": 0.2602053255626195,
+      "block_mean_std": 0.10479162823048656,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": -3135.7448294306023,
+      "std": 0.40729146784481324,
+      "variance": 0.16588633977918255,
+      "block_mean_std": 0.02556066032627556,
+      "blocks": 8
+    },
+    "mean_difference": -0.6606317148507515,
+    "wasserstein": 0.6606317148504128
+  },
+  "energy_convention": "raw BKS DSF, same parameters/units as own MD",
+  "energy_change_eV": {
+    "SMDP": 0.05348877783990247,
+    "reference": -0.6689150750776207
+  },
+  "drift_meV_atom_ps": {
+    "SMDP": 0.0005474432643121667,
+    "reference": -0.0003020126543275998
+  }
+}
+```
+
+### macro_30fs
+
+```json
+{
+  "dt_fs": 30,
+  "nyquist_THz": 16.666666666666668,
+  "elements": {
+    "8": {
+      "overlap": 0.8558999653893739,
+      "block_overlap": {
+        "mean": 0.8523545346329368,
+        "std": 0.027235151814870382,
+        "variance": 0.0007417534943790374,
+        "block_mean_std": 0.00840425276386988,
+        "blocks": 8
+      }
+    },
+    "14": {
+      "overlap": 0.7401350497472069,
+      "block_overlap": {
+        "mean": 0.7390375961018063,
+        "std": 0.04121592264409239,
+        "variance": 0.0016987522794038082,
+        "block_mean_std": 0.015088527281986145,
+        "blocks": 8
+      }
+    }
+  }
+}
+```
+
+### dense_1fs
+
+```json
+{
+  "dt_fs": 1,
+  "nyquist_THz": 500.0,
+  "elements": {
+    "8": {
+      "overlap": 0.8039985975767908,
+      "block_overlap": {
+        "mean": 0.7980860296278736,
+        "std": 0.0348525760927321,
+        "variance": 0.0012147020602996815,
+        "block_mean_std": 0.01368294902341455,
+        "blocks": 8
+      }
+    },
+    "14": {
+      "overlap": 0.6925209196121244,
+      "block_overlap": {
+        "mean": 0.6913257152198009,
+        "std": 0.04911979922774257,
+        "variance": 0.002412754676173739,
+        "block_mean_std": 0.01985313515181751,
+        "blocks": 8
+      }
+    }
+  }
+}
+```
+
+### rdf
+
+```json
+{
+  "14-8": {
+    "RMSE": 0.20425338256166864,
+    "peak_position_A": {
+      "SMDP": 1.6033405657411766,
+      "reference": 1.6033405657411766
+    },
+    "peak_height": {
+      "SMDP": 36.9086572814205,
+      "reference": 34.68099001453226
+    }
+  },
+  "8-8": {
+    "RMSE": 0.09239846132090647,
+    "peak_position_A": {
+      "SMDP": 2.6009746955356867,
+      "reference": 2.6009746955356867
+    },
+    "peak_height": {
+      "SMDP": 9.736714527640522,
+      "reference": 9.093325761876496
+    }
+  }
+}
+```
 
 No phonon identification, stability improvement or speedup is inferred from architecture alone.
 Official-paper BKS energy discrepancies remain recorded in the foundation report. This experiment compares only against its own independently generated, unchanged BKS reference.
