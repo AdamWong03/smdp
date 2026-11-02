@@ -24,6 +24,10 @@ def main():
     p.add_argument('--batch-sizes', type=int, nargs='+', default=[2, 8])
     p.add_argument('--iterations', type=int, default=10)
     p.add_argument('--precision', choices=['fp32', 'fp64', 'bf16'], default='fp32')
+    p.add_argument('--block-type', choices=['legacy', 'geometry'], default='legacy')
+    p.add_argument('--scalar-channels', type=int, default=128)
+    p.add_argument('--vector-channels', type=int, default=32)
+    p.add_argument('--edge-channels', type=int, default=64)
     p.add_argument('--output', type=Path, required=True)
     args = p.parse_args()
     torch.manual_seed(20261102)
@@ -36,7 +40,9 @@ def main():
     torch.set_default_dtype(torch.float64)
     ds = AtomicGraphDataset(root=str(args.cache), name='quartz30_train',
                             cutoff_radius=4.5, files=[], atom_type_mapper={8:0,14:1})
-    model = RelationalTransition().to(device=device, dtype=dtype)
+    model_config = dict(block_type=args.block_type, scalar_channels=args.scalar_channels,
+                        vector_channels=args.vector_channels, edge_channels=args.edge_channels)
+    model = RelationalTransition(model_config).to(device=device, dtype=dtype)
     rows = []
     def sync():
         if device.type == 'cuda':
@@ -82,7 +88,7 @@ def main():
             rows.append(row)
             print(json.dumps(row), flush=True)
             del optimizer, network
-    report = dict(device=str(device), precision=args.precision,
+    report = dict(device=str(device), precision=args.precision, model_config=model_config,
                   hardware=torch.cuda.get_device_name(device) if device.type=='cuda' else 'CPU',
                   threads=torch.get_num_threads(), parameters=sum(p.numel() for p in model.parameters()),
                   fitted=False, data='training graphs only', includes_io=False,

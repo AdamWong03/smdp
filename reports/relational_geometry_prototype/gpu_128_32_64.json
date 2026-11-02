@@ -1,0 +1,37 @@
+{
+  "device": "cuda",
+  "precision": "fp32",
+  "model_config": {
+    "block_type": "geometry",
+    "scalar_channels": 128,
+    "vector_channels": 32,
+    "edge_channels": 64
+  },
+  "hardware": "NVIDIA L40S",
+  "threads": 2,
+  "parameters": 1130784,
+  "fitted": false,
+  "data": "training graphs only",
+  "includes_io": false,
+  "optimizer": "AdamW lr=0",
+  "results": [
+    {
+      "batch_size": 8,
+      "atoms": 1296,
+      "edges": 37150,
+      "factorized": false,
+      "median_seconds": 0.03226152699789964,
+      "samples_per_second": 247.9733832971029,
+      "peak_cuda_bytes": 1581769216
+    },
+    {
+      "batch_size": 8,
+      "atoms": 1296,
+      "edges": 37150,
+      "factorized": true,
+      "median_seconds": 0.029243215481983498,
+      "samples_per_second": 273.5677273564097,
+      "peak_cuda_bytes": 1339422720
+    }
+  ]
+}

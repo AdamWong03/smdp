@@ -19,12 +19,12 @@ def graph(n=5):
         timestep=torch.tensor([30.], dtype=q.dtype)), r_cut=4.5, atom_type_mapper={8: 0, 14: 1})
 
 
-@pytest.fixture
-def setup():
+@pytest.fixture(params=['legacy', 'geometry'])
+def setup(request):
     previous_dtype = torch.get_default_dtype()
     torch.set_default_dtype(torch.float64)
     torch.manual_seed(17)
-    model = RelationalTransition().double()
+    model = RelationalTransition({'block_type': request.param}).double()
     batch = Batch.from_data_list([graph(5), graph(7)])
     yield model, batch
     torch.set_default_dtype(previous_dtype)
@@ -160,3 +160,26 @@ def test_fp32_forward_backward(setup):
     loss.backward()
     assert loss.isfinite()
     assert all(p.grad is not None and p.grad.isfinite().all() for p in model.parameters())
+
+
+def test_geometry_block_reads_current_and_candidate_axes():
+    previous_dtype = torch.get_default_dtype()
+    torch.set_default_dtype(torch.float64)
+    try:
+        torch.manual_seed(31)
+        model = RelationalTransition({'block_type': 'geometry'}).double()
+        g = Batch.from_data_list([graph(6)])
+    finally:
+        torch.set_default_dtype(previous_dtype)
+    block = model.refinement_blocks[0]
+    observed = []
+    handle = block.register_forward_hook(lambda _m, inputs, _out: observed.append(inputs[-1][1]))
+    model(g)
+    handle.remove()
+    directions = observed[0].detach().clone().requires_grad_(True)
+    src, dst = g.edge_index.flip(0)
+    v = torch.randn(len(g.pos), model.cfg.vector_channels, 3, dtype=torch.float64)
+    value = block.geometry_features(v, (src, dst), directions).square().sum()
+    grad, = torch.autograd.grad(value, directions)
+    assert grad[:, 0].abs().sum() > 0
+    assert grad[:, 1].abs().sum() > 0

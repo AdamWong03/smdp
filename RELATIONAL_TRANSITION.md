@@ -187,3 +187,35 @@ peak allocated CUDA memory 1.281 GB vs 1.080 GB. See
 `reports/relational_prototype/gpu_throughput.json`. This ~1.10x GPU improvement
 must not be confused with the larger CPU improvement or a comparison against
 the old trained SMDP model.
+
+## Geometry-complete relational block (R2)
+
+The `geometry` block keeps the candidate-endpoint feedback architecture but
+replaces each legacy relational block with one unified interaction cycle:
+
+1. Project node vectors once per atom, then form invariant pair correlations.
+2. Read both current and candidate-future edge axes using the same descriptor
+   families while retaining their distinct roles.
+3. Update persistent edges, aggregate invariant/equivariant messages, and apply
+   a node-local learned vector/scalar mixing operation.
+
+Transverse pair correlation is evaluated as
+`u_i.u_j - (u_i.n)(u_j.n)`, avoiding explicit edge-wise transverse vector
+tensors, triplets, rank-2 hidden features and attention matrices. The model is
+still O(3)-equivariant and retains per-system total momentum/COM drift. It does
+not establish energy conservation.
+
+The selected formal R2 configuration is 160 scalar / 40 vector / 80 edge
+channels with four blocks (2 proposal + 2 refinement), **1,750,760 trainable
+parameters**. On an otherwise idle L40S, batch-8 FP32 forward + loss + backward
++ AdamW benchmark measured 36.24 ms and 1.674 GB peak allocated memory. Batch 8
+had higher measured sample throughput than 16 or 32. The same mechanism at the
+old 128/32/64 width has 1,130,784 parameters and measured 29.24 ms / 1.339 GB.
+These are compute-only measurements on resident training graphs, not accuracy
+or end-to-end training results. Reports are in `reports/relational_geometry_prototype/`.
+
+Seventeen checks cover both legacy and geometry paths, including O(3), PBC,
+batch/permutation/momentum behavior, factorized output/gradient identity,
+future-feedback gradients, and direct gradient access through both current and
+candidate axes. R1 was paused after epoch 353 without deleting its best/last
+weights; R2 trains from scratch in a separate directory.

@@ -26,6 +26,8 @@ class RelationalConfig:
     proposal_layers: int = 2
     refinement_layers: int = 2
     velocity_scale: float = 0.01
+    # Default preserves historical checkpoints/configs exactly.
+    block_type: str = 'legacy'
 
 
 def mass_mean(x, masses, batch):
@@ -132,6 +134,74 @@ class RelationalBlock(nn.Module):
         return s, v, e
 
 
+class GeometryRelationalBlock(nn.Module):
+    """Dual-state edge geometry, equivariant messages and node-local mixing.
+
+    All learned vector projections run on nodes before edge indexing. Only
+    invariant contractions are stored as edge descriptors; no triplets, rank-2
+    features or attention tensors are constructed. Current and candidate axes
+    have the same descriptor families but separate slots (not swap symmetry).
+    """
+    def __init__(self, cfg, relation_dim):
+        super().__init__()
+        ds, dv, de = cfg.scalar_channels, cfg.vector_channels, cfg.edge_channels
+        self.ds, self.dv = ds, dv
+        self.factorized_edges = True
+        self.relation_vectors = nn.Linear(dv, 2 * dv, bias=False)
+        self.edge_update = mlp(2 * ds + de + relation_dim + 7 * dv, ds, de)
+        self.edge_norm = nn.LayerNorm(de)
+        self.message = mlp(de, ds, ds + 5 * dv)
+        self.sender_mix = nn.Linear(dv, dv, bias=False)
+        self.scalar_update = mlp(2 * ds, ds, ds)
+        self.scalar_norm = nn.LayerNorm(ds)
+        self.mixing_vectors = nn.Linear(dv, 2 * dv, bias=False)
+        self.mixing = mlp(ds + 2 * dv, ds, 2 * ds + dv)
+        self.dot_to_scalar = nn.Linear(dv, ds, bias=False)
+        self.output_norm = nn.LayerNorm(ds)
+
+    def geometry_features(self, v, edges, directions):
+        src, dst = edges
+        left, right = mix_vectors(self.relation_vectors, v).split(self.dv, dim=1)
+        left, right = left[src], right[dst]
+        dot = (left * right).sum(-1)
+        # r_perp.s_perp = r.s - (r.n)(s.n), without materializing
+        # two [edges, channels, xyz] transverse tensors for each direction.
+        features = []
+        for axis in directions[:, :2].unbind(1):
+            lp = (left * axis[:, None]).sum(-1)
+            rp = (right * axis[:, None]).sum(-1)
+            features.extend([lp, rp, dot - lp * rp])
+        return torch.cat([*features, dot], -1)
+
+    def forward(self, s, v, e, edges, relation):
+        src, dst = edges
+        invariants, directions, weight = relation
+        geometry = self.geometry_features(v, edges, directions)
+        extras = torch.cat([e, invariants, geometry], -1)
+        e = self.edge_norm(e + pair_mlp(self.edge_update, s, src, dst, extras,
+                                       self.factorized_edges))
+        message = self.message(e)
+        ms = message[:, :self.ds]
+        coefficients = message[:, self.ds:].reshape(-1, 5, self.dv)
+        mv = torch.einsum('ekc,ekd->ecd', coefficients[:, :4], directions)
+        mv = mv + coefficients[:, 4, :, None] * mix_vectors(self.sender_mix, v)[src]
+        aggregate_s = torch.zeros_like(s).index_add(0, dst, (ms * weight[:, None]).to(s.dtype))
+        aggregate_v = torch.zeros_like(v).index_add(0, dst, (mv * weight[:, None, None]).to(v.dtype))
+        degree = s.new_zeros(len(s)).index_add(0, dst, weight).clamp_min(1)
+        aggregate_s = aggregate_s / degree[:, None]
+        aggregate_v = aggregate_v / degree[:, None, None]
+        s = self.scalar_norm(s + self.scalar_update(torch.cat([s, aggregate_s], -1)))
+        v = v + aggregate_v
+        u, w = mix_vectors(self.mixing_vectors, v).split(self.dv, dim=1)
+        norm = (u.square().sum(-1) + 1e-8).sqrt()
+        dot = (u * w).sum(-1)
+        context = self.mixing(torch.cat([s, norm, dot], -1))
+        scalar_delta, scalar_gate, vector_gate = context.split([self.ds, self.ds, self.dv], -1)
+        s = self.output_norm(s + scalar_delta + scalar_gate * self.dot_to_scalar(dot))
+        v = v + torch.tanh(vector_gate)[:, :, None] * u
+        return s, v, e
+
+
 class EndpointHead(nn.Module):
     def __init__(self, cfg):
         super().__init__()
@@ -158,6 +228,10 @@ class RelationalTransition(nn.Module):
         self.config = asdict(self.cfg)
         self.factorized_edges = True
         c = self.cfg
+        block_classes = {'legacy': RelationalBlock, 'geometry': GeometryRelationalBlock}
+        if c.block_type not in block_classes:
+            raise ValueError(f'Unknown block_type: {c.block_type}')
+        block_class = block_classes[c.block_type]
         if min(c.horizon_fs, c.velocity_scale, *rms_targets) <= 0:
             raise ValueError('Horizon and unit scales must be positive')
         self.register_buffer('rms_targets', torch.tensor(rms_targets))
@@ -168,9 +242,9 @@ class RelationalTransition(nn.Module):
         self.edge_embedding = mlp(2 * c.scalar_channels + self.relations.scalar_size,
                                   c.scalar_channels, c.edge_channels)
         self.proposal_blocks = nn.ModuleList([
-            RelationalBlock(c, self.relations.scalar_size) for _ in range(c.proposal_layers)])
+            block_class(c, self.relations.scalar_size) for _ in range(c.proposal_layers)])
         self.refinement_blocks = nn.ModuleList([
-            RelationalBlock(c, self.relations.scalar_size) for _ in range(c.refinement_layers)])
+            block_class(c, self.relations.scalar_size) for _ in range(c.refinement_layers)])
         self.proposal_head = EndpointHead(c)
         self.correction_head = EndpointHead(c)
 
