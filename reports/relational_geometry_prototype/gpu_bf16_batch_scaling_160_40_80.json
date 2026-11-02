@@ -1,0 +1,73 @@
+{
+  "device": "cuda",
+  "precision": "bf16",
+  "model_config": {
+    "block_type": "geometry",
+    "scalar_channels": 160,
+    "vector_channels": 40,
+    "edge_channels": 80
+  },
+  "hardware": "NVIDIA L40S",
+  "threads": 2,
+  "parameters": 1750760,
+  "fitted": false,
+  "data": "training graphs only",
+  "includes_io": false,
+  "optimizer": "AdamW lr=0",
+  "results": [
+    {
+      "batch_size": 8,
+      "atoms": 1296,
+      "edges": 37150,
+      "factorized": false,
+      "median_seconds": 0.027900672517716885,
+      "samples_per_second": 286.7314397142224,
+      "peak_cuda_bytes": 1261795840
+    },
+    {
+      "batch_size": 8,
+      "atoms": 1296,
+      "edges": 37150,
+      "factorized": true,
+      "median_seconds": 0.027165830018930137,
+      "samples_per_second": 294.48759689747413,
+      "peak_cuda_bytes": 1145699328
+    },
+    {
+      "batch_size": 16,
+      "atoms": 2592,
+      "edges": 74296,
+      "factorized": false,
+      "median_seconds": 0.05312840300030075,
+      "samples_per_second": 301.157179520518,
+      "peak_cuda_bytes": 2477968896
+    },
+    {
+      "batch_size": 16,
+      "atoms": 2592,
+      "edges": 74296,
+      "factorized": true,
+      "median_seconds": 0.04378975500003435,
+      "samples_per_second": 365.3822680667533,
+      "peak_cuda_bytes": 2246782976
+    },
+    {
+      "batch_size": 32,
+      "atoms": 5184,
+      "edges": 148662,
+      "factorized": false,
+      "median_seconds": 0.11203165401821025,
+      "samples_per_second": 285.6335584833778,
+      "peak_cuda_bytes": 4894236160
+    },
+    {
+      "batch_size": 32,
+      "atoms": 5184,
+      "edges": 148662,
+      "factorized": true,
+      "median_seconds": 0.0960036515025422,
+      "samples_per_second": 333.3206549873015,
+      "peak_cuda_bytes": 4434279936
+    }
+  ]
+}

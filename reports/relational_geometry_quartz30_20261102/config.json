@@ -13,8 +13,8 @@
     "velocity_scale": 0.01,
     "block_type": "geometry"
   },
-  "batch_size": 8,
-  "precision": "fp32",
+  "batch_size": 16,
+  "precision": "bf16",
   "learning_rate": 0.001,
   "max_epochs": 600,
   "early_stopping_patience": 80,

@@ -208,11 +208,19 @@ not establish energy conservation.
 The selected formal R2 configuration is 160 scalar / 40 vector / 80 edge
 channels with four blocks (2 proposal + 2 refinement), **1,750,760 trainable
 parameters**. On an otherwise idle L40S, batch-8 FP32 forward + loss + backward
-+ AdamW benchmark measured 36.24 ms and 1.674 GB peak allocated memory. Batch 8
-had higher measured sample throughput than 16 or 32. The same mechanism at the
++ AdamW benchmark measured 36.24 ms and 1.674 GB peak allocated memory. The same mechanism at the
 old 128/32/64 width has 1,130,784 parameters and measured 29.24 ms / 1.339 GB.
 These are compute-only measurements on resident training graphs, not accuracy
 or end-to-end training results. Reports are in `reports/relational_geometry_prototype/`.
+
+BF16 autocast was enabled only after fixing mixed-dtype COM accumulation and
+checking finite forward/backward gradients. Batch 16 was the measured optimum:
+43.79 ms for 16 samples (365.4 samples/s) and 2.247 GB peak allocation, versus
+27.17 ms for batch 8 (294.5 samples/s) and 96.00 ms for batch 32 (333.3
+samples/s). The formal run therefore uses BF16 batch 16. An initial FP32 batch-8
+run was stopped after eight complete epochs and preserved as
+`quartz30_20261102_r2_geometry_fp32_interrupted`; it is not mixed into the
+formal BF16 result.
 
 Seventeen checks cover both legacy and geometry paths, including O(3), PBC,
 batch/permutation/momentum behavior, factorized output/gradient identity,

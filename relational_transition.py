@@ -33,9 +33,14 @@ class RelationalConfig:
 def mass_mean(x, masses, batch):
     """Separate COM for every physical graph, including unequal atom counts."""
     ng = int(batch.max()) + 1
-    total = masses.new_zeros(ng).index_add(0, batch, masses)
-    sums = x.new_zeros(ng, 3).index_add(0, batch, masses[:, None] * x)
-    return (sums / total[:, None])[batch]
+    # Autocast can make x BF16 while masses stay FP32. Accumulate the small
+    # per-system reduction in the promoted precision and return x's dtype.
+    acc_dtype = torch.promote_types(x.dtype, masses.dtype)
+    weights = masses.to(acc_dtype)
+    total = torch.zeros(ng, device=x.device, dtype=acc_dtype).index_add(0, batch, weights)
+    sums = torch.zeros(ng, 3, device=x.device, dtype=acc_dtype).index_add(
+        0, batch, weights[:, None] * x.to(acc_dtype))
+    return (sums / total[:, None])[batch].to(x.dtype)
 
 
 def mix_vectors(layer, v):

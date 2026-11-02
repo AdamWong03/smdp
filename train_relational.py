@@ -49,16 +49,18 @@ def read_graphs(cache, split):
 
 
 @torch.no_grad()
-def evaluate(model, loader, device):
+def evaluate(model, loader, device, precision='fp32'):
     model.eval()
     total = np.zeros(6, dtype=np.float64)
     count = 0
     for batch in loader:
         batch = batch.to(device, non_blocking=True)
-        out = model(batch)
-        qe = out['displacements']-batch.displacements
-        ve = out['velocities']-batch.update_velocities
-        loss, pieces = endpoint_objective(model, out, batch.displacements, batch.update_velocities)
+        with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
+                            enabled=precision == 'bf16'):
+            out = model(batch)
+            qe = out['displacements']-batch.displacements
+            ve = out['velocities']-batch.update_velocities
+            loss, pieces = endpoint_objective(model, out, batch.displacements, batch.update_velocities)
         n = batch.num_graphs
         total += np.array([float(qe.square().mean()), float(ve.square().mean()),
                            float(qe.abs().mean()), float(ve.abs().mean()),
@@ -77,6 +79,8 @@ def main():
     p.add_argument('--resume', action='store_true')
     args = p.parse_args()
     cfg = json.loads((args.run/'config.json').read_text())
+    if cfg['precision'] not in {'fp32', 'bf16'}:
+        raise ValueError('precision must be fp32 or bf16')
     seed = cfg['seed']
     random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -125,16 +129,18 @@ def main():
         for batch in train_loader:
             batch=batch.to(device, non_blocking=True)
             optimizer.zero_grad(set_to_none=True)
-            out=model(batch)
-            loss, pieces=endpoint_objective(model,out,batch.displacements,batch.update_velocities,
-                                            proposal_weight=cfg['proposal_weight'])
+            with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
+                                enabled=cfg['precision'] == 'bf16'):
+                out=model(batch)
+                loss, pieces=endpoint_objective(model,out,batch.displacements,batch.update_velocities,
+                                                proposal_weight=cfg['proposal_weight'])
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(),cfg['gradient_clip'],error_if_nonfinite=True)
             optimizer.step()
             n=batch.num_graphs; seen+=n
             running+=torch.stack([loss.detach(),pieces['final'],pieces['proposal']])*n
         torch.cuda.synchronize(); train_seconds=time.perf_counter()-tic
-        validation=evaluate(model,val_loader,device)
+        validation=evaluate(model,val_loader,device,cfg['precision'])
         score=validation['selection_loss']; improved=score<best
         if improved: best=score; stale=0
         else: stale+=1
@@ -162,7 +168,7 @@ def main():
     model.load_state_dict(saved['model'])
     # First test access occurs AFTER validation-only model selection is finished.
     test=read_graphs(Path(cfg['cache']),'test')
-    result=evaluate(model,loader(test,False),device)
+    result=evaluate(model,loader(test,False),device,cfg['precision'])
     result.update(checkpoint=str(args.run/'best.pt'),selected_epoch=saved['epoch']+1,
                   actual_training_seconds=previous_seconds+time.time()-start)
     (args.run/'test_metrics.json').write_text(json.dumps(result,indent=2)+'\n')
