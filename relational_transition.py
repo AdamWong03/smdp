@@ -207,6 +207,71 @@ class GeometryRelationalBlock(nn.Module):
         return s, v, e
 
 
+class GatedGeometryRelationalBlock(nn.Module):
+    """Geometry-complete block with bounded residual vector updates.
+
+    This keeps the richer R2 relation descriptors but restores the stable R1
+    update topology: aggregated vectors are scalar-gated before entering the
+    residual stream and node-local vector mixing is a bounded correction.
+    """
+    def __init__(self, cfg, relation_dim):
+        super().__init__()
+        ds, dv, de = cfg.scalar_channels, cfg.vector_channels, cfg.edge_channels
+        self.ds, self.dv = ds, dv
+        self.factorized_edges = True
+        self.relation_vectors = nn.Linear(dv, 2 * dv, bias=False)
+        self.edge_update = mlp(2 * ds + de + relation_dim + 7 * dv, ds, de)
+        self.edge_norm = nn.LayerNorm(de)
+        self.message = mlp(de, ds, ds + 5 * dv)
+        self.sender_mix = nn.Linear(dv, dv, bias=False)
+        self.scalar_update = mlp(2 * ds, ds, ds)
+        self.scalar_norm = nn.LayerNorm(ds)
+        self.aggregate_gate = nn.Linear(ds, dv)
+        self.mixing_vectors = nn.Linear(dv, 2 * dv, bias=False)
+        self.mixing = mlp(ds + 2 * dv, ds, ds + dv)
+        self.output_norm = nn.LayerNorm(ds)
+
+    def geometry_features(self, v, edges, directions):
+        src, dst = edges
+        left, right = mix_vectors(self.relation_vectors, v).split(self.dv, dim=1)
+        left, right = left[src], right[dst]
+        dot = (left * right).sum(-1)
+        features = []
+        for axis in directions[:, :2].unbind(1):
+            lp = (left * axis[:, None]).sum(-1)
+            rp = (right * axis[:, None]).sum(-1)
+            features.extend([lp, rp, dot - lp * rp])
+        return torch.cat([*features, dot], -1)
+
+    def forward(self, s, v, e, edges, relation):
+        src, dst = edges
+        invariants, directions, weight = relation
+        geometry = self.geometry_features(v, edges, directions)
+        extras = torch.cat([e, invariants, geometry], -1)
+        e = self.edge_norm(e + pair_mlp(self.edge_update, s, src, dst, extras,
+                                       self.factorized_edges))
+        message = self.message(e)
+        ms = message[:, :self.ds]
+        coefficients = message[:, self.ds:].reshape(-1, 5, self.dv)
+        mv = torch.einsum('ekc,ekd->ecd', coefficients[:, :4], directions)
+        mv = mv + coefficients[:, 4, :, None] * mix_vectors(self.sender_mix, v)[src]
+        aggregate_s = torch.zeros_like(s).index_add(0, dst, (ms * weight[:, None]).to(s.dtype))
+        aggregate_v = torch.zeros_like(v).index_add(0, dst, (mv * weight[:, None, None]).to(v.dtype))
+        degree = s.new_zeros(len(s)).index_add(0, dst, weight).clamp_min(1)
+        aggregate_s = aggregate_s / degree[:, None]
+        aggregate_v = aggregate_v / degree[:, None, None]
+        s = self.scalar_norm(s + self.scalar_update(torch.cat([s, aggregate_s], -1)))
+        v = v + torch.sigmoid(self.aggregate_gate(s))[:, :, None] * aggregate_v
+        u, w = mix_vectors(self.mixing_vectors, v).split(self.dv, dim=1)
+        norm = (u.square().sum(-1) + 1e-8).sqrt()
+        dot = (u * w).sum(-1)
+        scalar_delta, vector_gate = self.mixing(
+            torch.cat([s, norm, dot], -1)).split([self.ds, self.dv], -1)
+        s = self.output_norm(s + scalar_delta)
+        v = v + 0.1 * torch.tanh(vector_gate)[:, :, None] * w
+        return s, v, e
+
+
 class EndpointHead(nn.Module):
     def __init__(self, cfg):
         super().__init__()
@@ -233,7 +298,8 @@ class RelationalTransition(nn.Module):
         self.config = asdict(self.cfg)
         self.factorized_edges = True
         c = self.cfg
-        block_classes = {'legacy': RelationalBlock, 'geometry': GeometryRelationalBlock}
+        block_classes = {'legacy': RelationalBlock, 'geometry': GeometryRelationalBlock,
+                         'geometry_gated': GatedGeometryRelationalBlock}
         if c.block_type not in block_classes:
             raise ValueError(f'Unknown block_type: {c.block_type}')
         block_class = block_classes[c.block_type]

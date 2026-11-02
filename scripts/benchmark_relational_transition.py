@@ -24,7 +24,7 @@ def main():
     p.add_argument('--batch-sizes', type=int, nargs='+', default=[2, 8])
     p.add_argument('--iterations', type=int, default=10)
     p.add_argument('--precision', choices=['fp32', 'fp64', 'bf16'], default='fp32')
-    p.add_argument('--block-type', choices=['legacy', 'geometry'], default='legacy')
+    p.add_argument('--block-type', choices=['legacy', 'geometry', 'geometry_gated'], default='legacy')
     p.add_argument('--scalar-channels', type=int, default=128)
     p.add_argument('--vector-channels', type=int, default=32)
     p.add_argument('--edge-channels', type=int, default=64)

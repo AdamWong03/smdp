@@ -227,3 +227,25 @@ batch/permutation/momentum behavior, factorized output/gradient identity,
 future-feedback gradients, and direct gradient access through both current and
 candidate axes. R1 was paused after epoch 353 without deleting its best/last
 weights; R2 trains from scratch in a separate directory.
+
+## Gated standard-capacity relational block (R3)
+
+R2 changed architecture, width, precision and batch size together and selected
+its best checkpoint after only 8,451 optimizer updates. Its negative result
+therefore does not isolate the value of richer geometry processing. R3 retains
+the R2 current/future relation descriptors while restoring bounded R1-style
+vector residuals:
+
+- an invariant scalar gate controls the aggregated vector message;
+- node-local vector/scalar mixing is a bounded residual correction;
+- the unbounded direct `v = v + aggregate_v` R2 update is not used;
+- the candidate endpoint remains physically supervised, but its auxiliary
+  coefficient is 0.02 rather than 0.1 so it cannot numerically match the main
+  endpoint loss merely because its raw error is larger.
+
+The formal configuration is 192 scalar / 48 vector / 96 edge channels,
+2 proposal + 2 refinement blocks, **2,357,616 parameters**, full FP32 and batch
+8. It keeps the same endpoint data, seed, learning rate and final validation
+selection metric. Training records cumulative optimizer updates explicitly.
+R1 and R2 remain loadable through `legacy` and `geometry`; R3 uses the distinct
+`geometry_gated` block type.

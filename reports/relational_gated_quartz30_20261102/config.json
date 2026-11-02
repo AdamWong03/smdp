@@ -1,0 +1,26 @@
+{
+  "seed": 20261102,
+  "cache": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028/cache",
+  "model": {
+    "scalar_channels": 192,
+    "vector_channels": 48,
+    "edge_channels": 96,
+    "radial_channels": 16,
+    "cutoff_angstrom": 4.5,
+    "horizon_fs": 30.0,
+    "proposal_layers": 2,
+    "refinement_layers": 2,
+    "velocity_scale": 0.01,
+    "block_type": "geometry_gated"
+  },
+  "batch_size": 8,
+  "precision": "fp32",
+  "learning_rate": 0.001,
+  "max_epochs": 600,
+  "early_stopping_patience": 120,
+  "proposal_weight": 0.02,
+  "gradient_clip": 10.0,
+  "data_root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
+  "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+  "status": "gated geometry relational endpoint network; full FP32; trained from scratch"
+}

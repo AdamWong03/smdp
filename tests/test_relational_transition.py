@@ -19,7 +19,7 @@ def graph(n=5):
         timestep=torch.tensor([30.], dtype=q.dtype)), r_cut=4.5, atom_type_mapper={8: 0, 14: 1})
 
 
-@pytest.fixture(params=['legacy', 'geometry'])
+@pytest.fixture(params=['legacy', 'geometry', 'geometry_gated'])
 def setup(request):
     previous_dtype = torch.get_default_dtype()
     torch.set_default_dtype(torch.float64)
@@ -162,12 +162,13 @@ def test_fp32_forward_backward(setup):
     assert all(p.grad is not None and p.grad.isfinite().all() for p in model.parameters())
 
 
-def test_geometry_block_reads_current_and_candidate_axes():
+@pytest.mark.parametrize('block_type', ['geometry', 'geometry_gated'])
+def test_geometry_block_reads_current_and_candidate_axes(block_type):
     previous_dtype = torch.get_default_dtype()
     torch.set_default_dtype(torch.float64)
     try:
         torch.manual_seed(31)
-        model = RelationalTransition({'block_type': 'geometry'}).double()
+        model = RelationalTransition({'block_type': block_type}).double()
         g = Batch.from_data_list([graph(6)])
     finally:
         torch.set_default_dtype(previous_dtype)
