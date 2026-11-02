@@ -77,6 +77,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('--run', type=Path, required=True)
     p.add_argument('--resume', action='store_true')
+    p.add_argument('--evaluate-best', action='store_true')
     args = p.parse_args()
     cfg = json.loads((args.run/'config.json').read_text())
     if cfg['precision'] not in {'fp32', 'bf16'}:
@@ -104,6 +105,20 @@ def main():
         return DataLoader(graphs, batch_size=cfg['batch_size'], shuffle=shuffle,
                           num_workers=0, pin_memory=True, generator=generator if shuffle else None)
     train_loader, val_loader = loader(train, True), loader(val, False)
+    if args.evaluate_best:
+        saved = torch.load(args.run/'best.pt', map_location='cpu', weights_only=False)
+        model.load_state_dict(saved['model'])
+        test = read_graphs(Path(cfg['cache']), 'test')
+        result = evaluate(model, loader(test, False), device, cfg['precision'])
+        result.update(checkpoint=str(args.run/'best.pt'), selected_epoch=saved['epoch']+1,
+                      selected_optimizer_steps=saved.get('optimizer_steps'),
+                      stopped_epoch=json.loads((args.run/'status.json').read_text()).get('last_epoch'),
+                      actual_training_seconds=saved['elapsed_seconds'])
+        (args.run/'test_metrics.json').write_text(json.dumps(result, indent=2)+'\n')
+        (args.run/'status.json').write_text(json.dumps(
+            dict(state='stopped_and_test_completed', **result), indent=2)+'\n')
+        print(json.dumps(result), flush=True)
+        return
     first, best, stale, previous_seconds, optimizer_steps = 0, float('inf'), 0, 0., 0
     if args.resume:
         saved = torch.load(args.run/'last.pt', weights_only=False, map_location='cpu')

@@ -1,0 +1,70 @@
+{
+  "run_state": "stopped_and_test_completed",
+  "experiment": "quartz30_20261102_r3_gated_geometry_fp32",
+  "data": {
+    "train_samples": 5000,
+    "validation_samples": 1250,
+    "test_samples": 1000,
+    "horizon_fs": 30.0
+  },
+  "model": {
+    "parameters": 2357616,
+    "scalar_channels": 192,
+    "vector_channels": 48,
+    "edge_channels": 96,
+    "block_type": "geometry_gated",
+    "precision": "fp32",
+    "batch_size": 8
+  },
+  "training": {
+    "hardware": "NVIDIA L40S",
+    "shared_gpu": true,
+    "selected_epoch": 35,
+    "selected_optimizer_steps": 21875,
+    "stopped_epoch": 138,
+    "stopped_optimizer_steps": 86250,
+    "stale_epochs_at_stop": 103,
+    "selected_checkpoint_elapsed_seconds": 1639.3527791500092,
+    "total_elapsed_seconds": 6488.827528476715,
+    "best_epoch_samples_per_second": 121.63068660578656,
+    "best_epoch_peak_cuda_bytes": 1997456896
+  },
+  "best_validation": {
+    "position_RMSE_A": 0.0019598300307000997,
+    "velocity_RMSE_A_fs": 0.00013094736630407932,
+    "position_MAE_A": 0.0015539424752816558,
+    "velocity_MAE_A_fs": 0.00010391774839954451,
+    "selection_loss": 0.0010363363461568951,
+    "proposal_loss": 0.020942809092998504
+  },
+  "independent_test": {
+    "position_RMSE_A": 0.001988311649376987,
+    "velocity_RMSE_A_fs": 0.00013306793357477514,
+    "position_MAE_A": 0.0015755855953320862,
+    "velocity_MAE_A_fs": 0.00010555767186451703,
+    "selection_loss": 0.0010688910437747837,
+    "proposal_loss": 0.02174760787189007
+  },
+  "comparisons": {
+    "r1_best_validation": {
+      "parameters": 853920,
+      "position_RMSE_A": 0.0016344352364264815,
+      "velocity_RMSE_A_fs": 0.00011107305910411933,
+      "note": "R1 was paused without independent test evaluation."
+    },
+    "r2_best_validation": {
+      "parameters": 1750760,
+      "position_RMSE_A": 0.002779061834386531,
+      "velocity_RMSE_A_fs": 0.0001923338741613943
+    }
+  },
+  "physical_evaluation": {
+    "completed": false
+  },
+  "server_artifacts": {
+    "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261102_r3_gated_geometry_fp32",
+    "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261102_r3_gated_geometry_fp32/best.pt",
+    "history": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261102_r3_gated_geometry_fp32/history.jsonl",
+    "log": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261102_r3_gated_geometry_fp32/train.log"
+  }
+}
