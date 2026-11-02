@@ -48,6 +48,14 @@ def mix_vectors(layer, v):
     return layer(v.transpose(-1, -2)).transpose(-1, -2)
 
 
+def rms(value):
+    return value.float().square().mean().sqrt()
+
+
+def relative_rms(delta, reference):
+    return rms(delta) / rms(reference).clamp_min(1e-8)
+
+
 def pair_mlp(network, nodes, src, dst, extras, factorized=True):
     """Exact affine factorization, NOT a low-rank/model approximation.
 
@@ -230,6 +238,8 @@ class GatedGeometryRelationalBlock(nn.Module):
         self.mixing_vectors = nn.Linear(dv, 2 * dv, bias=False)
         self.mixing = mlp(ds + 2 * dv, ds, ds + dv)
         self.output_norm = nn.LayerNorm(ds)
+        self.collect_diagnostics = False
+        self.last_diagnostics = None
 
     def geometry_features(self, v, edges, directions):
         src, dst = edges
@@ -244,6 +254,7 @@ class GatedGeometryRelationalBlock(nn.Module):
         return torch.cat([*features, dot], -1)
 
     def forward(self, s, v, e, edges, relation):
+        s0, v0, e0 = s, v, e
         src, dst = edges
         invariants, directions, weight = relation
         geometry = self.geometry_features(v, edges, directions)
@@ -269,6 +280,93 @@ class GatedGeometryRelationalBlock(nn.Module):
             torch.cat([s, norm, dot], -1)).split([self.ds, self.dv], -1)
         s = self.output_norm(s + scalar_delta)
         v = v + 0.1 * torch.tanh(vector_gate)[:, :, None] * w
+        if self.collect_diagnostics:
+            self.last_diagnostics = dict(
+                scalar_rms=rms(s).detach(), vector_rms=rms(v).detach(), edge_rms=rms(e).detach(),
+                scalar_residual_ratio=relative_rms(s-s0, s0).detach(),
+                vector_residual_ratio=relative_rms(v-v0, v0).detach(),
+                edge_residual_ratio=relative_rms(e-e0, e0).detach())
+        return s, v, e
+
+
+class StableGeometryRelationalBlock(nn.Module):
+    """Pre-normalized geometry block with learnable LayerScale residuals."""
+    def __init__(self, cfg, relation_dim):
+        super().__init__()
+        ds, dv, de = cfg.scalar_channels, cfg.vector_channels, cfg.edge_channels
+        self.ds, self.dv = ds, dv
+        self.factorized_edges = True
+        self.scalar_pre_norm = nn.LayerNorm(ds)
+        self.edge_pre_norm = nn.LayerNorm(de)
+        self.mixing_scalar_pre_norm = nn.LayerNorm(ds)
+        self.relation_vectors = nn.Linear(dv, 2 * dv, bias=False)
+        self.edge_update = mlp(2 * ds + de + relation_dim + 7 * dv, ds, de)
+        self.message = mlp(de, ds, ds + 5 * dv)
+        self.sender_mix = nn.Linear(dv, dv, bias=False)
+        self.scalar_update = mlp(2 * ds, ds, ds)
+        self.aggregate_gate = nn.Linear(ds, dv)
+        self.mixing_vectors = nn.Linear(dv, 2 * dv, bias=False)
+        self.mixing = mlp(ds + 2 * dv, ds, ds + dv)
+        self.edge_scale = nn.Parameter(torch.full((de,), 0.1))
+        self.scalar_scale = nn.Parameter(torch.full((ds,), 0.1))
+        self.vector_scale = nn.Parameter(torch.full((dv,), 0.1))
+        self.collect_diagnostics = False
+        self.last_diagnostics = None
+
+    def geometry_features(self, v, edges, directions):
+        src, dst = edges
+        left, right = mix_vectors(self.relation_vectors, v).split(self.dv, dim=1)
+        left, right = left[src], right[dst]
+        dot = (left * right).sum(-1)
+        features = []
+        for axis in directions[:, :2].unbind(1):
+            lp = (left * axis[:, None]).sum(-1)
+            rp = (right * axis[:, None]).sum(-1)
+            features.extend([lp, rp, dot - lp * rp])
+        return torch.cat([*features, dot], -1)
+
+    def forward(self, s, v, e, edges, relation):
+        src, dst = edges
+        invariants, directions, weight = relation
+        s0, v0, e0 = s, v, e
+        sn, en = self.scalar_pre_norm(s), self.edge_pre_norm(e)
+        geometry = self.geometry_features(v, edges, directions)
+        extras = torch.cat([en, invariants, geometry], -1)
+        edge_delta = pair_mlp(self.edge_update, sn, src, dst, extras,
+                              self.factorized_edges)
+        e = e + self.edge_scale * edge_delta
+        message = self.message(e)
+        ms = message[:, :self.ds]
+        coefficients = message[:, self.ds:].reshape(-1, 5, self.dv)
+        mv = torch.einsum('ekc,ekd->ecd', coefficients[:, :4], directions)
+        mv = mv + coefficients[:, 4, :, None] * mix_vectors(self.sender_mix, v)[src]
+        aggregate_s = torch.zeros_like(s).index_add(0, dst, (ms * weight[:, None]).to(s.dtype))
+        aggregate_v = torch.zeros_like(v).index_add(0, dst, (mv * weight[:, None, None]).to(v.dtype))
+        degree = s.new_zeros(len(s)).index_add(0, dst, weight).clamp_min(1)
+        aggregate_s = aggregate_s / degree[:, None]
+        aggregate_v = aggregate_v / degree[:, None, None]
+        scalar_delta = self.scalar_update(torch.cat([sn, aggregate_s], -1))
+        s = s + self.scalar_scale * scalar_delta
+        vector_delta = torch.sigmoid(self.aggregate_gate(s))[:, :, None] * aggregate_v
+        v = v + self.vector_scale[:, None] * vector_delta
+        mixing_sn = self.mixing_scalar_pre_norm(s)
+        u, w = mix_vectors(self.mixing_vectors, v).split(self.dv, dim=1)
+        norm = (u.square().sum(-1) + 1e-8).sqrt()
+        dot = (u * w).sum(-1)
+        mixing_scalar_delta, vector_gate = self.mixing(
+            torch.cat([mixing_sn, norm, dot], -1)).split([self.ds, self.dv], -1)
+        s = s + self.scalar_scale * mixing_scalar_delta
+        mixing_vector_delta = torch.tanh(vector_gate)[:, :, None] * w
+        v = v + self.vector_scale[:, None] * mixing_vector_delta
+        if self.collect_diagnostics:
+            self.last_diagnostics = dict(
+                scalar_rms=rms(s).detach(), vector_rms=rms(v).detach(), edge_rms=rms(e).detach(),
+                scalar_residual_ratio=relative_rms(s-s0, s0).detach(),
+                vector_residual_ratio=relative_rms(v-v0, v0).detach(),
+                edge_residual_ratio=relative_rms(e-e0, e0).detach(),
+                scalar_scale_mean=self.scalar_scale.mean().detach(),
+                vector_scale_mean=self.vector_scale.mean().detach(),
+                edge_scale_mean=self.edge_scale.mean().detach())
         return s, v, e
 
 
@@ -299,7 +397,8 @@ class RelationalTransition(nn.Module):
         self.factorized_edges = True
         c = self.cfg
         block_classes = {'legacy': RelationalBlock, 'geometry': GeometryRelationalBlock,
-                         'geometry_gated': GatedGeometryRelationalBlock}
+                         'geometry_gated': GatedGeometryRelationalBlock,
+                         'geometry_stable': StableGeometryRelationalBlock}
         if c.block_type not in block_classes:
             raise ValueError(f'Unknown block_type: {c.block_type}')
         block_class = block_classes[c.block_type]
@@ -318,6 +417,21 @@ class RelationalTransition(nn.Module):
             block_class(c, self.relations.scalar_size) for _ in range(c.refinement_layers)])
         self.proposal_head = EndpointHead(c)
         self.correction_head = EndpointHead(c)
+
+    def set_diagnostics(self, enabled):
+        for block in [*self.proposal_blocks, *self.refinement_blocks]:
+            if hasattr(block, 'collect_diagnostics'):
+                block.collect_diagnostics = enabled
+
+    def diagnostics(self):
+        values = []
+        for stage, blocks in [('proposal', self.proposal_blocks),
+                              ('refinement', self.refinement_blocks)]:
+            for index, block in enumerate(blocks):
+                if getattr(block, 'last_diagnostics', None) is not None:
+                    values.append(dict(stage=stage, index=index, **{
+                        key: float(value) for key, value in block.last_diagnostics.items()}))
+        return values
 
     def forward(self, data):
         q, vel = data.pos, data.velocities
@@ -365,12 +479,24 @@ class RelationalTransition(nn.Module):
                     target=torch.cat([dq / self.rms_targets[0], vn / self.rms_targets[1]], -1))
 
 
+def endpoint_loss_components(model, output, reference_displacements, reference_velocities):
+    """Normalized position/velocity terms for final and proposal endpoints."""
+    def terms(dq, v):
+        q = ((dq-reference_displacements)/model.rms_targets[0]).square().mean()
+        velocity = ((v-reference_velocities)/model.rms_targets[1]).square().mean()
+        return q, velocity, 0.5 * (q + velocity)
+    final_q, final_v, final = terms(output['displacements'], output['velocities'])
+    proposal_q, proposal_v, proposal = terms(
+        output['proposal_displacements'], output['proposal_velocities'])
+    return dict(final=final, proposal=proposal, final_position=final_q,
+                final_velocity=final_v, proposal_position=proposal_q,
+                proposal_velocity=proposal_v)
+
+
 def endpoint_objective(model, output, reference_displacements, reference_velocities,
                        proposal_weight=0.1):
     """Only real endpoint labels; no internal-time labels or auxiliary physics."""
-    def error(dq, v):
-        return 0.5 * (((dq-reference_displacements)/model.rms_targets[0]).square().mean()
-                      + ((v-reference_velocities)/model.rms_targets[1]).square().mean())
-    final = error(output['displacements'], output['velocities'])
-    proposal = error(output['proposal_displacements'], output['proposal_velocities'])
-    return final + proposal_weight * proposal, dict(final=final.detach(), proposal=proposal.detach())
+    pieces = endpoint_loss_components(
+        model, output, reference_displacements, reference_velocities)
+    loss = pieces['final'] + proposal_weight * pieces['proposal']
+    return loss, {key: value.detach() for key, value in pieces.items()}

@@ -19,7 +19,7 @@ def graph(n=5):
         timestep=torch.tensor([30.], dtype=q.dtype)), r_cut=4.5, atom_type_mapper={8: 0, 14: 1})
 
 
-@pytest.fixture(params=['legacy', 'geometry', 'geometry_gated'])
+@pytest.fixture(params=['legacy', 'geometry', 'geometry_gated', 'geometry_stable'])
 def setup(request):
     previous_dtype = torch.get_default_dtype()
     torch.set_default_dtype(torch.float64)
@@ -162,7 +162,7 @@ def test_fp32_forward_backward(setup):
     assert all(p.grad is not None and p.grad.isfinite().all() for p in model.parameters())
 
 
-@pytest.mark.parametrize('block_type', ['geometry', 'geometry_gated'])
+@pytest.mark.parametrize('block_type', ['geometry', 'geometry_gated', 'geometry_stable'])
 def test_geometry_block_reads_current_and_candidate_axes(block_type):
     previous_dtype = torch.get_default_dtype()
     torch.set_default_dtype(torch.float64)
@@ -184,3 +184,15 @@ def test_geometry_block_reads_current_and_candidate_axes(block_type):
     grad, = torch.autograd.grad(value, directions)
     assert grad[:, 0].abs().sum() > 0
     assert grad[:, 1].abs().sum() > 0
+
+
+def test_stable_residual_scales_and_checkpoint_compatibility():
+    stable = RelationalTransition({'block_type': 'geometry_stable'})
+    for block in [*stable.proposal_blocks, *stable.refinement_blocks]:
+        for name in ['edge_scale', 'scalar_scale', 'vector_scale']:
+            torch.testing.assert_close(getattr(block, name),
+                                       torch.full_like(getattr(block, name), 0.1))
+    for kind in ['legacy', 'geometry', 'geometry_gated']:
+        original = RelationalTransition({'block_type': kind})
+        restored = RelationalTransition({'block_type': kind})
+        restored.load_state_dict(original.state_dict(), strict=True)

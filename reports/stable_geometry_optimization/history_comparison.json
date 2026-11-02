@@ -1,0 +1,127 @@
+{
+  "runs": [
+    {
+      "name": "R1",
+      "epochs": 353,
+      "parameters": 853920,
+      "batch_size": 8,
+      "precision": "fp32",
+      "steps_per_epoch": 625,
+      "best": {
+        "epoch": 348,
+        "optimizer_steps": 217500,
+        "lr": 0.001,
+        "train_final_loss": 0.0007674681255593896,
+        "train_proposal_loss": 0.010232546366751194,
+        "validation_final_loss": 0.0007365172918885946,
+        "validation_proposal_loss": 0.010637017704546451,
+        "validation_position_RMSE_A": 0.0016344352364264815,
+        "validation_velocity_RMSE_A_fs": 0.00011107305910411933
+      },
+      "final": {
+        "epoch": 353,
+        "optimizer_steps": 220625,
+        "lr": 0.001,
+        "train_final_loss": 0.0007597487419843674,
+        "train_proposal_loss": 0.010100027546286583,
+        "validation_final_loss": 0.000741190452221781,
+        "validation_proposal_loss": 0.010829936811327934,
+        "validation_position_RMSE_A": 0.0016285405621544941,
+        "validation_velocity_RMSE_A_fs": 0.00011184378041779603
+      },
+      "after_best": {
+        "extra_optimizer_steps": 3125,
+        "train_final_loss_change": -7.71938357502222e-06,
+        "validation_final_loss_change": 4.673160333186466e-06,
+        "train_proposal_loss_change": -0.00013251882046461105,
+        "validation_proposal_loss_change": 0.0001929191067814827
+      },
+      "missing_history_fields": [
+        "train_normalized_position_MSE",
+        "train_normalized_velocity_MSE"
+      ]
+    },
+    {
+      "name": "R2",
+      "epochs": 107,
+      "parameters": 1750760,
+      "batch_size": 16,
+      "precision": "bf16",
+      "steps_per_epoch": 313,
+      "best": {
+        "epoch": 27,
+        "optimizer_steps": 8451,
+        "lr": 0.001,
+        "train_final_loss": 0.002373097464442253,
+        "train_proposal_loss": 0.022262129932641983,
+        "validation_final_loss": 0.0021800255816429854,
+        "validation_proposal_loss": 0.021084481546282768,
+        "validation_position_RMSE_A": 0.002779061834386531,
+        "validation_velocity_RMSE_A_fs": 0.0001923338741613943
+      },
+      "final": {
+        "epoch": 107,
+        "optimizer_steps": 33491,
+        "lr": 0.0005120000000000001,
+        "train_final_loss": 0.0030487386975437403,
+        "train_proposal_loss": 0.04199542850255966,
+        "validation_final_loss": 0.0030565345488488675,
+        "validation_proposal_loss": 0.04024008159041405,
+        "validation_position_RMSE_A": 0.003125616183291334,
+        "validation_velocity_RMSE_A_fs": 0.0002336721396857145
+      },
+      "after_best": {
+        "extra_optimizer_steps": 25040,
+        "train_final_loss_change": 0.0006756412331014872,
+        "validation_final_loss_change": 0.000876508967205882,
+        "train_proposal_loss_change": 0.01973329856991768,
+        "validation_proposal_loss_change": 0.01915560004413128
+      },
+      "missing_history_fields": [
+        "train_normalized_position_MSE",
+        "train_normalized_velocity_MSE"
+      ]
+    },
+    {
+      "name": "R3",
+      "epochs": 138,
+      "parameters": 2357616,
+      "batch_size": 8,
+      "precision": "fp32",
+      "steps_per_epoch": 625,
+      "best": {
+        "epoch": 35,
+        "optimizer_steps": 21875,
+        "lr": 0.001,
+        "train_final_loss": 0.001089095021598041,
+        "train_proposal_loss": 0.021446863189339638,
+        "validation_final_loss": 0.0010363363461568951,
+        "validation_proposal_loss": 0.020942809092998504,
+        "validation_position_RMSE_A": 0.0019598300307000997,
+        "validation_velocity_RMSE_A_fs": 0.00013094736630407932
+      },
+      "final": {
+        "epoch": 138,
+        "optimizer_steps": 86250,
+        "lr": 0.0004096000000000001,
+        "train_final_loss": 0.001970380311831832,
+        "train_proposal_loss": 0.06368591636419296,
+        "validation_final_loss": 0.0019297207288444043,
+        "validation_proposal_loss": 0.0613718682050705,
+        "validation_position_RMSE_A": 0.0024242215297656067,
+        "validation_velocity_RMSE_A_fs": 0.00018768395166804803
+      },
+      "after_best": {
+        "extra_optimizer_steps": 64375,
+        "train_final_loss_change": 0.0008812852902337909,
+        "validation_final_loss_change": 0.0008933843826875092,
+        "train_proposal_loss_change": 0.042239053174853325,
+        "validation_proposal_loss_change": 0.040429059112071994
+      },
+      "missing_history_fields": [
+        "train_normalized_position_MSE",
+        "train_normalized_velocity_MSE"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 """Formal endpoint training on existing Quartz 30 fs graphs. No MD generation."""
 import argparse
 import json
+import math
 import os
 import random
 import signal
@@ -13,7 +14,8 @@ import torch
 from torch_geometric.loader import DataLoader
 from trajcast.data.dataset import AtomicGraphDataset
 
-from relational_transition import RelationalConfig, RelationalTransition, endpoint_objective
+from relational_transition import (RelationalConfig, RelationalTransition,
+                                   endpoint_loss_components, endpoint_objective)
 
 STOP = False
 
@@ -27,6 +29,73 @@ def atomic_save(value, path):
     temp = path.with_suffix(path.suffix + '.tmp')
     torch.save(value, temp)
     os.replace(temp, path)
+
+
+def make_scheduler(optimizer, cfg):
+    schedule = cfg.get('scheduler', {'type': 'plateau'})
+    if schedule['type'] == 'plateau':
+        return torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, factor=.8, patience=20, min_lr=1e-6), 'plateau'
+    if schedule['type'] != 'warmup_cosine':
+        raise ValueError(f"Unknown scheduler: {schedule['type']}")
+    warmup = int(schedule['warmup_steps'])
+    total = int(cfg['total_optimizer_steps'])
+    peak, initial, minimum = (float(cfg['learning_rate']),
+                              float(schedule['initial_lr']),
+                              float(schedule['minimum_lr']))
+    if not 0 < initial <= peak or not 0 < minimum <= peak or not 0 < warmup < total:
+        raise ValueError('Invalid warmup/cosine schedule')
+
+    def multiplier(step):
+        if step <= warmup:
+            return (initial + (peak-initial) * step/warmup) / peak
+        progress = min(1., (step-warmup)/(total-warmup))
+        return (minimum + .5*(peak-minimum)*(1+math.cos(math.pi*progress))) / peak
+
+    return torch.optim.lr_scheduler.LambdaLR(optimizer, multiplier), 'warmup_cosine'
+
+
+def module_gradient_norm(module):
+    total = None
+    for parameter in module.parameters():
+        if parameter.grad is not None:
+            value = parameter.grad.detach().float().square().sum()
+            total = value if total is None else total + value
+    return float(total.sqrt()) if total is not None else 0.
+
+
+def gradient_groups(model):
+    groups = {
+        'input_encoder': torch.nn.ModuleList([
+            model.element, model.kinematics, model.velocity_embedding, model.edge_embedding]),
+        'proposal_head': model.proposal_head,
+        'correction_head': model.correction_head,
+    }
+    groups.update({f'proposal_block_{i}': block for i, block in enumerate(model.proposal_blocks)})
+    groups.update({f'refinement_block_{i}': block for i, block in enumerate(model.refinement_blocks)})
+    return groups
+
+
+def training_diagnostics(model, batch, precision, proposal_weight):
+    """One fixed training batch; gradients are observed but never optimized."""
+    groups = gradient_groups(model)
+    gradients = {}
+    model.train()
+    model.set_diagnostics(True)
+    for label in ['final', 'weighted_proposal']:
+        model.zero_grad(set_to_none=True)
+        with torch.autocast(device_type=batch.pos.device.type, dtype=torch.bfloat16,
+                            enabled=precision == 'bf16'):
+            output = model(batch)
+            pieces = endpoint_loss_components(
+                model, output, batch.displacements, batch.update_velocities)
+            objective = pieces['final'] if label == 'final' else proposal_weight * pieces['proposal']
+        objective.backward()
+        gradients[label] = {name: module_gradient_norm(module) for name, module in groups.items()}
+    activations = model.diagnostics()
+    model.zero_grad(set_to_none=True)
+    model.set_diagnostics(False)
+    return dict(gradient_norms=gradients, blocks=activations)
 
 
 def read_graphs(cache, split):
@@ -51,7 +120,7 @@ def read_graphs(cache, split):
 @torch.no_grad()
 def evaluate(model, loader, device, precision='fp32'):
     model.eval()
-    total = np.zeros(6, dtype=np.float64)
+    total = np.zeros(10, dtype=np.float64)
     count = 0
     for batch in loader:
         batch = batch.to(device, non_blocking=True)
@@ -64,13 +133,18 @@ def evaluate(model, loader, device, precision='fp32'):
         n = batch.num_graphs
         total += np.array([float(qe.square().mean()), float(ve.square().mean()),
                            float(qe.abs().mean()), float(ve.abs().mean()),
-                           float(pieces['final']), float(pieces['proposal'])])*n
+                           float(pieces['final']), float(pieces['proposal']),
+                           float(pieces['final_position']), float(pieces['final_velocity']),
+                           float(pieces['proposal_position']), float(pieces['proposal_velocity'])])*n
         count += n
     total /= count
     return dict(samples=count, position_RMSE_A=float(np.sqrt(total[0])),
                 velocity_RMSE_A_fs=float(np.sqrt(total[1])), position_MAE_A=float(total[2]),
                 velocity_MAE_A_fs=float(total[3]), selection_loss=float(total[4]),
-                proposal_loss=float(total[5]))
+                proposal_loss=float(total[5]), normalized_position_MSE=float(total[6]),
+                normalized_velocity_MSE=float(total[7]),
+                proposal_normalized_position_MSE=float(total[8]),
+                proposal_normalized_velocity_MSE=float(total[9]))
 
 
 def main():
@@ -98,13 +172,14 @@ def main():
     model = RelationalTransition(cfg['model'], (sq,sv)).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=cfg['learning_rate'],
                                   weight_decay=0., amsgrad=True)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, factor=.8, patience=20, min_lr=1e-6)
+    scheduler, scheduler_type = make_scheduler(optimizer, cfg)
     generator = torch.Generator().manual_seed(seed)
     def loader(graphs, shuffle):
         return DataLoader(graphs, batch_size=cfg['batch_size'], shuffle=shuffle,
                           num_workers=0, pin_memory=True, generator=generator if shuffle else None)
     train_loader, val_loader = loader(train, True), loader(val, False)
+    diagnostic_batch = next(iter(loader(train[:cfg['batch_size']], False))).to(
+        device, non_blocking=True)
     if args.evaluate_best:
         saved = torch.load(args.run/'best.pt', map_location='cpu', weights_only=False)
         model.load_state_dict(saved['model'])
@@ -136,14 +211,16 @@ def main():
     metadata = dict(config=cfg, normalization_train_only=[sq,sv], parameters=sum(p.numel() for p in model.parameters()),
                     hardware=torch.cuda.get_device_name(), torch_version=torch.__version__,
                     train_samples=len(train), val_samples=len(val), initialized_from_pretrained=False,
-                    optimizer_steps_per_epoch=len(train_loader))
+                    optimizer_steps_per_epoch=len(train_loader), scheduler_type=scheduler_type)
     (args.run/'metadata.json').write_text(json.dumps(metadata, indent=2)+'\n')
     print(json.dumps(dict(event='training_started', **metadata)), flush=True)
     for epoch in range(first,cfg['max_epochs']):
         tic = time.perf_counter(); model.train()
-        running = torch.zeros(3,device=device); seen=0
+        running = torch.zeros(7,device=device); seen=0
         torch.cuda.reset_peak_memory_stats()
         for batch in train_loader:
+            if optimizer_steps >= cfg.get('total_optimizer_steps', float('inf')):
+                break
             batch=batch.to(device, non_blocking=True)
             optimizer.zero_grad(set_to_none=True)
             with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
@@ -155,20 +232,35 @@ def main():
             torch.nn.utils.clip_grad_norm_(model.parameters(),cfg['gradient_clip'],error_if_nonfinite=True)
             optimizer.step()
             optimizer_steps += 1
+            if scheduler_type == 'warmup_cosine':
+                scheduler.step()
             n=batch.num_graphs; seen+=n
-            running+=torch.stack([loss.detach(),pieces['final'],pieces['proposal']])*n
+            running+=torch.stack([loss.detach(),pieces['final'],pieces['proposal'],
+                                  pieces['final_position'],pieces['final_velocity'],
+                                  pieces['proposal_position'],pieces['proposal_velocity']])*n
+        if seen == 0:
+            break
         torch.cuda.synchronize(); train_seconds=time.perf_counter()-tic
         validation=evaluate(model,val_loader,device,cfg['precision'])
         score=validation['selection_loss']; improved=score<best
         if improved: best=score; stale=0
         else: stale+=1
-        scheduler.step(score)
+        if scheduler_type == 'plateau':
+            scheduler.step(score)
+        interval = int(cfg.get('diagnostics_interval_epochs', 0))
+        diagnostics = (training_diagnostics(model, diagnostic_batch, cfg['precision'],
+                                            cfg['proposal_weight'])
+                       if interval and ((epoch+1) == 1 or (epoch+1) % interval == 0) else None)
         record=dict(epoch=epoch+1,train_total_loss=float(running[0]/seen),
                     train_final_loss=float(running[1]/seen), train_proposal_loss=float(running[2]/seen),
+                    train_normalized_position_MSE=float(running[3]/seen),
+                    train_normalized_velocity_MSE=float(running[4]/seen),
+                    train_proposal_normalized_position_MSE=float(running[5]/seen),
+                    train_proposal_normalized_velocity_MSE=float(running[6]/seen),
                     validation=validation,train_seconds=train_seconds,epoch_seconds=time.perf_counter()-tic,
                     samples_per_second=seen/train_seconds,lr=optimizer.param_groups[0]['lr'],
                     peak_cuda_bytes=torch.cuda.max_memory_allocated(),improved=improved,
-                    optimizer_steps=optimizer_steps)
+                    optimizer_steps=optimizer_steps,diagnostics=diagnostics)
         payload=dict(model=model.state_dict(),optimizer=optimizer.state_dict(),scheduler=scheduler.state_dict(),
                      config=cfg,epoch=epoch,best=best,stale=stale,record=record,
                      optimizer_steps=optimizer_steps,
@@ -183,7 +275,9 @@ def main():
         if STOP:
             (args.run/'status.json').write_text(json.dumps(dict(state='paused',last_epoch=epoch+1))+'\n')
             return
-        if stale>=cfg['early_stopping_patience']: break
+        patience = cfg.get('early_stopping_patience')
+        if patience is not None and stale>=patience: break
+        if optimizer_steps >= cfg.get('total_optimizer_steps', float('inf')): break
     saved=torch.load(args.run/'best.pt',map_location='cpu',weights_only=False)
     model.load_state_dict(saved['model'])
     # First test access occurs AFTER validation-only model selection is finished.
