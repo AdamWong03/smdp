@@ -1,0 +1,35 @@
+{
+  "seed": 20261102,
+  "cache": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028/cache",
+  "model": {
+    "scalar_channels": 128,
+    "vector_channels": 32,
+    "edge_channels": 64,
+    "radial_channels": 16,
+    "cutoff_angstrom": 4.5,
+    "horizon_fs": 30.0,
+    "proposal_layers": 2,
+    "refinement_layers": 2,
+    "velocity_scale": 0.01
+  },
+  "batch_size": 8,
+  "precision": "fp32",
+  "learning_rate": 0.001,
+  "max_epochs": 600,
+  "early_stopping_patience": 80,
+  "proposal_weight": 0.1,
+  "gradient_clip": 10.0,
+  "data_root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
+  "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+  "physical_evaluation": {
+    "nve_ps": 100,
+    "nve_replicas": 2,
+    "nvt_thermalization_ps": 1500,
+    "nvt_production_ps": 15000,
+    "csvr_tau_fs": 100,
+    "reference": "unchanged BKS",
+    "sampling_fs": 30,
+    "internal_1fs_output": false
+  },
+  "status": "first endpoint-only relational network run; no pretrained weights"
+}

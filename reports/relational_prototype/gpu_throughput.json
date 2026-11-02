@@ -1,0 +1,31 @@
+{
+  "device": "cuda",
+  "precision": "fp32",
+  "hardware": "NVIDIA L40S",
+  "threads": 4,
+  "parameters": 853920,
+  "fitted": false,
+  "data": "training graphs only",
+  "includes_io": false,
+  "optimizer": "AdamW lr=0",
+  "results": [
+    {
+      "batch_size": 8,
+      "atoms": 1296,
+      "edges": 37150,
+      "factorized": false,
+      "median_seconds": 0.028405349992681295,
+      "samples_per_second": 281.6370860440452,
+      "peak_cuda_bytes": 1280702464
+    },
+    {
+      "batch_size": 8,
+      "atoms": 1296,
+      "edges": 37150,
+      "factorized": true,
+      "median_seconds": 0.025758601957932115,
+      "samples_per_second": 310.57586172825955,
+      "peak_cuda_bytes": 1080209408
+    }
+  ]
+}

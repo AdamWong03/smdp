@@ -1,0 +1,15 @@
+{
+  "created": "2026-11-02T17:40:47.297540",
+  "protected": [
+    "smdp_reference_md_v1",
+    "quartz30 endpoint graph caches",
+    "all best/final/last weights",
+    "unique trajectories and physical reports",
+    "new relational run"
+  ],
+  "deleted_files": 5824,
+  "deleted_allocated_bytes": 7762644992,
+  "free_before": 94927220736,
+  "free_after": 102688010240,
+  "completed": true
+}
