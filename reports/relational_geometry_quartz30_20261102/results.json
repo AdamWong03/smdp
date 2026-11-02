@@ -1,0 +1,66 @@
+{
+  "run_state": "training_and_test_completed",
+  "experiment": "quartz30_20261102_r2_geometry",
+  "git_commit": "bdf4a4e",
+  "data": {
+    "train_samples": 5000,
+    "validation_samples": 1250,
+    "test_samples": 1000,
+    "horizon_fs": 30.0
+  },
+  "model": {
+    "parameters": 1750760,
+    "scalar_channels": 160,
+    "vector_channels": 40,
+    "edge_channels": 80,
+    "proposal_layers": 2,
+    "refinement_layers": 2,
+    "precision": "bf16",
+    "batch_size": 16
+  },
+  "training": {
+    "hardware": "NVIDIA L40S",
+    "completed_epochs": 107,
+    "selected_epoch": 27,
+    "early_stopping_patience": 80,
+    "actual_training_seconds": 1970.732334136963,
+    "best_epoch_samples_per_second": 328.2531897184066,
+    "best_epoch_peak_cuda_bytes": 2263453184
+  },
+  "best_validation": {
+    "position_RMSE_A": 0.002779061834386531,
+    "velocity_RMSE_A_fs": 0.0001923338741613943,
+    "position_MAE_A": 0.0022059030920267104,
+    "velocity_MAE_A_fs": 0.00015241074366495014,
+    "selection_loss": 0.0021800255816429854,
+    "proposal_loss": 0.021084481546282768
+  },
+  "independent_test": {
+    "position_RMSE_A": 0.002813503697647462,
+    "velocity_RMSE_A_fs": 0.0001953066389826827,
+    "position_MAE_A": 0.00223210758715868,
+    "velocity_MAE_A_fs": 0.00015459862316492945,
+    "selection_loss": 0.002243190538138151,
+    "proposal_loss": 0.021878921940922738
+  },
+  "legacy_r1_validation_reference": {
+    "status": "paused_without_independent_test",
+    "parameters": 853920,
+    "selected_epoch": 348,
+    "position_RMSE_A": 0.0016344352364264815,
+    "velocity_RMSE_A_fs": 0.00011107305910411933,
+    "position_MAE_A": 0.0012963704043999313,
+    "velocity_MAE_A_fs": 0.0000881055985344545,
+    "selection_loss": 0.0007365172918885946
+  },
+  "physical_evaluation": {
+    "completed": false,
+    "reason": "No autonomous NVE/NVT evaluation was launched for this endpoint checkpoint."
+  },
+  "server_artifacts": {
+    "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261102_r2_geometry",
+    "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261102_r2_geometry/best.pt",
+    "history": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261102_r2_geometry/history.jsonl",
+    "log": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261102_r2_geometry/train.log"
+  }
+}
