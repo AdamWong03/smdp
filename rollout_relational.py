@@ -44,6 +44,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--initial", type=Path, required=True)
+    parser.add_argument("--initial-frame", type=int, default=0)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--ensemble", choices=["nve", "nvt"], required=True)
     parser.add_argument("--steps", type=int, required=True)
@@ -59,9 +60,11 @@ def main():
     model, saved = load_relational(args.checkpoint, device)
     dt = model.cfg.horizon_fs
     with h5py.File(args.initial) as source:
-        q = source["positions_unwrapped_A"][0].astype(np.float32)
-        v = source["velocities_A_per_fs"][0].astype(np.float32)
-        cell = source["cell_A"][0]
+        if not 0 <= args.initial_frame < len(source["positions_unwrapped_A"]):
+            raise IndexError("initial-frame outside source trajectory")
+        q = source["positions_unwrapped_A"][args.initial_frame].astype(np.float32)
+        v = source["velocities_A_per_fs"][args.initial_frame].astype(np.float32)
+        cell = source["cell_A"][args.initial_frame]
         z, masses = source["atomic_numbers"][:], source["masses_u"][:]
     thermostat = None
     thermostat_metadata = {}
@@ -83,6 +86,7 @@ def main():
                             thermalization_steps=args.thermalization_steps, completed_steps=0,
                             stable=False, failure_reason="", checkpoint=str(args.checkpoint),
                             checkpoint_sha256=checksum, seed=args.seed,
+                            initial_trajectory=str(args.initial), initial_frame=args.initial_frame,
                             thermostat_metadata=json.dumps(thermostat_metadata),
                             reference_forces_used_during_propagation=False)
         output["atomic_numbers"] = z; output["masses_u"] = masses; output["cell"] = cell
