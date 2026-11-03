@@ -34,13 +34,17 @@ def main():
         paths = [value.decode() if isinstance(value, bytes) else str(value)
                  for value in source["source_paths"][:]]
         z, masses = source["atomic_numbers"][:], source["masses_u"][:]
+        lag_steps = int(source.attrs["lag_steps"])
+        source_dt_fs = float(source.attrs["source_dt_fs"])
+        if not np.isclose(lag_steps * source_dt_fs, model.cfg.horizon_fs):
+            raise ValueError("Transition lag/source timestep differs from model horizon")
     horizons = (1, 2, 4, 8)
     valid = np.ones(len(q0), dtype=bool)
     handles = [h5py.File(path, "r") for path in paths]
     try:
         for i, handle in enumerate(handles):
             mask = trajectories == i
-            valid[mask] &= frames[mask] + max(horizons) * 30 < len(handle["time_fs"])
+            valid[mask] &= frames[mask] + max(horizons) * lag_steps < len(handle["time_fs"])
         selected = np.flatnonzero(valid)
         references = {}
         for horizon in horizons:
@@ -49,7 +53,7 @@ def main():
                 local = np.flatnonzero(trajectories[selected] == trajectory)
                 if not len(local):
                     continue
-                indices = frames[selected[local]] + horizon * 30
+                indices = frames[selected[local]] + horizon * lag_steps
                 unique, inverse = np.unique(indices, return_inverse=True)
                 rq[local] = handle["positions_unwrapped_A"][unique][inverse]
                 rv[local] = handle["velocities_A_per_fs"][unique][inverse]
@@ -99,7 +103,7 @@ def main():
     for horizon in horizons:
         value = sums[horizon]
         result["horizons"][str(horizon)] = {
-            "time_fs": horizon * 30,
+            "time_fs": horizon * model.cfg.horizon_fs,
             "position_RMSE_A": float(np.sqrt(value[0] / count)),
             "position_MAE_A": float(value[1] / count),
             "velocity_RMSE_A_fs": float(np.sqrt(value[2] / count)),
