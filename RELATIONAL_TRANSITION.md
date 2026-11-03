@@ -75,7 +75,7 @@ OMP_NUM_THREADS=2 "$PY" -m pytest tests/test_relational_transition.py -q
 
 # Explicit device selection; run only when resources are available.
 CUDA_VISIBLE_DEVICES=1 OMP_NUM_THREADS=2 "$PY" -m scripts.benchmark_relational_transition \
-  --cache /data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028/cache \
+  --cache /data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_graphs/trajcast_p64_30fs \
   --device cuda --precision fp32 --batch-sizes 2 8 16 --iterations 30 \
   --output reports/relational_prototype/gpu_throughput.json
 ```

@@ -12,7 +12,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from smdp_neural import RBF, mlp
+from dsrt_primitives import RBF, mlp
 
 
 @dataclass

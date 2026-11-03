@@ -1,87 +1,67 @@
-> **R3 implementation (not yet trained):** [R3_DESIGN.md](R3_DESIGN.md) records the
-> paired R3-A (8+8/16 fs composition) and R3-B (the same plus one spatial
-> equivariant mode exchange) experiments. Run
-> `bash scripts/run_r3_pair.sh` on the server for independent, matched
-> training and validation. Historical R1/R2 checkpoints and reports are untouched.
->
-# SMDP – Neural Motion-Mode Propagation
+# DSRT: future-conditioned relational refinement for learned MD
 
-Formal quartz integration is now available. See [EXPERIMENT.md](EXPERIMENT.md)
-for the frozen configuration, independent data splits, commands and server
-artifact paths. `train_quartz.py`, `evaluate_quartz.py`, `rollout_quartz.py` and
-`analyze_quartz.py` implement training and physical evaluation. The first formal
-run is complete (see `reports/quartz16_first`): it ran 15 ns NVT but failed physical
-fidelity, including NVE heating and mode concentration. The targeted additive-mode
-iteration is described in `EXPERIMENT.md`. Its completed frozen-trajectory
-reanalysis is reported in
-[R2 physical report](reports/quartz16_additive_long_rollout/PHYSICS_REPORT.md)
-and the [R1/R2/BKS table](reports/quartz16_additive_long_rollout/COMPARISON.md).
-[REANALYSIS.md](REANALYSIS.md) documents the MPI runtime fix, independently
-resumable physical tasks and frozen-checkpoint validation. No R3 or new MD
-trajectory was run for this analysis. Implementation and passing unit tests
-are not experimental evidence of long-time physical fidelity.
+DSRT learns a fixed-horizon phase-space transition without evaluating forces
+during inference. It first proposes the future atomic state from current
+periodic relations, converts that proposal into predicted future pair geometry,
+and uses the future-conditioned relations to refine the endpoint.
 
-This package contains an **implemented and unit-checked neural model core** for the frozen research route:
+The paper-stage method is frozen at R3-Opt. The active question is not whether
+a neural network can directly propagate MD—prior work already establishes
+that—but whether predicted future geometry is a useful conditioning signal for
+finite-time relational propagation and whether any gain survives long-time
+physical evaluation.
 
-`Equivariant Encoder → Learned Motion Modes → (Recurrent/Temporal operators) → Cross-Mode Exchange → Coupled Segment Decoder`.
+## Active implementation
 
-The two operators execute per mode and are combined by a mode-state- and horizon-conditioned router; propagation proceeds in two halves with **cross-mode exchange between them**. One graph encoding yields multiple time-queried future position and velocity states. No Hessian, Jacobi charts, learned residual action, force evaluation or implicit symplectic solver is used.
+- [`relational_transition.py`](relational_transition.py): DSRT model and losses.
+- [`train_relational.py`](train_relational.py): fixed-horizon endpoint training.
+- [`relational_inference.py`](relational_inference.py): frozen-checkpoint loader.
+- [`rollout_relational.py`](rollout_relational.py): autonomous NVE/NVT rollout.
+- [`evaluate_relational_rollout.py`](evaluate_relational_rollout.py): short
+  autonomous prediction evaluation.
+- [`analysis_tasks.py`](analysis_tasks.py), [`physics/`](physics): offline BKS,
+  RDF, VDOS and thermodynamic analysis.
+- [`periodic.py`](periodic.py): scalable periodic graph construction.
 
-## Files
+The frozen configuration is in
+[`configs/quartz30_r3_opt.json`](configs/quartz30_r3_opt.json). The manuscript
+draft and fixed evidence plan live in [`paper/`](paper/README.md).
 
-- `smdp_neural.py`: independent PyTorch model with scalar/vector O(3)-equivariant messages, continuous time queries, motion tokens, two trainable propagation operators, coupling and phase-space decoder.
-- `training_objectives.py`: normalized endpoint/intermediate position-velocity loss and short autoregressive rollout utilities.
-- `test_neural_smdp.py`: numerical checks of nontrivial outputs under rigid translation, rotation, PBC reimaging, zero-time identity, COM conservation, differentiability and time query consistency.
+## Frozen Quartz result
 
-## Verified locally
+R3-Opt has 2,357,616 parameters and was trained on 5,000 independent-split
+Quartz 30 fs transitions. Its independent-test endpoint RMSE is 0.001800 Å for
+position and 0.0001221 Å/fs for velocity. Two 100 ps NVE trajectories remained
+structurally stable but showed measurable BKS energy drift. A complete 1.5 ns
+thermalization plus 15 ns NVT production trajectory achieved O/Si VDOS overlap
+of 0.946/0.950 within the 30 fs-resolvable band and 106.1 ns/day end-to-end on
+one L40S. Full numbers and limitations are in
+[`R3_OPT_PHYSICS_RESULTS.md`](reports/stable_geometry_optimization/R3_OPT_PHYSICS_RESULTS.md).
 
-`python test_neural_smdp.py`
+These results do **not** yet establish that future geometry is necessary. That
+claim requires matched Current-Only and Ballistic-Geometry controls.
 
-This verifies **mathematical/software invariants only**. It is not a physical MD experiment, not an external dataset training run, and not proof of long-time stability.
+## Reproduction paths
 
-## Example usage
+Server assets are intentionally not committed:
 
-```python
-import torch
-from smdp_neural import NeuralSMDP, SMDPConfig, build_periodic_edges
+- reference data: `/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1`
+- frozen checkpoint: `/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261103_r3_opt/best.pt`
+- derived graph cache: `data/smdp_reference_md_v1/quartz/derived_graphs/trajcast_p64_30fs`
 
-model = NeuralSMDP(SMDPConfig(horizon_fs=16.0, additive_modes=True, exclude_self_exchange=True))
-# q: [N,3] Angstrom, velocity: [N,3] Angstrom/fs
-# atomic_numbers: [N] int64, masses: [N] amu, cell: [3,3] row lattice vectors
-edge_index, edge_shift = build_periodic_edges(q, cell, cutoff=4.5)
-out = model(q, velocity, atomic_numbers, masses, edge_index, edge_shift, [4.,8.,12.,16.])
-pred_q16, pred_v16 = out['positions'][-1], out['velocities'][-1]
+```bash
+/data1/wyd/envs/trajcast/bin/python train_relational.py --run /path/to/run
+
+/data1/wyd/envs/trajcast/bin/python evaluate_relational_rollout.py \
+  --checkpoint /path/to/best.pt --output /path/to/evaluation
 ```
 
-The `build_periodic_edges` reference helper is `O(N²)` and uses minimum image: **DO NOT use it for 4,374-atom production**. Integrate an efficient periodic neighbor list such as `vesin` with the project already using it. Edge `shift` is a Cartesian vector **added to the sender** so that `dr = q[src] + shift - q[dst]`; verify signs once against neighbor-list ground truth. Recompute neighbor lists during autoregressive steps.
+The upstream TrajCast code is used for mature graph/data infrastructure and is
+licensed separately under Apache-2.0. DSRT does not load TrajCast weights.
 
-## Project integration in `/data1/wyd/research/foundation_mlip_adaptation`
+## Scope
 
-1. Keep the 212 GB `data/smdp_reference_md_v1` untouched. Read `dataset_metadata.json`, `physical_summary.json`, `long_reference_summary.json`, transition manifests and raw NVE storage schema **before** implementing the reader. No assumed field names, array layout, velocity units or PBC conventions.
-2. Determine velocity units from the original MD engine metadata. Convert to **Angstrom/fs**, not Angstrom/ps, and use **unwrapped** positions for trajectory targets. Masses must be the same atom ordering as coordinates. Verify this for each training sample.
-3. Build indices to existing **independent Quartz NVE train trajectories**: obtain contiguous frames for `t`, `t+4fs`, `t+8fs`, `t+12fs`, `t+16fs`. Use reference steps of 1fs; if the actual storage cadence differs, use its metadata instead of guessing. Keep original train/val/test grouping by complete independent trajectory; no overlapping windows from one trajectory across sets.
-4. On the training trajectories *only*, estimate RMS scales of the **16 fs free-drift position residual** `q(t+h)-q(t)-h*v(t)` and velocity increment `v(t+h)-v(t)` and save these with the model checkpoint. For every segment apply `supervised_segment_loss`. Use actual positions/velocities at 4/8/12/16fs; never interpolate a target from endpoints.
-5. Train the full model on all 5,000 Quartz 16fs train windows, validate on 1,250, report 1,000 test. Train normally to convergence using endpoint plus intermediate supervision; then fine-tune with truncated differentiable autoregressive rollout losses drawn from contiguous **training NVE**. Select checkpoints using held-out validation, not test.
-6. For force-free NVE rollout, run `h=16 fs` repeatedly with **fresh** neighbor lists from the predicted positions at each new step. For NVT, port the reference-equivalent CSVR thermostat (taking care of correct h/tau and degrees of freedom; validate against the dataset metadata/TrajCast Methods). No BKS force evaluations during prediction. Offline BKS potential evaluations are allowed for physical evaluation.
-7. Evaluate on test NVE (trajectory stability, temperatures, energy drift, min distances), then full 15ns 300K NVT, comparing offline BKS potential energy distribution, Si/O VDOS and Si–O/O–O RDF against the reference NVT. **There are two different VDOS claims:** (a) stride-sampled 16fs outputs, compared to MD downsampled to 16fs (Nyquist ≈1042 cm⁻¹); (b) additionally queried 1fs internal trajectory outputs, separately compared to 1fs MD, without claiming these are independent integration steps. Report both without conflating their information content.
-8. Report wall-clock throughput/ns/day for real autoregressive trajectory generation (with neighbor updates, GPU synchronization, thermostat and output I/O accounted for). Record 162-atom and larger-supercell inference where practicable. The model accepts variable N and supports external scalable neighbor lists.
-9. Measure mode routing distributions, per-mode branch occupancy, cross-mode attention and their variation across trajectory/time. These logs establish network operation, but are **not proof that modes correspond to named physical vibrations**.
-10. Keep legacy Structured Action code and logs in place. Do not mix old PET/FlashMD/Hessian implementation into this architecture.
-
-## Requirements and honest limits
-
-- Package currently requires PyTorch, with optional `vesin` supplied by the project for large-scale PBC neighbor handling.
-- The core has been integrated with the server's formal dataset, a batched
-  periodic graph adapter, training, CSVR rollout and offline BKS evaluation.
-  Completed training and physical results must be read from actual run artifacts;
-  the requested 15 ns duration is not a claim of completion.
-- Unit tests verify the final decoder for nonzero output weights, so equivariance checks are not trivially passing due to zero-initialized initial predictions.
-- The model is a useful faithful realization of the fixed algorithm idea, but final parameter choices should be measured through full official runs rather than assumed optimal.
-
-## Research implementation references
-
-- Thiemann et al., *Force-free molecular dynamics through autoregressive equivariant networks*, NMI 2026: https://doi.org/10.1038/s42256-026-01227-7 ; https://github.com/IBM/trajcast
-- Schütt et al., *Equivariant message passing for the prediction of tensorial properties and molecular spectra*, ICML 2021: https://proceedings.mlr.press/v139/schutt21a.html
-- Xu et al., *Equivariant Graph Neural Operator for Modeling 3D Dynamics*, ICML 2024: https://proceedings.mlr.press/v235/xu24j.html
-- Thompson et al., *ATOM*, ICLR 2026: https://proceedings.iclr.cc/paper_files/paper/2026/hash/8adbebb54e63b5f82b306847861b9168-Abstract-Conference.html
-- DoMiNO, *ACM TKDD*, 2026: https://doi.org/10.1145/3822365
+The repository no longer treats Structured Action, Motion Modes, SACMP or the
+continuous-segment prototype as active methods. Their committed history remains
+recoverable from Git; large server artifacts were removed after their negative
+results had been recorded.

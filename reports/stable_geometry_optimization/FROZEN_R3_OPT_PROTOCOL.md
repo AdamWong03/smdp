@@ -23,19 +23,23 @@ The checkpoint is not changed or reselected using subsequent physical tests.
 
 ## Fixed research order
 
-1. Complete Quartz physical validation: 15 ns NVT, longer/multiple NVE,
-   250/350 K generalization, independently thermalized 1,296/4,374-atom cells,
-   and end-to-end efficiency.
-2. Build a 25K Quartz training set emphasizing independent trajectories and
-   non-overlapping state coverage; retrain exactly the same architecture and
-   compare at a matched update budget.
-3. Train the same architecture from scratch on the existing flexible-water
-   reference data at a water-appropriate horizon, then evaluate RDF, MSD,
-   diffusion, VACF/VDOS, temperature and energy distributions.
+1. Freeze and organize the existing Quartz evidence, manuscript protocol and
+   retained R1 lightweight comparison.
+2. Train the same architecture from scratch on the existing flexible-water
+   reference data at 5 fs, then evaluate RDF, MSD, diffusion, VACF/VDOS,
+   temperature and energy distributions.
+3. Train matched Current-Only and Ballistic-Geometry controls on Quartz and
+   Water. These preserve the two-stage capacity and change only the relation
+   supplied to the refinement blocks.
+4. Complete Quartz independent repeats, 250/350 K transfer and independently
+   thermalized 1,296/4,374-atom size transfer.
+5. Build a diverse 25K Quartz training set from independent trajectory states;
+   retrain the frozen architecture at a matched optimizer-update budget.
 
 No new attention module, force/energy loss, propagator branch, dense-time loss
 or architecture change is introduced during these stages. BKS is used only to
 generate reference data and to evaluate energies, never during neural rollout.
 External published results are contextual references, not same-protocol local
-baselines. Any later no-future-feedback ablation is kept separate from this
-physical-validation sequence.
+baselines. Test and physical trajectories never select checkpoints. If Full
+DSRT does not reproducibly beat Current-Only, future geometry is not retained
+as a supported mechanism claim.

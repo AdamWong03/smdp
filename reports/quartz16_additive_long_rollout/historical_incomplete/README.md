@@ -1,1 +1,0 @@
-Historical incomplete R2 postprocessing report. Its production_available=0 entries represented missing analysis, NOT missing generated trajectories. Superseded by ../PHYSICS_REPORT.md and ../COMPARISON.md. Preserved, not used as current physics results.

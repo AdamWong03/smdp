@@ -8,7 +8,7 @@ from ase import Atoms
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from analyze_quartz import stats, paired, spectrum_blocks, rdf_sample
+from physics.statistics import stats, paired, spectrum_blocks, rdf_sample
 from physics.units import KINETIC_TO_EV, KB_EV_PER_K
 
 

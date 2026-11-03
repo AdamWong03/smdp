@@ -1,0 +1,31 @@
+{
+  "seed": 20261102,
+  "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_graphs/trajcast_p64_30fs",
+  "model": {
+    "scalar_channels": 192,
+    "vector_channels": 48,
+    "edge_channels": 96,
+    "radial_channels": 16,
+    "cutoff_angstrom": 4.5,
+    "horizon_fs": 30.0,
+    "proposal_layers": 2,
+    "refinement_layers": 2,
+    "velocity_scale": 0.01,
+    "block_type": "geometry_gated"
+  },
+  "batch_size": 8,
+  "precision": "fp32",
+  "learning_rate": 0.0003,
+  "max_epochs": 400,
+  "total_optimizer_steps": 250000,
+  "proposal_weight": 0.02,
+  "gradient_clip": 10.0,
+  "diagnostics_interval_epochs": 10,
+  "scheduler": {
+    "type": "warmup_cosine",
+    "initial_lr": 0.00001,
+    "warmup_steps": 5000,
+    "minimum_lr": 0.00001
+  },
+  "validation_selection": "normalized final endpoint position/velocity MSE; no test selection"
+}

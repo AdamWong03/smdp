@@ -5,15 +5,20 @@ import h5py
 import pytest
 import numpy as np
 import analysis_tasks
-from analyze_quartz import spectrum_blocks
-from summarize_experiment import compare_runs
+from physics.statistics import spectrum_blocks
 
 
 def test_failed_energy_does_not_block_other_tasks_and_resume(tmp_path,monkeypatch):
     for name in ['candidate','reference']:
         with h5py.File(tmp_path/(name+'.h5'),'w') as f:
             f.attrs.update(completed_steps=1,thermalization_steps=0,requested_steps=1,stable=True,failure_reason='')
-    monkeypatch.setattr(analysis_tasks,'Context',lambda c,r,out:SimpleNamespace(completed=1,production=True,common=2))
+    monkeypatch.setattr(
+        analysis_tasks,
+        'Context',
+        lambda c, r, out: SimpleNamespace(
+            completed=1, production=True, common=2, dt=30.0
+        ),
+    )
     def failure(x):raise OSError('test missing MPI')
     calls=[]
     def thermo(x):calls.append(1);return {'temperature_K':{'test_value':300}}
@@ -28,22 +33,6 @@ def test_failed_energy_does_not_block_other_tasks_and_resume(tmp_path,monkeypatc
     analysis_tasks.main()
     result=json.loads((tmp_path/'out/metrics.json').read_text())
     assert result['physical_analysis_completed'] and len(calls)==1
-
-
-def test_missing_analysis_is_not_missing_trajectory(tmp_path):
-    old=tmp_path/'old';new=tmp_path/'new';out=tmp_path/'report'
-    for p in [old,new,out]:p.mkdir()
-    (new/'nvt.summary.json').write_text(json.dumps(dict(production_ps=15000,requested_production_ps=15000)))
-    compare_runs(old,new,report_output=out)
-    state=json.loads((out/'run_status.json').read_text())['nvt']
-    assert state['trajectory_completed'] is True
-    assert state['physical_analysis_completed'] is False
-    (new/'nvt_analysis').mkdir()
-    (new/'nvt_analysis/metrics.json').write_text(json.dumps({'production_available':False}))
-    compare_runs(old,new,report_output=out)
-    state=json.loads((out/'run_status.json').read_text())['nvt']
-    assert state['trajectory_completed'] is True
-    assert state['physical_analysis_completed'] is False
 
 
 def test_spectral_cache_preserves_uncached_definition(tmp_path):
