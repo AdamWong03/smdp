@@ -50,6 +50,12 @@ def test_spectral_cache_preserves_uncached_definition(tmp_path):
         np.testing.assert_array_equal(expected[1][z],resumed[1][z])
 
 
+def test_dense_vdos_is_not_applicable_for_endpoint_model():
+    result = analysis_tasks.spectral(SimpleNamespace(c={}), 'queried_1fs')
+    assert result['VDOS']['queried_1fs']['available'] is False
+    assert 'endpoint-only' in result['VDOS']['queried_1fs']['reason']
+
+
 def test_parallel_spectral_blocks_match_serial(tmp_path):
     values=np.random.default_rng(5).normal(size=(2048,2,3));numbers=np.array([8,14])
     with h5py.File(tmp_path/'source.h5','w') as f:f.create_dataset('v',data=values)

@@ -115,7 +115,11 @@ def spectral(x,label):
     if label.startswith('macro_'):
         cd,cs,cf,rs,dt=x.c['velocities'],x.start,x.common,x.reference_stride,x.dt
     else:
-        if 'dense/velocities' not in x.c: raise ValueError('Candidate has no dense queried trajectory')
+        if 'dense/velocities' not in x.c:
+            return {'VDOS': {label: {
+                'available': False,
+                'reason': 'endpoint-only model has no dense queried trajectory',
+            }}}
         dense_stride=round(x.dt)
         cd,cs,cf,rs,dt=x.c['dense/velocities'],x.start*dense_stride,(x.common-1)*dense_stride+1,1,1.
     workers=getattr(x,'spectral_workers',1)

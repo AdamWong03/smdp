@@ -302,14 +302,16 @@ conservation.
 
 ### 5.3 Long NVT statistics
 
-One completed experiment contains 1.5 ns thermalization and 15 ns production
-(500,000 learned steps). Mean temperature is 300.23 K versus 299.45 K for the
-reference. Mean potential energy differs by +0.118 eV, while its standard
-deviation is 0.435 versus 0.397 eV. O–O structure is close (RDF RMSE 0.024),
-whereas Si–O structure retains a larger error (RDF RMSE 0.180 and a first-peak
-height 5.4% below reference). O and Si VDOS overlaps are 0.946 and 0.950 in the
-common frequency band; reference split-half overlaps exceed 0.999, confirming
-that the residual spectral discrepancy is larger than sampling repeatability.
+Two independent experiments each contain 1.5 ns thermalization and 15 ns
+production (500,000 learned steps). Mean temperatures are 300.23 and 300.60 K
+versus 299.45 K for the reference. Mean potential energies differ by +0.1184 eV
+in both runs, while their standard deviations are 0.435 and 0.430 versus 0.397
+eV. O–O structure is close (RDF RMSE 0.024 and 0.022), whereas Si–O structure
+retains a larger repeatable error (RDF RMSE 0.180 and 0.179, with first-peak
+heights 5.4–5.6% below reference). O VDOS overlaps are 0.9465 and 0.9466 and Si
+overlaps are 0.9497 and 0.9501 in the common frequency band. Reference
+split-half overlaps exceed 0.999, confirming that the residual spectral
+discrepancy is larger than sampling repeatability.
 
 The neural transition adds 0.000961 eV of kinetic energy per 30 fs step on
 average and CSVR removes approximately the same amount. Temperature agreement

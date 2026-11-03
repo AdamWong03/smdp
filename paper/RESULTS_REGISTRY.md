@@ -13,9 +13,11 @@
 - Two independent 100 ps NVE rollouts with offline BKS energy analysis.
 - One complete 1.5 ns + 15 ns NVT rollout with thermodynamics, RDF, VDOS,
   thermostat balance and end-to-end efficiency.
-- A second independent NVT trajectory is currently generated from reference
-  frame 7,500,000 with seed 2026110302; it is not counted as complete until
-  rollout and independent analysis both finish.
+- A second independent 1.5 ns + 15 ns NVT trajectory from reference frame
+  7,500,000 and seed 2026110302 completed with all applicable physical tasks.
+  Its temperature, potential-energy distribution, RDF and VDOS reproduce the
+  first run closely. Dense 1 fs VDOS is explicitly not applicable to this
+  endpoint-only model.
 
 See `reports/stable_geometry_optimization/R3_OPT_PHYSICS_RESULTS.md` for values.
 

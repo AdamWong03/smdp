@@ -77,6 +77,37 @@ cooling rate, although instantaneous exchanges remain broad.
 The difference between compute-only and end-to-end throughput includes HDF5
 streaming, thermostat work and per-step statistics.
 
+## Independent 15 ns NVT repeat
+
+A second trajectory used reference frame 7,500,000 and an independent CSVR
+seed. It completed the same 1.5 ns thermalization and 15 ns production protocol
+without a collision, non-finite value or safety stop.
+
+| Observable | Replica 1 | Replica 2 | BKS reference |
+|---|---:|---:|---:|
+| Mean temperature (K) | 300.228 | 300.604 | 299.448 |
+| Temperature standard deviation (K) | 19.951 | 19.184 | 19.117 |
+| Mean potential energy (eV) | -3135.657945 | -3135.657887 | -3135.776305 |
+| Potential-energy standard deviation (eV) | 0.43524 | 0.42997 | 0.39660 |
+| Si--O RDF RMSE | 0.17993 | 0.17900 | -- |
+| O--O RDF RMSE | 0.02405 | 0.02227 | -- |
+| O VDOS overlap | 0.94647 | 0.94665 | split-half: 0.99923 |
+| Si VDOS overlap | 0.94973 | 0.95013 | split-half: 0.99903 |
+| Minimum sampled distance (A) | 1.432 | 1.456 | -- |
+| End-to-end throughput (ns/day) | 106.1 | 127.4 | -- |
+
+The Si--O peak height is 32.90 in replica 2 versus 34.83 in the reference;
+the O--O peak height is 9.255 versus 9.181. The network adds 0.000872 eV of
+kinetic energy per step on average and CSVR removes 0.000872 eV. These agree in
+direction and scale with replica 1 (+0.000961/-0.000961 eV).
+
+The two independent runs therefore reproduce both the favorable results and
+the limitations: temperature, O--O structure, potential-energy mean and
+low-frequency spectra are highly repeatable, while the Si--O peak deficit,
+element kinetic-energy imbalance and excess potential-energy variance persist.
+Two replicas establish repeatability but are not treated as a complete
+uncertainty estimate; the frozen protocol still calls for a third run.
+
 ## Research conclusion
 
 R3-Opt produces a stable long NVT trajectory with strong low-frequency VDOS,
