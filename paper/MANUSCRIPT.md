@@ -340,7 +340,13 @@ velocity RMSE of 0.001654 Å and 0.00011294 Å/fs, respectively, compared with
 0.001800 Å and 0.00012208 Å/fs for R3-Opt. Thus the lightweight R1 model is the
 stronger endpoint predictor. This comparison does not establish that R1 has
 better autonomous physical statistics, which require the same rollout and
-offline BKS evaluation protocol.
+offline BKS evaluation protocol. That evaluation reverses the endpoint-error
+ranking. Across two independent 100 ps NVE runs, R1 cools to mean temperatures
+of 114.6 and 115.7 K and loses 8.02 and 8.49 eV, whereas R3-Opt maintains mean
+temperatures of 298.6 and 304.6 K with energy changes of +1.30 and +0.69 eV.
+R1 also has Si--O RDF RMSE of 1.87--1.93 compared with 0.20--0.27 for R3-Opt.
+Thus lower supervised endpoint error is not sufficient evidence of better
+learned dynamics.
 
 Several limits are structural. The model learns one fixed horizon and does not
 provide arbitrary-time states. Future relations are evaluated only for current

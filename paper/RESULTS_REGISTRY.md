@@ -9,7 +9,9 @@
 - Retained R1 independent test: 0.00165393 Å position RMSE and
   0.000112936 Å/fs velocity RMSE (1,000 samples; validation-selected epoch 348).
   R1 is therefore the stronger endpoint predictor; autonomous physical quality
-  remains to be compared under the same protocol.
+  is much worse under the same protocol: two 100 ps NVE runs average
+  114.59/115.72 K and lose 8.02/8.49 eV, versus R3-Opt at 298.64/304.57 K and
+  +1.30/+0.69 eV. R1 Si-O RDF RMSE is 1.87/1.93 versus 0.27/0.20 for R3-Opt.
 
 ## Completed evidence
 
@@ -27,7 +29,7 @@ See `reports/stable_geometry_optimization/R3_OPT_PHYSICS_RESULTS.md` for values.
 
 ## Missing evidence
 
-- R1 basic autonomous physical evaluation (independent endpoint test complete).
+- R1 endpoint and two-run 100 ps NVE physical evaluation are complete.
 - Third independent Quartz NVT and at least three additional NVE starts.
 - Water 5 fs training and physical evaluation.
 - Current-Only and Ballistic-Geometry matched controls.
