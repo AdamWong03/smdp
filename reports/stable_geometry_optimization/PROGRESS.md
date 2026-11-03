@@ -1,13 +1,13 @@
 # Stable Geometry-DSRT training snapshot
 
-Generated: `2026-11-03T02:08:59.752365+00:00`
+Generated: `2026-11-03T02:25:47.044202+00:00`
 
 This is a live training snapshot. It is not labeled as a final test result unless both fixed 250,000-step schedules and held-out tests have completed.
 
 | Model | State | Epoch | Best epoch | Best steps | Best val loss | q RMSE (A) | v RMSE (A/fs) |
 |---|---|---:|---:|---:|---:|---:|---:|
-| R3-Opt | training | 360 | 357 | 223,125 | 0.000866800 | 0.001779780 | 0.000120243 |
-| Stable-DSRT | training | 355 | 351 | 219,375 | 0.001648094 | 0.002412446 | 0.000167376 |
+| R3-Opt | stopped_and_test_completed | 370 | 364 | 227,500 | 0.000864482 | 0.001777579 | 0.000120075 |
+| Stable-DSRT | stopped_and_test_completed | 365 | 365 | 228,125 | 0.001643191 | 0.002407985 | 0.000167159 |
 
 The complete per-epoch records, including learning rate, proposal/final losses, gradient diagnostics and feature statistics, are stored in `training_snapshot.json`.
 
