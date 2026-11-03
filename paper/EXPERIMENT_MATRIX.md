@@ -11,7 +11,7 @@ relations or ballistic future relations.
 
 | Stage | Experiment | Model selection | Primary evidence |
 |---|---|---|---|
-| A | Freeze Quartz evidence; paper draft; R1 independent evaluation | Existing validation selections | Reproducible baseline table and Figs. 1–2 |
+| A | Freeze Quartz evidence; paper draft; R1 independent evaluation | Existing validation selections | Endpoint test complete; R1 physical rollout remains |
 | B | Water, 64 flexible molecules, 5 fs | Water validation endpoint loss | RDF, MSD/diffusion, VACF/VDOS, energy, NVE |
 | C | Current-Only and Ballistic-Geometry controls on Quartz and Water | Same split and validation rule as Full | Mechanism benefit versus geometric change |
 | D | Quartz repeats, 250/350 K, 1,296/4,374 atoms | No reselection of frozen 300 K checkpoint | Repeatability, transfer limits, throughput |

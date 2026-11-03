@@ -98,21 +98,33 @@ def training_diagnostics(model, batch, precision, proposal_weight):
     return dict(gradient_norms=gradients, blocks=activations)
 
 
-def read_graphs(cache, split):
-    path = cache / f'quartz30_{split};P:64.pt'
+def dataset_settings(cfg):
+    """Dataset naming/species metadata, with exact Quartz backward defaults."""
+    return (cfg.get('dataset_name', 'quartz30'),
+            {int(key): int(value) for key, value in
+             cfg.get('atom_type_mapper', {8: 0, 14: 1}).items()},
+            cfg.get('split_counts', {'train': 5000, 'val': 1250, 'test': 1000}))
+
+
+def read_graphs(cache, split, cfg=None):
+    cfg = cfg or {}
+    name, mapper, counts = dataset_settings(cfg)
+    path = cache / f'{name}_{split};P:64.pt'
     if not path.is_file():
         raise FileNotFoundError(path)
     # Upstream encodes dtype in filenames. Read existing f64 cache, then cast.
     old = torch.get_default_dtype()
     torch.set_default_dtype(torch.float64)
     try:
-        dataset = AtomicGraphDataset(root=str(cache), name=f'quartz30_{split}',
-                                    cutoff_radius=4.5, files=[], atom_type_mapper={8:0,14:1})
+        dataset = AtomicGraphDataset(root=str(cache), name=f'{name}_{split}',
+                                    cutoff_radius=float(cfg.get('model', {}).get(
+                                        'cutoff_angstrom', 4.5)),
+                                    files=[], atom_type_mapper=mapper)
         graphs = [dataset[i].clone().apply(lambda x: x.float() if x.is_floating_point() else x)
                   for i in range(len(dataset))]
     finally:
         torch.set_default_dtype(old)
-    if len(graphs) != {'train':5000, 'val':1250, 'test':1000}[split]:
+    if len(graphs) != int(counts[split]):
         raise ValueError(f'Incomplete formal {split} dataset')
     return graphs
 
@@ -165,8 +177,8 @@ def main():
     torch.backends.cudnn.allow_tf32 = False
     device = torch.device('cuda')
     start = time.time()
-    train = read_graphs(Path(cfg['cache']), 'train')
-    val = read_graphs(Path(cfg['cache']), 'val')
+    train = read_graphs(Path(cfg['cache']), 'train', cfg)
+    val = read_graphs(Path(cfg['cache']), 'val', cfg)
     sq = torch.cat([g.displacements for g in train]).square().mean().sqrt().item()
     sv = torch.cat([g.update_velocities for g in train]).square().mean().sqrt().item()
     model = RelationalTransition(cfg['model'], (sq,sv)).to(device)
@@ -183,7 +195,7 @@ def main():
     if args.evaluate_best:
         saved = torch.load(args.run/'best.pt', map_location='cpu', weights_only=False)
         model.load_state_dict(saved['model'])
-        test = read_graphs(Path(cfg['cache']), 'test')
+        test = read_graphs(Path(cfg['cache']), 'test', cfg)
         result = evaluate(model, loader(test, False), device, cfg['precision'])
         result.update(checkpoint=str(args.run/'best.pt'), selected_epoch=saved['epoch']+1,
                       selected_optimizer_steps=saved.get('optimizer_steps'),
@@ -281,7 +293,7 @@ def main():
     saved=torch.load(args.run/'best.pt',map_location='cpu',weights_only=False)
     model.load_state_dict(saved['model'])
     # First test access occurs AFTER validation-only model selection is finished.
-    test=read_graphs(Path(cfg['cache']),'test')
+    test=read_graphs(Path(cfg['cache']),'test',cfg)
     result=evaluate(model,loader(test,False),device,cfg['precision'])
     result.update(checkpoint=str(args.run/'best.pt'),selected_epoch=saved['epoch']+1,
                   selected_optimizer_steps=saved.get('optimizer_steps'),

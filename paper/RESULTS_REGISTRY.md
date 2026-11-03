@@ -6,6 +6,10 @@
 - Parameters: 2,357,616
 - Checkpoint SHA256: `d59c8110762e328c8c59debf60820090b6ab912fc896e675db619af02e395508`
 - Test endpoint RMSE: 0.00180043 Å position; 0.00012208 Å/fs velocity
+- Retained R1 independent test: 0.00165393 Å position RMSE and
+  0.000112936 Å/fs velocity RMSE (1,000 samples; validation-selected epoch 348).
+  R1 is therefore the stronger endpoint predictor; autonomous physical quality
+  remains to be compared under the same protocol.
 
 ## Completed evidence
 
@@ -23,7 +27,7 @@ See `reports/stable_geometry_optimization/R3_OPT_PHYSICS_RESULTS.md` for values.
 
 ## Missing evidence
 
-- R1 independent test and basic autonomous physical evaluation.
+- R1 basic autonomous physical evaluation (independent endpoint test complete).
 - Third independent Quartz NVT and at least three additional NVE starts.
 - Water 5 fs training and physical evaluation.
 - Current-Only and Ballistic-Geometry matched controls.

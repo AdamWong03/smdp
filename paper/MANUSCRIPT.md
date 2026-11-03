@@ -333,8 +333,14 @@ geometry-aware message passing and optimization schedule all contribute to the
 observed accuracy. Only matched Current-Only and Ballistic-Geometry experiments
 can attribute an independent benefit to the learned proposal relations. The
 lightweight earlier DSRT-R1 checkpoint is also retained as an architecture-
-capacity reference because its validation endpoint error is lower than R3-Opt;
-its independent and physical results must be reported rather than omitted.
+capacity reference because its validation endpoint error is lower than R3-Opt.
+
+On the 1,000-transition independent test split, R1 obtains position and
+velocity RMSE of 0.001654 Å and 0.00011294 Å/fs, respectively, compared with
+0.001800 Å and 0.00012208 Å/fs for R3-Opt. Thus the lightweight R1 model is the
+stronger endpoint predictor. This comparison does not establish that R1 has
+better autonomous physical statistics, which require the same rollout and
+offline BKS evaluation protocol.
 
 Several limits are structural. The model learns one fixed horizon and does not
 provide arbitrary-time states. Future relations are evaluated only for current

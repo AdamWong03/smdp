@@ -18,6 +18,8 @@ def load_relational(checkpoint, device="cuda"):
 
 
 def atomic_graph(positions, velocities, cell, atomic_numbers, masses, model, device):
+    species = sorted({int(value) for value in torch.as_tensor(atomic_numbers).reshape(-1)})
+    mapper = {atomic_number: index for index, atomic_number in enumerate(species)}
     graph = AtomicGraph.from_atoms_dict(
         dict(positions=torch.as_tensor(positions, dtype=torch.float32),
              velocities=torch.as_tensor(velocities, dtype=torch.float32),
@@ -25,7 +27,7 @@ def atomic_graph(positions, velocities, cell, atomic_numbers, masses, model, dev
              pbc=torch.tensor([True, True, True]),
              atomic_numbers=torch.as_tensor(atomic_numbers, dtype=torch.long).reshape(-1, 1),
              atomic_masses=torch.as_tensor(masses, dtype=torch.float32).reshape(-1, 1)),
-        model.cfg.cutoff_angstrom, {8: 0, 14: 1})
+        model.cfg.cutoff_angstrom, mapper)
     graph.timestep = torch.tensor([model.cfg.horizon_fs], dtype=torch.float32)
     return graph.to(device)
 

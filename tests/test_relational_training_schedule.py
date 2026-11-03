@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from train_relational import make_scheduler
+from train_relational import dataset_settings, make_scheduler
 
 
 def test_warmup_cosine_scheduler_reaches_frozen_endpoints():
@@ -24,3 +24,12 @@ def test_warmup_cosine_scheduler_reaches_frozen_endpoints():
     scale = scheduler.lr_lambdas[0]
     assert config["learning_rate"] * scale(5_000) == pytest.approx(3.0e-4)
     assert config["learning_rate"] * scale(250_000) == pytest.approx(1.0e-5)
+
+
+def test_dataset_settings_support_water_without_changing_quartz_defaults():
+    assert dataset_settings({}) == (
+        'quartz30', {8: 0, 14: 1}, {'train': 5000, 'val': 1250, 'test': 1000})
+    config = {'dataset_name': 'water5', 'atom_type_mapper': {'1': 0, '8': 1},
+              'split_counts': {'train': 5000, 'val': 1250, 'test': 1000}}
+    assert dataset_settings(config) == (
+        'water5', {1: 0, 8: 1}, {'train': 5000, 'val': 1250, 'test': 1000})
