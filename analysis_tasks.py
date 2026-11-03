@@ -21,23 +21,31 @@ class Context:
     def __init__(self,c,r,out):
         self.c,self.r,self.out=c,r,out
         self.completed=int(c.attrs['completed_steps']);thermal=int(c.attrs.get('thermalization_steps',0))
+        self.dt=float(c.attrs['timestep_fs'])
+        reference_dt=float(r.attrs['output_interval_fs'])
+        self.reference_stride=round(self.dt/reference_dt)
+        if not np.isclose(self.reference_stride*reference_dt,self.dt):
+            raise ValueError('Candidate cadence must be an integer multiple of reference cadence')
         self.production=self.completed>thermal;self.start=thermal if self.production else 0
-        self.common=min(self.completed-self.start+1,(len(r['time_fs'])-1)//16+1)
+        self.common=min(self.completed-self.start+1,(len(r['time_fs'])-1)//self.reference_stride+1)
         if self.common<2: raise ValueError('No complete common propagation step')
         self.z=c['atomic_numbers'][:];self.m=c['masses_u'][:];self.cell=c['cell'][:]
         np.testing.assert_array_equal(self.z,r['atomic_numbers'][:]);np.testing.assert_allclose(self.m,r['masses_u'][:])
         self.dof=3*len(self.m)-3
         self.idx=np.unique(np.linspace(0,self.common-1,min(2000,self.common),dtype=int))
-        self.times=self.idx*16.;self.ci=self.start+self.idx
-        self.cv=c['velocities'][self.ci].astype(float);self.rv=r['velocities_A_per_fs'][self.idx*16].astype(float)
+        self.times=self.idx*self.dt;self.ci=self.start+self.idx
+        self.cv=c['velocities'][self.ci].astype(float);self.rv=r['velocities_A_per_fs'][self.idx*self.reference_stride].astype(float)
         self.cke=self.ke(self.cv);self.rke=self.ke(self.rv)
     def ke(self,v): return .5*KINETIC_TO_EV*(self.m[None,:,None]*v*v).sum((1,2))
 
 
 def thermo(x):
+    join = (stats(x.c['segment_join_derivative_RMS_A_fs'][x.start:x.completed+1])
+            if 'segment_join_derivative_RMS_A_fs' in x.c else
+            dict(available=False, reason='endpoint-only model has no dense segment derivative'))
     result=dict(temperature_K=paired(2*x.cke/(x.dof*KB_EV_PER_K),2*x.rke/(x.dof*KB_EV_PER_K)),
         kinetic_energy_eV=paired(x.cke,x.rke),element_kinetic_energy_eV={},
-        segment_join_derivative_RMS_A_fs=stats(x.c['segment_join_derivative_RMS_A_fs'][x.start:x.completed+1]),
+        segment_join_derivative_RMS_A_fs=join,
         minimum_distance_A=float(x.c['minimum_distance_A'][:].min()),thermodynamic_sampling='2000 uniform production frames, matching R1')
     for z in np.unique(x.z):
         m=x.z==z
@@ -47,7 +55,7 @@ def thermo(x):
     pd.DataFrame(dict(time_fs=x.times,SMDP_KE_eV=x.cke,reference_KE_eV=x.rke,
         SMDP_temperature_K=2*x.cke/(x.dof*KB_EV_PER_K),reference_temperature_K=2*x.rke/(x.dof*KB_EV_PER_K))).to_csv(x.out/'kinetic.csv',index=False)
     if x.c.attrs['ensemble']=='nve':
-        q=x.c['positions'][x.ci];qr=x.r['positions_unwrapped_A'][x.idx*16]
+        q=x.c['positions'][x.ci];qr=x.r['positions_unwrapped_A'][x.idx*x.reference_stride]
         pd.DataFrame(dict(time_fs=x.times,position_RMSE_A=np.sqrt(((q-qr)**2).mean((1,2))),
             velocity_RMSE_A_fs=np.sqrt(((x.cv-x.rv)**2).mean((1,2))))).to_csv(x.out/'nve_trajectory_error.csv',index=False)
     return result
@@ -57,7 +65,7 @@ def energy_task(x):
     # Lazy import/initialization: missing MPI cannot prevent other tasks.
     from physics.bks import make_calculator, energy
     calc=make_calculator();cpe=[];rpe=[]
-    for frame,rf in zip(x.ci,x.idx*16):
+    for frame,rf in zip(x.ci,x.idx*x.reference_stride):
         cpe.append(energy(Atoms(numbers=x.z,positions=x.c['positions'][int(frame)],cell=x.cell,pbc=True),calc)[1])
         rpe.append(energy(Atoms(numbers=x.z,positions=x.r['positions_unwrapped_A'][int(rf)],cell=x.cell,pbc=True),calc)[1])
     calc.lmp.close();cpe=np.array(cpe);rpe=np.array(rpe)
@@ -104,8 +112,12 @@ def energy_windows(data):
 
 
 def spectral(x,label):
-    if label=='macro_16fs': cd,cs,cf,rs,dt=x.c['velocities'],x.start,x.common,16,16.
-    else: cd,cs,cf,rs,dt=x.c['dense/velocities'],x.start*16,(x.common-1)*16+1,1,1.
+    if label.startswith('macro_'):
+        cd,cs,cf,rs,dt=x.c['velocities'],x.start,x.common,x.reference_stride,x.dt
+    else:
+        if 'dense/velocities' not in x.c: raise ValueError('Candidate has no dense queried trajectory')
+        dense_stride=round(x.dt)
+        cd,cs,cf,rs,dt=x.c['dense/velocities'],x.start*dense_stride,(x.common-1)*dense_stride+1,1,1.
     workers=getattr(x,'spectral_workers',1)
     cand=spectrum_blocks(cd,x.z,cs,cf,1,dt,cache=x.out/'spectral_cache'/f'{label}_candidate',workers=workers)
     ref=spectrum_blocks(x.r['velocities_A_per_fs'],x.z,0,cf,rs,dt,cache=x.out/'spectral_cache'/f'{label}_reference',workers=workers)
@@ -126,7 +138,7 @@ def spectral(x,label):
 
 def rdf_task(x):
     ri=np.unique(np.linspace(0,x.common-1,min(512,x.common),dtype=int))
-    cq=x.c['positions'][x.start+ri];rq=x.r['positions_unwrapped_A'][ri*16]
+    cq=x.c['positions'][x.start+ri];rq=x.r['positions_unwrapped_A'][ri*x.reference_stride]
     rmax=min(6.,.49/np.linalg.norm(np.linalg.inv(x.cell),axis=0).max());result={};rows=[]
     fig,axes=plt.subplots(2,1,figsize=(7,6))
     for ax,(a,b) in zip(axes,[(14,8),(8,8)]):
@@ -151,10 +163,10 @@ def thermostat(x):
     post=x.c['temperature_K'][x.start:stop].astype(float)
     pre=x.c['pre_thermostat_temperature_K'][start:stop].astype(float)
     alpha=x.c['thermostat_alpha'][start:stop].astype(float)
-    metadata=json.loads(x.c.attrs['thermostat_metadata']);decay=np.exp(-16/metadata['thermostat_tau_fs'])
+    metadata=json.loads(x.c.attrs['thermostat_metadata']);decay=np.exp(-x.dt/metadata['thermostat_tau_fs'])
     expected=decay*pre+(1-decay)*300;factor=x.dof*KB_EV_PER_K/2
     network=(pre-post[:-1])*factor;exchange=(post[1:]-pre)*factor
-    result=dict(target_K=300,tau_fs=metadata['thermostat_tau_fs'],dt_fs=16,production_steps=len(pre),
+    result=dict(target_K=300,tau_fs=metadata['thermostat_tau_fs'],dt_fs=x.dt,production_steps=len(pre),
         post_temperature_K=stats(post[1:]),pre_temperature_K=stats(pre),alpha=stats(alpha),
         network_delta_KE_eV=stats(network),csvr_delta_KE_eV=stats(exchange),
         post_step_delta_KE_eV=stats(np.diff(post)*factor),
@@ -170,14 +182,14 @@ def thermostat(x):
     # Bounded time-block output, retaining per-step source arrays in original HDF5.
     rows=[]
     for ids in np.array_split(np.arange(len(pre)),100):
-        rows.append(dict(time_ps=float(ids.mean()*.016),pre_temperature_K=float(pre[ids].mean()),post_temperature_K=float(post[1:][ids].mean()),
+        rows.append(dict(time_ps=float(ids.mean()*x.dt/1000),pre_temperature_K=float(pre[ids].mean()),post_temperature_K=float(post[1:][ids].mean()),
             network_delta_KE_eV=float(network[ids].mean()),csvr_delta_KE_eV=float(exchange[ids].mean())))
     pd.DataFrame(rows).to_csv(x.out/'thermostat_blocks.csv',index=False)
     return {'thermostat':result}
 
 
 TASKS={'thermo':thermo,'rdf':rdf_task,'energy':energy_task,'thermostat':thermostat,
-       'vdos_macro':lambda x:spectral(x,'macro_16fs'),'vdos_dense':lambda x:spectral(x,'queried_1fs')}
+       'vdos_macro':lambda x:spectral(x,f'macro_{x.dt:g}fs'),'vdos_dense':lambda x:spectral(x,'queried_1fs')}
 
 
 def main():
@@ -196,20 +208,25 @@ def main():
         base=dict(candidate=str(a.candidate),reference=str(a.reference),production_available=x.production,
             trajectory_completed=x.completed>=int(c.attrs.get('thermalization_steps',0))+int(c.attrs['requested_steps']),
             stable=bool(c.attrs['stable']),failure=str(c.attrs['failure_reason']),evaluation_phase='production' if x.production else 'failed_thermalization_diagnostic',
-            duration_ps=(x.common-1)*.016,requested_production_ps=int(c.attrs['requested_steps'])*.016)
+            duration_ps=(x.common-1)*x.dt/1000,requested_production_ps=int(c.attrs['requested_steps'])*x.dt/1000)
         def consolidate():
             result=dict(base);status={}
             for name in TASKS:
                 path=a.output/(name+'.json')
-                if not path.exists():status[name]={'completed':False,'failure_reason':'not run'};continue
+                if not path.exists():
+                    status[name]={'completed':False,'failure_reason':
+                                  'not run' if name in a.tasks else 'not requested'}
+                    continue
                 record=json.loads(path.read_text());status[name]={k:record[k] for k in ['completed','failure_reason','elapsed_s']}
                 if record['completed']:
                     payload=record['metrics']
                     for k,v in payload.items():
                         if k=='VDOS':result.setdefault(k,{}).update(v)
                         else:result[k]=v
-            result['task_status']=status;result['physical_analysis_completed']=all(v['completed'] for v in status.values())
-            result['analysis_failure_reason']={k:v['failure_reason'] for k,v in status.items() if not v['completed']}
+            result['task_status']=status
+            result['physical_analysis_completed']=all(status[name]['completed'] for name in a.tasks)
+            result['analysis_failure_reason']={name:status[name]['failure_reason'] for name in a.tasks
+                                               if not status[name]['completed']}
             save_json(a.output/'metrics.json',result);return result
         for name in a.tasks:
             target=a.output/(name+'.json')
