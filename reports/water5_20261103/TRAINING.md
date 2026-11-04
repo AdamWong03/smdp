@@ -1,6 +1,6 @@
 # DSRT Water 5 fs formal training
 
-Status: running from the frozen R3-Opt architecture on 2026-11-03.
+Status: formal training and independent endpoint test completed on 2026-11-04.
 
 ## Protocol
 
@@ -27,5 +27,22 @@ disjoint across splits.
 - Dataset cache: `.../data/smdp_reference_md_v1/water/derived_graphs/dsrt_5fs`
 - Service: `dsrt-water5-r3opt-20261103.service`
 
-The first epoch is a warmup point, not a selected result: validation position
-RMSE 0.024251 Å and velocity RMSE 0.0067493 Å/fs at optimizer step 625.
+## Final result
+
+The complete 250,000-update schedule ran to epoch 400. Validation loss continued
+to improve through the final low-learning-rate phase, so epoch 400 is the
+validation-selected checkpoint. The independent test set was accessed only
+after selection.
+
+| Metric | Validation | Independent test |
+|---|---:|---:|
+| Position RMSE (Å) | 0.000657063 | 0.000654127 |
+| Velocity RMSE (Å/fs) | 0.000238463 | 0.000237643 |
+| Position MAE (Å) | 0.000455865 | 0.000453784 |
+| Velocity MAE (Å/fs) | 0.000165762 | 0.000165311 |
+
+Training used 22,601.4 seconds (6.28 hours), including the resumed first epoch,
+and reached a peak allocated model memory of about 3.1 GB. The result establishes
+accurate supervised 5 fs endpoints but does not by itself establish autonomous
+liquid dynamics. Multistep and 100 ps NVE evaluation were launched after the
+checkpoint was frozen.

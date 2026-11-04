@@ -31,7 +31,9 @@ See `reports/stable_geometry_optimization/R3_OPT_PHYSICS_RESULTS.md` for values.
 
 - R1 endpoint and two-run 100 ps NVE physical evaluation are complete.
 - Third independent Quartz NVT and at least three additional NVE starts.
-- Water 5 fs training and physical evaluation.
+- Water 5 fs endpoint training is complete: independent-test position/velocity
+  RMSE 0.00065413 Å / 0.00023764 Å/fs at validation-selected epoch 400.
+  Multistep and physical evaluation are in progress.
 - Current-Only and Ballistic-Geometry matched controls.
 - Mechanism analysis versus true pair-geometry change.
 - 250/350 K and independently thermalized large-supercell transfer.
