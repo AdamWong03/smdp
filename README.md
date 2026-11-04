@@ -21,6 +21,10 @@ physical evaluation.
   autonomous prediction evaluation.
 - [`analysis_tasks.py`](analysis_tasks.py), [`physics/`](physics): offline BKS,
   RDF, VDOS and thermodynamic analysis.
+- [`analyze_water.py`](analyze_water.py): original SPC/Fw energy decomposition,
+  molecular kinetic partition, RDF, VDOS/VACF and NVT diffusion.
+- [`diagnose_water_bias.py`](diagnose_water_bias.py): signed prediction errors
+  on real and autonomous states, with evaluation-only true continuations.
 - [`periodic.py`](periodic.py): scalable periodic graph construction.
 
 The frozen configuration is in
@@ -41,6 +45,16 @@ one L40S. Full numbers and limitations are in
 These results do **not** yet establish that future geometry is necessary. That
 claim requires matched Current-Only and Ballistic-Geometry controls.
 
+## Water 5 fs result and diagnosis
+
+The same architecture trained from scratch completes 250,000 updates and
+reaches independent-test position/velocity RMSE 0.000654 Å / 0.0002376 Å/fs.
+Autonomous Water dynamics are substantially worse than endpoint error suggests:
+the first 50 ps gains 6.30 eV total energy, internally overheats, and loses
+molecular translation/rotation energy. H/O VDOS overlap is 0.391/0.614.
+The original-protocol 2.5 ns CSVR evaluation is running; no completed NVT result
+is claimed. See [the measured diagnosis](reports/water5_20261103/PHYSICS.md).
+
 ## Reproduction paths
 
 Server assets are intentionally not committed:
@@ -50,10 +64,13 @@ Server assets are intentionally not committed:
 - derived graph cache: `data/smdp_reference_md_v1/quartz/derived_graphs/trajcast_p64_30fs`
 
 ```bash
-/data1/wyd/envs/trajcast/bin/python train_relational.py --run /path/to/run
+export PYTHONPATH=/data1/wyd/research/foundation_mlip_adaptation/upstream/trajcast-c52f107
+export TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1
+/data1/wyd/envs/mlip/bin/python train_relational.py --run /path/to/run
 
-/data1/wyd/envs/trajcast/bin/python evaluate_relational_rollout.py \
-  --checkpoint /path/to/best.pt --output /path/to/evaluation
+/data1/wyd/envs/mlip/bin/python evaluate_relational_rollout.py \
+  --checkpoint /path/to/best.pt --transitions /path/to/test.h5 \
+  --output /path/to/evaluation.json
 ```
 
 The upstream TrajCast code is used for mature graph/data infrastructure and is

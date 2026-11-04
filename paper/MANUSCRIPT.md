@@ -182,13 +182,14 @@ does not constitute numerical substepping.
 
 ### 3.4 Future-conditioned relational refinement
 
-For every edge ((i,j)) in the current graph, DSRT forms a continuous-image
-proposal relation
+For every directed sender--receiver edge ((i,j)), the implementation uses
+\(d^t_{ij}=r_i-r_j+S_{ij}\), where \(S_{ij}\) is the periodic image shift.
+DSRT forms the continuous-image proposal relation
 
 \[
 \widehat d^p_{ij}
 = d^t_{ij}
-+ (\widehat{\Delta r}^p_j-\widehat{\Delta r}^p_i)
++ (\widehat{\Delta r}^p_i-\widehat{\Delta r}^p_j)
 \]
 
 with the sign matching the directed-edge convention, together with proposal
@@ -213,8 +214,17 @@ training set. The endpoint objective is
 +0.02\,\mathcal L_{\mathrm{proposal}},
 \]
 
-where each term is the sum of normalized position and velocity mean-square
-errors. The proposal loss anchors the intermediate state to an actual future
+where each term is one half of the sum of normalized position and velocity
+mean-square errors:
+
+\[
+\mathcal L_k = \tfrac12\left[
+\operatorname{MSE}(\widehat{\Delta R}^{\,k},\Delta R)/\sigma_R^2
++\operatorname{MSE}(\widehat V^{\,k},V_{t+h})/\sigma_V^2\right],
+\qquad k\in\{\mathrm{final},\mathrm{proposal}\}.
+\]
+
+The proposal loss anchors the intermediate state to an actual future
 estimate; it is not a dense trajectory loss.
 
 The frozen R3-Opt configuration uses 192 scalar, 48 vector and 96 edge channels,
@@ -281,7 +291,7 @@ independent starts. Efficiency includes model execution, neighbor rebuilding,
 thermostat work and production I/O. Compute-only timing is reported separately.
 Step-size ratio is not treated as a measured speedup.
 
-## 5. Current Quartz results
+## 5. Current results
 
 ### 5.1 Endpoint and short autonomous prediction
 
@@ -302,7 +312,8 @@ conservation.
 
 ### 5.3 Long NVT statistics
 
-Two independent experiments each contain 1.5 ns thermalization and 15 ns
+Two autonomous runs from different initial frames and thermostat seeds each
+contain 1.5 ns thermalization and 15 ns
 production (500,000 learned steps). Mean temperatures are 300.23 and 300.60 K
 versus 299.45 K for the reference. Mean potential energies differ by +0.1184 eV
 in both runs, while their standard deviations are 0.435 and 0.430 versus 0.397
@@ -318,6 +329,30 @@ average and CSVR removes approximately the same amount. Temperature agreement
 must therefore be interpreted jointly with thermostat exchange, not as NVE
 energy conservation. End-to-end throughput is 106.1 ns/day on one L40S; a
 compute-only measurement reaches approximately 291 ns/day.
+
+### 5.4 Flexible water: a negative transfer of architecture performance
+
+The same architecture, trained from scratch on 5 fs water endpoints, reaches
+independent-test position/velocity RMSE of 0.000654 Å / 0.0002376 Å/fs.
+Nevertheless, an unthermostatted 100 ps run shows substantial heating.
+Within the common 0--50 ps reference interval its mean temperature is 406.2 K
+versus 276.0 K, and total SPC/Fw energy rises by 6.30 eV versus -0.0235 eV.
+This comparison uses the original bonded topology and long-range electrostatic
+potential; fixed raw reference frames verify the offline energy/force convention.
+
+An instantaneous molecular kinetic decomposition localizes a large imbalance:
+internal kinetic energy averages 8.33 eV versus 2.25 eV, while molecular
+translation and rotation average 0.97 and 0.73 eV versus 2.26 and 2.30 eV.
+The bond-length distribution broadens, O--O structure over-sharpens, and H/O
+sampled VDOS overlap falls to 0.391/0.614. The current endpoint-trained method
+therefore does not reproduce the evaluated liquid dynamics.
+
+Additional short reference continuations from 160 autonomously visited states
+are used only for diagnostics. Their signed prediction errors differ from those
+on real test states, but temperature and state-distribution changes are
+confounded. These observations motivate testing state-dependent propagation
+error rather than assuming a uniform velocity amplification. One fixed-protocol
+2.5 ns NVT evaluation is in progress; its statistics are not yet available.
 
 ## 6. Discussion
 

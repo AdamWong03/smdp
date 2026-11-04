@@ -6,6 +6,9 @@
 - `train_relational.py`: formal supervised training.
 - `rollout_relational.py`, `evaluate_relational_rollout.py`: autonomous use.
 - `physics/`, `analysis_tasks.py`, `periodic.py`: shared physical evaluation.
+- `analyze_water.py`, `physics/spcfw.py`, `physics/water_motion.py`: Water
+  reference energy, molecular motion and long-trajectory statistics.
+- `diagnose_water_bias.py`: conditional signed errors and evaluation-only labels.
 - `configs/`: versioned formal configurations.
 - `paper/`: manuscript, evidence registry and frozen experiment matrix.
 - `reports/stable_geometry_optimization/`: evidence for the frozen Quartz model.
@@ -32,6 +35,7 @@ data/smdp_reference_md_v1/
 experiments/relational_transition/
   quartz30_20261102_r1/      retained lightweight reference best checkpoint
   quartz30_20261103_r3_opt/  frozen paper checkpoint and physical trajectories
+  water5_20261103_r3_opt/   Water checkpoint, NVE diagnosis and active NVT
 ```
 
 Only `best.pt` is retained for completed training. Active trajectories must not

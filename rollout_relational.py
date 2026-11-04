@@ -52,6 +52,7 @@ def main():
     parser.add_argument("--thermostat-metadata", type=Path)
     parser.add_argument("--seed", type=int, default=2026110301)
     parser.add_argument("--device", default="cuda")
+    parser.add_argument('--execution-note', default='GPU exclusivity not recorded')
     args = parser.parse_args()
     if args.output.exists() or args.output.with_suffix(".summary.json").exists():
         raise FileExistsError(args.output)
@@ -66,6 +67,7 @@ def main():
         v = source["velocities_A_per_fs"][args.initial_frame].astype(np.float32)
         cell = source["cell_A"][args.initial_frame]
         z, masses = source["atomic_numbers"][:], source["masses_u"][:]
+        molecule_ids = source['molecule_ids'][:] if 'molecule_ids' in source else None
     thermostat = None
     thermostat_metadata = {}
     if args.ensemble == "nvt":
@@ -87,9 +89,21 @@ def main():
                             stable=False, failure_reason="", checkpoint=str(args.checkpoint),
                             checkpoint_sha256=checksum, seed=args.seed,
                             initial_trajectory=str(args.initial), initial_frame=args.initial_frame,
+                            execution_note=args.execution_note,
                             thermostat_metadata=json.dumps(thermostat_metadata),
                             reference_forces_used_during_propagation=False)
         output["atomic_numbers"] = z; output["masses_u"] = masses; output["cell"] = cell
+        if molecule_ids is not None:
+            output['molecule_ids'] = molecule_ids
+        species = np.unique(z)
+        output['kinetic_species'] = species
+        species_ke = lambda velocity: np.array([
+            .5*KINETIC_TO_EV*np.sum(masses[z==element, None]*velocity[z==element]**2)
+            for element in species])
+        pre_species = output.create_dataset('pre_thermostat_species_KE_eV',
+            (total_steps+1, len(species)), dtype='f8')
+        post_species = output.create_dataset('post_thermostat_species_KE_eV',
+            (total_steps+1, len(species)), dtype='f8')
         shape = (total_steps+1, len(z), 3)
         positions = output.create_dataset("positions", shape, dtype="f4", chunks=(128, len(z), 3), compression="lzf")
         velocities = output.create_dataset("velocities", shape, dtype="f4", chunks=(128, len(z), 3), compression="lzf")
@@ -99,6 +113,7 @@ def main():
         positions[0], velocities[0] = q, v
         scalars["temperature_K"][0] = scalars["pre_thermostat_temperature_K"][0] = temperature(v, masses)
         scalars["thermostat_alpha"][0] = 1.0
+        pre_species[0] = post_species[0] = species_ke(v)
         edges, shifts = near.one(q, cell)
         scalars["minimum_distance_A"][0] = np.linalg.norm(q[edges[0]]+shifts-q[edges[1]], axis=1).min()
         torch.cuda.reset_peak_memory_stats(device)
@@ -116,6 +131,7 @@ def main():
                 if minimum < .65 or pre > 3000 or pre < 1:
                     raise RuntimeError(f"physical safety stop: min={minimum}, preT={pre}")
                 alpha = 1.0
+                pre_ke = species_ke(v)
                 if thermostat is not None:
                     v, alpha = thermostat(v)
                 post = temperature(v, masses)
@@ -125,6 +141,7 @@ def main():
                 scalars["temperature_K"][index] = post
                 scalars["thermostat_alpha"][index] = alpha
                 scalars["minimum_distance_A"][index] = minimum
+                pre_species[index], post_species[index] = pre_ke, species_ke(v)
                 completed = index; output.attrs["completed_steps"] = completed
                 if index % 1000 == 0:
                     output.flush()
@@ -142,6 +159,7 @@ def main():
                   peak_cuda_bytes=torch.cuda.max_memory_allocated(device),
                   hardware=torch.cuda.get_device_name(device), parameters=sum(p.numel() for p in model.parameters()),
                   selected_epoch=saved["epoch"]+1, checkpoint_sha256=checksum)
+    result['execution_note'] = args.execution_note
     args.output.with_suffix(".summary.json").write_text(json.dumps(result, indent=2)+"\n")
     print(json.dumps(result), flush=True)
 

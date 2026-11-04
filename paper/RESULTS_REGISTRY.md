@@ -35,11 +35,25 @@ See `reports/stable_geometry_optimization/R3_OPT_PHYSICS_RESULTS.md` for values.
   406.18 K versus reference 275.99 K; full 100 ps mean 413.93 K, maximum
   608.65 K. Production throughput is 40.34 ns/day on L40S.
   See `reports/water5_20261103/RESULTS.md` and `results.json`.
+- Water SPC/Fw reference energy/force verification and matched 0–50 ps NVE
+  analysis are complete. Total energy increases by 6.296 eV versus -0.0235 eV
+  in the reference. Mean internal/translation/rotation kinetic energies are
+  8.327/0.973/0.727 eV versus 2.253/2.260/2.297 eV. H/O VDOS overlaps are
+  0.391/0.614 and O–O RDF RMSE is 0.408. The liquid is not physically faithful.
+- Signed-error diagnosis completed on 1,000 true test pairs and 160 autonomous
+  states with their own true 5 fs SPC/Fw continuations. These diagnostic labels
+  are never used for training. Real-state mean total-energy endpoint error is
+  -0.00272 eV, whereas early autonomous-state sample means are positive;
+  later means change sign and have large variance. No unique causal mechanism
+  is claimed from these state/temperature-confounded samples.
 
 ## Missing evidence
 
 - Third independent Quartz NVT and at least three additional NVE starts.
-- Water reference-potential energy, RDF, VACF/VDOS, MSD/diffusion and formal NVT.
+- Water 250 ps thermalization + 2.5 ns formal NVT is running with original
+  CSVR 300 K / 50 fs settings. NVT energy, motion partition, RDF, spectra,
+  thermostat exchange and diffusion remain pending. No equilibrium diffusion
+  result is inferred from the nonstationary NVE run.
 - Current-Only and Ballistic-Geometry matched controls.
 - Mechanism analysis versus true pair-geometry change.
 - 250/350 K and independently thermalized large-supercell transfer.

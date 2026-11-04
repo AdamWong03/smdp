@@ -1,0 +1,29 @@
+{
+  "checkpoint_selection": "validation-selected epoch 400; fixed before physical analysis",
+  "horizon_fs": 5.0,
+  "temperature_K": 300.0,
+  "thermostat": "CSVR",
+  "thermostat_tau_fs": 50.0,
+  "thermostat_removed_dof": 3,
+  "thermostat_seed": 2026110401,
+  "thermalization_ps": 250.0,
+  "thermalization_model_steps": 50000,
+  "production_ps": 2500.0,
+  "production_model_steps": 500000,
+  "reference_potential": "Original flexible SPC/Fw, lj/cut/coul/long + PPPM 1e-5",
+  "reference_dt_fs": 0.5,
+  "msd": {
+    "definition": "Time-origin averaged unwrapped molecular COM with global COM drift removed",
+    "sampling_fs": 50.0,
+    "time_blocks": 8,
+    "fit_window_ps": [10.0, 100.0],
+    "fixed_before_nvt_result": true
+  },
+  "bias_diagnostic": {
+    "real_test_states": 1000,
+    "autonomous_states_per_window": 32,
+    "windows_ps": [[0,1],[1,5],[5,20],[20,50],[50,100]],
+    "reference_continuation_fs": 5.0,
+    "used_for_training": false
+  }
+}

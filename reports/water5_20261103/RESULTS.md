@@ -45,11 +45,11 @@ test uses a different graph-building path and is not the production throughput.
 ## Interpretation and remaining work
 
 Good endpoint accuracy has not produced thermally faithful autonomous Water
-dynamics. Numerical completion is not physical validation. Potential/total
-energy, RDF, VACF/VDOS, MSD/diffusion and formal NVT have not yet been evaluated
-for this checkpoint. Water energy evaluation must use the reference flexible
-water potential, not the Quartz BKS calculator. No explanation of the total
-energy source is claimed from temperature alone.
+dynamics. Numerical completion is not physical validation. Subsequent original
+SPC/Fw energy, molecular motion, RDF and VDOS analysis is now complete: see
+[`PHYSICS.md`](PHYSICS.md). It identifies total energy injection and internal
+overheating accompanied by loss of translation/rotation energy. Formal NVT and
+its diffusion result remain pending.
 
 `results.json` contains machine-readable completed metrics and explicit pending
 analysis status. `training_and_nve.png` shows the full training curve and NVE
