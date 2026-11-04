@@ -27,13 +27,19 @@
 
 See `reports/stable_geometry_optimization/R3_OPT_PHYSICS_RESULTS.md` for values.
 
+- R1 endpoint and two-run 100 ps NVE physical evaluation are complete.
+- Water 5 fs training and independent test are complete: position/velocity
+  RMSE 0.00065413 Å / 0.00023764 Å/fs at validation-selected epoch 400.
+  The 999-start multistep test reaches position RMSE 0.008369 Å at 40 fs.
+  A complete 100 ps NVE run exhibits heating: common 0–50 ps mean temperature
+  406.18 K versus reference 275.99 K; full 100 ps mean 413.93 K, maximum
+  608.65 K. Production throughput is 40.34 ns/day on L40S.
+  See `reports/water5_20261103/RESULTS.md` and `results.json`.
+
 ## Missing evidence
 
-- R1 endpoint and two-run 100 ps NVE physical evaluation are complete.
 - Third independent Quartz NVT and at least three additional NVE starts.
-- Water 5 fs endpoint training is complete: independent-test position/velocity
-  RMSE 0.00065413 Å / 0.00023764 Å/fs at validation-selected epoch 400.
-  Multistep and physical evaluation are in progress.
+- Water reference-potential energy, RDF, VACF/VDOS, MSD/diffusion and formal NVT.
 - Current-Only and Ballistic-Geometry matched controls.
 - Mechanism analysis versus true pair-geometry change.
 - 250/350 K and independently thermalized large-supercell transfer.

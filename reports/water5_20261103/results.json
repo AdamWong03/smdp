@@ -1,0 +1,146 @@
+{
+  "endpoint": {
+    "samples": 1000,
+    "position_RMSE_A": 0.0006541270870085142,
+    "velocity_RMSE_A_fs": 0.00023764270835357424,
+    "position_MAE_A": 0.00045378405950032176,
+    "velocity_MAE_A_fs": 0.00016531051916535944,
+    "selection_loss": 0.00023845092731062322,
+    "proposal_loss": 0.001637737138196826,
+    "normalized_position_MSE": 0.000136043994105421,
+    "normalized_velocity_MSE": 0.0003408578601665795,
+    "proposal_normalized_position_MSE": 0.0008629958690144122,
+    "proposal_normalized_velocity_MSE": 0.0024124784134328366,
+    "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/water5_20261103_r3_opt/best.pt",
+    "selected_epoch": 400,
+    "selected_optimizer_steps": 250000,
+    "actual_training_seconds": 22601.42354106903
+  },
+  "multistep": {
+    "samples": 999,
+    "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/water5_20261103_r3_opt/best.pt",
+    "selected_epoch": 400,
+    "batch_size": 8,
+    "elapsed_seconds": 283.1401376599679,
+    "model_seconds": 24.013636118965223,
+    "neighbor_graph_seconds": 258.97911156207556,
+    "horizons": {
+      "1": {
+        "time_fs": 5.0,
+        "position_RMSE_A": 0.0006540983629084822,
+        "position_MAE_A": 0.0004537669980523319,
+        "velocity_RMSE_A_fs": 0.00023764006933097147,
+        "velocity_MAE_A_fs": 0.0001653097092420834,
+        "temperature_RMSE_K": 0.4460354419273743
+      },
+      "2": {
+        "time_fs": 10.0,
+        "position_RMSE_A": 0.0019114660642681463,
+        "position_MAE_A": 0.0013012894640681131,
+        "velocity_RMSE_A_fs": 0.00033023191210280946,
+        "velocity_MAE_A_fs": 0.00022914382295452862,
+        "temperature_RMSE_K": 0.6785011339961762
+      },
+      "4": {
+        "time_fs": 20.0,
+        "position_RMSE_A": 0.004480047541234838,
+        "position_MAE_A": 0.003080512999745792,
+        "velocity_RMSE_A_fs": 0.00044308157234122125,
+        "velocity_MAE_A_fs": 0.0003139063145809133,
+        "temperature_RMSE_K": 0.9341593317734221
+      },
+      "8": {
+        "time_fs": 40.0,
+        "position_RMSE_A": 0.008368861430663227,
+        "position_MAE_A": 0.005970769083787623,
+        "velocity_RMSE_A_fs": 0.000745075144287084,
+        "velocity_MAE_A_fs": 0.0005250985968989348,
+        "temperature_RMSE_K": 1.520026489077351
+      }
+    }
+  },
+  "rollout": {
+    "completed_steps": 20000,
+    "production_steps": 20000,
+    "simulated_ps": 100.0,
+    "stable": true,
+    "failure_reason": null,
+    "elapsed_seconds": 214.17942399799358,
+    "model_and_graph_seconds": 169.08551698294468,
+    "ns_day_end_to_end": 40.3400095056794,
+    "peak_cuda_bytes": 78268416,
+    "hardware": "NVIDIA L40S",
+    "parameters": 2357616,
+    "selected_epoch": 400,
+    "checkpoint_sha256": "4a885a5f1b8a5acf316fe4bfae2c5db9b3b63402f8ae00738fa7e1de4488521b"
+  },
+  "training": {
+    "epochs": 400,
+    "optimizer_updates": 250000,
+    "final_train_loss": 0.00024293983005918562,
+    "final_validation": {
+      "samples": 1250,
+      "position_RMSE_A": 0.0006570628560081003,
+      "velocity_RMSE_A_fs": 0.00023846282745074873,
+      "position_MAE_A": 0.00045586461299099027,
+      "velocity_MAE_A_fs": 0.0001657615076052025,
+      "selection_loss": 0.00024024122199043632,
+      "proposal_loss": 0.0016549815397709608,
+      "normalized_position_MSE": 0.00013726788370404391,
+      "normalized_velocity_MSE": 0.00034321455974131823,
+      "proposal_normalized_position_MSE": 0.0008719079623930156,
+      "proposal_normalized_velocity_MSE": 0.0024380551129579544
+    }
+  },
+  "nve": {
+    "trajectory_completed": true,
+    "physical_analysis_completed": false,
+    "pending": [
+      "potential/total energy",
+      "RDF",
+      "VACF/VDOS",
+      "MSD/diffusion"
+    ],
+    "initial_temperature_K": 275.1084663888633,
+    "mean_temperature_K": 413.92936072753656,
+    "final_temperature_K": 315.2273125331991,
+    "maximum_temperature_K": 608.6541901180584,
+    "minimum_distance_A": 0.8692595958709717,
+    "common_duration_ps": 50.0,
+    "common_candidate_temperature_K": 406.1795930036868,
+    "common_reference_temperature_K": 275.98696841611593,
+    "reference_total_energy_change_eV": -0.02341097790489144,
+    "windows": [
+      {
+        "start_ps": 0,
+        "stop_ps": 1,
+        "mean_temperature_K": 284.7526363613774,
+        "std_temperature_K": 12.079657549578634
+      },
+      {
+        "start_ps": 1,
+        "stop_ps": 5,
+        "mean_temperature_K": 303.91685069178305,
+        "std_temperature_K": 23.336412597432208
+      },
+      {
+        "start_ps": 5,
+        "stop_ps": 20,
+        "mean_temperature_K": 363.184476900614,
+        "std_temperature_K": 40.44415761088174
+      },
+      {
+        "start_ps": 20,
+        "stop_ps": 50,
+        "mean_temperature_K": 445.38056159985496,
+        "std_temperature_K": 51.191960677255366
+      },
+      {
+        "start_ps": 50,
+        "stop_ps": 100,
+        "mean_temperature_K": 421.68261702067974,
+        "std_temperature_K": 50.42820138018097
+      }
+    ]
+  }
+}

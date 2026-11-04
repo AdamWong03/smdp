@@ -44,5 +44,5 @@ after selection.
 Training used 22,601.4 seconds (6.28 hours), including the resumed first epoch,
 and reached a peak allocated model memory of about 3.1 GB. The result establishes
 accurate supervised 5 fs endpoints but does not by itself establish autonomous
-liquid dynamics. Multistep and 100 ps NVE evaluation were launched after the
-checkpoint was frozen.
+liquid dynamics. Multistep and 100 ps NVE evaluation are complete and reveal
+substantial NVE heating; see `RESULTS.md` and `results.json` for the results.
