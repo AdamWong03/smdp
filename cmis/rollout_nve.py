@@ -11,8 +11,12 @@ import time
 import numpy as np
 import torch
 
-from cmis_model import CMIS, CMISConfig
-from vesin_adapter import VesinGraph
+try:
+    from .cmis_model import CMIS, CMISConfig
+    from .vesin_adapter import VesinGraph
+except ImportError:
+    from cmis_model import CMIS, CMISConfig
+    from vesin_adapter import VesinGraph
 
 K_B_EV_PER_K=8.617333262145e-5
 AMU_AFS2_TO_EV=1.66053906660e-27*(1e5**2)/1.602176634e-19

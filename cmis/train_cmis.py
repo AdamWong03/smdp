@@ -19,8 +19,12 @@ from pathlib import Path
 import numpy as np
 import torch
 from torch.utils.data import Dataset,DataLoader
-from cmis_model import CMIS, CMISConfig, small_cell_periodic_graph
-from vesin_adapter import BatchGraph
+try:
+    from .cmis_model import CMIS, CMISConfig, small_cell_periodic_graph
+    from .vesin_adapter import BatchGraph
+except ImportError:
+    from cmis_model import CMIS, CMISConfig, small_cell_periodic_graph
+    from vesin_adapter import BatchGraph
 
 
 class NPZSegments(Dataset):

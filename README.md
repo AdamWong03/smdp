@@ -1,5 +1,10 @@
 # DSRT: future-conditioned relational refinement for learned MD
 
+Latest experiment: [CMIS formal Quartz / Water protocol](reports/cmis_20261106/PROTOCOL.md)
+on `experiment/cmis-coupled-impulse-segments`. Full 350-epoch training runs are
+in progress. [CMIS](cmis/README.md) is the newly supplied model; the DSRT
+implementation and completed results below remain historical comparisons.
+
 DSRT learns a fixed-horizon phase-space transition without evaluating forces
 during inference. It first proposes the future atomic state from current
 periodic relations, converts that proposal into predicted future pair geometry,

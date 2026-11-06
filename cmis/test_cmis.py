@@ -1,7 +1,10 @@
 """Mathematical/software tests; no claim of physical accuracy."""
 import math
 import torch
-from cmis_model import CMIS, CMISConfig, small_cell_periodic_graph
+try:
+    from .cmis_model import CMIS, CMISConfig, small_cell_periodic_graph
+except ImportError:
+    from cmis_model import CMIS, CMISConfig, small_cell_periodic_graph
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(23)

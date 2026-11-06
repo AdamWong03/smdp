@@ -45,7 +45,10 @@ class BatchGraph:
     def __call__(self,flatq:torch.Tensor):
         edges=[];shifts=[]
         if self.debug:
-            from cmis_model import small_cell_periodic_graph
+            try:
+                from .cmis_model import small_cell_periodic_graph
+            except ImportError:
+                from cmis_model import small_cell_periodic_graph
         for b in range(len(self.cells)):
             q=flatq[b*self.n_atoms:(b+1)*self.n_atoms]
             if self.debug:

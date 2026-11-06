@@ -80,10 +80,10 @@ def oscillatory_primitives(s: torch.Tensor, omega: torch.Tensor):
     Q0=0.5*ss.square()+torch.zeros_like(x)
     Qc=0.5*ss**2*sinc_half.square()
     # Avoid catastrophic cancellation of (x-sin(x))/omega**2 near zero.
-    w_safe=torch.where(w.abs()<1e-3,torch.ones_like(w),w)
+    w_safe=torch.where(w.abs()<1e-8,torch.ones_like(w),w)
     Qs_exact=(x-torch.sin(x))/w_safe.square()
     Qs_taylor=(w*ss**3)/6-(w**3*ss**5)/120+(w**5*ss**7)/5040
-    Qs=torch.where(w.abs()<1e-3,Qs_taylor,Qs_exact)
+    Qs=torch.where(x.abs()<0.1,Qs_taylor,Qs_exact)
     return torch.stack([P0,Pc,Ps],dim=-1),torch.stack([Q0,Qc,Qs],dim=-1)
 
 
@@ -197,7 +197,7 @@ class PairModeStep(nn.Module):
         s=self.node_norm(s+self.cfg.mode_update_scale*self.node_up(torch.cat((s,agg),dim=-1)))
         if active_modes is not None:
             s=s*active_modes[None,:,None]
-        # One impulse J_{e,k,b} per mode k and quadratic Bernstein profile b.
+        # One impulse amplitude per mode and [constant, cos, sin] temporal basis.
         head=self.refine_head if is_refinement else self.initial_head
         coeff=head(e).view(-1,n_modes,3,2)
         if is_refinement:
@@ -308,6 +308,8 @@ class CMIS(nn.Module):
             result['mode_attention_first']=attn0
             result['mode_attention_second']=attn1
             result['mode_states']=modes
+            result['mode_edges_initial']=torch.stack([src0,dst0])
+            result['mode_edges_refined']=torch.stack([src1,dst1])
         return result
 
 

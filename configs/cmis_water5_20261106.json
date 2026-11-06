@@ -1,0 +1,22 @@
+{
+  "system": "water",
+  "upstream_commit": "d7e20ed",
+  "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_segments/cmis_5fs",
+  "reference_root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
+  "seed": 20261106,
+  "epochs": 350,
+  "batch_size": 8,
+  "data_workers": 2,
+  "learning_rate": 0.0002,
+  "weight_decay": 0.000001,
+  "gradient_clip": 1.0,
+  "endpoint_weight": 2.0,
+  "precision": "FP32",
+  "model": {
+    "width": 96, "modes": 4, "encoder_layers": 3, "rbf_dim": 20,
+    "cutoff": 4.5, "horizon_fs": 5.0, "velocity_scale": 0.01,
+    "correction_scale": 0.5, "mode_update_scale": 0.2
+  },
+  "selection": "lowest validation mass-weighted segment loss; no test selection",
+  "shared_gpu": true
+}

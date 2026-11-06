@@ -305,7 +305,7 @@ def diffusion_task(x):
     a,b=molecular_centres(q),molecular_centres(rq)
     results={};tables=[];fig,ax=plt.subplots(figsize=(8,5))
     for label,values in [('model',a),('reference',b)]:
-        blocks=np.array_split(values,8);fits=[];curves=[]
+        blocks=np.array_split(values,8);fits=[];short_fits=[];curves=[]
         for block in blocks:
             msd=time_averaged_msd(block);t=np.arange(len(msd))*sampling_fs/1000
             mask=(t>=10)&(t<=100)
@@ -314,17 +314,27 @@ def diffusion_task(x):
             residual=msd[mask]-(slope*t[mask]+intercept)
             denominator=np.sum((msd[mask]-msd[mask].mean())**2)
             fits.append(dict(diffusion_m2_s=float(slope/6*1e-8),slope_A2_ps=float(slope),
-                             intercept_A2=float(intercept),R2=float(1-np.sum(residual**2)/denominator)))
+                             intercept_A2=float(intercept),
+                             R2=float(1-np.sum(residual**2)/denominator) if denominator>0 else None))
+            short=(t>=1)&(t<=10)
+            short_slope,short_intercept=np.polyfit(t[short],msd[short],1)
+            short_residual=msd[short]-(short_slope*t[short]+short_intercept)
+            short_denominator=np.sum((msd[short]-msd[short].mean())**2)
+            short_fits.append(dict(diffusion_m2_s=float(short_slope/6*1e-8),
+                slope_A2_ps=float(short_slope),intercept_A2=float(short_intercept),
+                R2=float(1-np.sum(short_residual**2)/short_denominator) if short_denominator>0 else None))
             curves.append(msd)
         length=min(map(len,curves));mean=np.mean([v[:length] for v in curves],axis=0)
         t=np.arange(length)*sampling_fs/1000
-        results[label]=dict(diffusion_m2_s=stats([v['diffusion_m2_s'] for v in fits]),block_fits=fits)
+        results[label]=dict(diffusion_m2_s=stats([v['diffusion_m2_s'] for v in fits]),block_fits=fits,
+            short_window_1_10ps=dict(diffusion_m2_s=stats([v['diffusion_m2_s'] for v in short_fits]),
+                                    block_fits=short_fits))
         ax.plot(t,mean,label=label)
         tables.extend(dict(source=label,time_ps=float(u),mean_MSD_A2=float(v)) for u,v in zip(t,mean))
     ax.set(xlim=(0,150),xlabel='Lag (ps)',ylabel='Molecular COM MSD (Å²)');ax.legend()
     fig.tight_layout();fig.savefig(x.out/'msd.png',dpi=160);plt.close(fig)
     pd.DataFrame(tables).to_csv(x.out/'msd.csv',index=False)
-    return dict(results=results,fit_window_ps=[10,100],sampling_fs=sampling_fs,blocks=8,
+    return dict(results=results,fit_window_ps=[10,100],additional_sensitivity_window_ps=[1,10],sampling_fs=sampling_fs,blocks=8,
                 definition='Time-origin averaged unwrapped molecular COM; global COM drift removed')
 
 

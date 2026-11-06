@@ -1,0 +1,220 @@
+{
+  "updated_at": "2026-11-06T17:46:30.024583+08:00",
+  "runs": {
+    "quartz30": {
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/cmis/quartz30_20261106_r1",
+      "metadata": {
+        "config": {
+          "width": 96,
+          "modes": 4,
+          "encoder_layers": 3,
+          "rbf_dim": 20,
+          "cutoff": 4.5,
+          "horizon_fs": 30,
+          "velocity_scale": 0.01,
+          "correction_scale": 0.5,
+          "mode_update_scale": 0.2
+        },
+        "scale_q": 0.060796965408012625,
+        "scale_v": 0.004484083108536462,
+        "seed": 20261106,
+        "parameters": 431827,
+        "train_samples": 5000,
+        "val_samples": 1250,
+        "times_fs": [
+          3.0,
+          6.0,
+          9.0,
+          12.0,
+          15.0,
+          18.0,
+          21.0,
+          24.0,
+          27.0,
+          30.0
+        ],
+        "dataset": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_segments/cmis_30fs",
+        "hardware": "NVIDIA L40S",
+        "initialized_from_pretrained": false,
+        "precision": "FP32",
+        "upstream_commit": "d7e20ed"
+      },
+      "last": {
+        "epoch": 15,
+        "optimizer_steps": 9375,
+        "train": {
+          "samples": 5000,
+          "total_loss": 0.05333380777090788,
+          "position_loss": 0.013025759963691234,
+          "velocity_loss": 0.04030804780721665,
+          "endpoint_position_RMSE_A": 0.012112718129804302,
+          "endpoint_velocity_RMSE_A_fs": 0.0015243596800190245,
+          "endpoint_position_MAE_A": 0.009416866838932038,
+          "endpoint_velocity_MAE_A_fs": 0.0011944965006783605,
+          "segment_position_RMSE_A": 0.00658959681080262,
+          "segment_velocity_RMSE_A_fs": 0.0008605920994142908,
+          "seconds": 39.08754278894048
+        },
+        "validation": {
+          "samples": 1250,
+          "total_loss": 0.06250925864577293,
+          "position_loss": 0.019199809485673906,
+          "velocity_loss": 0.04330944916009903,
+          "endpoint_position_RMSE_A": 0.013128702041267308,
+          "endpoint_velocity_RMSE_A_fs": 0.0015243882936736013,
+          "endpoint_position_MAE_A": 0.010313206723332404,
+          "endpoint_velocity_MAE_A_fs": 0.001197395845130086,
+          "segment_position_RMSE_A": 0.008443483485132122,
+          "segment_velocity_RMSE_A_fs": 0.000909666974970781,
+          "seconds": 11.072903800057247
+        },
+        "lr": 0.0002,
+        "improved": false,
+        "epoch_seconds": 50.16130845597945,
+        "peak_cuda_bytes": 1154843136
+      },
+      "best": {
+        "epoch": 14,
+        "optimizer_steps": 8750,
+        "train": {
+          "samples": 5000,
+          "total_loss": 0.05390497581809759,
+          "position_loss": 0.012672676055133343,
+          "velocity_loss": 0.04123229976296425,
+          "endpoint_position_RMSE_A": 0.012023678179190866,
+          "endpoint_velocity_RMSE_A_fs": 0.001544568545965475,
+          "endpoint_position_MAE_A": 0.009420495589077474,
+          "endpoint_velocity_MAE_A_fs": 0.0012100031848996879,
+          "segment_position_RMSE_A": 0.00645475180837392,
+          "segment_velocity_RMSE_A_fs": 0.0008697192895809909,
+          "seconds": 38.00153872894589
+        },
+        "validation": {
+          "samples": 1250,
+          "total_loss": 0.046542590242624284,
+          "position_loss": 0.010217472559213639,
+          "velocity_loss": 0.036325117683410645,
+          "endpoint_position_RMSE_A": 0.01064458383319711,
+          "endpoint_velocity_RMSE_A_fs": 0.0014610280534925106,
+          "endpoint_position_MAE_A": 0.008419483867287636,
+          "endpoint_velocity_MAE_A_fs": 0.0011485579961910844,
+          "segment_position_RMSE_A": 0.005702023662125419,
+          "segment_velocity_RMSE_A_fs": 0.000810131031091718,
+          "seconds": 6.3995959860039875
+        },
+        "lr": 0.0002,
+        "improved": true,
+        "epoch_seconds": 44.401970779988915,
+        "peak_cuda_bytes": 1154921984
+      },
+      "completed_epochs": 15,
+      "planned_epochs": 350,
+      "stage": "formal training in progress"
+    },
+    "water5": {
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/cmis/water5_20261106_r1",
+      "metadata": {
+        "config": {
+          "width": 96,
+          "modes": 4,
+          "encoder_layers": 3,
+          "rbf_dim": 20,
+          "cutoff": 4.5,
+          "horizon_fs": 5,
+          "velocity_scale": 0.01,
+          "correction_scale": 0.5,
+          "mode_update_scale": 0.2
+        },
+        "scale_q": 0.012282777370021064,
+        "scale_v": 0.005422278876127508,
+        "seed": 20261106,
+        "parameters": 431827,
+        "train_samples": 5000,
+        "val_samples": 1250,
+        "times_fs": [
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0
+        ],
+        "dataset": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_segments/cmis_5fs",
+        "hardware": "NVIDIA L40S",
+        "initialized_from_pretrained": false,
+        "precision": "FP32",
+        "upstream_commit": "d7e20ed"
+      },
+      "last": {
+        "epoch": 14,
+        "optimizer_steps": 8750,
+        "train": {
+          "samples": 5000,
+          "total_loss": 0.054823263618350035,
+          "position_loss": 0.026381136587262155,
+          "velocity_loss": 0.028442127031087876,
+          "endpoint_position_RMSE_A": 0.006817357892129003,
+          "endpoint_velocity_RMSE_A_fs": 0.0028387698906203215,
+          "endpoint_position_MAE_A": 0.004312953066080809,
+          "endpoint_velocity_MAE_A_fs": 0.0018578770641237497,
+          "segment_position_RMSE_A": 0.00407605463584718,
+          "segment_velocity_RMSE_A_fs": 0.0019471646251797553,
+          "seconds": 42.43129208299797
+        },
+        "validation": {
+          "samples": 1250,
+          "total_loss": 0.0531256370216608,
+          "position_loss": 0.02599145297408104,
+          "velocity_loss": 0.027134184047579765,
+          "endpoint_position_RMSE_A": 0.006694138528005524,
+          "endpoint_velocity_RMSE_A_fs": 0.0027378249785107627,
+          "endpoint_position_MAE_A": 0.004253263169527054,
+          "endpoint_velocity_MAE_A_fs": 0.001778247402049601,
+          "segment_position_RMSE_A": 0.003994912770800056,
+          "segment_velocity_RMSE_A_fs": 0.0018862857469045945,
+          "seconds": 7.481310762930661
+        },
+        "lr": 0.0002,
+        "improved": false,
+        "epoch_seconds": 49.91339195496403,
+        "peak_cuda_bytes": 1661128704
+      },
+      "best": {
+        "epoch": 13,
+        "optimizer_steps": 8125,
+        "train": {
+          "samples": 5000,
+          "total_loss": 0.0633428965985775,
+          "position_loss": 0.030660753378272055,
+          "velocity_loss": 0.032682143220305444,
+          "endpoint_position_RMSE_A": 0.007383341968941944,
+          "endpoint_velocity_RMSE_A_fs": 0.003039810304114133,
+          "endpoint_position_MAE_A": 0.004667175697535276,
+          "endpoint_velocity_MAE_A_fs": 0.001986916187591851,
+          "segment_position_RMSE_A": 0.00438935272352632,
+          "segment_velocity_RMSE_A_fs": 0.002089665021207101,
+          "seconds": 48.133355404948816
+        },
+        "validation": {
+          "samples": 1250,
+          "total_loss": 0.046142686730623245,
+          "position_loss": 0.02188704535961151,
+          "velocity_loss": 0.024255641371011733,
+          "endpoint_position_RMSE_A": 0.0061510414110358316,
+          "endpoint_velocity_RMSE_A_fs": 0.0026170867374369364,
+          "endpoint_position_MAE_A": 0.003868703741952777,
+          "endpoint_velocity_MAE_A_fs": 0.0017134113216772675,
+          "segment_position_RMSE_A": 0.0037000423941745777,
+          "segment_velocity_RMSE_A_fs": 0.0017838216416173971,
+          "seconds": 7.182304474059492
+        },
+        "lr": 0.0002,
+        "improved": true,
+        "epoch_seconds": 55.31646375195123,
+        "peak_cuda_bytes": 1662179328
+      },
+      "completed_epochs": 14,
+      "planned_epochs": 350,
+      "stage": "formal training in progress"
+    }
+  }
+}

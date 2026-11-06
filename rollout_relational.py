@@ -53,12 +53,22 @@ def main():
     parser.add_argument("--seed", type=int, default=2026110301)
     parser.add_argument("--device", default="cuda")
     parser.add_argument('--execution-note', default='GPU exclusivity not recorded')
+    parser.add_argument('--model-type',choices=['dsrt','cmis'],default='dsrt')
+    parser.add_argument('--dense-queries',action='store_true')
     args = parser.parse_args()
     if args.output.exists() or args.output.with_suffix(".summary.json").exists():
         raise FileExistsError(args.output)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     device = torch.device(args.device)
-    model, saved = load_relational(args.checkpoint, device)
+    if args.model_type=='cmis':
+        from cmis.inference import load_cmis,step as cmis_step,segment as cmis_segment
+        model,saved=load_cmis(args.checkpoint,device)
+        predict_step=cmis_step
+    else:
+        model,saved=load_relational(args.checkpoint,device)
+        predict_step=step
+    if args.dense_queries and args.model_type!='cmis':
+        raise ValueError('Dense queries require a segment model')
     dt = model.cfg.horizon_fs
     with h5py.File(args.initial) as source:
         if not 0 <= args.initial_frame < len(source["positions_unwrapped_A"]):
@@ -76,7 +86,7 @@ def main():
             raise ValueError("Expected the frozen 300 K NVT-CSVR protocol")
         thermostat = CSVR(masses, dt, thermostat_metadata["thermostat_tau_fs"], args.seed)
     total_steps = args.thermalization_steps + args.steps
-    neighbors = PeriodicGraphBuilder(model.cfg.cutoff_angstrom)
+    neighbors = PeriodicGraphBuilder(model.cfg.cutoff if args.model_type=='cmis' else model.cfg.cutoff_angstrom)
     near = PeriodicGraphBuilder(3.0)
     checksum = hashlib.sha256(args.checkpoint.read_bytes()).hexdigest()
     start = time.perf_counter()
@@ -90,6 +100,7 @@ def main():
                             checkpoint_sha256=checksum, seed=args.seed,
                             initial_trajectory=str(args.initial), initial_frame=args.initial_frame,
                             execution_note=args.execution_note,
+                            model_type=args.model_type,
                             thermostat_metadata=json.dumps(thermostat_metadata),
                             reference_forces_used_during_propagation=False)
         output["atomic_numbers"] = z; output["masses_u"] = masses; output["cell"] = cell
@@ -107,6 +118,14 @@ def main():
         shape = (total_steps+1, len(z), 3)
         positions = output.create_dataset("positions", shape, dtype="f4", chunks=(128, len(z), 3), compression="lzf")
         velocities = output.create_dataset("velocities", shape, dtype="f4", chunks=(128, len(z), 3), compression="lzf")
+        dense=None
+        if args.dense_queries:
+            if not float(dt).is_integer():raise ValueError('Dense cadence requires integral fs horizon')
+            dense=output.create_dataset('dense/velocities',
+                (total_steps*int(dt)+1,len(z),3),dtype='f4',chunks=(256,len(z),3),compression='lzf')
+            dense[0]=v
+            dense.attrs['dt_fs']=1.
+            dense.attrs['convention']='Neural interior queries; committed endpoint velocity after CSVR at boundaries'
         scalars = {name: output.create_dataset(name, (total_steps+1,), dtype="f8") for name in
                    ["time_fs", "temperature_K", "pre_thermostat_temperature_K",
                     "thermostat_alpha", "minimum_distance_A"]}
@@ -120,7 +139,13 @@ def main():
         try:
             for index in range(1, total_steps+1):
                 torch.cuda.synchronize(device); tic = time.perf_counter()
-                qn, vn = step(model, q, v, cell, z, masses, device, builder=neighbors)
+                dense_values=None
+                if dense is not None:
+                    predicted=cmis_segment(model,q,v,cell,z,masses,device,neighbors,np.arange(1,int(dt)+1))
+                    qn,vn=predicted['positions'][-1],predicted['velocities'][-1]
+                    dense_values=predicted['velocities'].cpu().numpy()
+                else:
+                    qn,vn=predict_step(model,q,v,cell,z,masses,device,builder=neighbors)
                 torch.cuda.synchronize(device); model_seconds += time.perf_counter()-tic
                 q, v = qn.cpu().numpy(), vn.cpu().numpy()
                 pre = temperature(v, masses)
@@ -142,6 +167,9 @@ def main():
                 scalars["thermostat_alpha"][index] = alpha
                 scalars["minimum_distance_A"][index] = minimum
                 pre_species[index], post_species[index] = pre_ke, species_ke(v)
+                if dense is not None:
+                    dense_values[-1]=v
+                    dense[(index-1)*int(dt)+1:index*int(dt)+1]=dense_values
                 completed = index; output.attrs["completed_steps"] = completed
                 if index % 1000 == 0:
                     output.flush()
@@ -149,6 +177,8 @@ def main():
                                           minimum_A=minimum, elapsed_s=time.perf_counter()-start)), flush=True)
         except Exception as error:
             failure = f"{type(error).__name__}: {error}"
+            output['failure_state/positions']=q
+            output['failure_state/velocities']=v
         elapsed = time.perf_counter()-start
         output.attrs.update(stable=failure is None, failure_reason=failure or "")
         output.flush()
