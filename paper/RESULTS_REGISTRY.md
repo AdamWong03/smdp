@@ -46,14 +46,21 @@ See `reports/stable_geometry_optimization/R3_OPT_PHYSICS_RESULTS.md` for values.
   -0.00272 eV, whereas early autonomous-state sample means are positive;
   later means change sign and have large variance. No unique causal mechanism
   is claimed from these state/temperature-confounded samples.
+- Water 250 ps thermalization + 2.5 ns production and all six physical tasks
+  are complete. Full-step post-thermostat mean temperature is 311.427 K.
+  Translation/rotation/internal kinetic energy averages 0.152/0.212/7.330 eV
+  versus 2.459/2.502/2.450 eV. H/O VDOS overlap is 0.215/0.233; O–O RDF peak
+  is 11.46 versus 3.16. Mean potential energy is -29.740 versus -27.682 eV.
+  Model MSD plateaus: its tiny, sometimes negative block slopes do not establish
+  a normal positive diffusion coefficient. Reference diffusion is 1.883e-9 m²/s.
+  The original energy-task image/step-alignment errors were repaired, checked
+  against raw reference data and rerun without regenerating trajectories.
 
 ## Missing evidence
 
 - Third independent Quartz NVT and at least three additional NVE starts.
-- Water 250 ps thermalization + 2.5 ns formal NVT is running with original
-  CSVR 300 K / 50 fs settings. NVT energy, motion partition, RDF, spectra,
-  thermostat exchange and diffusion remain pending. No equilibrium diffusion
-  result is inferred from the nonstationary NVE run.
+- Two additional Water NVT initial states from the original experiment matrix;
+  the one completed run is a negative physical-fidelity result.
 - Current-Only and Ballistic-Geometry matched controls.
 - Mechanism analysis versus true pair-geometry change.
 - 250/350 K and independently thermalized large-supercell transfer.

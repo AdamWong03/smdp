@@ -48,8 +48,8 @@ Good endpoint accuracy has not produced thermally faithful autonomous Water
 dynamics. Numerical completion is not physical validation. Subsequent original
 SPC/Fw energy, molecular motion, RDF and VDOS analysis is now complete: see
 [`PHYSICS.md`](PHYSICS.md). It identifies total energy injection and internal
-overheating accompanied by loss of translation/rotation energy. Formal NVT and
-its diffusion result remain pending.
+overheating accompanied by loss of translation/rotation energy. Formal 2.5 ns
+NVT and its physical analyses are now complete; see [`NVT_RESULTS.md`](NVT_RESULTS.md).
 
 `results.json` contains machine-readable completed metrics and explicit pending
 analysis status. `training_and_nve.png` shows the full training curve and NVE

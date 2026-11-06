@@ -12,7 +12,7 @@ relations or ballistic future relations.
 | Stage | Experiment | Model selection | Primary evidence |
 |---|---|---|---|
 | A | Freeze Quartz evidence; paper draft; R1 independent evaluation | Existing validation selections | Complete: endpoint test and two 100 ps NVE runs |
-| B | Water, 64 flexible molecules, 5 fs | Endpoint training/test complete | NVE energy/motion/RDF/VDOS and signed-error diagnosis complete; internal overheating; 2.5 ns NVT running |
+| B | Water, 64 flexible molecules, 5 fs | Endpoint training/test complete | NVE + one 2.5 ns NVT fully analyzed; internal overheating, suppressed molecular motion and failed liquid statistics |
 | C | Current-Only and Ballistic-Geometry controls on Quartz and Water | Same split and validation rule as Full | Mechanism benefit versus geometric change |
 | D | Quartz repeats, 250/350 K, 1,296/4,374 atoms | No reselection of frozen 300 K checkpoint | Repeatability, transfer limits, throughput |
 | E | Diverse 25K Quartz training set | Same validation set and matched optimizer updates | Data efficiency and physical-statistics gain |

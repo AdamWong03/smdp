@@ -52,8 +52,10 @@ reaches independent-test position/velocity RMSE 0.000654 Å / 0.0002376 Å/fs.
 Autonomous Water dynamics are substantially worse than endpoint error suggests:
 the first 50 ps gains 6.30 eV total energy, internally overheats, and loses
 molecular translation/rotation energy. H/O VDOS overlap is 0.391/0.614.
-The original-protocol 2.5 ns CSVR evaluation is running; no completed NVT result
-is claimed. See [the measured diagnosis](reports/water5_20261103/PHYSICS.md).
+The original-protocol 2.5 ns CSVR evaluation is also complete: internal motion
+dominates, molecular translation/rotation are suppressed, and H/O VDOS overlap
+is only 0.215/0.233. See [the measured diagnosis](reports/water5_20261103/PHYSICS.md)
+and [complete NVT results](reports/water5_20261103/NVT_RESULTS.md).
 
 ## Reproduction paths
 

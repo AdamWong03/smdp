@@ -30,6 +30,7 @@ class WaterReference:
             if not np.allclose(self.cell, np.diag(np.diag(self.cell)), atol=1e-10):
                 raise ValueError('Formal water reference is orthorhombic')
             lo, hi, xy, yz, xz, _, _ = self.lmp.extract_box()
+            self.origin = np.asarray(lo, dtype=float)
             np.testing.assert_allclose(np.asarray(hi)-lo, np.diag(self.cell), atol=1e-7)
             types = np.ctypeslib.as_array(self.lmp.gather_atoms('type', 0, 1), shape=(self.n,))
             np.testing.assert_array_equal(np.where(types == 1, 8, 1), atomic_numbers)
@@ -41,10 +42,20 @@ class WaterReference:
         q = np.ascontiguousarray(positions, dtype=np.float64)
         if q.shape != (self.n, 3) or not np.isfinite(q).all():
             raise ValueError('Invalid water coordinates')
-        # Reset images before remapping the supplied continuous coordinates.
-        # LAMMPS reconstructs the bonded periodic geometry during run 0.
-        self.lmp.command('set atom * image 0 0 0')
-        self.lmp.scatter_atoms('x', 1, 3, q.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+        # Long diffusive trajectories can span many boxes. Supply wrapped x
+        # AND their consistent image flags, rather than expecting run 0 to
+        # repair arbitrary unwrapped coordinates after a large frame jump.
+        fractional = (q-self.origin) @ np.linalg.inv(self.cell)
+        image = np.floor(fractional).astype(np.int64)
+        wrapped = np.ascontiguousarray(self.origin+(fractional-image) @ self.cell)
+        self.lmp.scatter_atoms('x', 1, 3, wrapped.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+        nlocal = int(self.lmp.extract_setting('nlocal'))
+        if nlocal != self.n:
+            raise ValueError('Offline WaterReference requires a single MPI rank')
+        ids = self.lmp.numpy.extract_atom('id')[:nlocal]
+        encoded = np.array([self.lmp.encode_image_flags(*map(int, flags)) for flags in image],
+                           dtype=self.lmp.c_imageint)
+        self.lmp.numpy.extract_atom('image')[:nlocal] = encoded[ids-1]
         self.lmp.command('run 0 pre yes post no')
         result = {name: float(self.lmp.get_thermo(name))/EV_TO_KCAL_MOL
                   for name in self.components}
@@ -82,12 +93,27 @@ class WaterReference:
 
 def verify_reference(raw, calculator, frames):
     """Compare raw NVE energies/forces; return measured errors before acceptance."""
+    # Long reference trajectories retain coordinates every .5 fs but thermo
+    # every 5 fs. Match by the recorded MD step, never by array row number.
+    thermo_steps = raw['thermo/step'][:]
+    raw_steps = raw['step'][:]
     records = []
-    for frame in frames:
-        result = calculator.evaluate(raw['positions_unwrapped_A'][frame], forces=True)
-        force_error = result['forces_eV_A'] - raw['forces_eV_per_A'][frame]
-        records.append(dict(frame=int(frame), energy_error_eV=float(
-            result['pe']-raw['thermo/potential_energy_eV'][frame]),
-            force_RMSE_eV_A=float(np.sqrt(np.mean(force_error**2))),
-            force_max_error_eV_A=float(abs(force_error).max())))
+    for requested_frame in frames:
+        step = raw_steps[requested_frame]
+        ti = min(int(np.searchsorted(thermo_steps, step)), len(thermo_steps)-1)
+        if ti > 0 and abs(thermo_steps[ti-1]-step) < abs(thermo_steps[ti]-step):
+            ti -= 1
+        frame = int(np.searchsorted(raw_steps, thermo_steps[ti]))
+        if frame >= len(raw_steps) or raw_steps[frame] != thermo_steps[ti]:
+            raise ValueError('No coordinate frame matches the saved thermo MD step')
+        has_forces = 'forces_eV_per_A' in raw
+        result = calculator.evaluate(raw['positions_unwrapped_A'][frame], forces=has_forces)
+        record = dict(frame=frame, requested_frame=int(requested_frame), thermo_index=ti,
+            energy_error_eV=float(result['pe']-raw['thermo/potential_energy_eV'][ti]),
+            force_available=has_forces)
+        if has_forces:
+            force_error = result['forces_eV_A'] - raw['forces_eV_per_A'][frame]
+            record.update(force_RMSE_eV_A=float(np.sqrt(np.mean(force_error**2))),
+                          force_max_error_eV_A=float(abs(force_error).max()))
+        records.append(record)
     return records

@@ -77,14 +77,14 @@ The O–O peak is substantially over-sharpened. VDOS uses 5 fs matched
 sampling (100 THz Nyquist); the heated NVE is nonstationary, so these
 overlaps are not equilibrium spectra or an independent diffusion result.
 
-## Next running experiment
+## Follow-up NVT protocol
 
 One 300 K CSVR run uses the original 50 fs coupling time, 250 ps
 thermalization and 2.5 ns production. The frozen checkpoint is unchanged.
 Per-element pre/post thermostat kinetic energies are recorded. Molecular
 COM diffusion uses eight blocks, 50 fs sampling and a predeclared 10–100 ps
 MSD fitting interval. The GPU is shared, so runtime is not an exclusive-GPU
-benchmark. NVT results remain pending until production and analysis finish.
+benchmark. Completed NVT results are reported separately in NVT_RESULTS.md.
 
 ## Software correction
 

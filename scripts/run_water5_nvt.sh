@@ -31,4 +31,4 @@ fi
     --topology "$data/equilibration/snapshots/water_5.data" \
     --output "$out/analysis" \
     --tasks motion energy rdf vdos thermostat diffusion \
-    > "$out/analysis.log" 2>&1
+    >> "$out/analysis.log" 2>&1

@@ -95,7 +95,7 @@ def energy_task(x, topology):
         frames = np.unique(np.linspace(0, len(x.r['time_fs'])-1, 8, dtype=int))
         verification = verify_reference(x.r, calc, frames)
         accepted = (max(abs(r['energy_error_eV']) for r in verification) < 1e-3 and
-                    max(r['force_max_error_eV_A'] for r in verification) < .02)
+                    max(r.get('force_max_error_eV_A', 0.) for r in verification) < .02)
         save(x.out/'reference_verification.json', dict(accepted=accepted, frames=verification,
             tolerances=dict(energy_eV=1e-3, max_force_eV_A=.02),
             rationale='Allows rounded raw dump coordinates/forces; no energy recentering'))
@@ -176,7 +176,8 @@ def vdos_task(x):
         return dict(available=False, reason='Less than 4.096 ps')
     frequency, cp = c; _, rp = r
     result = dict(nyquist_THz=float(frequency[-1]), cadence_fs=x.dt, elements={},
-                  interpretation='Matched sampled spectra; NVE heating is nonstationary')
+                  interpretation=('Matched sampled NVT production spectra' if x.c.attrs['ensemble']=='nvt'
+                                  else 'Matched sampled spectra; NVE heating is nonstationary'))
     fig, axes = plt.subplots(2, 1, figsize=(8, 7)); rows = []
     for ax, z in zip(axes, sorted(cp)):
         cm, rm = cp[z].mean(0), rp[z].mean(0)

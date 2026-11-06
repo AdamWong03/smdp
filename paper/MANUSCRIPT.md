@@ -351,8 +351,18 @@ Additional short reference continuations from 160 autonomously visited states
 are used only for diagnostics. Their signed prediction errors differ from those
 on real test states, but temperature and state-distribution changes are
 confounded. These observations motivate testing state-dependent propagation
-error rather than assuming a uniform velocity amplification. One fixed-protocol
-2.5 ns NVT evaluation is in progress; its statistics are not yet available.
+error rather than assuming a uniform velocity amplification.
+
+A subsequent fixed-protocol NVT run completes 250 ps thermalization and 2.5 ns
+production. CSVR at 300 K with 50 fs relaxation maintains a full-step mean of
+311.43 K while removing 0.02981 eV kinetic energy per learned step on average.
+Translation, rotation and internal kinetic energies average 0.152, 0.212 and
+7.330 eV, compared with 2.459, 2.502 and 2.450 eV in the reference. The O--O
+RDF peak height is 11.46 versus 3.16; H/O VDOS overlaps are 0.215/0.233.
+Molecular COM MSD approaches a plateau, with no credible normal diffusion
+regime, whereas reference diffusion is 1.883e-9 m²/s. Mean potential energy is
+-29.740 versus -27.682 eV. This endpoint-trained checkpoint therefore fails
+the evaluated liquid statistical and dynamical tests even under thermostatting.
 
 ## 6. Discussion
 
