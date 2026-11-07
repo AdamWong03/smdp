@@ -1,8 +1,11 @@
 # DSRT: future-conditioned relational refinement for learned MD
 
 Latest experiment: [CMIS formal Quartz / Water protocol](reports/cmis_20261106/PROTOCOL.md)
-on `experiment/cmis-coupled-impulse-segments`. Full 350-epoch training runs are
-in progress. [CMIS](cmis/README.md) is the newly supplied model; the DSRT
+on `experiment/cmis-coupled-impulse-segments`. Both 350-epoch training runs and
+independent tests are complete. [Final results](reports/cmis_20261106/RESULTS.md)
+show worse endpoint accuracy, early Quartz instability and failed NVT
+thermalization on both systems. Water NVE improves some motion/spectral metrics
+but cools and loses energy. [CMIS](cmis/README.md) is the newly supplied model; the DSRT
 implementation and completed results below remain historical comparisons.
 
 DSRT learns a fixed-horizon phase-space transition without evaluating forces

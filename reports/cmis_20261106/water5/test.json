@@ -1,0 +1,272 @@
+{
+  "samples": 1000,
+  "queries": {
+    "1": {
+      "position_RMSE_A": 0.000123891695506418,
+      "velocity_RMSE_A_fs": 0.00017905426861648306,
+      "position_MAE_A": 8.346161038531994e-05,
+      "velocity_MAE_A_fs": 0.00012133228229081213
+    },
+    "2": {
+      "position_RMSE_A": 0.000292602652568754,
+      "velocity_RMSE_A_fs": 0.00025108059616112013,
+      "position_MAE_A": 0.00020011064056622117,
+      "velocity_MAE_A_fs": 0.0001708022088713545
+    },
+    "3": {
+      "position_RMSE_A": 0.0005423616610013584,
+      "velocity_RMSE_A_fs": 0.0003264035550907213,
+      "position_MAE_A": 0.00036922681135483673,
+      "velocity_MAE_A_fs": 0.00022091181658686072
+    },
+    "4": {
+      "position_RMSE_A": 0.0008721735848613294,
+      "velocity_RMSE_A_fs": 0.00043725482738657807,
+      "position_MAE_A": 0.0005901263981702667,
+      "velocity_MAE_A_fs": 0.00029557801217312905
+    },
+    "5": {
+      "position_RMSE_A": 0.0013191272564768805,
+      "velocity_RMSE_A_fs": 0.0005999854107425936,
+      "position_MAE_A": 0.0008893041769534622,
+      "velocity_MAE_A_fs": 0.00040445419746648446
+    }
+  },
+  "species_endpoint": {
+    "1": {
+      "position_RMSE_A": 0.0016082951198350133,
+      "velocity_RMSE_A_fs": 0.0007317169603020183,
+      "position_MAE_A": 0.0012485210576714963,
+      "velocity_MAE_A_fs": 0.0005691359931346274
+    },
+    "8": {
+      "position_RMSE_A": 0.00021694186172895873,
+      "velocity_RMSE_A_fs": 9.554087776771302e-05,
+      "position_MAE_A": 0.00017087041551739428,
+      "velocity_MAE_A_fs": 7.509060613019851e-05
+    }
+  },
+  "modes": {
+    "endpoint_velocity_contribution": {
+      "effective_rank": 1.7599860628566213,
+      "cosine": [
+        [
+          1.0,
+          0.7796821543891505,
+          0.6662610553680078,
+          0.2690405023509971
+        ],
+        [
+          0.7796821543891505,
+          1.0,
+          0.9314777173078701,
+          0.723968876451847
+        ],
+        [
+          0.6662610553680078,
+          0.9314777173078701,
+          1.0,
+          0.8011128417555097
+        ],
+        [
+          0.2690405023509971,
+          0.723968876451847,
+          0.8011128417555097,
+          1.0
+        ]
+      ]
+    },
+    "impulse_amplitude_squared_share": [
+      0.25676521214515413,
+      0.26854339631475416,
+      0.21785858890610438,
+      0.25683280263398744
+    ],
+    "mean_second_attention": [
+      [
+        0.4122579525228163,
+        0.16435892287211998,
+        0.1946081865572875,
+        0.22877493808386012
+      ],
+      [
+        0.548239673864465,
+        0.1519527690046428,
+        0.12590851891745114,
+        0.1738990381927788
+      ],
+      [
+        0.5168747466694331,
+        0.19698798904653328,
+        0.07042620919376107,
+        0.21571105506073096
+      ],
+      [
+        0.4833629137480554,
+        0.14459369152691215,
+        0.17477824147447246,
+        0.1972651531871076
+      ]
+    ],
+    "deletion_position_RMS_change_A": [
+      0.008641884367546626,
+      0.009431354585752534,
+      0.008230514108336563,
+      0.007661927063141817
+    ],
+    "deletion_velocity_RMS_change_A_fs": [
+      0.004301582887011877,
+      0.004921308455153878,
+      0.004773199225398258,
+      0.004854464908735891
+    ],
+    "frequency_rad_fs": [
+      {
+        "mean": 0.1393440216779709,
+        "std": 0.06776466965675354,
+        "quantiles": [
+          0.0740407407283783,
+          0.0947958305478096,
+          0.12404757738113403,
+          0.1752835214138031,
+          0.5546283721923828
+        ]
+      },
+      {
+        "mean": 0.25591593980789185,
+        "std": 0.08027563244104385,
+        "quantiles": [
+          0.1570395976305008,
+          0.18946507573127747,
+          0.24178138375282288,
+          0.3126534640789032,
+          0.6917409896850586
+        ]
+      },
+      {
+        "mean": 0.4098733067512512,
+        "std": 0.06247406080365181,
+        "quantiles": [
+          0.26600348949432373,
+          0.3568370282649994,
+          0.39912477135658264,
+          0.4623470425605774,
+          0.7492527961730957
+        ]
+      },
+      {
+        "mean": 0.668061375617981,
+        "std": 0.03522806242108345,
+        "quantiles": [
+          0.4933953881263733,
+          0.6307384371757507,
+          0.6615631580352783,
+          0.7125810980796814,
+          0.8741084337234497
+        ]
+      }
+    ],
+    "interpretation": "Deletion effect and contribution covariance do not identify physical phonon modes"
+  },
+  "dense_1fs": {
+    "samples": 1000,
+    "queries": {
+      "1": {
+        "position_RMSE_A": 0.00012389171082786938,
+        "velocity_RMSE_A_fs": 0.00017905427089694412,
+        "position_MAE_A": 8.346162955424713e-05,
+        "velocity_MAE_A_fs": 0.00012133228487387103
+      },
+      "2": {
+        "position_RMSE_A": 0.00029260273928613984,
+        "velocity_RMSE_A_fs": 0.0002510806023280529,
+        "position_MAE_A": 0.00020011068222267013,
+        "velocity_MAE_A_fs": 0.00017080221052318952
+      },
+      "3": {
+        "position_RMSE_A": 0.000542361768049019,
+        "velocity_RMSE_A_fs": 0.000326403549505483,
+        "position_MAE_A": 0.00036922682081620906,
+        "velocity_MAE_A_fs": 0.00022091179668280603
+      },
+      "4": {
+        "position_RMSE_A": 0.0008721734172538984,
+        "velocity_RMSE_A_fs": 0.0004372548406114308,
+        "position_MAE_A": 0.0005901262228029635,
+        "velocity_MAE_A_fs": 0.00029557803323806536
+      },
+      "5": {
+        "position_RMSE_A": 0.0013191272752828911,
+        "velocity_RMSE_A_fs": 0.0005999854242755267,
+        "position_MAE_A": 0.0008893042988919433,
+        "velocity_MAE_A_fs": 0.00040445421058313334
+      }
+    },
+    "species_endpoint": {
+      "1": {
+        "position_RMSE_A": 0.0016082951280219468,
+        "velocity_RMSE_A_fs": 0.0007317169766517683,
+        "position_MAE_A": 0.0012485211416851597,
+        "velocity_MAE_A_fs": 0.0005691360092593622
+      },
+      "8": {
+        "position_RMSE_A": 0.0002169420833944731,
+        "velocity_RMSE_A_fs": 9.554088228838398e-05,
+        "position_MAE_A": 0.00017087061330551024,
+        "velocity_MAE_A_fs": 7.509061323067575e-05
+      }
+    }
+  },
+  "multistep": {
+    "samples": 999,
+    "horizons": {
+      "1": {
+        "time_fs": 5,
+        "position_RMSE_A": 0.0013191323952005671,
+        "velocity_RMSE_A_fs": 0.0006000033524461479
+      },
+      "2": {
+        "time_fs": 10,
+        "position_RMSE_A": 0.004133622050459744,
+        "velocity_RMSE_A_fs": 0.0007671507634240636
+      },
+      "4": {
+        "time_fs": 20,
+        "position_RMSE_A": 0.00918182499800274,
+        "velocity_RMSE_A_fs": 0.0010443165843243515
+      },
+      "8": {
+        "time_fs": 40,
+        "position_RMSE_A": 0.016032184387894284,
+        "velocity_RMSE_A_fs": 0.0017747775685118643
+      }
+    }
+  },
+  "query_checks": {
+    "endpoint_dense_identity": {
+      "position_max_abs_A": 1.9073486328125e-06,
+      "velocity_max_abs_A_fs": 6.807968020439148e-07
+    },
+    "qdot_v_max_abs_A_fs": 3.725290298461914e-09,
+    "query_timing": {
+      "endpoint": {
+        "mean_seconds": 0.013532790660392494,
+        "compute_graph_ns_day": 31.92246232437254,
+        "queries": 1,
+        "includes": "two periodic graph rebuilds + neural forward; excludes thermostat/output"
+      },
+      "dense_1fs": {
+        "mean_seconds": 0.013411377919837833,
+        "compute_graph_ns_day": 32.211455271944466,
+        "queries": 5,
+        "includes": "two periodic graph rebuilds + neural forward; excludes thermostat/output"
+      }
+    },
+    "hardware": "NVIDIA L40S",
+    "shared_gpu": true
+  },
+  "selected_epoch": 346,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/cmis/water5_20261106_r1/best.pt",
+  "elapsed_seconds": 105.37682053807657,
+  "split": "test"
+}

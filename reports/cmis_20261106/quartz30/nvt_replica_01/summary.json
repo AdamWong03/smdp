@@ -1,0 +1,25 @@
+{
+  "rollout": {
+    "completed_steps": 23,
+    "production_steps": 0,
+    "simulated_ps": 0.69,
+    "stable": false,
+    "failure_reason": "RuntimeError: physical safety stop: min=0.1752435266971588, preT=1962.2808629269548",
+    "elapsed_seconds": 1.5532407460268587,
+    "model_and_graph_seconds": 1.5012401168933138,
+    "ns_day_end_to_end": 38.38168690365345,
+    "peak_cuda_bytes": 30498304,
+    "hardware": "NVIDIA L40S",
+    "parameters": 431827,
+    "selected_epoch": 347,
+    "checkpoint_sha256": "5b0df666136d6147b7336b962910be8f43dc82ed46106a89375564cf5616a447",
+    "execution_note": "Shared L40S; graph, thermostat and dense-query output included"
+  },
+  "analysis": {},
+  "saved_temperature_summary": {
+    "mean_K": 377.4761537749496,
+    "initial_K": 277.0853120456677,
+    "final_valid_K": 1444.752705268056,
+    "maximum_valid_K": 1444.752705268056
+  }
+}

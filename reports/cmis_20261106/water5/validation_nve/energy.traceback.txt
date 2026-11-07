@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/data1/wyd/research/foundation_mlip_adaptation/smdp/analyze_water.py", line 368, in main
+    record = dict(completed=True, metrics=tasks[name](x), failure_reason=None)
+                                          ^^^^^^^^^^^^^^
+  File "/data1/wyd/research/foundation_mlip_adaptation/smdp/analyze_water.py", line 359, in <lambda>
+    tasks = dict(motion=motion_task, energy=lambda x:energy_task(x,args.topology),
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data1/wyd/research/foundation_mlip_adaptation/smdp/analyze_water.py", line 103, in energy_task
+    raise ValueError('Reference energy/force verification failed; see reference_verification.json')
+ValueError: Reference energy/force verification failed; see reference_verification.json

@@ -1,0 +1,452 @@
+{
+  "samples": 1250,
+  "queries": {
+    "3": {
+      "position_RMSE_A": 0.00024658746816932946,
+      "velocity_RMSE_A_fs": 0.00011249034213480585,
+      "position_MAE_A": 0.00019157516937262146,
+      "velocity_MAE_A_fs": 8.850925939030008e-05
+    },
+    "6": {
+      "position_RMSE_A": 0.000578435074851167,
+      "velocity_RMSE_A_fs": 0.00014288202032211415,
+      "position_MAE_A": 0.0004559641429214497,
+      "velocity_MAE_A_fs": 0.00011323631861775573
+    },
+    "9": {
+      "position_RMSE_A": 0.0009820206493931206,
+      "velocity_RMSE_A_fs": 0.00017739902734861717,
+      "position_MAE_A": 0.0007777106995366532,
+      "velocity_MAE_A_fs": 0.00014041386544327223
+    },
+    "12": {
+      "position_RMSE_A": 0.0014038605333681145,
+      "velocity_RMSE_A_fs": 0.00021525054052644243,
+      "position_MAE_A": 0.001113492351757909,
+      "velocity_MAE_A_fs": 0.00017023341892796686
+    },
+    "15": {
+      "position_RMSE_A": 0.0018973944027797609,
+      "velocity_RMSE_A_fs": 0.0002603642398203267,
+      "position_MAE_A": 0.00150284387515968,
+      "velocity_MAE_A_fs": 0.00020562921504583596
+    },
+    "18": {
+      "position_RMSE_A": 0.0024457038700114557,
+      "velocity_RMSE_A_fs": 0.0002862733516615692,
+      "position_MAE_A": 0.0019346488041951035,
+      "velocity_MAE_A_fs": 0.00022638262968849076
+    },
+    "21": {
+      "position_RMSE_A": 0.002997949212092127,
+      "velocity_RMSE_A_fs": 0.0003222357539896086,
+      "position_MAE_A": 0.0023716506862196444,
+      "velocity_MAE_A_fs": 0.0002550837315419732
+    },
+    "24": {
+      "position_RMSE_A": 0.0035965407104216938,
+      "velocity_RMSE_A_fs": 0.00040130655652870684,
+      "position_MAE_A": 0.002846234763800186,
+      "velocity_MAE_A_fs": 0.0003159286290916153
+    },
+    "27": {
+      "position_RMSE_A": 0.0043029547800413955,
+      "velocity_RMSE_A_fs": 0.0005305954958707511,
+      "position_MAE_A": 0.0034036358599507906,
+      "velocity_MAE_A_fs": 0.0004165653346972344
+    },
+    "30": {
+      "position_RMSE_A": 0.005318025873964557,
+      "velocity_RMSE_A_fs": 0.0007047892823951965,
+      "position_MAE_A": 0.00419622996358554,
+      "velocity_MAE_A_fs": 0.0005548834525425466
+    }
+  },
+  "species_endpoint": {
+    "8": {
+      "position_RMSE_A": 0.005715021641717549,
+      "velocity_RMSE_A_fs": 0.0007637675159484995,
+      "position_MAE_A": 0.00453892269436109,
+      "velocity_MAE_A_fs": 0.0006062393423582987
+    },
+    "14": {
+      "position_RMSE_A": 0.004418286190127294,
+      "velocity_RMSE_A_fs": 0.0005687725036437019,
+      "position_MAE_A": 0.003510844502034439,
+      "velocity_MAE_A_fs": 0.0004521716729110424
+    }
+  },
+  "modes": {
+    "endpoint_velocity_contribution": {
+      "effective_rank": 1.453456707812627,
+      "cosine": [
+        [
+          1.0,
+          -0.5230573046715298,
+          0.5142087700060619,
+          0.2821195059576687
+        ],
+        [
+          -0.5230573046715298,
+          1.0,
+          -0.9277452668703492,
+          -0.8398193386792692
+        ],
+        [
+          0.5142087700060619,
+          -0.9277452668703492,
+          1.0,
+          0.868989911054368
+        ],
+        [
+          0.2821195059576687,
+          -0.8398193386792692,
+          0.868989911054368,
+          1.0
+        ]
+      ]
+    },
+    "impulse_amplitude_squared_share": [
+      0.12281604536196825,
+      0.37767458421363975,
+      0.380206081264147,
+      0.11930328916024484
+    ],
+    "mean_second_attention": [
+      [
+        0.14172179397631574,
+        0.2625696191124342,
+        0.5624779470585562,
+        0.0332306398589348
+      ],
+      [
+        0.11902140407328621,
+        0.37893747210178846,
+        0.4167527706979234,
+        0.08528835322048377
+      ],
+      [
+        0.017262225962580573,
+        0.7458034378653691,
+        0.21677495438723285,
+        0.02015938163275175
+      ],
+      [
+        0.6754465935018328,
+        0.07324049265683617,
+        0.07314383552806612,
+        0.17816907842285287
+      ]
+    ],
+    "deletion_position_RMS_change_A": [
+      0.028490529517138697,
+      0.07505613177622526,
+      0.05606647514829463,
+      0.0282018561466731
+    ],
+    "deletion_velocity_RMS_change_A_fs": [
+      0.0029134323919558875,
+      0.011781114972648228,
+      0.011531676275820777,
+      0.0017137358858922913
+    ],
+    "frequency_rad_fs": [
+      {
+        "mean": 0.07473908364772797,
+        "std": 0.02331097610294819,
+        "quantiles": [
+          0.022809185087680817,
+          0.04803579077124596,
+          0.07570044696331024,
+          0.10937628149986267,
+          0.14630919694900513
+        ]
+      },
+      {
+        "mean": 0.17155292630195618,
+        "std": 0.049649208784103394,
+        "quantiles": [
+          0.055103693157434464,
+          0.10501129552721977,
+          0.18418461829423904,
+          0.23080243170261383,
+          0.2685122787952423
+        ]
+      },
+      {
+        "mean": 0.2185947299003601,
+        "std": 0.03891218826174736,
+        "quantiles": [
+          0.1366763710975647,
+          0.18372683227062225,
+          0.2058405503630638,
+          0.28165215253829956,
+          0.3072618842124939
+        ]
+      },
+      {
+        "mean": 0.8006614446640015,
+        "std": 0.05611056834459305,
+        "quantiles": [
+          0.6867974996566772,
+          0.7262672245502472,
+          0.8081868886947632,
+          0.8733568787574768,
+          0.9058636426925659
+        ]
+      }
+    ],
+    "interpretation": "Deletion effect and contribution covariance do not identify physical phonon modes"
+  },
+  "dense_1fs": {
+    "samples": 1250,
+    "queries": {
+      "1": {
+        "position_RMSE_A": 5.172273008539451e-05,
+        "velocity_RMSE_A_fs": 7.016770444881269e-05,
+        "position_MAE_A": 3.940312925558738e-05,
+        "velocity_MAE_A_fs": 5.4329382795773284e-05
+      },
+      "2": {
+        "position_RMSE_A": 0.00014230815115081404,
+        "velocity_RMSE_A_fs": 0.00010013555707666991,
+        "position_MAE_A": 0.00010960263504974646,
+        "velocity_MAE_A_fs": 7.832074128313432e-05
+      },
+      "3": {
+        "position_RMSE_A": 0.0002465873310065391,
+        "velocity_RMSE_A_fs": 0.0001124903313715975,
+        "position_MAE_A": 0.00019157518944504226,
+        "velocity_MAE_A_fs": 8.85092486408557e-05
+      },
+      "4": {
+        "position_RMSE_A": 0.0003521970722166848,
+        "velocity_RMSE_A_fs": 0.00012253619307938423,
+        "position_MAE_A": 0.00027552053402845104,
+        "velocity_MAE_A_fs": 9.673448802201023e-05
+      },
+      "5": {
+        "position_RMSE_A": 0.00046135826872667994,
+        "velocity_RMSE_A_fs": 0.00013204727936833282,
+        "position_MAE_A": 0.0003625689808907943,
+        "velocity_MAE_A_fs": 0.00010452666313347926
+      },
+      "6": {
+        "position_RMSE_A": 0.0005784350265391859,
+        "velocity_RMSE_A_fs": 0.00014288201856307915,
+        "position_MAE_A": 0.0004559640125733697,
+        "velocity_MAE_A_fs": 0.00011323632657428186
+      },
+      "7": {
+        "position_RMSE_A": 0.0007055841156000634,
+        "velocity_RMSE_A_fs": 0.00015666488635017518,
+        "position_MAE_A": 0.0005573581069011295,
+        "velocity_MAE_A_fs": 0.0001240929511942287
+      },
+      "8": {
+        "position_RMSE_A": 0.0008415882918556002,
+        "velocity_RMSE_A_fs": 0.00016898910456459521,
+        "position_MAE_A": 0.0006658013593676043,
+        "velocity_MAE_A_fs": 0.0001337238083943874
+      },
+      "9": {
+        "position_RMSE_A": 0.0009820204650286973,
+        "velocity_RMSE_A_fs": 0.00017739902710986672,
+        "position_MAE_A": 0.0007777105533812887,
+        "velocity_MAE_A_fs": 0.00014041386073419462
+      },
+      "10": {
+        "position_RMSE_A": 0.00112198709773725,
+        "velocity_RMSE_A_fs": 0.00018617608924922298,
+        "position_MAE_A": 0.0008892920728955406,
+        "velocity_MAE_A_fs": 0.00014740768620465124
+      },
+      "11": {
+        "position_RMSE_A": 0.0012610635129195948,
+        "velocity_RMSE_A_fs": 0.00019913731088778673,
+        "position_MAE_A": 0.0010000384174985212,
+        "velocity_MAE_A_fs": 0.00015759953853562383
+      },
+      "12": {
+        "position_RMSE_A": 0.0014038604956047006,
+        "velocity_RMSE_A_fs": 0.00021525054125468387,
+        "position_MAE_A": 0.0011134925939447037,
+        "velocity_MAE_A_fs": 0.00017023341961796117
+      },
+      "13": {
+        "position_RMSE_A": 0.0015562060368234305,
+        "velocity_RMSE_A_fs": 0.00023241258446220754,
+        "position_MAE_A": 0.0012340384050366783,
+        "velocity_MAE_A_fs": 0.00018367174576848603
+      },
+      "14": {
+        "position_RMSE_A": 0.0017211747060169652,
+        "velocity_RMSE_A_fs": 0.00024840866359952097,
+        "position_MAE_A": 0.0013641253377631194,
+        "velocity_MAE_A_fs": 0.0001961566481979116
+      },
+      "15": {
+        "position_RMSE_A": 0.001897394235825628,
+        "velocity_RMSE_A_fs": 0.000260364229592185,
+        "position_MAE_A": 0.0015028437959483955,
+        "velocity_MAE_A_fs": 0.000205629190213834
+      },
+      "16": {
+        "position_RMSE_A": 0.0020799364051734296,
+        "velocity_RMSE_A_fs": 0.0002684448480907272,
+        "position_MAE_A": 0.0016464832163317997,
+        "velocity_MAE_A_fs": 0.00021213215335979228
+      },
+      "17": {
+        "position_RMSE_A": 0.0022634709224204404,
+        "velocity_RMSE_A_fs": 0.00027658853035124423,
+        "position_MAE_A": 0.0017909738468740676,
+        "velocity_MAE_A_fs": 0.00021867446251844875
+      },
+      "18": {
+        "position_RMSE_A": 0.0024457042628527937,
+        "velocity_RMSE_A_fs": 0.00028627333726263365,
+        "position_MAE_A": 0.0019346489701971244,
+        "velocity_MAE_A_fs": 0.00022638260780351213
+      },
+      "19": {
+        "position_RMSE_A": 0.0026276398802501247,
+        "velocity_RMSE_A_fs": 0.00029539661000378985,
+        "position_MAE_A": 0.002078302950325059,
+        "velocity_MAE_A_fs": 0.00023374540653181732
+      },
+      "20": {
+        "position_RMSE_A": 0.002811134411024609,
+        "velocity_RMSE_A_fs": 0.0003056561959144342,
+        "position_MAE_A": 0.002223608498744247,
+        "velocity_MAE_A_fs": 0.0002420747137325838
+      },
+      "21": {
+        "position_RMSE_A": 0.002997949522140093,
+        "velocity_RMSE_A_fs": 0.00032223576400221233,
+        "position_MAE_A": 0.0023716509952672556,
+        "velocity_MAE_A_fs": 0.0002550837510350788
+      },
+      "22": {
+        "position_RMSE_A": 0.00319002502225059,
+        "velocity_RMSE_A_fs": 0.0003449651571194438,
+        "position_MAE_A": 0.002523854710550408,
+        "velocity_MAE_A_fs": 0.00027265879460325137
+      },
+      "23": {
+        "position_RMSE_A": 0.0033892048529857765,
+        "velocity_RMSE_A_fs": 0.0003705611606658394,
+        "position_MAE_A": 0.0026818746004316626,
+        "velocity_MAE_A_fs": 0.00029231137268007426
+      },
+      "24": {
+        "position_RMSE_A": 0.0035965407808661396,
+        "velocity_RMSE_A_fs": 0.0004013065422787655,
+        "position_MAE_A": 0.00284623462736162,
+        "velocity_MAE_A_fs": 0.0003159286216561646
+      },
+      "25": {
+        "position_RMSE_A": 0.003814112589836512,
+        "velocity_RMSE_A_fs": 0.0004402109879722372,
+        "position_MAE_A": 0.003018563462693796,
+        "velocity_MAE_A_fs": 0.00034590032106131426
+      },
+      "26": {
+        "position_RMSE_A": 0.004047057611934399,
+        "velocity_RMSE_A_fs": 0.000483951007727666,
+        "position_MAE_A": 0.0032025146911145905,
+        "velocity_MAE_A_fs": 0.00037989317393292656
+      },
+      "27": {
+        "position_RMSE_A": 0.004302954583697603,
+        "velocity_RMSE_A_fs": 0.0005305954655399693,
+        "position_MAE_A": 0.0034036354547162416,
+        "velocity_MAE_A_fs": 0.0004165653088834723
+      },
+      "28": {
+        "position_RMSE_A": 0.0045916473856255,
+        "velocity_RMSE_A_fs": 0.0005834735143851102,
+        "position_MAE_A": 0.0036295793996980116,
+        "velocity_MAE_A_fs": 0.0004583076894223891
+      },
+      "29": {
+        "position_RMSE_A": 0.0049255475404461424,
+        "velocity_RMSE_A_fs": 0.0006409740769183983,
+        "position_MAE_A": 0.0038900764661302135,
+        "velocity_MAE_A_fs": 0.0005040737919126783
+      },
+      "30": {
+        "position_RMSE_A": 0.005318025639424358,
+        "velocity_RMSE_A_fs": 0.0007047892461091623,
+        "position_MAE_A": 0.004196229708448762,
+        "velocity_MAE_A_fs": 0.0005548834709187111
+      }
+    },
+    "species_endpoint": {
+      "8": {
+        "position_RMSE_A": 0.005715021579595296,
+        "velocity_RMSE_A_fs": 0.0007637675150739528,
+        "position_MAE_A": 0.004538922382050688,
+        "velocity_MAE_A_fs": 0.0006062394044945276
+      },
+      "14": {
+        "position_RMSE_A": 0.004418285503930763,
+        "velocity_RMSE_A_fs": 0.0005687723711019047,
+        "position_MAE_A": 0.0035108443612449107,
+        "velocity_MAE_A_fs": 0.00045217160376707824
+      }
+    }
+  },
+  "multistep": {
+    "samples": 1250,
+    "horizons": {
+      "1": {
+        "time_fs": 30,
+        "position_RMSE_A": 0.005318026060249484,
+        "velocity_RMSE_A_fs": 0.0007047893004211506
+      },
+      "2": {
+        "time_fs": 60,
+        "position_RMSE_A": 0.013161900102553036,
+        "velocity_RMSE_A_fs": 0.0009453248010573465
+      },
+      "4": {
+        "time_fs": 120,
+        "position_RMSE_A": 0.029395113247410343,
+        "velocity_RMSE_A_fs": 0.0015152441972708184
+      },
+      "8": {
+        "time_fs": 240,
+        "position_RMSE_A": 0.061960001146558294,
+        "velocity_RMSE_A_fs": 0.002401738751267175
+      }
+    }
+  },
+  "query_checks": {
+    "endpoint_dense_identity": {
+      "position_max_abs_A": 1.9073486328125e-06,
+      "velocity_max_abs_A_fs": 1.3317912817001343e-07
+    },
+    "qdot_v_max_abs_A_fs": 6.984919309616089e-09,
+    "query_timing": {
+      "endpoint": {
+        "mean_seconds": 0.03311300546163693,
+        "compute_graph_ns_day": 78.27740079356315,
+        "queries": 1,
+        "includes": "two periodic graph rebuilds + neural forward; excludes thermostat/output"
+      },
+      "dense_1fs": {
+        "mean_seconds": 0.0345414673211053,
+        "compute_graph_ns_day": 75.04024006577893,
+        "queries": 30,
+        "includes": "two periodic graph rebuilds + neural forward; excludes thermostat/output"
+      }
+    },
+    "hardware": "NVIDIA L40S",
+    "shared_gpu": true
+  },
+  "selected_epoch": 347,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/cmis/quartz30_20261106_r1/best.pt",
+  "elapsed_seconds": 207.73031201399863,
+  "split": "val"
+}
