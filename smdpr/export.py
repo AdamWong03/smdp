@@ -14,9 +14,11 @@ def main():
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     snapshot = dict(updated_at=datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(), runs={})
-    for run in sorted(args.root.iterdir()):
-        if not run.is_dir() or not (run/'config.json').exists():
+    for config in sorted(args.root.rglob('config.json')):
+        run = config.parent
+        if 'physics' in run.relative_to(args.root).parts:
             continue
+        name = str(run.relative_to(args.root))
         item = dict(server_path=str(run), history=[])
         for name in ['config', 'metadata', 'status', 'progress', 'queue_status',
                      'pipeline_status', 'validation_gate', 'formal_physics_status']:
@@ -29,14 +31,14 @@ def main():
                 except json.JSONDecodeError:
                     # A simultaneously appended final line is not fabricated.
                     continue
-        snapshot['runs'][run.name] = item
+        snapshot['runs'][name] = item
         # Directory structure distinguishes stages, sources and failed runs.
         for path in run.rglob('*'):
             if path.is_file() and path.suffix in {'.json', '.png', '.csv'} and any(
                     part in {'evaluation', 'physics'} for part in path.relative_to(run).parts):
                 if 'spectral_cache' in path.parts:
                     continue
-                dest = args.output/'results'/run.name/path.relative_to(run)
+                dest = args.output/'results'/name/path.relative_to(run)
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(path, dest)
     (args.output/'training_snapshot.json').write_text(json.dumps(snapshot, indent=2)+'\n')
@@ -49,9 +51,12 @@ def main():
         if not rows:
             continue
         x = [r['optimizer_steps'] for r in rows]
-        axes[0].plot(x, [r['train_final_loss'] for r in rows], '--', label=name+' train')
+        final_logged = all('train_final_loss' in r for r in rows)
+        axes[0].plot(x, [r['train_final_loss'] if final_logged else r['train_loss'] for r in rows],
+                     '--', label=name+(' train final' if final_logged else ' train two-step total'))
         axes[0].plot(x, [r['validation']['selection_loss'] for r in rows], label=name+' val')
-        axes[1].plot(x, [r['validation']['position_RMSE_A'] for r in rows], label=name)
+        if all('position_RMSE_A' in r['validation'] for r in rows):
+            axes[1].plot(x, [r['validation']['position_RMSE_A'] for r in rows], label=name)
     axes[0].set(xlabel='Optimizer updates', ylabel='Normalized final endpoint loss', yscale='log')
     axes[1].set(xlabel='Optimizer updates', ylabel='Validation position RMSE (Å)', yscale='log')
     for ax in axes:
