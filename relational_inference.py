@@ -11,7 +11,11 @@ from relational_transition import RelationalTransition
 
 def load_relational(checkpoint, device="cuda"):
     saved = torch.load(Path(checkpoint), map_location="cpu", weights_only=False)
-    model = RelationalTransition(saved["config"]["model"])
+    if saved['config'].get('architecture') == 'smdpr':
+        from smdpr.model import SMDPR
+        model = SMDPR(saved['config']['model'], **saved['config']['motion'])
+    else:
+        model = RelationalTransition(saved["config"]["model"])
     model.load_state_dict(saved["model"], strict=True)
     model.to(device).eval()
     return model, saved
@@ -34,7 +38,11 @@ def atomic_graph(positions, velocities, cell, atomic_numbers, masses, model, dev
 
 def vesin_graph(positions, velocities, cell, atomic_numbers, masses, model, builder, device):
     """Equivalent model input using the production Vesin periodic list."""
-    edges, shifts = builder.one(positions, cell)  # [sender, receiver]
+    # Neighbor topology is discrete; preserve the original tensors below so
+    # differentiable autonomous training still receives gradients through q/v.
+    topology_q = positions.detach().cpu().numpy() if torch.is_tensor(positions) else positions
+    topology_cell = cell.detach().cpu().numpy() if torch.is_tensor(cell) else cell
+    edges, shifts = builder.one(topology_q, topology_cell)  # [sender, receiver]
     graph = Data(pos=torch.as_tensor(positions, dtype=torch.float32),
                  velocities=torch.as_tensor(velocities, dtype=torch.float32),
                  cell=torch.as_tensor(cell, dtype=torch.float32).reshape(1, 3, 3),

@@ -1,0 +1,45 @@
+{
+  "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "dtype": "float32; TF32 disabled",
+  "measurement": "shared-device paired latency; graph prebuilt; random initialization",
+  "validation_graph_atoms": 162,
+  "directed_edges": 4674,
+  "baseline_parameters": 2357616,
+  "smdpr_parameters": 2571592,
+  "baseline": {
+    "mean_seconds": 0.005802077859407291,
+    "block_seconds": [
+      0.005974341597175225,
+      0.005747802148107439,
+      0.005791378946742043,
+      0.005752965452848003,
+      0.005743901152163744
+    ]
+  },
+  "smdpr_endpoint": {
+    "mean_seconds": 0.008650975459022447,
+    "block_seconds": [
+      0.008950573147740216,
+      0.008679609547834843,
+      0.008572931395610795,
+      0.008517438801936806,
+      0.00853432440198958
+    ]
+  },
+  "smdpr_dense": {
+    "mean_seconds": 0.009372908439254389,
+    "block_seconds": [
+      0.009569302800809965,
+      0.009333263547159732,
+      0.009312253497773782,
+      0.009317537304013968,
+      0.009332185046514497
+    ]
+  },
+  "endpoint_overhead_ratio": 1.4910133349893004,
+  "latency_target_passed": true,
+  "dense_queries": 30,
+  "includes_neighbor_rebuild": false,
+  "includes_io": false,
+  "includes_thermostat": false
+}

@@ -28,6 +28,7 @@ def save(path, value):
 class Context:
     def __init__(self, candidate, reference, out, frames):
         self.c, self.r, self.out = candidate, reference, out
+        self.model_label = 'DSRT'
         self.dt = float(candidate.attrs['timestep_fs'])
         self.stop = int(candidate.attrs['completed_steps'])
         self.start = int(candidate.attrs.get('thermalization_steps', 0))
@@ -82,7 +83,7 @@ def motion_task(x):
                for key in ['translation_eV', 'rotation_eV', 'internal_eV', 'total_KE_eV']}))
     fig, axes = plt.subplots(2, 2, figsize=(11, 7))
     for ax, key in zip(axes.flat, ['translation_eV', 'rotation_eV', 'internal_eV', 'total_KE_eV']):
-        ax.plot(x.time, x.motion[key], label='DSRT'); ax.plot(x.time, x.rmotion[key], label='Reference', alpha=.65)
+        ax.plot(x.time, x.motion[key], label=x.model_label); ax.plot(x.time, x.rmotion[key], label='Reference', alpha=.65)
         ax.set(xlabel='ps', ylabel=key); ax.legend()
     fig.tight_layout(); fig.savefig(x.out/'motion.png', dpi=160); plt.close(fig)
     return result
@@ -158,7 +159,7 @@ def rdf_task(x):
             peak_search_A=[lo, hi], includes_intramolecular_pairs=True,
             peak_position_A=dict(model=float(radius[ic]), reference=float(radius[ir])),
             peak_height=dict(model=float(cm[ic]), reference=float(rm[ir])))
-        ax.plot(radius, cm, label='DSRT'); ax.plot(radius, rm, label='Reference'); ax.legend()
+        ax.plot(radius, cm, label=x.model_label); ax.plot(radius, rm, label='Reference'); ax.legend()
         ax.set(xlabel='Å', ylabel='g(r)', title=f'{a}-{b}')
         rows.extend(dict(pair=f'{a}-{b}',r_A=float(v),model=float(u),reference=float(w))
                     for v,u,w in zip(radius,cm,rm))
@@ -183,7 +184,7 @@ def vdos_task(x):
         cm, rm = cp[z].mean(0), rp[z].mean(0)
         result['elements'][str(z)] = dict(overlap=float(np.minimum(cm,rm).sum()),
             block_overlap=stats(np.minimum(cp[z],rp[z]).sum(axis=1)))
-        ax.plot(frequency,cm,label='DSRT'); ax.plot(frequency,rm,label='Reference')
+        ax.plot(frequency,cm,label=x.model_label); ax.plot(frequency,rm,label='Reference')
         ax.set(xlabel='THz', title=f'Z={z}'); ax.legend()
         rows.extend(dict(element=int(z), frequency_THz=float(f), model=float(a), reference=float(b))
                     for f,a,b in zip(frequency,cm,rm))
@@ -212,7 +213,7 @@ def vdos_task(x):
         t=np.arange(len(a))*x.dt
         result['VACF'][str(z)]=dict(normalized_curve_RMSE=float(np.sqrt(np.mean((a-b)**2))),
             windows=len(offsets),maximum_lag_fs=float(t[-1]))
-        ax.plot(t,a,label='DSRT');ax.plot(t,b,label='Reference');ax.legend()
+        ax.plot(t,a,label=x.model_label);ax.plot(t,b,label='Reference');ax.legend()
         ax.set(xlabel='Lag (fs)',ylabel='Normalized VACF',title=f'Z={z}')
         rows.extend(dict(element=int(z),lag_fs=float(v),model=float(u),reference=float(w))
                     for v,u,w in zip(t,a,b))
@@ -333,22 +334,29 @@ def main():
     for key in ['candidate','reference','topology','output']:
         p.add_argument('--'+key,type=Path,required=True)
     p.add_argument('--tasks',nargs='+',default=['motion','energy','rdf','vdos','full_energy','thermostat','diffusion'],
-                   choices=['motion','energy','rdf','vdos','full_energy','thermostat','diffusion'])
+                   choices=['motion','energy','rdf','vdos','full_energy','thermostat','diffusion','vdos_dense'])
     p.add_argument('--frames',type=int,default=2000)
+    p.add_argument('--model-label',default='DSRT')
     args = p.parse_args(); args.output.mkdir(parents=True,exist_ok=True)
     identity = {key: dict(path=str(value.resolve()), size=value.stat().st_size,
                          mtime_ns=value.stat().st_mtime_ns)
                 for key,value in [('candidate',args.candidate),('reference',args.reference),('topology',args.topology)]}
     identity['frames'] = args.frames
+    if args.model_label!='DSRT':
+        identity['model_label'] = args.model_label
     manifest = args.output/'manifest.json'
     if manifest.exists() and json.loads(manifest.read_text()) != identity:
         raise ValueError('Sources/settings changed: use a different analysis output')
     save(manifest, identity)
     with h5py.File(args.candidate,'r') as c, h5py.File(args.reference,'r') as r:
         x = Context(c,r,args.output,args.frames)
+        x.model_label = args.model_label
         tasks = dict(motion=motion_task, energy=lambda x:energy_task(x,args.topology),
                      rdf=rdf_task, vdos=vdos_task,full_energy=lambda x:full_energy_task(x,args.topology),
                      thermostat=thermostat_task,diffusion=diffusion_task)
+        if 'vdos_dense' in args.tasks:
+            from analysis_tasks import spectral
+            tasks['vdos_dense'] = lambda context: spectral(context, 'dense_1fs')
         for name in args.tasks:
             dest = args.output/(name+'.json')
             if dest.exists() and json.loads(dest.read_text()).get('completed'):

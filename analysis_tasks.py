@@ -121,7 +121,11 @@ def spectral(x,label):
                 'reason': 'endpoint-only model has no dense queried trajectory',
             }}}
         dense_stride=round(x.dt)
-        cd,cs,cf,rs,dt=x.c['dense/velocities'],x.start*dense_stride,(x.common-1)*dense_stride+1,1,1.
+        reference_dt=float(x.r.attrs['output_interval_fs'])
+        reference_stride=round(1./reference_dt)
+        if not np.isclose(reference_stride*reference_dt,1.):
+            raise ValueError('Reference cannot supply a true 1 fs dense spectrum')
+        cd,cs,cf,rs,dt=x.c['dense/velocities'],x.start*dense_stride,(x.common-1)*dense_stride+1,reference_stride,1.
     workers=getattr(x,'spectral_workers',1)
     cand=spectrum_blocks(cd,x.z,cs,cf,1,dt,cache=x.out/'spectral_cache'/f'{label}_candidate',workers=workers)
     ref=spectrum_blocks(x.r['velocities_A_per_fs'],x.z,0,cf,rs,dt,cache=x.out/'spectral_cache'/f'{label}_reference',workers=workers)

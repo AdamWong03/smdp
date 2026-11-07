@@ -1,5 +1,26 @@
 # DSRT: future-conditioned relational refinement for learned MD
 
+## SMDP-R experiment branch (2026-11-07)
+
+The current user-authorized experiment extends the unchanged R3-Opt backbone
+with persistent, neighbor-propagated motion states and bounded conditioning of
+its existing scalar/vector messages. Quartz 30 fs and Water 5 fs official
+250,000-update trainings are running from random initialization. Historical
+DSRT results below remain baselines, **not SMDP-R results**.
+
+- [Frozen SMDP-R protocol and commands](docs/SMDPR_PROTOCOL.md)
+- [Model](smdpr/model.py), [trainer](smdpr/train.py),
+  [two-step matched fine tuning](smdpr/finetune.py),
+  [guarded evaluation pipeline](smdpr/pipeline.py)
+- [Run status and server paths](reports/smdpr/IMPLEMENTATION_STATUS.md)
+
+The endpoint model has 2,571,592 parameters including its gradient-isolated
+query reader (+9.08% relative to R3-Opt). Accuracy and long-time physical
+benefits are not established yet. K=1 and matched R3-Opt two-step controls are
+declared; no new force model, physical loss or numerical integrator is used.
+
+## Historical DSRT method and results
+
 DSRT learns a fixed-horizon phase-space transition without evaluating forces
 during inference. It first proposes the future atomic state from current
 periodic relations, converts that proposal into predicted future pair geometry,

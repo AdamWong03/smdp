@@ -253,7 +253,7 @@ class GatedGeometryRelationalBlock(nn.Module):
             features.extend([lp, rp, dot - lp * rp])
         return torch.cat([*features, dot], -1)
 
-    def forward(self, s, v, e, edges, relation):
+    def forward(self, s, v, e, edges, relation, message_transform=None):
         s0, v0, e0 = s, v, e
         src, dst = edges
         invariants, directions, weight = relation
@@ -264,6 +264,8 @@ class GatedGeometryRelationalBlock(nn.Module):
         message = self.message(e)
         ms = message[:, :self.ds]
         coefficients = message[:, self.ds:].reshape(-1, 5, self.dv)
+        if message_transform is not None:
+            ms, coefficients = message_transform(e, ms, coefficients)
         mv = torch.einsum('ekc,ekd->ecd', coefficients[:, :4], directions)
         mv = mv + coefficients[:, 4, :, None] * mix_vectors(self.sender_mix, v)[src]
         aggregate_s = torch.zeros_like(s).index_add(0, dst, (ms * weight[:, None]).to(s.dtype))
@@ -433,7 +435,14 @@ class RelationalTransition(nn.Module):
                         key: float(value) for key, value in block.last_diagnostics.items()}))
         return values
 
-    def forward(self, data):
+    def initialize_motion(self, s):
+        return None
+
+    def propagate_block(self, index, block, s, v, e, edges, relation, motion):
+        s, v, e = block(s, v, e, edges, relation)
+        return s, v, e, motion
+
+    def forward(self, data, return_context=False):
         q, vel = data.pos, data.velocities
         z, masses = data.atomic_numbers.reshape(-1).long(), data.atomic_masses.reshape(-1)
         batch = getattr(data, 'batch', None)
@@ -455,12 +464,13 @@ class RelationalTransition(nn.Module):
         vrel = center(vel) / self.cfg.velocity_scale
         s = self.element(z) + self.kinematics(torch.stack([masses.log(), vrel.square().sum(-1)], -1))
         v = self.velocity_embedding(z)[:, :, None] * vrel[:, None, :]
+        motion = self.initialize_motion(s)
         d0 = q[src] - q[dst] + data.shifts
         u0 = vrel[src] - vrel[dst]
         initial = self.relations(d0, u0, d0, u0)
         e = pair_mlp(self.edge_embedding, s, src, dst, initial[0], self.factorized_edges)
-        for block in self.proposal_blocks:
-            s, v, e = block(s, v, e, edges, initial)
+        for index, block in enumerate(self.proposal_blocks):
+            s, v, e, motion = self.propagate_block(index, block, s, v, e, edges, initial, motion)
         proposal = self.proposal_head(s, v)
         dq0 = self.cfg.horizon_fs * vel + self.rms_targets[0] * center(proposal[:, 0])
         v0 = vel + self.rms_targets[1] * center(proposal[:, 1])
@@ -468,15 +478,18 @@ class RelationalTransition(nn.Module):
         d1 = d0 + dq0[src] - dq0[dst]
         u1 = (v0[src] - v0[dst]) / self.cfg.velocity_scale
         future = self.relations(d0, u0, d1, u1)
-        for block in self.refinement_blocks:
-            s, v, e = block(s, v, e, edges, future)
+        for index, block in enumerate(self.refinement_blocks, len(self.proposal_blocks)):
+            s, v, e, motion = self.propagate_block(index, block, s, v, e, edges, future, motion)
         correction = self.correction_head(s, v)
         dq = dq0 + self.rms_targets[0] * center(correction[:, 0])
         vn = v0 + self.rms_targets[1] * center(correction[:, 1])
-        return dict(displacements=dq, positions=q + dq, velocities=vn,
+        output = dict(displacements=dq, positions=q + dq, velocities=vn,
                     proposal_displacements=dq0, proposal_velocities=v0,
                     correction_displacements=dq-dq0, correction_velocities=vn-v0,
                     target=torch.cat([dq / self.rms_targets[0], vn / self.rms_targets[1]], -1))
+        if return_context:
+            output['context'] = dict(scalar=s, vector=v, modes=motion)
+        return output
 
 
 def endpoint_loss_components(model, output, reference_displacements, reference_velocities):

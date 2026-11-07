@@ -53,6 +53,8 @@ def main():
     parser.add_argument("--seed", type=int, default=2026110301)
     parser.add_argument("--device", default="cuda")
     parser.add_argument('--execution-note', default='GPU exclusivity not recorded')
+    parser.add_argument('--dense-query-fs', type=float, default=0.,
+                        help='Optional SMDP-R interior output; zero preserves original endpoint path')
     args = parser.parse_args()
     if args.output.exists() or args.output.with_suffix(".summary.json").exists():
         raise FileExistsError(args.output)
@@ -60,6 +62,9 @@ def main():
     device = torch.device(args.device)
     model, saved = load_relational(args.checkpoint, device)
     dt = model.cfg.horizon_fs
+    if args.dense_query_fs:
+        if not hasattr(model, 'query') or args.dense_query_fs!=1. or not float(dt).is_integer():
+            raise ValueError('Dense output requires SMDP-R and a true 1 fs cadence')
     with h5py.File(args.initial) as source:
         if not 0 <= args.initial_frame < len(source["positions_unwrapped_A"]):
             raise IndexError("initial-frame outside source trajectory")
@@ -113,6 +118,22 @@ def main():
         positions[0], velocities[0] = q, v
         scalars["temperature_K"][0] = scalars["pre_thermostat_temperature_K"][0] = temperature(v, masses)
         scalars["thermostat_alpha"][0] = 1.0
+        dense_q = dense_v = None
+        previous_derivative = None
+        if args.dense_query_fs:
+            group = output.create_group('dense')
+            group.attrs.update(output_interval_fs=1.,
+                boundary_velocity='right continuous: post-CSVR macro velocity at segment start',
+                interior_velocity='neural query before endpoint CSVR; q/v consistency not guaranteed')
+            dense_shape = (total_steps*int(dt)+1, len(z), 3)
+            dense_q = group.create_dataset('positions', dense_shape, dtype='f4',
+                                           chunks=(128, len(z), 3), compression='lzf')
+            dense_v = group.create_dataset('velocities', dense_shape, dtype='f4',
+                                           chunks=(128, len(z), 3), compression='lzf')
+            dense_q[0], dense_v[0] = q, v
+            join = output.create_dataset('segment_join_derivative_RMS_A_fs', (total_steps+1,), dtype='f8')
+            consistency = output.create_dataset('segment_kinematic_RMS_A_fs', (total_steps+1,), dtype='f8')
+            join[0] = consistency[0] = 0.
         pre_species[0] = post_species[0] = species_ke(v)
         edges, shifts = near.one(q, cell)
         scalars["minimum_distance_A"][0] = np.linalg.norm(q[edges[0]]+shifts-q[edges[1]], axis=1).min()
@@ -120,7 +141,17 @@ def main():
         try:
             for index in range(1, total_steps+1):
                 torch.cuda.synchronize(device); tic = time.perf_counter()
-                qn, vn = step(model, q, v, cell, z, masses, device, builder=neighbors)
+                if args.dense_query_fs:
+                    from relational_inference import vesin_graph
+                    graph = vesin_graph(q, v, cell, z, masses, model, neighbors, device)
+                    with torch.inference_mode():
+                        endpoint = model(graph, return_context=True)
+                        queried = model.query(graph, endpoint, torch.arange(int(dt)+1, device=device))
+                    qn, vn = endpoint['positions'], endpoint['velocities']
+                    segment_q = queried['positions'].cpu().numpy()
+                    segment_v = queried['velocities'].cpu().numpy()
+                else:
+                    qn, vn = step(model, q, v, cell, z, masses, device, builder=neighbors)
                 torch.cuda.synchronize(device); model_seconds += time.perf_counter()-tic
                 q, v = qn.cpu().numpy(), vn.cpu().numpy()
                 pre = temperature(v, masses)
@@ -135,6 +166,19 @@ def main():
                 if thermostat is not None:
                     v, alpha = thermostat(v)
                 post = temperature(v, masses)
+                if dense_q is not None:
+                    begin = (index-1)*int(dt)
+                    # Do not save a rejected segment as completed dynamics.
+                    dense_q[begin:begin+int(dt)] = segment_q[:-1]
+                    dense_v[begin:begin+int(dt)] = segment_v[:-1]
+                    dense_q[begin+int(dt)] = q
+                    dense_v[begin+int(dt)] = v
+                    difference = np.diff(segment_q, axis=0)
+                    mismatch = difference-.5*(segment_v[1:]+segment_v[:-1])
+                    consistency[index] = float(np.sqrt(np.mean(mismatch**2)))
+                    join[index] = (float(np.sqrt(np.mean((difference[0]-previous_derivative)**2)))
+                                   if previous_derivative is not None else 0.)
+                    previous_derivative = difference[-1]
                 positions[index], velocities[index] = q, v
                 scalars["time_fs"][index] = index*dt
                 scalars["pre_thermostat_temperature_K"][index] = pre
