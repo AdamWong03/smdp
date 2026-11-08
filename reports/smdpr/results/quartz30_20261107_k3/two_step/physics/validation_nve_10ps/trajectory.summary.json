@@ -1,0 +1,16 @@
+{
+  "completed_steps": 333,
+  "production_steps": 333,
+  "simulated_ps": 9.99,
+  "stable": true,
+  "failure_reason": null,
+  "elapsed_seconds": 12.729533730074763,
+  "model_and_graph_seconds": 12.233118127915077,
+  "ns_day_end_to_end": 67.80578285917551,
+  "peak_cuda_bytes": 102520832,
+  "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "parameters": 2571592,
+  "selected_epoch": 38,
+  "checkpoint_sha256": "e7af50f3385609ed52ea17b826053b3cb688f28cda2e814d5424141da3616778",
+  "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+}

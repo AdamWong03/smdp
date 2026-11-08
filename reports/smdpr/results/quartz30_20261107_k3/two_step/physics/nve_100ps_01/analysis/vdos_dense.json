@@ -1,0 +1,13 @@
+{
+  "completed": true,
+  "failure_reason": null,
+  "metrics": {
+    "VDOS": {
+      "queried_1fs": {
+        "available": false,
+        "reason": "endpoint-only model has no dense queried trajectory"
+      }
+    }
+  },
+  "elapsed_s": 9.966501966118813e-05
+}

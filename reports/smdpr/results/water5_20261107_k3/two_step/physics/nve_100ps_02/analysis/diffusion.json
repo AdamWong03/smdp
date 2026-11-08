@@ -1,0 +1,9 @@
+{
+  "completed": true,
+  "metrics": {
+    "applicable": false,
+    "reason": "Nonstationary NVE heating; no equilibrium diffusion claim"
+  },
+  "failure_reason": null,
+  "elapsed_s": 0.0001166400033980608
+}

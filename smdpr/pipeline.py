@@ -10,10 +10,24 @@ import numpy as np
 import torch
 
 from smdpr.train import write_json
+from smdpr.reference import aligned_reference
 
 REPO = Path(__file__).resolve().parents[1]
 PROJECT = REPO.parent
 DATA = PROJECT/'data/smdp_reference_md_v1'
+
+
+def prediction_status(run):
+    status = run/'status.json'
+    record = json.loads(status.read_text()) if status.exists() else {}
+    cfg = json.loads((run/'config.json').read_text())
+    required = [run/'evaluation/test_endpoint.json', run/'evaluation/test_multistep.json']
+    if cfg.get('architecture')=='smdpr':
+        required += [run/'evaluation/test_query.json', run/'evaluation/test_modes.json']
+    record.update(endpoint_test_completed=required[0].exists(),
+                  multistep_test_completed=required[1].exists(),
+                  test_completed=all(path.exists() for path in required))
+    write_json(status, record)
 
 
 def command(run, label, *arguments):
@@ -33,6 +47,8 @@ def endpoint(run, split, modes=False):
         options = ['--mode-analysis'] if modes else []
         command(run, f'evaluate_{split}', '-m', 'smdpr.evaluate', '--run', run,
                 '--split', split, *options)
+    if split=='test':
+        prediction_status(run)
     return json.loads(required[0].read_text())
 
 
@@ -43,6 +59,8 @@ def multistep(run, cfg, split):
         command(run, f'multistep_{split}', 'evaluate_relational_rollout.py',
             '--checkpoint', run/'best.pt', '--transitions',
             DATA/cfg['system']/'transitions'/f'{h}fs'/f'{split}.h5', '--output', dest)
+    if split=='test':
+        prediction_status(run)
 
 
 def trajectory(run, cfg, name, source, ensemble, steps, thermal=0, frame=0, dense=False):
@@ -129,16 +147,7 @@ def formal_physics(run, cfg):
             # The second Water initial state is 25 ps into the same independent
             # test source. Crop the REFERENCE view for correctly aligned errors.
             cropped = path.parent/'aligned_reference.h5'
-            if not cropped.exists():
-                with h5py.File(reference) as src, h5py.File(cropped, 'x') as dst:
-                    dst.attrs.update(dict(src.attrs))
-                    for key, value in src.items():
-                        data = value[frame:] if len(value.shape)>0 and value.shape[0]==len(src['time_fs']) else value[:]
-                        if key=='time_fs':
-                            data = data-data[0]
-                        dst[key] = data
-                    dst.attrs['n_frames'] = len(dst['time_fs'])
-                    dst.attrs['reference_initial_frame'] = frame
+            aligned_reference(reference, cropped, frame)
             reference = cropped
         analyze(run, cfg, path, reference, False)
     if not all(item['stable'] for item in nve_summaries):
@@ -180,6 +189,7 @@ def main():
         status_path = stage2/'status.json'
         completed = status_path.exists() and json.loads(status_path.read_text()).get('state')=='two_step_training_completed'
         if not completed:
+            write_json(state, dict(state='two_step_training', physical_analysis_completed=False))
             options = ['--resume'] if (stage2/'last.pt').exists() else []
             command(run, 'two_step_training', '-m', 'smdpr.finetune', '--initial-checkpoint',
                 run/'best.pt', '--run', stage2, *options)
@@ -188,12 +198,14 @@ def main():
         endpoint(run, 'test', modes=True)
         multistep(run, cfg, 'test')
         if validation_gate(stage2, cfg, baseline_run/'best.pt'):
+            write_json(state, dict(state='physical_evaluation', physical_analysis_completed=False))
             physics_completed = formal_physics(stage2, cfg)
         else:
             endpoint(stage2, 'test', modes=True)
             write_json(state, dict(state='stage2_stopped_by_validation_gate', physical_analysis_completed=False))
             return
         if args.baseline_control:
+            write_json(state, dict(state='baseline_control', physical_analysis_completed=physics_completed))
             # Only one fine-tuning control per system, used by the K3 pipeline.
             control = run.parent/f"{cfg['system']}{int(cfg['model']['horizon_fs'])}_r3opt_matched_two_step"
             status = control/'status.json'

@@ -2,6 +2,11 @@
 
 ## SMDP-R experiment branch (2026-11-07)
 
+**2026-11-08 update:** Both primary trainings and two-step fine tuning finished.
+Quartz completed its 15 ns NVT, but its two 100 ps NVE runs dissipate substantial
+energy. Water NVT and remaining analysis/controls are pending. Read the
+[interim results and recovery record](reports/smdpr/INTERIM_RESULTS_20261108.md).
+
 The current user-authorized experiment extends the unchanged R3-Opt backbone
 with persistent, neighbor-propagated motion states and bounded conditioning of
 its existing scalar/vector messages. Quartz 30 fs and Water 5 fs official

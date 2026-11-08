@@ -1,0 +1,126 @@
+{
+  "completed": true,
+  "failure_reason": null,
+  "metrics": {
+    "thermostat": {
+      "target_K": 300,
+      "tau_fs": 100.0,
+      "dt_fs": 30.0,
+      "production_steps": 500000,
+      "post_temperature_K": {
+        "mean": 297.1474447029106,
+        "std": 19.1499855774397,
+        "variance": 366.7219476161485,
+        "block_mean_std": 0.1975235206480954,
+        "blocks": 8
+      },
+      "pre_temperature_K": {
+        "mean": 296.1306753691648,
+        "std": 19.13778356978097,
+        "variance": 366.25475996377844,
+        "block_mean_std": 0.19913336192445483,
+        "blocks": 8
+      },
+      "alpha": {
+        "mean": 1.001993644575708,
+        "std": 0.02337449441402485,
+        "variance": 0.000546366989111279,
+        "block_mean_std": 1.2930537461277716e-05,
+        "blocks": 8
+      },
+      "network_delta_KE_eV": {
+        "mean": -0.021161132692521747,
+        "std": 0.3819279112150677,
+        "variance": 0.14586892936510465,
+        "block_mean_std": 0.00014153096319514447,
+        "blocks": 8
+      },
+      "csvr_delta_KE_eV": {
+        "mean": 0.021159844082076874,
+        "std": 0.2874438970743081,
+        "variance": 0.08262399396526544,
+        "block_mean_std": 0.00014215833402220527,
+        "blocks": 8
+      },
+      "post_step_delta_KE_eV": {
+        "mean": -1.2886104448719633e-06,
+        "std": 0.4365770640578195,
+        "variance": 0.19059953286134543,
+        "block_mean_std": 6.297247839088733e-06,
+        "blocks": 8
+      },
+      "scaling_max_error_K": 2.9596734520964674e-06,
+      "conditional_mean_innovation_K": {
+        "mean": 0.013910891165970418,
+        "std": 12.886249978762779,
+        "variance": 166.0554385151637,
+        "block_mean_std": 0.05032730914464068,
+        "blocks": 8
+      },
+      "predicted_stationary_post_temperature_K": 297.09359538241347,
+      "species": {
+        "8": {
+          "network_delta_KE_eV": {
+            "mean": -0.014021739187364829,
+            "std": 0.3484963194566592,
+            "variance": 0.12144968467483788,
+            "block_mean_std": 0.00010701799863128453,
+            "blocks": 8
+          },
+          "csvr_delta_KE_eV": {
+            "mean": 0.014020537285542794,
+            "std": 0.1904673787977455,
+            "variance": 0.03627782238608387,
+            "block_mean_std": 0.00010726223827976248,
+            "blocks": 8
+          },
+          "pre_KE_eV": {
+            "mean": 4.0790551103391355,
+            "std": 0.32351177593158215,
+            "variance": 0.1046598691664062,
+            "block_mean_std": 0.0023836138203047674,
+            "blocks": 8
+          },
+          "post_KE_eV": {
+            "mean": 4.093075647624677,
+            "std": 0.32418012265412777,
+            "variance": 0.10509275192404534,
+            "block_mean_std": 0.002350402649234244,
+            "blocks": 8
+          }
+        },
+        "14": {
+          "network_delta_KE_eV": {
+            "mean": -0.00713939350515692,
+            "std": 0.3016468131883858,
+            "variance": 0.09099079990670893,
+            "block_mean_std": 4.565818136063237e-05,
+            "blocks": 8
+          },
+          "csvr_delta_KE_eV": {
+            "mean": 0.00713930679653408,
+            "std": 0.09757361290061893,
+            "variance": 0.009520609934479828,
+            "block_mean_std": 4.709300181090947e-05,
+            "blocks": 8
+          },
+          "pre_KE_eV": {
+            "mean": 2.0836788655633947,
+            "std": 0.2317531041641004,
+            "variance": 0.053709501289696364,
+            "block_mean_std": 0.002054942451798878,
+            "blocks": 8
+          },
+          "post_KE_eV": {
+            "mean": 2.0908181723599286,
+            "std": 0.23220352044241468,
+            "variance": 0.053918474905850895,
+            "block_mean_std": 0.0020646291967903263,
+            "blocks": 8
+          }
+        }
+      }
+    }
+  },
+  "elapsed_s": 0.2525773149682209
+}

@@ -1,0 +1,19 @@
+{
+  "candidate": {
+    "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/physics/nve_100ps_02/trajectory.h5",
+    "size": 95098641,
+    "mtime_ns": 1794082630235830280
+  },
+  "reference": {
+    "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/physics/nve_100ps_02/aligned_reference.h5",
+    "size": 815639352,
+    "mtime_ns": 1794112063801307555
+  },
+  "topology": {
+    "path": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/equilibration/snapshots/water_5.data",
+    "size": 30310,
+    "mtime_ns": 1792486602535457426
+  },
+  "frames": 2000,
+  "model_label": "SMDP-R"
+}

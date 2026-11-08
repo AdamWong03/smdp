@@ -1,0 +1,43 @@
+{
+  "samples": 1249,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/best.pt",
+  "selected_epoch": 399,
+  "batch_size": 8,
+  "elapsed_seconds": 377.33492447808385,
+  "model_seconds": 31.536701758624986,
+  "neighbor_graph_seconds": 345.59496376942843,
+  "horizons": {
+    "1": {
+      "time_fs": 5.0,
+      "position_RMSE_A": 0.0006613903527212403,
+      "position_MAE_A": 0.00045756071037266957,
+      "velocity_RMSE_A_fs": 0.0002411694230489954,
+      "velocity_MAE_A_fs": 0.00016719142771694275,
+      "temperature_RMSE_K": 0.46383174403987276
+    },
+    "2": {
+      "time_fs": 10.0,
+      "position_RMSE_A": 0.0019411823183934204,
+      "position_MAE_A": 0.00131487318335076,
+      "velocity_RMSE_A_fs": 0.00033530609784178096,
+      "velocity_MAE_A_fs": 0.00023167521215013555,
+      "temperature_RMSE_K": 0.6643047676357154
+    },
+    "4": {
+      "time_fs": 20.0,
+      "position_RMSE_A": 0.004545008032710154,
+      "position_MAE_A": 0.003106229658117711,
+      "velocity_RMSE_A_fs": 0.00044779417524146945,
+      "velocity_MAE_A_fs": 0.00031609504781736326,
+      "temperature_RMSE_K": 0.8861667432946079
+    },
+    "8": {
+      "time_fs": 40.0,
+      "position_RMSE_A": 0.008436465274667012,
+      "position_MAE_A": 0.005968127223708517,
+      "velocity_RMSE_A_fs": 0.0007480631112768655,
+      "velocity_MAE_A_fs": 0.0005254991271033234,
+      "temperature_RMSE_K": 1.4327177180962645
+    }
+  }
+}

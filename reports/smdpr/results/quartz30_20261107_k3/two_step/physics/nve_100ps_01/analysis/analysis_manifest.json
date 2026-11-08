@@ -1,0 +1,12 @@
+{
+  "candidate": {
+    "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/physics/nve_100ps_01/trajectory.h5",
+    "size": 13619731,
+    "mtime_ns": 1794076305728370931
+  },
+  "reference": {
+    "path": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_09/trajectory.h5",
+    "size": 1204964800,
+    "mtime_ns": 1792487247304713650
+  }
+}

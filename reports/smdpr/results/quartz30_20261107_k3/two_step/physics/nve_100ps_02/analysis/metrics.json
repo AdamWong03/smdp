@@ -1,0 +1,400 @@
+{
+  "candidate": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/physics/nve_100ps_02/trajectory.h5",
+  "reference": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_10/trajectory.h5",
+  "production_available": true,
+  "trajectory_completed": true,
+  "stable": true,
+  "failure": "",
+  "evaluation_phase": "production",
+  "duration_ps": 99.99,
+  "requested_production_ps": 99.99,
+  "temperature_K": {
+    "SMDP": {
+      "mean": 131.7628854421635,
+      "std": 39.57324146728599,
+      "variance": 1566.0414402281235,
+      "block_mean_std": 36.017686490961644,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 303.1415476462189,
+      "std": 13.588414696060214,
+      "variance": 184.64501395210522,
+      "block_mean_std": 0.888523313995721,
+      "blocks": 8
+    },
+    "mean_difference": -171.3786622040554,
+    "wasserstein": 171.3786622040555
+  },
+  "kinetic_energy_eV": {
+    "SMDP": {
+      "mean": 2.7420989394803064,
+      "std": 0.8235531811184755,
+      "variance": 0.6782398421303606,
+      "block_mean_std": 0.7495590248951552,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": 6.30863625613288,
+      "std": 0.28278659352553964,
+      "variance": 0.07996825747777879,
+      "block_mean_std": 0.018490934141546424,
+      "blocks": 8
+    },
+    "mean_difference": -3.566537316652574,
+    "wasserstein": 3.5665373166525742
+  },
+  "element_kinetic_energy_eV": {
+    "8": {
+      "SMDP": {
+        "mean": 1.771263618044247,
+        "std": 0.5631541649586405,
+        "variance": 0.31714261351026357,
+        "block_mean_std": 0.5048059296407944,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 4.223022582320726,
+        "std": 0.27224803410260695,
+        "variance": 0.07411899207273423,
+        "block_mean_std": 0.03846226988858465,
+        "blocks": 8
+      },
+      "mean_difference": -2.451758964276479,
+      "wasserstein": 2.4517589642764785
+    },
+    "14": {
+      "SMDP": {
+        "mean": 0.9708353214360598,
+        "std": 0.282584493189658,
+        "variance": 0.07985399579125588,
+        "block_mean_std": 0.2453402404502213,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 2.085613673812154,
+        "std": 0.21081542029634512,
+        "variance": 0.04444314143472464,
+        "block_mean_std": 0.029753007222714,
+        "blocks": 8
+      },
+      "mean_difference": -1.1147783523760944,
+      "wasserstein": 1.1147783523760941
+    }
+  },
+  "segment_join_derivative_RMS_A_fs": {
+    "available": false,
+    "reason": "endpoint-only model has no dense segment derivative"
+  },
+  "minimum_distance_A": 1.5093119144439697,
+  "thermodynamic_sampling": "2000 uniform production frames, matching R1",
+  "RDF": {
+    "14-8": {
+      "RMSE": 1.698010806560063,
+      "peak_position_A": {
+        "SMDP": 1.6033405657411766,
+        "reference": 1.6033405657411766,
+        "difference": 0.0
+      },
+      "peak_height": {
+        "SMDP": 54.78645261959628,
+        "reference": 34.60156716953583,
+        "difference": 20.184885450060456
+      },
+      "block_curve_RMSE": {
+        "mean": 1.7016462974483506,
+        "std": 0.3991088910821463,
+        "variance": 0.15928790694082054,
+        "block_mean_std": 0.3991088910821463,
+        "blocks": 8
+      }
+    },
+    "8-8": {
+      "RMSE": 0.31549833148547396,
+      "peak_position_A": {
+        "SMDP": 2.6009746955356867,
+        "reference": 2.6009746955356867,
+        "difference": 0.0
+      },
+      "peak_height": {
+        "SMDP": 11.34536995282236,
+        "reference": 9.054788499808485,
+        "difference": 2.290581453013875
+      },
+      "block_curve_RMSE": {
+        "mean": 0.31927850717652595,
+        "std": 0.0771479447193727,
+        "variance": 0.0059518053744233865,
+        "block_mean_std": 0.0771479447193727,
+        "blocks": 8
+      }
+    }
+  },
+  "potential_energy_eV": {
+    "SMDP": {
+      "mean": -3139.2967538272833,
+      "std": 0.8200193591047433,
+      "variance": 0.6724317493065539,
+      "block_mean_std": 0.7485243627115885,
+      "blocks": 8
+    },
+    "reference": {
+      "mean": -3135.7140455769218,
+      "std": 0.28413218461139195,
+      "variance": 0.0807310983320421,
+      "block_mean_std": 0.019449037765667226,
+      "blocks": 8
+    },
+    "mean_difference": -3.58270825036152,
+    "wasserstein": 3.582708250361625
+  },
+  "energy_evaluation": "Unchanged raw BKS buck/coul-dsf energy; offline only",
+  "total_energy_drift_meV_atom_ps": {
+    "SMDP": -0.24652759951598388,
+    "reference": -0.00047233168649143226
+  },
+  "energy_change_eV": {
+    "SMDP": -8.235529460708676,
+    "reference": 0.0019395575932321663
+  },
+  "nve_windows": [
+    {
+      "start_ps": 0,
+      "end_ps": 1,
+      "samples": 21,
+      "endpoint_convention": "interpolated between identical sampled energy frames",
+      "SMDP": {
+        "KE": {
+          "mean_eV": 6.253647304207246,
+          "change_eV": -0.08214707755049755,
+          "mean_change_from_initial_eV": 0.1921872768435794
+        },
+        "PE": {
+          "mean_eV": -3136.0847271302573,
+          "change_eV": -0.7262150375095189,
+          "mean_change_from_initial_eV": -0.6219832036717889
+        },
+        "total": {
+          "mean_eV": -3129.83107982605,
+          "change_eV": -0.8083621150603904,
+          "mean_change_from_initial_eV": -0.4297959268283843
+        },
+        "temperature_K": 300.4992276085127
+      },
+      "reference": {
+        "KE": {
+          "mean_eV": 6.450749076585936,
+          "change_eV": 0.24868723532421022,
+          "mean_change_from_initial_eV": 0.3892890492222705
+        },
+        "PE": {
+          "mean_eV": -3135.853250114104,
+          "change_eV": -0.24934091389786772,
+          "mean_change_from_initial_eV": -0.3905061875182669
+        },
+        "total": {
+          "mean_eV": -3129.4025010375176,
+          "change_eV": -0.0006536785735988815,
+          "mean_change_from_initial_eV": -0.0012171382961804781
+        },
+        "temperature_K": 309.9703294278011
+      }
+    },
+    {
+      "start_ps": 1,
+      "end_ps": 5,
+      "samples": 80,
+      "endpoint_convention": "interpolated between identical sampled energy frames",
+      "SMDP": {
+        "KE": {
+          "mean_eV": 5.328135635232388,
+          "change_eV": -1.42262694545229,
+          "mean_change_from_initial_eV": -0.7333243921312791
+        },
+        "PE": {
+          "mean_eV": -3136.6340343365896,
+          "change_eV": -0.7586610060670864,
+          "mean_change_from_initial_eV": -1.1712904100039396
+        },
+        "total": {
+          "mean_eV": -3131.3058987013574,
+          "change_eV": -2.1812879515191526,
+          "mean_change_from_initial_eV": -1.904614802135427
+        },
+        "temperature_K": 256.0266937189689
+      },
+      "reference": {
+        "KE": {
+          "mean_eV": 6.220135588723134,
+          "change_eV": 0.0048870510913614496,
+          "mean_change_from_initial_eV": 0.15867556135946734
+        },
+        "PE": {
+          "mean_eV": -3135.620607979953,
+          "change_eV": -0.006572200820301077,
+          "mean_change_from_initial_eV": -0.15786405336731946
+        },
+        "total": {
+          "mean_eV": -3129.40047239123,
+          "change_eV": -0.0016851497293828288,
+          "mean_change_from_initial_eV": 0.0008115079919662094
+        },
+        "temperature_K": 298.8889281897979
+      }
+    },
+    {
+      "start_ps": 5,
+      "end_ps": 20,
+      "samples": 300,
+      "endpoint_convention": "interpolated between identical sampled energy frames",
+      "SMDP": {
+        "KE": {
+          "mean_eV": 3.536455866422572,
+          "change_eV": -1.8764351283171732,
+          "mean_change_from_initial_eV": -2.5250041609410947
+        },
+        "PE": {
+          "mean_eV": -3138.5177591807246,
+          "change_eV": -2.3329761950349166,
+          "mean_change_from_initial_eV": -3.0550152541391857
+        },
+        "total": {
+          "mean_eV": -3134.981303314302,
+          "change_eV": -4.209411323352015,
+          "mean_change_from_initial_eV": -5.580019415080469
+        },
+        "temperature_K": 169.93319332489787
+      },
+      "reference": {
+        "KE": {
+          "mean_eV": 6.300067573659203,
+          "change_eV": -0.08257927655360309,
+          "mean_change_from_initial_eV": 0.23860754629553527
+        },
+        "PE": {
+          "mean_eV": -3135.7030646156227,
+          "change_eV": 0.08704680884693516,
+          "mean_change_from_initial_eV": -0.2403206890369453
+        },
+        "total": {
+          "mean_eV": -3129.4029970419633,
+          "change_eV": 0.004467532293347176,
+          "mean_change_from_initial_eV": -0.0017131427416173513
+        },
+        "temperature_K": 302.7298067309245
+      }
+    },
+    {
+      "start_ps": 20,
+      "end_ps": 100,
+      "samples": 1599,
+      "endpoint_convention": "interpolated between identical sampled energy frames",
+      "SMDP": {
+        "KE": {
+          "mean_eV": 2.4175632738129447,
+          "change_eV": -0.38857458740729944,
+          "mean_change_from_initial_eV": -3.6438967535507225
+        },
+        "PE": {
+          "mean_eV": -3139.61831012113,
+          "change_eV": -0.6478934833698986,
+          "mean_change_from_initial_eV": -4.155566194544221
+        },
+        "total": {
+          "mean_eV": -3137.2007468473166,
+          "change_eV": -1.0364680707771186,
+          "mean_change_from_initial_eV": -7.799462948095138
+        },
+        "temperature_K": 116.16835122549175
+      },
+      "reference": {
+        "KE": {
+          "mean_eV": 6.3128052923463684,
+          "change_eV": 0.5028916211322656,
+          "mean_change_from_initial_eV": 0.2513452649827019
+        },
+        "PE": {
+          "mean_eV": -3135.718952394224,
+          "change_eV": -0.5030807675293545,
+          "mean_change_from_initial_eV": -0.2562084676383899
+        },
+        "total": {
+          "mean_eV": -3129.4061471018777,
+          "change_eV": -0.00018914639713329962,
+          "mean_change_from_initial_eV": -0.004863202655890508
+        },
+        "temperature_K": 303.3418774859242
+      }
+    }
+  ],
+  "thermostat": {
+    "applicable": false
+  },
+  "VDOS": {
+    "macro_30fs": {
+      "nyquist_THz": 16.666666666666668,
+      "elements": {
+        "8": {
+          "overlap": 0.875615049320242,
+          "block_overlap": {
+            "mean": 0.872691314900044,
+            "std": 0.03187459719557596,
+            "variance": 0.001015989946380219,
+            "block_mean_std": 0.03187459719557596,
+            "blocks": 6
+          },
+          "reference_split_half_overlap": 0.9722971596514504
+        },
+        "14": {
+          "overlap": 0.9050313279306755,
+          "block_overlap": {
+            "mean": 0.8991329293095571,
+            "std": 0.025698557476278975,
+            "variance": 0.000660415856361614,
+            "block_mean_std": 0.025698557476278975,
+            "blocks": 6
+          },
+          "reference_split_half_overlap": 0.9755292252944342
+        }
+      }
+    },
+    "queried_1fs": {
+      "available": false,
+      "reason": "endpoint-only model has no dense queried trajectory"
+    }
+  },
+  "task_status": {
+    "thermo": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 0.21740151604171842
+    },
+    "rdf": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 2.0652114029508084
+    },
+    "energy": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 38.81967621704098
+    },
+    "thermostat": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 0.00031064299400895834
+    },
+    "vdos_macro": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 0.421785102924332
+    },
+    "vdos_dense": {
+      "completed": true,
+      "failure_reason": null,
+      "elapsed_s": 9.165401570498943e-05
+    }
+  },
+  "physical_analysis_completed": true,
+  "analysis_failure_reason": {}
+}

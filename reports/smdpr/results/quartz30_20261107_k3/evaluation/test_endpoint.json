@@ -1,0 +1,17 @@
+{
+  "samples": 1000,
+  "position_RMSE_A": 0.0017323171548024588,
+  "velocity_RMSE_A_fs": 0.00011190024102025083,
+  "position_MAE_A": 0.001374590840190649,
+  "velocity_MAE_A_fs": 8.874529233435169e-05,
+  "selection_loss": 0.000776180733460933,
+  "proposal_loss": 0.010235986016690731,
+  "normalized_position_MSE": 0.0005937978597357869,
+  "normalized_velocity_MSE": 0.0009585636132396758,
+  "proposal_normalized_position_MSE": 0.004771561317145824,
+  "proposal_normalized_velocity_MSE": 0.015700410678982736,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/best.pt",
+  "selected_epoch": 399,
+  "selected_optimizer_steps": 249375,
+  "split": "test"
+}

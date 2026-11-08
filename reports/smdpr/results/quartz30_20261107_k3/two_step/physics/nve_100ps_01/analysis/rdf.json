@@ -1,0 +1,49 @@
+{
+  "completed": true,
+  "failure_reason": null,
+  "metrics": {
+    "RDF": {
+      "14-8": {
+        "RMSE": 1.5903791688050455,
+        "peak_position_A": {
+          "SMDP": 1.6033405657411766,
+          "reference": 1.6033405657411766,
+          "difference": 0.0
+        },
+        "peak_height": {
+          "SMDP": 54.621865519121755,
+          "reference": 35.74984926586994,
+          "difference": 18.872016253251815
+        },
+        "block_curve_RMSE": {
+          "mean": 1.5929404241264948,
+          "std": 0.41307669528449953,
+          "variance": 0.1706323561871633,
+          "block_mean_std": 0.41307669528449953,
+          "blocks": 8
+        }
+      },
+      "8-8": {
+        "RMSE": 0.28647557090504944,
+        "peak_position_A": {
+          "SMDP": 2.6009746955356867,
+          "reference": 2.6009746955356867,
+          "difference": 0.0
+        },
+        "peak_height": {
+          "SMDP": 11.328119940277626,
+          "reference": 9.232059905321348,
+          "difference": 2.0960600349562775
+        },
+        "block_curve_RMSE": {
+          "mean": 0.29110603419686604,
+          "std": 0.07161109345786174,
+          "variance": 0.005128148706230609,
+          "block_mean_std": 0.07161109345786174,
+          "blocks": 8
+        }
+      }
+    }
+  },
+  "elapsed_s": 2.2753216719720513
+}

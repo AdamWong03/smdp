@@ -131,6 +131,9 @@ def spectrum_blocks(dataset, numbers, start, frames, stride, dt, cache=None,
             with temporary.open("wb") as handle:
                 np.savez(handle, frequency=frequency, **record)
             temporary.replace(path)
+        if (index+1) % 64 == 0 or index+1 == len(offsets):
+            print(f"VDOS {Path(cache).name if cache else 'uncached'}: "
+                  f"{index+1}/{len(offsets)} blocks", flush=True)
     return frequency, {z: np.asarray(values) for z, values in accum.items()}
 
 

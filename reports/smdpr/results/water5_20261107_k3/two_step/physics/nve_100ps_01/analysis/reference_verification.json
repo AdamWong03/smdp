@@ -1,0 +1,82 @@
+{
+  "accepted": true,
+  "frames": [
+    {
+      "frame": 0,
+      "requested_frame": 0,
+      "thermo_index": 0,
+      "energy_error_eV": 0.00022229068205348312,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006976052029586449,
+      "force_max_error_eV_A": 0.005580868946729822
+    },
+    {
+      "frame": 14285,
+      "requested_frame": 14285,
+      "thermo_index": 14285,
+      "energy_error_eV": -0.00019303630813638506,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0005553235039298815,
+      "force_max_error_eV_A": 0.004115896018026394
+    },
+    {
+      "frame": 28571,
+      "requested_frame": 28571,
+      "thermo_index": 28571,
+      "energy_error_eV": 0.00031691006451950443,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006413839629889192,
+      "force_max_error_eV_A": 0.0033867395131419453
+    },
+    {
+      "frame": 42857,
+      "requested_frame": 42857,
+      "thermo_index": 42857,
+      "energy_error_eV": 0.0001816659250799546,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006620474503100137,
+      "force_max_error_eV_A": 0.004905484447996988
+    },
+    {
+      "frame": 57142,
+      "requested_frame": 57142,
+      "thermo_index": 57142,
+      "energy_error_eV": -0.00024076102963732637,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006173592544518593,
+      "force_max_error_eV_A": 0.0035951944346390707
+    },
+    {
+      "frame": 71428,
+      "requested_frame": 71428,
+      "thermo_index": 71428,
+      "energy_error_eV": 0.00028609416851210767,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006685968443880983,
+      "force_max_error_eV_A": 0.0037418861191125252
+    },
+    {
+      "frame": 85714,
+      "requested_frame": 85714,
+      "thermo_index": 85714,
+      "energy_error_eV": -0.0001471870363900507,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006311951974527439,
+      "force_max_error_eV_A": 0.0031484055786247245
+    },
+    {
+      "frame": 100000,
+      "requested_frame": 100000,
+      "thermo_index": 100000,
+      "energy_error_eV": 0.0001470472410289858,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0007886550815676937,
+      "force_max_error_eV_A": 0.004336928540781493
+    }
+  ],
+  "tolerances": {
+    "energy_eV": 0.001,
+    "max_force_eV_A": 0.02
+  },
+  "rationale": "Allows rounded raw dump coordinates/forces; no energy recentering"
+}

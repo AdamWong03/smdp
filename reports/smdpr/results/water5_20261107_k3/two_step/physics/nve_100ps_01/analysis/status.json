@@ -1,0 +1,45 @@
+{
+  "trajectory_completed": true,
+  "physical_analysis_completed": true,
+  "analysis_failure_reason": {},
+  "common_duration_ps": 50.0,
+  "requested_tasks": [
+    "motion",
+    "energy",
+    "rdf",
+    "vdos",
+    "full_energy",
+    "thermostat",
+    "diffusion"
+  ],
+  "task_status": {
+    "motion": {
+      "completed": true,
+      "failure_reason": null
+    },
+    "energy": {
+      "completed": true,
+      "failure_reason": null
+    },
+    "rdf": {
+      "completed": true,
+      "failure_reason": null
+    },
+    "vdos": {
+      "completed": true,
+      "failure_reason": null
+    },
+    "full_energy": {
+      "completed": true,
+      "failure_reason": null
+    },
+    "thermostat": {
+      "completed": true,
+      "failure_reason": null
+    },
+    "diffusion": {
+      "completed": true,
+      "failure_reason": null
+    }
+  }
+}

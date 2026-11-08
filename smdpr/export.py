@@ -20,10 +20,10 @@ def main():
             continue
         name = str(run.relative_to(args.root))
         item = dict(server_path=str(run), history=[])
-        for name in ['config', 'metadata', 'status', 'progress', 'queue_status',
+        for artifact in ['config', 'metadata', 'status', 'progress', 'queue_status',
                      'pipeline_status', 'validation_gate', 'formal_physics_status']:
-            if (run/f'{name}.json').exists():
-                item[name] = json.loads((run/f'{name}.json').read_text())
+            if (run/f'{artifact}.json').exists():
+                item[artifact] = json.loads((run/f'{artifact}.json').read_text())
         if (run/'history.jsonl').exists():
             for row in (run/'history.jsonl').read_text().splitlines():
                 try:
@@ -38,6 +38,15 @@ def main():
                     part in {'evaluation', 'physics'} for part in path.relative_to(run).parts):
                 if 'spectral_cache' in path.parts:
                     continue
+                if path.suffix in {'.png', '.csv'}:
+                    analysis = next((p for p in path.parents if p.name=='analysis'), None)
+                    if analysis is not None:
+                        status = next((analysis/name for name in ['metrics.json', 'status.json']
+                                       if (analysis/name).exists()), None)
+                        if status is None or not json.loads(status.read_text()).get('physical_analysis_completed'):
+                            # An interrupted writer can leave a partial figure or
+                            # CSV. Atomic task/status JSON can still be exported.
+                            continue
                 dest = args.output/'results'/name/path.relative_to(run)
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(path, dest)

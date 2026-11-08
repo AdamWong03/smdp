@@ -1,0 +1,55 @@
+{
+  "completed": true,
+  "metrics": {
+    "8-8": {
+      "RMSE": 0.08141025483208501,
+      "peak_search_A": [
+        2.4,
+        3.3
+      ],
+      "includes_intramolecular_pairs": true,
+      "peak_position_A": {
+        "model": 2.75,
+        "reference": 2.75
+      },
+      "peak_height": {
+        "model": 3.8393385477049957,
+        "reference": 3.431807721229063
+      }
+    },
+    "8-1": {
+      "RMSE": 0.30889166692327097,
+      "peak_search_A": [
+        0.8,
+        1.3
+      ],
+      "includes_intramolecular_pairs": true,
+      "peak_position_A": {
+        "model": 1.0166666666666666,
+        "reference": 1.0166666666666666
+      },
+      "peak_height": {
+        "model": 31.550346819582945,
+        "reference": 29.87942662080462
+      }
+    },
+    "1-1": {
+      "RMSE": 0.08547254398098202,
+      "peak_search_A": [
+        1.2,
+        2.0
+      ],
+      "includes_intramolecular_pairs": true,
+      "peak_position_A": {
+        "model": 1.65,
+        "reference": 1.65
+      },
+      "peak_height": {
+        "model": 3.436241990813922,
+        "reference": 2.861383475093118
+      }
+    }
+  },
+  "failure_reason": null,
+  "elapsed_s": 8.540101201971993
+}

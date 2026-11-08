@@ -12,6 +12,9 @@ python_bin=/data1/wyd/envs/mlip/bin/python
 run=$1
 unit=$2
 control=$3
+exec 9>"$run/.followup.lock"
+flock -n 9 || { echo 'A follow-up process already owns this run.' >&2; exit 1; }
+echo "$$" > "$run/followup.pid"
 while ! "$python_bin" -c 'import json,sys,pathlib; p=pathlib.Path(sys.argv[1])/"status.json"; sys.exit(0 if p.exists() and json.loads(p.read_text()).get("state")=="endpoint_training_completed" else 1)' "$run"; do
     if ! systemctl --user is-active --quiet "$unit"; then
         echo 'Primary training is not active and not completed; preserve state and stop follow-up.' >&2

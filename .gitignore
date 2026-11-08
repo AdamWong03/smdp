@@ -30,3 +30,8 @@ tensorboard/
 .mypy_cache/
 .ruff_cache/
 .DS_Store
+!reports/smdpr/results/
+!reports/smdpr/results/**/
+!reports/smdpr/results/**/*.json
+!reports/smdpr/results/**/*.csv
+!reports/smdpr/results/**/*.png

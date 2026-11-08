@@ -1,0 +1,49 @@
+{
+  "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "dtype": "float32; TF32 disabled",
+  "measurement": "shared-device paired latency; graph prebuilt",
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/best.pt",
+  "supercell": 1,
+  "scaling_only": "replicas for runtime, not independent physical generalization",
+  "validation_graph_atoms": 192,
+  "directed_edges": 7258,
+  "baseline_parameters": 2357616,
+  "smdpr_parameters": 2571592,
+  "baseline": {
+    "mean_seconds": 0.009930288166894268,
+    "block_seconds": [
+      0.010190766498756906,
+      0.009289039842163524,
+      0.011483825840211162,
+      0.009323151161273321,
+      0.009364657492066423
+    ]
+  },
+  "smdpr_endpoint": {
+    "mean_seconds": 0.013310878828633577,
+    "block_seconds": [
+      0.013182137995803108,
+      0.013633437163662165,
+      0.013510710016513864,
+      0.013036408151189486,
+      0.01319170081599926
+    ]
+  },
+  "smdpr_dense": {
+    "mean_seconds": 0.014079053269233555,
+    "block_seconds": [
+      0.014897735828223327,
+      0.014061696672191223,
+      0.01374069151158134,
+      0.013643089681863785,
+      0.014052052652308097
+    ]
+  },
+  "endpoint_overhead_ratio": 1.340432282016706,
+  "latency_target_passed": true,
+  "peak_cuda_allocated_bytes": 142235136,
+  "dense_queries": 5,
+  "includes_neighbor_rebuild": false,
+  "includes_io": false,
+  "includes_thermostat": false
+}
