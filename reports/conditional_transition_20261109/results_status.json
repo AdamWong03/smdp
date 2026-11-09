@@ -1,0 +1,28 @@
+{
+  "training_arms_completed": 8,
+  "updates_per_arm": 25000,
+  "validation_analysis_completed": 8,
+  "nve_trajectories_requested": 16,
+  "nve_full_duration_completed": 15,
+  "failed_nve": [
+    {
+      "system": "quartz",
+      "arm": "two_step",
+      "replica": 0,
+      "stable": false,
+      "failure_reason": "RuntimeError: physical safety stop: min=0.5043264031410217, preT=1143.3766467944477",
+      "time_ps": 19.53,
+      "mean_temperature_K": 483.1611972403749,
+      "final_temperature_K": 1110.1961336317702,
+      "reference_mean_temperature_K": 290.50821735250213,
+      "energy_change_eV": -221.36663075957313,
+      "reference_energy_change_eV": -0.0014325712209029007,
+      "energy_linear_slope_eV_ps": 1.0500742064292392,
+      "ns_day_shared_gpu": 104.82343294929817,
+      "peak_cuda_bytes": 57455616
+    }
+  ],
+  "test_evaluated": false,
+  "long_NVT_started": false,
+  "scientific_outcome": "Autonomous-successor did not improve long-term dynamics under this fixed protocol."
+}

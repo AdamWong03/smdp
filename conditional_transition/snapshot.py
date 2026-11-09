@@ -31,13 +31,16 @@ def main():
             records.append(row)
     write_json(report/'configs.json',configs)
     write_json(report/'numerical_checks.json',read(ROOT/'numerical_checks.json'))
+    analysis_complete=all(r['evaluation'] and r['evaluation'].get('validation_physics_completed',False)
+                          for r in records)
     write_json(report/'progress_snapshot.json',dict(
         timestamp=datetime.datetime.now(datetime.timezone.utc).isoformat(),
         source_git_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         gpu_snapshot=subprocess.check_output(['nvidia-smi',
             '--query-gpu=index,name,memory.used,memory.free,utilization.gpu,uuid','--format=csv'],text=True),
-        records=records,physical_conclusions_available=False,
-        note='Progress snapshot; pending or queued is not completed. No test selection or new long NVT.'))
+        records=records,physical_conclusions_available=analysis_complete,
+        note='Training status/progress describe training only; pipeline/evaluation status are authoritative for analysis. '
+             'Completed analysis is not a guarantee of stable/correct NVE. No test selection or new long NVT.'))
 
 
 if __name__=='__main__':main()
