@@ -1,0 +1,247 @@
+{
+  "timestamp": "2026-11-09T08:00:30.400690+00:00",
+  "source_git_commit": "a640293c736aa958265f47a4210d2f80e7273cc5",
+  "gpu_snapshot": "index, name, memory.used [MiB], memory.free [MiB], utilization.gpu [%], uuid\n0, NVIDIA RTX PRO 6000 Blackwell Server Edition, 85717 MiB, 11534 MiB, 96 %, GPU-f48b2c84-f983-64e3-000b-d669b9e64454\n1, NVIDIA L40S, 29139 MiB, 16320 MiB, 97 %, GPU-e021d5a1-42fd-70cc-8dd1-08de8f1d8987\n2, NVIDIA L40S, 8590 MiB, 36869 MiB, 99 %, GPU-83ddba27-1ec6-70a3-41f5-4b8a1d4e7900\n3, NVIDIA RTX PRO 6000 Blackwell Server Edition, 80082 MiB, 17169 MiB, 96 %, GPU-9e62da9a-1b28-25c8-e1a0-e96004a11a95\n4, NVIDIA L40S, 42178 MiB, 3281 MiB, 94 %, GPU-18ea7690-4b23-bbfd-b455-f6efe865ab85\n5, NVIDIA L40S, 42178 MiB, 3280 MiB, 88 %, GPU-ed405bf3-4069-2d20-0432-9ecda26de366\n",
+  "records": [
+    {
+      "system": "quartz",
+      "arm": "original",
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/quartz/original",
+      "pipeline": null,
+      "training": null,
+      "progress": null,
+      "evaluation": null,
+      "collection": [
+        null,
+        null
+      ],
+      "collection_progress": [
+        null,
+        null
+      ]
+    },
+    {
+      "system": "quartz",
+      "arm": "two_step",
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/quartz/two_step",
+      "pipeline": {
+        "state": "training",
+        "target_step": 12500
+      },
+      "training": null,
+      "progress": {
+        "state": "training",
+        "optimizer_steps": 300,
+        "target_steps": 25000,
+        "supervised_transition_targets": 4800,
+        "original_draws": 4800,
+        "extra_draws": 0,
+        "lr": 2.9992942010385427e-05,
+        "elapsed_seconds": 182.48571848869324
+      },
+      "evaluation": null,
+      "collection": [
+        null,
+        null
+      ],
+      "collection_progress": [
+        null,
+        null
+      ]
+    },
+    {
+      "system": "quartz",
+      "arm": "extra_reference",
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/quartz/extra_reference",
+      "pipeline": null,
+      "training": null,
+      "progress": null,
+      "evaluation": null,
+      "collection": [
+        null,
+        null
+      ],
+      "collection_progress": [
+        null,
+        null
+      ]
+    },
+    {
+      "system": "quartz",
+      "arm": "autonomous",
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/quartz/autonomous",
+      "pipeline": {
+        "state": "collecting",
+        "round": 1,
+        "trained_updates": 0
+      },
+      "training": null,
+      "progress": null,
+      "evaluation": null,
+      "collection": [
+        null,
+        null
+      ],
+      "collection_progress": [
+        {
+          "state": "collecting",
+          "round": 1,
+          "starts_completed": 48,
+          "total_starts": 125,
+          "states": 768,
+          "neural_macro_steps": 12288,
+          "failed_rollouts": 0
+        },
+        null
+      ]
+    },
+    {
+      "system": "water",
+      "arm": "original",
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/water/original",
+      "pipeline": null,
+      "training": null,
+      "progress": null,
+      "evaluation": null,
+      "collection": [
+        null,
+        null
+      ],
+      "collection_progress": [
+        null,
+        null
+      ]
+    },
+    {
+      "system": "water",
+      "arm": "two_step",
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/water/two_step",
+      "pipeline": {
+        "state": "training",
+        "target_step": 12500
+      },
+      "training": {
+        "state": "training",
+        "optimizer_steps": 625,
+        "supervised_transition_targets": 10000,
+        "train_total_loss": 0.001265340256690979,
+        "train_final_loss": 0.001202927453070879,
+        "train_proposal_loss": 0.0031206402253359557,
+        "validation": {
+          "samples": 1250,
+          "position_RMSE_A": 0.000941874767496987,
+          "velocity_RMSE_A_fs": 0.00025266481017198624,
+          "position_MAE_A": 0.0006985197451896965,
+          "velocity_MAE_A_fs": 0.00018316011875867843,
+          "selection_loss": 0.00033368655778467655,
+          "proposal_loss": 0.0018195575738325716,
+          "normalized_position_MSE": 0.00028205995471216737,
+          "normalized_velocity_MSE": 0.0003853131628595293,
+          "proposal_normalized_position_MSE": 0.0010558622304350138,
+          "proposal_normalized_velocity_MSE": 0.0025832529250532387
+        },
+        "lr": 2.9969271853225082e-05,
+        "original_draws": 10000,
+        "extra_draws": 0,
+        "extra_pool_size": 0,
+        "interval_seconds": 120.07951810094528,
+        "peak_cuda_bytes": 6156834304
+      },
+      "progress": {
+        "state": "training",
+        "optimizer_steps": 1100,
+        "target_steps": 25000,
+        "supervised_transition_targets": 17600,
+        "original_draws": 17600,
+        "extra_draws": 0,
+        "lr": 2.9904787331148334e-05,
+        "elapsed_seconds": 209.78616905212402
+      },
+      "evaluation": null,
+      "collection": [
+        null,
+        null
+      ],
+      "collection_progress": [
+        null,
+        null
+      ],
+      "validation_history": [
+        {
+          "optimizer_steps": 625,
+          "supervised_transition_targets": 10000,
+          "train_total_loss": 0.001265340256690979,
+          "train_final_loss": 0.001202927453070879,
+          "train_proposal_loss": 0.0031206402253359557,
+          "validation": {
+            "samples": 1250,
+            "position_RMSE_A": 0.000941874767496987,
+            "velocity_RMSE_A_fs": 0.00025266481017198624,
+            "position_MAE_A": 0.0006985197451896965,
+            "velocity_MAE_A_fs": 0.00018316011875867843,
+            "selection_loss": 0.00033368655778467655,
+            "proposal_loss": 0.0018195575738325716,
+            "normalized_position_MSE": 0.00028205995471216737,
+            "normalized_velocity_MSE": 0.0003853131628595293,
+            "proposal_normalized_position_MSE": 0.0010558622304350138,
+            "proposal_normalized_velocity_MSE": 0.0025832529250532387
+          },
+          "lr": 2.9969271853225082e-05,
+          "original_draws": 10000,
+          "extra_draws": 0,
+          "extra_pool_size": 0,
+          "interval_seconds": 120.07951810094528,
+          "peak_cuda_bytes": 6156834304
+        }
+      ]
+    },
+    {
+      "system": "water",
+      "arm": "extra_reference",
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/water/extra_reference",
+      "pipeline": null,
+      "training": null,
+      "progress": null,
+      "evaluation": null,
+      "collection": [
+        null,
+        null
+      ],
+      "collection_progress": [
+        null,
+        null
+      ]
+    },
+    {
+      "system": "water",
+      "arm": "autonomous",
+      "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/water/autonomous",
+      "pipeline": {
+        "state": "collecting",
+        "round": 1,
+        "trained_updates": 0
+      },
+      "training": null,
+      "progress": null,
+      "evaluation": null,
+      "collection": [
+        null,
+        null
+      ],
+      "collection_progress": [
+        {
+          "state": "collecting",
+          "round": 1,
+          "starts_completed": 112,
+          "total_starts": 125,
+          "states": 1792,
+          "neural_macro_steps": 28672,
+          "failed_rollouts": 0
+        },
+        null
+      ]
+    }
+  ],
+  "physical_conclusions_available": false,
+  "note": "Progress snapshot; pending or queued is not completed. No test selection or new long NVT."
+}

@@ -173,9 +173,9 @@ def state_bank(system,name,path,calc,cell):
     return dest
 
 
-def errors(system,name,model,bank_path,calc,cell,z,m,mol):
+def errors(system,name,model,bank_path,calc,cell,z,m,mol,destination=None):
     bank_name=bank_path.stem.replace('bank_','')
-    dest=ARTIFACTS/system/name/f'local_{bank_name}.csv'
+    dest=destination if destination is not None else ARTIFACTS/system/name/f'local_{bank_name}.csv'
     if dest.exists():return
     builder=PeriodicGraphBuilder(model.cfg.cutoff_angstrom)
     rows=[]

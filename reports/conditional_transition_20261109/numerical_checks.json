@@ -1,0 +1,178 @@
+{
+  "quartz": {
+    "passed": true,
+    "train_samples": 5000,
+    "val_samples": 1250,
+    "parameters": 2357616,
+    "cached_production_graph_max_error": {
+      "positions": 9.5367431640625e-07,
+      "velocities": 1.0710209608078003e-08
+    },
+    "accumulation_gradient_relative_error": 2.5732162612257525e-05,
+    "full_batch_loss": 0.0011620002333074808,
+    "accumulated_loss": 0.0011619993019849062,
+    "reference": {
+      "passed": true,
+      "potential_force_checks": [
+        {
+          "frame": 0,
+          "requested_frame": 0,
+          "thermo_index": 0,
+          "energy_error_eV": 0.0004368661670923757,
+          "force_available": true,
+          "force_RMSE_eV_A": 0.0005675609393066723,
+          "force_max_error_eV_A": 0.002545959636074069
+        },
+        {
+          "frame": 1000,
+          "requested_frame": 1000,
+          "thermo_index": 1000,
+          "energy_error_eV": 0.00010387440852355212,
+          "force_available": true,
+          "force_RMSE_eV_A": 0.0005648167791685917,
+          "force_max_error_eV_A": 0.0023675671496341533
+        },
+        {
+          "frame": 20000,
+          "requested_frame": 20000,
+          "thermo_index": 20000,
+          "energy_error_eV": 0.00014691822843815316,
+          "force_available": true,
+          "force_RMSE_eV_A": 0.0005833485848660578,
+          "force_max_error_eV_A": 0.002544768275122511
+        }
+      ],
+      "continuation_checks": [
+        {
+          "frame": 0,
+          "horizon_fs": 30.0,
+          "q_max_error_A": 6.5994392880242e-05,
+          "v_max_error_A_fs": 2.8449905883779283e-06
+        },
+        {
+          "frame": 1000,
+          "horizon_fs": 30.0,
+          "q_max_error_A": 6.548888773139083e-05,
+          "v_max_error_A_fs": 3.7707242970222606e-06
+        },
+        {
+          "frame": 20000,
+          "horizon_fs": 30.0,
+          "q_max_error_A": 6.720929534687059e-05,
+          "v_max_error_A_fs": 4.8339170069045326e-06
+        }
+      ],
+      "integration_masses_by_element": {
+        "8": 15.99899999588435,
+        "14": 28.08499999277529
+      },
+      "stored_masses_by_element": {
+        "8": 15.999,
+        "14": 28.0855
+      },
+      "maximum_mass_metadata_difference_u": 0.0005000072247085541,
+      "metadata_vs_integrator_KE_bias_eV": {
+        "mean": 3.573075346875524e-05,
+        "max_abs": 4.736203510925386e-05,
+        "sample_stride_reference_frames": 1000
+      },
+      "integration_dt_fs": 1.0,
+      "horizon_fs": 30.0,
+      "reference_for_training": true,
+      "energy_convention": "raw original LAMMPS eV; no recentering",
+      "verification_source": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+      "topology": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/equilibration/snapshots/quartz_1.data",
+      "purpose": "training-label generation only; never inference"
+    },
+    "extra_training_draws": 120000,
+    "transition_targets_per_arm": 400000
+  },
+  "water": {
+    "passed": true,
+    "train_samples": 5000,
+    "val_samples": 1250,
+    "parameters": 2357616,
+    "cached_production_graph_max_error": {
+      "positions": 9.5367431640625e-07,
+      "velocities": 1.8277205526828766e-08
+    },
+    "accumulation_gradient_relative_error": 2.884992500185035e-05,
+    "full_batch_loss": 0.00027300044894218445,
+    "accumulated_loss": 0.0002730005362536758,
+    "reference": {
+      "passed": true,
+      "potential_force_checks": [
+        {
+          "frame": 0,
+          "requested_frame": 0,
+          "thermo_index": 0,
+          "energy_error_eV": 0.0003472864687381616,
+          "force_available": true,
+          "force_RMSE_eV_A": 0.0006537355560725847,
+          "force_max_error_eV_A": 0.0047080478145399285
+        },
+        {
+          "frame": 1000,
+          "requested_frame": 1000,
+          "thermo_index": 1000,
+          "energy_error_eV": -0.0003501058155421788,
+          "force_available": true,
+          "force_RMSE_eV_A": 0.0006688928206576133,
+          "force_max_error_eV_A": 0.004125861102471706
+        },
+        {
+          "frame": 20000,
+          "requested_frame": 20000,
+          "thermo_index": 20000,
+          "energy_error_eV": -4.899401854174812e-05,
+          "force_available": true,
+          "force_RMSE_eV_A": 0.0006783582378936437,
+          "force_max_error_eV_A": 0.0053040932538203495
+        }
+      ],
+      "continuation_checks": [
+        {
+          "frame": 0,
+          "horizon_fs": 5.0,
+          "q_max_error_A": 9.492003217026479e-05,
+          "v_max_error_A_fs": 1.5317117377108835e-05
+        },
+        {
+          "frame": 1000,
+          "horizon_fs": 5.0,
+          "q_max_error_A": 0.00011880544765574541,
+          "v_max_error_A_fs": 1.3544826479500172e-05
+        },
+        {
+          "frame": 20000,
+          "horizon_fs": 5.0,
+          "q_max_error_A": 9.303850136888059e-05,
+          "v_max_error_A_fs": 1.5331530268150075e-05
+        }
+      ],
+      "integration_masses_by_element": {
+        "1": 1.008,
+        "8": 15.9994
+      },
+      "stored_masses_by_element": {
+        "1": 1.008,
+        "8": 15.9994
+      },
+      "maximum_mass_metadata_difference_u": 0.0,
+      "metadata_vs_integrator_KE_bias_eV": {
+        "mean": 0.0,
+        "max_abs": 0.0,
+        "sample_stride_reference_frames": 1000
+      },
+      "integration_dt_fs": 0.5,
+      "horizon_fs": 5.0,
+      "reference_for_training": true,
+      "energy_convention": "raw original LAMMPS eV; no recentering",
+      "verification_source": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_01/trajectory.h5",
+      "topology": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/equilibration/snapshots/water_1.data",
+      "purpose": "training-label generation only; never inference"
+    },
+    "extra_training_draws": 120000,
+    "transition_targets_per_arm": 400000
+  }
+}

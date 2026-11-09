@@ -1,4 +1,15 @@
-# SMDP-R experiment scope
+# Conditional-transition experiment scope
+
+The research lead authorized the protocol in
+`docs/CONDITIONAL_TRANSITION_LEARNING_PROPOSAL.md` on 2026-11-09 and requested
+execution. This supersedes the older SMDP-R-only scope below. Freeze the R3-Opt
+geometry_gated network and endpoint objective. Execute the four matched 25k
+update arms for Quartz/Water. Only TRAIN sources may generate additional labels;
+diagnostic validation banks must never enter training. Do not add architecture,
+physics losses, inference force calls, or unplanned training branches. Preserve
+all historical results. Use fixed-final checkpoints for the new comparison.
+
+## Historical SMDP-R scope (retained)
 
 The research lead explicitly authorized SMDP-R on 2026-11-07. This is the
 applicable exception to the older parent DSRT-only architecture freeze.
