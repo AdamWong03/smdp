@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-11-09T08:00:30.400690+00:00",
-  "source_git_commit": "a640293c736aa958265f47a4210d2f80e7273cc5",
-  "gpu_snapshot": "index, name, memory.used [MiB], memory.free [MiB], utilization.gpu [%], uuid\n0, NVIDIA RTX PRO 6000 Blackwell Server Edition, 85717 MiB, 11534 MiB, 96 %, GPU-f48b2c84-f983-64e3-000b-d669b9e64454\n1, NVIDIA L40S, 29139 MiB, 16320 MiB, 97 %, GPU-e021d5a1-42fd-70cc-8dd1-08de8f1d8987\n2, NVIDIA L40S, 8590 MiB, 36869 MiB, 99 %, GPU-83ddba27-1ec6-70a3-41f5-4b8a1d4e7900\n3, NVIDIA RTX PRO 6000 Blackwell Server Edition, 80082 MiB, 17169 MiB, 96 %, GPU-9e62da9a-1b28-25c8-e1a0-e96004a11a95\n4, NVIDIA L40S, 42178 MiB, 3281 MiB, 94 %, GPU-18ea7690-4b23-bbfd-b455-f6efe865ab85\n5, NVIDIA L40S, 42178 MiB, 3280 MiB, 88 %, GPU-ed405bf3-4069-2d20-0432-9ecda26de366\n",
+  "timestamp": "2026-11-09T08:03:29.138583+00:00",
+  "source_git_commit": "01797d8f847b075b91a9606a52c79849dde386cb",
+  "gpu_snapshot": "index, name, memory.used [MiB], memory.free [MiB], utilization.gpu [%], uuid\n0, NVIDIA RTX PRO 6000 Blackwell Server Edition, 87337 MiB, 9914 MiB, 97 %, GPU-f48b2c84-f983-64e3-000b-d669b9e64454\n1, NVIDIA L40S, 29139 MiB, 16320 MiB, 98 %, GPU-e021d5a1-42fd-70cc-8dd1-08de8f1d8987\n2, NVIDIA L40S, 16714 MiB, 28745 MiB, 100 %, GPU-83ddba27-1ec6-70a3-41f5-4b8a1d4e7900\n3, NVIDIA RTX PRO 6000 Blackwell Server Edition, 77302 MiB, 19949 MiB, 96 %, GPU-9e62da9a-1b28-25c8-e1a0-e96004a11a95\n4, NVIDIA L40S, 42178 MiB, 3281 MiB, 91 %, GPU-18ea7690-4b23-bbfd-b455-f6efe865ab85\n5, NVIDIA L40S, 42178 MiB, 3280 MiB, 91 %, GPU-ed405bf3-4069-2d20-0432-9ecda26de366\n",
   "records": [
     {
       "system": "quartz",
@@ -28,16 +28,42 @@
         "state": "training",
         "target_step": 12500
       },
-      "training": null,
+      "training": {
+        "state": "training",
+        "optimizer_steps": 625,
+        "supervised_transition_targets": 10000,
+        "train_total_loss": 0.0029905912935733795,
+        "train_final_loss": 0.002544075835123658,
+        "train_proposal_loss": 0.02232577288746834,
+        "validation": {
+          "samples": 1250,
+          "position_RMSE_A": 0.0018567469619972861,
+          "velocity_RMSE_A_fs": 0.00012510170881987364,
+          "position_MAE_A": 0.0014747641598805785,
+          "velocity_MAE_A_fs": 9.932410047622398e-05,
+          "selection_loss": 0.0009401216852478682,
+          "proposal_loss": 0.01915256649851799,
+          "normalized_position_MSE": 0.0006821647301316261,
+          "normalized_velocity_MSE": 0.0011980786433443426,
+          "proposal_normalized_position_MSE": 0.007201149485260248,
+          "proposal_normalized_velocity_MSE": 0.031103983524441717
+        },
+        "lr": 2.9969271853225082e-05,
+        "original_draws": 10000,
+        "extra_draws": 0,
+        "extra_pool_size": 0,
+        "interval_seconds": 322.390227357042,
+        "peak_cuda_bytes": 3951834112
+      },
       "progress": {
         "state": "training",
-        "optimizer_steps": 300,
+        "optimizer_steps": 700,
         "target_steps": 25000,
-        "supervised_transition_targets": 4800,
-        "original_draws": 4800,
+        "supervised_transition_targets": 11200,
+        "original_draws": 11200,
         "extra_draws": 0,
-        "lr": 2.9992942010385427e-05,
-        "elapsed_seconds": 182.48571848869324
+        "lr": 2.9961446409849353e-05,
+        "elapsed_seconds": 354.5086271762848
       },
       "evaluation": null,
       "collection": [
@@ -47,6 +73,34 @@
       "collection_progress": [
         null,
         null
+      ],
+      "validation_history": [
+        {
+          "optimizer_steps": 625,
+          "supervised_transition_targets": 10000,
+          "train_total_loss": 0.0029905912935733795,
+          "train_final_loss": 0.002544075835123658,
+          "train_proposal_loss": 0.02232577288746834,
+          "validation": {
+            "samples": 1250,
+            "position_RMSE_A": 0.0018567469619972861,
+            "velocity_RMSE_A_fs": 0.00012510170881987364,
+            "position_MAE_A": 0.0014747641598805785,
+            "velocity_MAE_A_fs": 9.932410047622398e-05,
+            "selection_loss": 0.0009401216852478682,
+            "proposal_loss": 0.01915256649851799,
+            "normalized_position_MSE": 0.0006821647301316261,
+            "normalized_velocity_MSE": 0.0011980786433443426,
+            "proposal_normalized_position_MSE": 0.007201149485260248,
+            "proposal_normalized_velocity_MSE": 0.031103983524441717
+          },
+          "lr": 2.9969271853225082e-05,
+          "original_draws": 10000,
+          "extra_draws": 0,
+          "extra_pool_size": 0,
+          "interval_seconds": 322.390227357042,
+          "peak_cuda_bytes": 3951834112
+        }
       ]
     },
     {
@@ -86,10 +140,10 @@
         {
           "state": "collecting",
           "round": 1,
-          "starts_completed": 48,
+          "starts_completed": 96,
           "total_starts": 125,
-          "states": 768,
-          "neural_macro_steps": 12288,
+          "states": 1536,
+          "neural_macro_steps": 24576,
           "failed_rollouts": 0
         },
         null
@@ -122,40 +176,40 @@
       },
       "training": {
         "state": "training",
-        "optimizer_steps": 625,
-        "supervised_transition_targets": 10000,
-        "train_total_loss": 0.001265340256690979,
-        "train_final_loss": 0.001202927453070879,
-        "train_proposal_loss": 0.0031206402253359557,
+        "optimizer_steps": 1875,
+        "supervised_transition_targets": 30000,
+        "train_total_loss": 0.0007602387385442853,
+        "train_final_loss": 0.0007130872456356883,
+        "train_proposal_loss": 0.002357574788480997,
         "validation": {
           "samples": 1250,
-          "position_RMSE_A": 0.000941874767496987,
-          "velocity_RMSE_A_fs": 0.00025266481017198624,
-          "position_MAE_A": 0.0006985197451896965,
-          "velocity_MAE_A_fs": 0.00018316011875867843,
-          "selection_loss": 0.00033368655778467655,
-          "proposal_loss": 0.0018195575738325716,
-          "normalized_position_MSE": 0.00028205995471216737,
-          "normalized_velocity_MSE": 0.0003853131628595293,
-          "proposal_normalized_position_MSE": 0.0010558622304350138,
-          "proposal_normalized_velocity_MSE": 0.0025832529250532387
+          "position_RMSE_A": 0.0007148897387281838,
+          "velocity_RMSE_A_fs": 0.000247271312584926,
+          "position_MAE_A": 0.0005027626166585833,
+          "velocity_MAE_A_fs": 0.00017361679992172868,
+          "selection_loss": 0.00026576553229242563,
+          "proposal_loss": 0.0017608106855303049,
+          "normalized_position_MSE": 0.00016249246571678667,
+          "normalized_velocity_MSE": 0.0003690385981462896,
+          "proposal_normalized_position_MSE": 0.0009320411830209196,
+          "proposal_normalized_velocity_MSE": 0.0025895801942795514
         },
-        "lr": 2.9969271853225082e-05,
-        "original_draws": 10000,
+        "lr": 2.9723992483296786e-05,
+        "original_draws": 30000,
         "extra_draws": 0,
         "extra_pool_size": 0,
-        "interval_seconds": 120.07951810094528,
+        "interval_seconds": 123.69835408206563,
         "peak_cuda_bytes": 6156834304
       },
       "progress": {
         "state": "training",
-        "optimizer_steps": 1100,
+        "optimizer_steps": 1900,
         "target_steps": 25000,
-        "supervised_transition_targets": 17600,
-        "original_draws": 17600,
+        "supervised_transition_targets": 30400,
+        "original_draws": 30400,
         "extra_draws": 0,
-        "lr": 2.9904787331148334e-05,
-        "elapsed_seconds": 209.78616905212402
+        "lr": 2.971661444583364e-05,
+        "elapsed_seconds": 369.3313088417053
       },
       "evaluation": null,
       "collection": [
@@ -192,6 +246,58 @@
           "extra_pool_size": 0,
           "interval_seconds": 120.07951810094528,
           "peak_cuda_bytes": 6156834304
+        },
+        {
+          "optimizer_steps": 1250,
+          "supervised_transition_targets": 20000,
+          "train_total_loss": 0.0007529929785057902,
+          "train_final_loss": 0.000706252636667341,
+          "train_proposal_loss": 0.002337017004750669,
+          "validation": {
+            "samples": 1250,
+            "position_RMSE_A": 0.0007239583135416116,
+            "velocity_RMSE_A_fs": 0.0002464128307842422,
+            "position_MAE_A": 0.0005062293797265738,
+            "velocity_MAE_A_fs": 0.00017152893990278245,
+            "selection_loss": 0.00026656085681170226,
+            "proposal_loss": 0.0017410004291683436,
+            "normalized_position_MSE": 0.00016664113812148572,
+            "normalized_velocity_MSE": 0.0003664805740583688,
+            "proposal_normalized_position_MSE": 0.0009343723572790623,
+            "proposal_normalized_velocity_MSE": 0.00254762850292027
+          },
+          "lr": 2.987707990931257e-05,
+          "original_draws": 20000,
+          "extra_draws": 0,
+          "extra_pool_size": 0,
+          "interval_seconds": 117.26673943002243,
+          "peak_cuda_bytes": 6156834304
+        },
+        {
+          "optimizer_steps": 1875,
+          "supervised_transition_targets": 30000,
+          "train_total_loss": 0.0007602387385442853,
+          "train_final_loss": 0.0007130872456356883,
+          "train_proposal_loss": 0.002357574788480997,
+          "validation": {
+            "samples": 1250,
+            "position_RMSE_A": 0.0007148897387281838,
+            "velocity_RMSE_A_fs": 0.000247271312584926,
+            "position_MAE_A": 0.0005027626166585833,
+            "velocity_MAE_A_fs": 0.00017361679992172868,
+            "selection_loss": 0.00026576553229242563,
+            "proposal_loss": 0.0017608106855303049,
+            "normalized_position_MSE": 0.00016249246571678667,
+            "normalized_velocity_MSE": 0.0003690385981462896,
+            "proposal_normalized_position_MSE": 0.0009320411830209196,
+            "proposal_normalized_velocity_MSE": 0.0025895801942795514
+          },
+          "lr": 2.9723992483296786e-05,
+          "original_draws": 30000,
+          "extra_draws": 0,
+          "extra_pool_size": 0,
+          "interval_seconds": 123.69835408206563,
+          "peak_cuda_bytes": 6156834304
         }
       ]
     },
@@ -217,25 +323,39 @@
       "arm": "autonomous",
       "run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/water/autonomous",
       "pipeline": {
-        "state": "collecting",
-        "round": 1,
-        "trained_updates": 0
+        "state": "training",
+        "target_step": 12500
       },
       "training": null,
-      "progress": null,
+      "progress": {
+        "state": "training",
+        "optimizer_steps": 400,
+        "target_steps": 25000,
+        "supervised_transition_targets": 6400,
+        "original_draws": 4480,
+        "extra_draws": 1920,
+        "lr": 2.9987432626075253e-05,
+        "elapsed_seconds": 84.54126834869385
+      },
       "evaluation": null,
       "collection": [
-        null,
+        {
+          "state": "collection_completed",
+          "labels": "/data1/wyd/research/foundation_mlip_adaptation/experiments/conditional_transition_20261109/water/autonomous/collection_round1/labels.h5",
+          "round": 1,
+          "valid_labels": 2000,
+          "reference_micro_steps": 20000
+        },
         null
       ],
       "collection_progress": [
         {
           "state": "collecting",
           "round": 1,
-          "starts_completed": 112,
+          "starts_completed": 125,
           "total_starts": 125,
-          "states": 1792,
-          "neural_macro_steps": 28672,
+          "states": 2000,
+          "neural_macro_steps": 32000,
           "failed_rollouts": 0
         },
         null
