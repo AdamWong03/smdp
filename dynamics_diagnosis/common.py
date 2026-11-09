@@ -5,6 +5,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import h5py
 
 REPO = Path(__file__).resolve().parents[1]
 PROJECT = REPO.parent
@@ -46,7 +47,18 @@ def initial_sources(system):
 
 def inventory():
     rows = []
+    split_sources={}
     for system in ['quartz', 'water']:
+        h=30 if system=='quartz' else 5
+        split_sources[system]={}
+        for split in ['train','val','test']:
+            path=DATA/system/'transitions'/f'{h}fs'/f'{split}.h5'
+            with h5py.File(path) as f:
+                split_sources[system][split]=[p.decode() if isinstance(p,bytes) else str(p)
+                                               for p in f['source_paths'][:]]
+        for a,b in [('train','val'),('train','test'),('val','test')]:
+            if set(split_sources[system][a])&set(split_sources[system][b]):
+                raise ValueError(f'Source leakage in {system} {a}/{b}')
         for name, path in checkpoints(system).items():
             saved = torch.load(path, map_location='cpu', weights_only=False)
             status = path.parent/'status.json'
@@ -55,11 +67,15 @@ def inventory():
                 checkpoint_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
                 selected_epoch=saved['epoch']+1, selected_updates=saved.get('optimizer_steps'),
                 status=json.loads(status.read_text()) if status.exists() else None,
+                discovered_prediction_results=[str(p) for p in sorted((path.parent/'evaluation').glob('*.json'))],
+                source_selection=(json.loads((path.parent/'source_selection.json').read_text())
+                    if (path.parent/'source_selection.json').exists() else None),
                 config=saved['config'], parameters=sum(x.numel() for k,x in saved['model'].items()
                     if k not in {'rms_targets','relations.rbf.centers'}),
                 existing_trajectory_summaries=[dict(path=str(p), **json.loads(p.read_text()))
                     for run in runs for p in run.glob('physics/*/trajectory.summary.json')]))
     save(REPORT/'assets.json', dict(git_sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),
          seed=SEED, models=rows, all_checkpoints_frozen=True,
+         split_sources=split_sources,
          evaluation_source_split='validation; no training or checkpoint selection'))
     return rows

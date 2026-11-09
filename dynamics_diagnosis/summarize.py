@@ -1,4 +1,5 @@
 """Finite report builder: measurements first, no inferred model selection."""
+import argparse
 import json
 from pathlib import Path
 
@@ -68,10 +69,29 @@ def spectra():
                                     velocity_power_ratio=float(ca[0]/cr[0]),nyquist_THz=500/h,
                                     warning='NVE nonstationary window, not equilibrium density of states')
                                 rows.append(row)
-    pd.DataFrame(rows).to_csv(REPORT/'spectral_windows.csv',index=False)
+    frame=pd.DataFrame(rows)
+    frame.to_csv(REPORT/'spectral_windows.csv',index=False)
+    spectral_figures(frame)
 
 
-def main():
+def spectral_figures(frame):
+    for system,part in frame.groupby('system'):
+        elements=sorted(part.element.unique())
+        fig,axes=plt.subplots(2,len(elements),figsize=(10,7),sharex=True)
+        for column,element in enumerate(elements):
+            for name,g in part[part.element==element].groupby('model',sort=False):
+                means=g.groupby('window',sort=False).mean(numeric_only=True)
+                axes[0,column].plot(means.index,means.VDOS_overlap,'o-',label=name)
+                axes[1,column].plot(means.index,means.velocity_power_ratio,'o-')
+            axes[0,column].set(title=f'Z={element}',ylabel='Window VDOS overlap')
+            axes[1,column].axhline(1,color='k',lw=.6)
+            axes[1,column].set(xlabel='NVE window (ps)',ylabel='Raw velocity power / reference')
+        axes[0,0].legend(fontsize=7)
+        fig.suptitle(system+' — nonstationary macro-state spectra and amplitude')
+        fig.tight_layout();fig.savefig(REPORT/'figures'/f'{system}_spectral_attenuation.png',dpi=180);plt.close(fig)
+
+
+def main(reuse_spectra=False):
     REPORT.mkdir(exist_ok=True,parents=True)
     figures=REPORT/'figures';figures.mkdir(exist_ok=True)
     comparisons=[];series=[];errors=[]
@@ -109,13 +129,21 @@ def main():
         water.to_csv(REPORT/'water_motion.csv',index=False)
         for system in ['quartz','water']:
             df=whole[whole.system==system]
+            colors=dict(zip(checkpoints(system),plt.get_cmap('tab10').colors))
             fig,axes=plt.subplots(3,1,figsize=(9,9),sharex=True)
             for name,part in df.groupby('model',sort=False):
                 for replica,line in part.groupby('replica'):
                     style='-' if replica==0 else '--'
-                    axes[0].plot(line.time_ps,line.temperature_K,style,label=f'{name} start{replica}')
-                    axes[1].plot(line.time_ps,line.total_E_eV-line.total_E_eV.iloc[0],style)
-                    axes[2].plot(line.time_ps,line.PE_eV-line.PE_eV.iloc[0],style)
+                    axes[0].plot(line.time_ps,line.temperature_K,style,color=colors[name],label=f'{name} start{replica}')
+                    axes[1].plot(line.time_ps,line.total_E_eV-line.total_E_eV.iloc[0],style,color=colors[name])
+                    axes[2].plot(line.time_ps,line.PE_eV-line.PE_eV.iloc[0],style,color=colors[name])
+            for replica,line in df[df.model=='r3opt'].groupby('replica'):
+                style='-' if replica==0 else '--'
+                for ax,key in zip(axes,['temperature_K','total_E_eV','PE_eV']):
+                    ref=line['reference_'+key]
+                    values=ref if key=='temperature_K' else ref-ref.iloc[0]
+                    ax.plot(line.time_ps,values,style,color='k',lw=1.3,alpha=.7,
+                            label=f'MD start{replica}' if key=='temperature_K' else None)
             axes[0].set_ylabel('Temperature (K)');axes[0].legend(fontsize=6,ncol=2)
             axes[1].set_ylabel('Total energy change (eV)');axes[2].set_ylabel('PE change (eV)')
             axes[-1].set_xlabel('Time (ps)')
@@ -126,6 +154,9 @@ def main():
             for name,part in water[water.replica==0].groupby('model',sort=False):
                 for ax,key in zip(axes,['translation_eV','rotation_eV','internal_eV']):
                     ax.plot(part.time_ps,part[key],label=name);ax.set_ylabel(key)
+            reference=water[(water.replica==0)&(water.model=='r3opt')]
+            for ax,key in zip(axes,['translation_eV','rotation_eV','internal_eV']):
+                ax.plot(reference.time_ps,reference['reference_'+key],color='k',lw=1.3,label='MD')
             axes[0].legend(fontsize=7,ncol=2);axes[-1].set_xlabel('Time (ps)')
             fig.tight_layout();fig.savefig(figures/'water_molecular_motion.png',dpi=180);plt.close(fig)
         windowrows=[]
@@ -141,11 +172,16 @@ def main():
         pd.DataFrame(windowrows).to_csv(REPORT/'energy_windows.csv',index=False)
     if errors:
         df=pd.concat(errors,ignore_index=True)
+        df['signed_KE_discrepancy_eV']=df.model_delta_KE_eV-df.MD_delta_KE_eV
+        df['signed_PE_discrepancy_eV']=df.model_delta_PE_eV-df.MD_delta_PE_eV
+        np.testing.assert_allclose(df.signed_KE_discrepancy_eV+df.signed_PE_discrepancy_eV,
+                                   df.signed_energy_discrepancy_eV,atol=1e-9)
         df.to_csv(REPORT/'energy_transition.csv',index=False)
         water=df[df.system=='water']
         water.to_csv(REPORT/'water_motion_transition.csv',index=False)
         values=['signed_energy_discrepancy_eV','model_delta_E_eV','MD_delta_E_eV',
-                'model_delta_KE_eV','model_delta_PE_eV','q_RMSE_A','v_RMSE_A_fs',
+                'model_delta_KE_eV','model_delta_PE_eV','signed_KE_discrepancy_eV',
+                'signed_PE_discrepancy_eV','q_RMSE_A','v_RMSE_A_fs',
                 'temperature_K','kinetic_error_cross_eV','kinetic_error_quadratic_eV']
         group_summary(df,['system','model','state_source','origin','window'],values).to_csv(REPORT/'local_by_window.csv',index=False)
         # Uniform sampling inside unequal-duration windows is intentional.
@@ -214,7 +250,15 @@ def main():
             axes[1].legend(fontsize=7)
             fig.suptitle(system+' — temperature/state associations, not causal layer attribution')
             fig.tight_layout();fig.savefig(figures/f'{system}_local_error.png',dpi=180);plt.close(fig)
-    spectra()
+    roundtrips=[]
+    for system in ['quartz','water']:
+        for path in (ARTIFACTS/system).glob('*/roundtrip.json'):
+            roundtrips.append(dict(system=system,model=path.parent.name,**json.loads(path.read_text())))
+    pd.DataFrame(roundtrips).to_csv(REPORT/'roundtrip.csv',index=False)
+    if reuse_spectra:
+        spectral_figures(pd.read_csv(REPORT/'spectral_windows.csv'))
+    else:
+        spectra()
     status={}
     for system in ['quartz','water']:
         p=ARTIFACTS/system/'status.json'
@@ -224,4 +268,9 @@ def main():
         uncertainty='contiguous time blocks within two starts; not independent frame replicates'))
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--reuse-spectra',action='store_true',
+                        help='Replot the already completed frozen-state spectral table')
+    args=parser.parse_args()
+    main(reuse_spectra=args.reuse_spectra)
