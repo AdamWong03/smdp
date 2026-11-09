@@ -1,0 +1,30 @@
+{
+  "completed": true,
+  "systems": {
+    "quartz": {
+      "state": "diagnosis_completed",
+      "models": [
+        "k3_stage2",
+        "r3opt",
+        "r3opt_two_step",
+        "k3_stage1",
+        "k1_stage1",
+        "k1_stage2"
+      ]
+    },
+    "water": {
+      "state": "diagnosis_completed",
+      "models": [
+        "k3_stage2",
+        "r3opt",
+        "r3opt_two_step",
+        "k3_stage1",
+        "k1_stage1",
+        "k1_stage2"
+      ]
+    }
+  },
+  "no_training": true,
+  "no_test_selection": true,
+  "uncertainty": "contiguous time blocks within two starts; not independent frame replicates"
+}

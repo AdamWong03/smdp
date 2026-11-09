@@ -1,0 +1,16 @@
+{
+  "quartz": {
+    "samples": 256,
+    "mean_q_RMSE_A": 1.5698447201611016e-05,
+    "mean_v_RMSE_A_fs": 9.775600642443819e-07,
+    "mean_energy_offset_eV": 4.920084393466445e-05,
+    "std_energy_offset_eV": 0.0003615911264071525
+  },
+  "water": {
+    "samples": 256,
+    "mean_q_RMSE_A": 2.157945220613352e-05,
+    "mean_v_RMSE_A_fs": 2.4891533407386364e-06,
+    "mean_energy_offset_eV": -2.594953717217907e-06,
+    "std_energy_offset_eV": 0.00036000309365348277
+  }
+}

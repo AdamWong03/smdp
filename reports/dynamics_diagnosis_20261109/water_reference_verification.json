@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "potential_force_checks": [
+    {
+      "frame": 0,
+      "requested_frame": 0,
+      "thermo_index": 0,
+      "energy_error_eV": -0.00019894837691580847,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006241138630298416,
+      "force_max_error_eV_A": 0.0035336813869003836
+    },
+    {
+      "frame": 1000,
+      "requested_frame": 1000,
+      "thermo_index": 1000,
+      "energy_error_eV": 0.00024319213266821293,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006568589979647993,
+      "force_max_error_eV_A": 0.004060531973266557
+    },
+    {
+      "frame": 20000,
+      "requested_frame": 20000,
+      "thermo_index": 20000,
+      "energy_error_eV": 0.0003787047777876751,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006327135520042361,
+      "force_max_error_eV_A": 0.004891096565616149
+    }
+  ],
+  "continuation_checks": [
+    {
+      "frame": 0,
+      "horizon_fs": 5.0,
+      "q_max_error_A": 0.0001166102981482453,
+      "v_max_error_A_fs": 1.758216076140108e-05
+    },
+    {
+      "frame": 1000,
+      "horizon_fs": 5.0,
+      "q_max_error_A": 0.00010785216187336744,
+      "v_max_error_A_fs": 1.5473351099245386e-05
+    },
+    {
+      "frame": 20000,
+      "horizon_fs": 5.0,
+      "q_max_error_A": 0.00012630709984229327,
+      "v_max_error_A_fs": 1.5867923270844464e-05
+    }
+  ],
+  "integration_masses_by_element": {
+    "1": 1.008,
+    "8": 15.9994
+  },
+  "stored_masses_by_element": {
+    "1": 1.008,
+    "8": 15.9994
+  },
+  "maximum_mass_metadata_difference_u": 0.0,
+  "metadata_vs_integrator_KE_bias_eV": {
+    "mean": 0.0,
+    "max_abs": 0.0,
+    "sample_stride_reference_frames": 1000
+  },
+  "integration_dt_fs": 0.5,
+  "horizon_fs": 5.0,
+  "reference_for_training": false,
+  "energy_convention": "raw original LAMMPS eV; no recentering"
+}

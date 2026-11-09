@@ -1,0 +1,13 @@
+system,model,q_RMSE_A,v_RMSE_A_fs,samples,interpretation
+quartz,k3_stage2,0.0014031575748531132,0.00011996593247250025,64,time-reversal round trip; not an energy conservation test
+quartz,k1_stage1,0.0013795160128095975,0.00011885154771883043,64,time-reversal round trip; not an energy conservation test
+quartz,k3_stage1,0.001358180790547707,0.00011658323885529193,64,time-reversal round trip; not an energy conservation test
+quartz,r3opt_two_step,0.0015358584554775391,0.0001389912158611736,64,time-reversal round trip; not an energy conservation test
+quartz,r3opt,0.0014972641114906397,0.00013595281002186258,64,time-reversal round trip; not an energy conservation test
+quartz,k1_stage2,0.001426354886210087,0.00012183856836840222,64,time-reversal round trip; not an energy conservation test
+water,k3_stage2,0.0005138810638248119,0.00018923390185638422,64,time-reversal round trip; not an energy conservation test
+water,k1_stage1,0.0005100452238922063,0.00017764203310654457,64,time-reversal round trip; not an energy conservation test
+water,k3_stage1,0.0005090212200729138,0.00017647909166321971,64,time-reversal round trip; not an energy conservation test
+water,r3opt_two_step,0.0005196604044219924,0.00018722142348938923,64,time-reversal round trip; not an energy conservation test
+water,r3opt,0.0005266383761648008,0.0001796959183295846,64,time-reversal round trip; not an energy conservation test
+water,k1_stage2,0.0005124195954298804,0.0001892258334752016,64,time-reversal round trip; not an energy conservation test

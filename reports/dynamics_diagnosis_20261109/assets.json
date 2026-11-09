@@ -1,0 +1,1763 @@
+{
+  "git_sha": "fd10002546dca21cf1efd1ec9adcde94f3506cc6",
+  "seed": 20261109,
+  "models": [
+    {
+      "system": "quartz",
+      "model": "r3opt",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261103_r3_opt/best.pt",
+      "checkpoint_sha256": "d59c8110762e328c8c59debf60820090b6ab912fc896e675db619af02e395508",
+      "selected_epoch": 364,
+      "selected_updates": 227500,
+      "status": {
+        "state": "stopped_and_test_completed",
+        "samples": 1000,
+        "position_RMSE_A": 0.0018004317399284674,
+        "velocity_RMSE_A_fs": 0.00012207800568053638,
+        "position_MAE_A": 0.00142981918156147,
+        "velocity_MAE_A_fs": 9.697610919829459e-05,
+        "selection_loss": 0.0008911378025077283,
+        "proposal_loss": 0.019685622557997703,
+        "normalized_position_MSE": 0.0006414120863191783,
+        "normalized_velocity_MSE": 0.0011408635145053268,
+        "proposal_normalized_position_MSE": 0.007399816893041134,
+        "proposal_normalized_velocity_MSE": 0.03197142815589905,
+        "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261103_r3_opt/best.pt",
+        "selected_epoch": 364,
+        "selected_optimizer_steps": 227500,
+        "stopped_epoch": 370,
+        "actual_training_seconds": 34141.32082557678
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261103_r3_opt/evaluation/multistep.json"
+      ],
+      "source_selection": null,
+      "config": {
+        "seed": 20261102,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028/cache",
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 30.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "early_stopping_patience": null,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "data_root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "status": "R3-Opt fixed-budget formal training from scratch"
+      },
+      "parameters": 2357616,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261103_r3_opt/physics/nve_test_09/trajectory.summary.json",
+          "completed_steps": 3333,
+          "production_steps": 3333,
+          "simulated_ps": 99.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 220.57977696403395,
+          "model_and_graph_seconds": 213.07126794423675,
+          "ns_day_end_to_end": 39.1655849820205,
+          "peak_cuda_bytes": 57492992,
+          "hardware": "NVIDIA L40S",
+          "parameters": 2357616,
+          "selected_epoch": 364,
+          "checkpoint_sha256": "d59c8110762e328c8c59debf60820090b6ab912fc896e675db619af02e395508"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261103_r3_opt/physics/nvt/trajectory.summary.json",
+          "completed_steps": 550000,
+          "production_steps": 500000,
+          "simulated_ps": 16500.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 13441.87762938696,
+          "model_and_graph_seconds": 12404.26017274498,
+          "ns_day_end_to_end": 106.05661197832352,
+          "peak_cuda_bytes": 57741824,
+          "hardware": "NVIDIA L40S",
+          "parameters": 2357616,
+          "selected_epoch": 364,
+          "checkpoint_sha256": "d59c8110762e328c8c59debf60820090b6ab912fc896e675db619af02e395508"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261103_r3_opt/physics/nve_test_10/trajectory.summary.json",
+          "completed_steps": 3333,
+          "production_steps": 3333,
+          "simulated_ps": 99.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 220.42861391202314,
+          "model_and_graph_seconds": 213.56407856778242,
+          "ns_day_end_to_end": 39.192443515740784,
+          "peak_cuda_bytes": 57502208,
+          "hardware": "NVIDIA L40S",
+          "parameters": 2357616,
+          "selected_epoch": 364,
+          "checkpoint_sha256": "d59c8110762e328c8c59debf60820090b6ab912fc896e675db619af02e395508"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261103_r3_opt/physics/nvt_replica_02/trajectory.summary.json",
+          "completed_steps": 550000,
+          "production_steps": 500000,
+          "simulated_ps": 16500.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 11192.402467940003,
+          "model_and_graph_seconds": 10177.014542232559,
+          "ns_day_end_to_end": 127.37211729863625,
+          "peak_cuda_bytes": 57752576,
+          "hardware": "NVIDIA L40S",
+          "parameters": 2357616,
+          "selected_epoch": 364,
+          "checkpoint_sha256": "d59c8110762e328c8c59debf60820090b6ab912fc896e675db619af02e395508"
+        }
+      ]
+    },
+    {
+      "system": "quartz",
+      "model": "r3opt_two_step",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_r3opt_matched_two_step/best.pt",
+      "checkpoint_sha256": "55a11db5fc30e7dd5d45b824d3738469279e05c48c94757ed61bebdb1631c88e",
+      "selected_epoch": 37,
+      "selected_updates": 23125,
+      "status": {
+        "state": "two_step_training_completed",
+        "optimizer_steps": 25000,
+        "selected_by": "validation mean 1/2 endpoint loss",
+        "best_selection_loss": 0.0017538881793618202,
+        "test_completed": false
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_r3opt_matched_two_step/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_r3opt_matched_two_step/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_r3opt_matched_two_step/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_r3opt_matched_two_step/evaluation/val_multistep.json"
+      ],
+      "source_selection": {
+        "train_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_02/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_03/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_04/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_05/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_06/trajectory.h5"
+        ],
+        "val_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_07/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_08/trajectory.h5"
+        ],
+        "train_starts": 4998,
+        "val_starts": 1250,
+        "excluded_train_start_indices": [
+          833,
+          3333
+        ],
+        "excluded_val_start_indices": [],
+        "reason": "two true future endpoints must exist"
+      },
+      "config": {
+        "seed": 20261102,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/experiments/trajcast_smdp/quartz30_20261028/cache",
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 30.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "early_stopping_patience": null,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "data_root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1",
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "status": "R3-Opt fixed-budget formal training from scratch",
+        "stage2": {
+          "total_updates": 25000,
+          "initial_lr": 3e-05,
+          "minimum_lr": 1e-05,
+          "loss": "mean of 2 autonomous normalized endpoint losses plus original proposal weight",
+          "selection": "validation mean 1/2 step final endpoint loss",
+          "initial_checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/quartz30_20261103_r3_opt/best.pt",
+          "initial_selected_updates": 227500
+        },
+        "system": "quartz"
+      },
+      "parameters": 2357616,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_r3opt_matched_two_step/physics/nve_100ps_02/trajectory.summary.json",
+          "completed_steps": 3333,
+          "production_steps": 3333,
+          "simulated_ps": 99.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 39.1133777720388,
+          "model_and_graph_seconds": 34.389540939591825,
+          "ns_day_end_to_end": 220.87419936858294,
+          "peak_cuda_bytes": 81947648,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2357616,
+          "selected_epoch": 37,
+          "checkpoint_sha256": "55a11db5fc30e7dd5d45b824d3738469279e05c48c94757ed61bebdb1631c88e",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_r3opt_matched_two_step/physics/nvt_production/trajectory.summary.json",
+          "completed_steps": 550000,
+          "production_steps": 500000,
+          "simulated_ps": 16500.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 8720.34023183107,
+          "model_and_graph_seconds": 7886.223185193492,
+          "ns_day_end_to_end": 163.47985997108935,
+          "peak_cuda_bytes": 83881984,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2357616,
+          "selected_epoch": 37,
+          "checkpoint_sha256": "55a11db5fc30e7dd5d45b824d3738469279e05c48c94757ed61bebdb1631c88e",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_r3opt_matched_two_step/physics/nve_100ps_01/trajectory.summary.json",
+          "completed_steps": 3333,
+          "production_steps": 3333,
+          "simulated_ps": 99.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 39.19437889603432,
+          "model_and_graph_seconds": 34.436989550013095,
+          "ns_day_end_to_end": 220.41772936154644,
+          "peak_cuda_bytes": 81971200,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2357616,
+          "selected_epoch": 37,
+          "checkpoint_sha256": "55a11db5fc30e7dd5d45b824d3738469279e05c48c94757ed61bebdb1631c88e",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_r3opt_matched_two_step/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 333,
+          "production_steps": 333,
+          "simulated_ps": 9.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 4.599923296016641,
+          "model_and_graph_seconds": 4.092851673369296,
+          "ns_day_end_to_end": 187.64138974826884,
+          "peak_cuda_bytes": 81918464,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2357616,
+          "selected_epoch": 37,
+          "checkpoint_sha256": "55a11db5fc30e7dd5d45b824d3738469279e05c48c94757ed61bebdb1631c88e",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    },
+    {
+      "system": "quartz",
+      "model": "k3_stage1",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/best.pt",
+      "checkpoint_sha256": "17d7a67d20529d67d13f8b55340df6b4f5a39f6c6307ab5ae226e0db680b073e",
+      "selected_epoch": 399,
+      "selected_updates": 249375,
+      "status": {
+        "state": "endpoint_training_completed",
+        "optimizer_steps": 250000,
+        "selected_by": "validation endpoint only",
+        "best_selection_loss": 0.0007536498002707958,
+        "elapsed_seconds": 27172.008823394775,
+        "test_completed": true,
+        "physical_analysis_completed": false,
+        "endpoint_test_completed": true,
+        "multistep_test_completed": true
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/evaluation/test_modes.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/evaluation/test_query.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/evaluation/val_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/evaluation/val_query.json"
+      ],
+      "source_selection": null,
+      "config": {
+        "seed": 20261102,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_graphs/trajcast_p64_30fs",
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 30.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "architecture": "smdpr",
+        "motion": {
+          "modes": 3,
+          "mode_dimension": 32,
+          "modulation": 0.1,
+          "query_head": true
+        },
+        "interior_labels": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_segments/cmis_30fs",
+        "system": "quartz",
+        "experiment": "SMDP-R K3 official endpoint training",
+        "query_training": "separate optimizer; detached backbone; 3 real interior frames per segment",
+        "frozen_protocol": "docs/SMDPR_PROTOCOL.md"
+      },
+      "parameters": 2571592,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 333,
+          "production_steps": 333,
+          "simulated_ps": 9.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 22.71574619493913,
+          "model_and_graph_seconds": 22.0996659505181,
+          "ns_day_end_to_end": 37.99725496987192,
+          "peak_cuda_bytes": 102636032,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 399,
+          "checkpoint_sha256": "17d7a67d20529d67d13f8b55340df6b4f5a39f6c6307ab5ae226e0db680b073e",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    },
+    {
+      "system": "quartz",
+      "model": "k3_stage2",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/best.pt",
+      "checkpoint_sha256": "e7af50f3385609ed52ea17b826053b3cb688f28cda2e814d5424141da3616778",
+      "selected_epoch": 38,
+      "selected_updates": 23750,
+      "status": {
+        "state": "two_step_training_completed",
+        "optimizer_steps": 25000,
+        "selected_by": "validation mean 1/2 endpoint loss",
+        "best_selection_loss": 0.0015742879992350935,
+        "test_completed": true,
+        "endpoint_test_completed": true,
+        "multistep_test_completed": true
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/efficiency_supercell1.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/efficiency_supercell2.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/efficiency_supercell3.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/test_modes.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/test_query.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/val_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/evaluation/val_query.json"
+      ],
+      "source_selection": {
+        "train_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_02/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_03/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_04/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_05/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_06/trajectory.h5"
+        ],
+        "val_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_07/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_08/trajectory.h5"
+        ],
+        "train_starts": 4998,
+        "val_starts": 1250,
+        "excluded_train_start_indices": [
+          833,
+          3333
+        ],
+        "excluded_val_start_indices": [],
+        "reason": "two true future endpoints must exist"
+      },
+      "config": {
+        "seed": 20261102,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_graphs/trajcast_p64_30fs",
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 30.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "architecture": "smdpr",
+        "motion": {
+          "modes": 3,
+          "mode_dimension": 32,
+          "modulation": 0.1,
+          "query_head": true
+        },
+        "interior_labels": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_segments/cmis_30fs",
+        "system": "quartz",
+        "experiment": "SMDP-R K3 official endpoint training",
+        "query_training": "separate optimizer; detached backbone; 3 real interior frames per segment",
+        "frozen_protocol": "docs/SMDPR_PROTOCOL.md",
+        "stage2": {
+          "total_updates": 25000,
+          "initial_lr": 3e-05,
+          "minimum_lr": 1e-05,
+          "loss": "mean of 2 autonomous normalized endpoint losses plus original proposal weight",
+          "selection": "validation mean 1/2 step final endpoint loss",
+          "initial_checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/best.pt",
+          "initial_selected_updates": 249375
+        }
+      },
+      "parameters": 2571592,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/physics/nve_100ps_02/trajectory.summary.json",
+          "completed_steps": 3333,
+          "production_steps": 3333,
+          "simulated_ps": 99.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 125.62679580703843,
+          "model_and_graph_seconds": 120.46019261202309,
+          "ns_day_end_to_end": 68.768258750065,
+          "peak_cuda_bytes": 102836224,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 38,
+          "checkpoint_sha256": "e7af50f3385609ed52ea17b826053b3cb688f28cda2e814d5424141da3616778",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/physics/nvt_production/trajectory.summary.json",
+          "completed_steps": 550000,
+          "production_steps": 500000,
+          "simulated_ps": 16500.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 16573.65087887994,
+          "model_and_graph_seconds": 14978.162169657764,
+          "ns_day_end_to_end": 86.01605104501533,
+          "peak_cuda_bytes": 105316864,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 38,
+          "checkpoint_sha256": "e7af50f3385609ed52ea17b826053b3cb688f28cda2e814d5424141da3616778",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/physics/nve_100ps_01/trajectory.summary.json",
+          "completed_steps": 3333,
+          "production_steps": 3333,
+          "simulated_ps": 99.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 112.36022096103989,
+          "model_and_graph_seconds": 106.8179230025271,
+          "ns_day_end_to_end": 76.8878516445385,
+          "peak_cuda_bytes": 102697984,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 38,
+          "checkpoint_sha256": "e7af50f3385609ed52ea17b826053b3cb688f28cda2e814d5424141da3616778",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/two_step/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 333,
+          "production_steps": 333,
+          "simulated_ps": 9.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 12.729533730074763,
+          "model_and_graph_seconds": 12.233118127915077,
+          "ns_day_end_to_end": 67.80578285917551,
+          "peak_cuda_bytes": 102520832,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 38,
+          "checkpoint_sha256": "e7af50f3385609ed52ea17b826053b3cb688f28cda2e814d5424141da3616778",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k3/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 333,
+          "production_steps": 333,
+          "simulated_ps": 9.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 22.71574619493913,
+          "model_and_graph_seconds": 22.0996659505181,
+          "ns_day_end_to_end": 37.99725496987192,
+          "peak_cuda_bytes": 102636032,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 399,
+          "checkpoint_sha256": "17d7a67d20529d67d13f8b55340df6b4f5a39f6c6307ab5ae226e0db680b073e",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    },
+    {
+      "system": "quartz",
+      "model": "k1_stage1",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/best.pt",
+      "checkpoint_sha256": "c7640b94afc8f19fbe601d6ef9f354f40986b2787739e567833834cc61a2ce5c",
+      "selected_epoch": 399,
+      "selected_updates": 249375,
+      "status": {
+        "state": "endpoint_training_completed",
+        "optimizer_steps": 250000,
+        "selected_by": "validation endpoint only",
+        "best_selection_loss": 0.0008147097956389188,
+        "elapsed_seconds": 20799.200350522995,
+        "test_completed": true,
+        "physical_analysis_completed": false,
+        "endpoint_test_completed": true,
+        "multistep_test_completed": true
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/evaluation/test_modes.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/evaluation/test_query.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/evaluation/val_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/evaluation/val_query.json"
+      ],
+      "source_selection": null,
+      "config": {
+        "seed": 20261102,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_graphs/trajcast_p64_30fs",
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 30.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "architecture": "smdpr",
+        "motion": {
+          "modes": 1,
+          "mode_dimension": 96,
+          "modulation": 0.1,
+          "query_head": true
+        },
+        "interior_labels": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_segments/cmis_30fs",
+        "system": "quartz",
+        "experiment": "K1 matched-total-latent-width control; no extra physical losses",
+        "query_training": "separate optimizer; detached backbone; 3 real interior frames per segment",
+        "frozen_protocol": "docs/SMDPR_PROTOCOL.md"
+      },
+      "parameters": 2647368,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 333,
+          "production_steps": 333,
+          "simulated_ps": 9.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 20.424675276037306,
+          "model_and_graph_seconds": 19.883282597991638,
+          "ns_day_end_to_end": 42.25947234581745,
+          "peak_cuda_bytes": 100874240,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 399,
+          "checkpoint_sha256": "c7640b94afc8f19fbe601d6ef9f354f40986b2787739e567833834cc61a2ce5c",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    },
+    {
+      "system": "quartz",
+      "model": "k1_stage2",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/best.pt",
+      "checkpoint_sha256": "2abbdb5fb6804b94f527b4455742f7a3d54ffd427f5dcc9e145fb40591f45ac6",
+      "selected_epoch": 37,
+      "selected_updates": 23125,
+      "status": {
+        "state": "two_step_training_completed",
+        "optimizer_steps": 25000,
+        "selected_by": "validation mean 1/2 endpoint loss",
+        "best_selection_loss": 0.0017074000941589475,
+        "test_completed": true,
+        "endpoint_test_completed": true,
+        "multistep_test_completed": true
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/efficiency_supercell1.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/efficiency_supercell2.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/efficiency_supercell3.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/test_modes.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/test_query.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/val_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/evaluation/val_query.json"
+      ],
+      "source_selection": {
+        "train_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_02/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_03/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_04/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_05/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_06/trajectory.h5"
+        ],
+        "val_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_07/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_08/trajectory.h5"
+        ],
+        "train_starts": 4998,
+        "val_starts": 1250,
+        "excluded_train_start_indices": [
+          833,
+          3333
+        ],
+        "excluded_val_start_indices": [],
+        "reason": "two true future endpoints must exist"
+      },
+      "config": {
+        "seed": 20261102,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_graphs/trajcast_p64_30fs",
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 30.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "architecture": "smdpr",
+        "motion": {
+          "modes": 1,
+          "mode_dimension": 96,
+          "modulation": 0.1,
+          "query_head": true
+        },
+        "interior_labels": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_segments/cmis_30fs",
+        "system": "quartz",
+        "experiment": "K1 matched-total-latent-width control; no extra physical losses",
+        "query_training": "separate optimizer; detached backbone; 3 real interior frames per segment",
+        "frozen_protocol": "docs/SMDPR_PROTOCOL.md",
+        "stage2": {
+          "total_updates": 25000,
+          "initial_lr": 3e-05,
+          "minimum_lr": 1e-05,
+          "loss": "mean of 2 autonomous normalized endpoint losses plus original proposal weight",
+          "selection": "validation mean 1/2 step final endpoint loss",
+          "initial_checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/best.pt",
+          "initial_selected_updates": 249375
+        }
+      },
+      "parameters": 2647368,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/physics/nve_100ps_02/trajectory.summary.json",
+          "completed_steps": 3333,
+          "production_steps": 3333,
+          "simulated_ps": 99.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 143.12374229705893,
+          "model_and_graph_seconds": 137.9952943554381,
+          "ns_day_end_to_end": 60.361305967455316,
+          "peak_cuda_bytes": 101034496,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 37,
+          "checkpoint_sha256": "2abbdb5fb6804b94f527b4455742f7a3d54ffd427f5dcc9e145fb40591f45ac6",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/physics/nvt_production/trajectory.summary.json",
+          "completed_steps": 550000,
+          "production_steps": 500000,
+          "simulated_ps": 16500.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 28433.140122869983,
+          "model_and_graph_seconds": 26800.729148170212,
+          "ns_day_end_to_end": 50.138675990040554,
+          "peak_cuda_bytes": 103341568,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 37,
+          "checkpoint_sha256": "2abbdb5fb6804b94f527b4455742f7a3d54ffd427f5dcc9e145fb40591f45ac6",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/physics/nve_100ps_01/trajectory.summary.json",
+          "completed_steps": 3333,
+          "production_steps": 3333,
+          "simulated_ps": 99.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 137.79103626694996,
+          "model_and_graph_seconds": 132.63277736934833,
+          "ns_day_end_to_end": 62.69737302260314,
+          "peak_cuda_bytes": 101041664,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 37,
+          "checkpoint_sha256": "2abbdb5fb6804b94f527b4455742f7a3d54ffd427f5dcc9e145fb40591f45ac6",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/two_step/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 333,
+          "production_steps": 333,
+          "simulated_ps": 9.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 15.64585101697594,
+          "model_and_graph_seconds": 15.114601843059063,
+          "ns_day_end_to_end": 55.16708545054448,
+          "peak_cuda_bytes": 100870144,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 37,
+          "checkpoint_sha256": "2abbdb5fb6804b94f527b4455742f7a3d54ffd427f5dcc9e145fb40591f45ac6",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/quartz30_20261107_k1/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 333,
+          "production_steps": 333,
+          "simulated_ps": 9.99,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 20.424675276037306,
+          "model_and_graph_seconds": 19.883282597991638,
+          "ns_day_end_to_end": 42.25947234581745,
+          "peak_cuda_bytes": 100874240,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 399,
+          "checkpoint_sha256": "c7640b94afc8f19fbe601d6ef9f354f40986b2787739e567833834cc61a2ce5c",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    },
+    {
+      "system": "water",
+      "model": "r3opt",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/water5_20261103_r3_opt/best.pt",
+      "checkpoint_sha256": "4a885a5f1b8a5acf316fe4bfae2c5db9b3b63402f8ae00738fa7e1de4488521b",
+      "selected_epoch": 400,
+      "selected_updates": 250000,
+      "status": {
+        "state": "training_and_test_completed",
+        "samples": 1000,
+        "position_RMSE_A": 0.0006541270870085142,
+        "velocity_RMSE_A_fs": 0.00023764270835357424,
+        "position_MAE_A": 0.00045378405950032176,
+        "velocity_MAE_A_fs": 0.00016531051916535944,
+        "selection_loss": 0.00023845092731062322,
+        "proposal_loss": 0.001637737138196826,
+        "normalized_position_MSE": 0.000136043994105421,
+        "normalized_velocity_MSE": 0.0003408578601665795,
+        "proposal_normalized_position_MSE": 0.0008629958690144122,
+        "proposal_normalized_velocity_MSE": 0.0024124784134328366,
+        "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/water5_20261103_r3_opt/best.pt",
+        "selected_epoch": 400,
+        "selected_optimizer_steps": 250000,
+        "actual_training_seconds": 22601.42354106903
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/water5_20261103_r3_opt/evaluation/multistep_test.json"
+      ],
+      "source_selection": null,
+      "config": {
+        "seed": 20261103,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/dsrt_5fs",
+        "dataset_name": "water5",
+        "atom_type_mapper": {
+          "1": 0,
+          "8": 1
+        },
+        "split_counts": {
+          "train": 5000,
+          "val": 1250,
+          "test": 1000
+        },
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 5.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection"
+      },
+      "parameters": 2357616,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/water5_20261103_r3_opt/physics/nvt_replica_01/trajectory.summary.json",
+          "completed_steps": 550000,
+          "production_steps": 500000,
+          "simulated_ps": 2750.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 6330.327156955027,
+          "model_and_graph_seconds": 5391.123541442619,
+          "ns_day_end_to_end": 37.53360515324279,
+          "peak_cuda_bytes": 78180864,
+          "hardware": "NVIDIA L40S",
+          "parameters": 2357616,
+          "selected_epoch": 400,
+          "checkpoint_sha256": "4a885a5f1b8a5acf316fe4bfae2c5db9b3b63402f8ae00738fa7e1de4488521b",
+          "execution_note": "Shared L40S; other GPU workloads present at launch; efficiency is not an exclusive-GPU benchmark"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/water5_20261103_r3_opt/physics/nve_test_05/trajectory.summary.json",
+          "completed_steps": 20000,
+          "production_steps": 20000,
+          "simulated_ps": 100.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 214.17942399799358,
+          "model_and_graph_seconds": 169.08551698294468,
+          "ns_day_end_to_end": 40.3400095056794,
+          "peak_cuda_bytes": 78268416,
+          "hardware": "NVIDIA L40S",
+          "parameters": 2357616,
+          "selected_epoch": 400,
+          "checkpoint_sha256": "4a885a5f1b8a5acf316fe4bfae2c5db9b3b63402f8ae00738fa7e1de4488521b"
+        }
+      ]
+    },
+    {
+      "system": "water",
+      "model": "r3opt_two_step",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_r3opt_matched_two_step/best.pt",
+      "checkpoint_sha256": "ff45b4483980be91102a0c35f22ba7b056809372ec3b42e94e6e91e4156f66d3",
+      "selected_epoch": 40,
+      "selected_updates": 25000,
+      "status": {
+        "state": "two_step_training_completed",
+        "optimizer_steps": 25000,
+        "selected_by": "validation mean 1/2 endpoint loss",
+        "best_selection_loss": 0.0005159306240268051,
+        "test_completed": false
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_r3opt_matched_two_step/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_r3opt_matched_two_step/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_r3opt_matched_two_step/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_r3opt_matched_two_step/evaluation/val_multistep.json"
+      ],
+      "source_selection": {
+        "train_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_01/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_02/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_03/trajectory.h5"
+        ],
+        "val_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5"
+        ],
+        "train_starts": 4998,
+        "val_starts": 1250,
+        "excluded_train_start_indices": [
+          1665,
+          1666
+        ],
+        "excluded_val_start_indices": [],
+        "reason": "two true future endpoints must exist"
+      },
+      "config": {
+        "seed": 20261103,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/dsrt_5fs",
+        "dataset_name": "water5",
+        "atom_type_mapper": {
+          "1": 0,
+          "8": 1
+        },
+        "split_counts": {
+          "train": 5000,
+          "val": 1250,
+          "test": 1000
+        },
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 5.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "stage2": {
+          "total_updates": 25000,
+          "initial_lr": 3e-05,
+          "minimum_lr": 1e-05,
+          "loss": "mean of 2 autonomous normalized endpoint losses plus original proposal weight",
+          "selection": "validation mean 1/2 step final endpoint loss",
+          "initial_checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/relational_transition/water5_20261103_r3_opt/best.pt",
+          "initial_selected_updates": 250000
+        },
+        "system": "water"
+      },
+      "parameters": 2357616,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_r3opt_matched_two_step/physics/nve_100ps_02/trajectory.summary.json",
+          "completed_steps": 20000,
+          "production_steps": 20000,
+          "simulated_ps": 100.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 383.24483979993965,
+          "model_and_graph_seconds": 351.322479742812,
+          "ns_day_end_to_end": 22.54433485525918,
+          "peak_cuda_bytes": 103266304,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2357616,
+          "selected_epoch": 40,
+          "checkpoint_sha256": "ff45b4483980be91102a0c35f22ba7b056809372ec3b42e94e6e91e4156f66d3",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_r3opt_matched_two_step/physics/nvt_production/trajectory.summary.json",
+          "completed_steps": 550000,
+          "production_steps": 500000,
+          "simulated_ps": 2750.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 10693.704638606985,
+          "model_and_graph_seconds": 9763.019830626785,
+          "ns_day_end_to_end": 22.2186798709779,
+          "peak_cuda_bytes": 103916032,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2357616,
+          "selected_epoch": 40,
+          "checkpoint_sha256": "ff45b4483980be91102a0c35f22ba7b056809372ec3b42e94e6e91e4156f66d3",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_r3opt_matched_two_step/physics/nve_100ps_01/trajectory.summary.json",
+          "completed_steps": 20000,
+          "production_steps": 20000,
+          "simulated_ps": 100.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 381.91617005795706,
+          "model_and_graph_seconds": 350.23774311260786,
+          "ns_day_end_to_end": 22.622765615524607,
+          "peak_cuda_bytes": 103749120,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2357616,
+          "selected_epoch": 40,
+          "checkpoint_sha256": "ff45b4483980be91102a0c35f22ba7b056809372ec3b42e94e6e91e4156f66d3",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_r3opt_matched_two_step/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 2000,
+          "production_steps": 2000,
+          "simulated_ps": 10.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 38.655567909940146,
+          "model_and_graph_seconds": 35.480792651185766,
+          "ns_day_end_to_end": 22.3512432158014,
+          "peak_cuda_bytes": 103271424,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2357616,
+          "selected_epoch": 40,
+          "checkpoint_sha256": "ff45b4483980be91102a0c35f22ba7b056809372ec3b42e94e6e91e4156f66d3",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    },
+    {
+      "system": "water",
+      "model": "k3_stage1",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/best.pt",
+      "checkpoint_sha256": "fd691137b3918e06ebf4910fd77d2e253d56b544c1eb23974059bc69dde154d1",
+      "selected_epoch": 399,
+      "selected_updates": 249375,
+      "status": {
+        "state": "endpoint_training_completed",
+        "optimizer_steps": 250000,
+        "selected_by": "validation endpoint only",
+        "best_selection_loss": 0.00024506205106154084,
+        "elapsed_seconds": 32417.291113615036,
+        "test_completed": true,
+        "physical_analysis_completed": false,
+        "endpoint_test_completed": true,
+        "multistep_test_completed": true
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/evaluation/test_modes.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/evaluation/test_query.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/evaluation/val_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/evaluation/val_query.json"
+      ],
+      "source_selection": null,
+      "config": {
+        "seed": 20261103,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/dsrt_5fs",
+        "dataset_name": "water5",
+        "atom_type_mapper": {
+          "1": 0,
+          "8": 1
+        },
+        "split_counts": {
+          "train": 5000,
+          "val": 1250,
+          "test": 1000
+        },
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 5.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "architecture": "smdpr",
+        "motion": {
+          "modes": 3,
+          "mode_dimension": 32,
+          "modulation": 0.1,
+          "query_head": true
+        },
+        "interior_labels": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_segments/cmis_5fs",
+        "system": "water",
+        "experiment": "SMDP-R K3 official endpoint training",
+        "query_training": "separate optimizer; detached backbone; 3 real interior frames per segment",
+        "frozen_protocol": "docs/SMDPR_PROTOCOL.md"
+      },
+      "parameters": 2571592,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 2000,
+          "production_steps": 2000,
+          "simulated_ps": 10.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 48.48622395307757,
+          "model_and_graph_seconds": 45.359975080238655,
+          "ns_day_end_to_end": 17.81949447818692,
+          "peak_cuda_bytes": 136318976,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 399,
+          "checkpoint_sha256": "fd691137b3918e06ebf4910fd77d2e253d56b544c1eb23974059bc69dde154d1",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    },
+    {
+      "system": "water",
+      "model": "k3_stage2",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/best.pt",
+      "checkpoint_sha256": "1356500973a132d0a89465f44584a7c6e45127dc9ae44f9239b867e0fe73b7bc",
+      "selected_epoch": 38,
+      "selected_updates": 23750,
+      "status": {
+        "state": "two_step_training_completed",
+        "optimizer_steps": 25000,
+        "selected_by": "validation mean 1/2 endpoint loss",
+        "best_selection_loss": 0.0005299048442393541,
+        "test_completed": true,
+        "endpoint_test_completed": true,
+        "multistep_test_completed": true
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/efficiency_supercell1.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/efficiency_supercell2.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/efficiency_supercell3.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/test_modes.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/test_query.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/val_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/evaluation/val_query.json"
+      ],
+      "source_selection": {
+        "train_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_01/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_02/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_03/trajectory.h5"
+        ],
+        "val_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5"
+        ],
+        "train_starts": 4998,
+        "val_starts": 1250,
+        "excluded_train_start_indices": [
+          1665,
+          1666
+        ],
+        "excluded_val_start_indices": [],
+        "reason": "two true future endpoints must exist"
+      },
+      "config": {
+        "seed": 20261103,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/dsrt_5fs",
+        "dataset_name": "water5",
+        "atom_type_mapper": {
+          "1": 0,
+          "8": 1
+        },
+        "split_counts": {
+          "train": 5000,
+          "val": 1250,
+          "test": 1000
+        },
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 5.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "architecture": "smdpr",
+        "motion": {
+          "modes": 3,
+          "mode_dimension": 32,
+          "modulation": 0.1,
+          "query_head": true
+        },
+        "interior_labels": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_segments/cmis_5fs",
+        "system": "water",
+        "experiment": "SMDP-R K3 official endpoint training",
+        "query_training": "separate optimizer; detached backbone; 3 real interior frames per segment",
+        "frozen_protocol": "docs/SMDPR_PROTOCOL.md",
+        "stage2": {
+          "total_updates": 25000,
+          "initial_lr": 3e-05,
+          "minimum_lr": 1e-05,
+          "loss": "mean of 2 autonomous normalized endpoint losses plus original proposal weight",
+          "selection": "validation mean 1/2 step final endpoint loss",
+          "initial_checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/best.pt",
+          "initial_selected_updates": 249375
+        }
+      },
+      "parameters": 2571592,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/physics/nve_100ps_02/trajectory.summary.json",
+          "completed_steps": 20000,
+          "production_steps": 20000,
+          "simulated_ps": 100.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 631.9033523350954,
+          "model_and_graph_seconds": 598.110506381141,
+          "ns_day_end_to_end": 13.672976995726156,
+          "peak_cuda_bytes": 136347136,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 38,
+          "checkpoint_sha256": "1356500973a132d0a89465f44584a7c6e45127dc9ae44f9239b867e0fe73b7bc",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/physics/nvt_production/trajectory.summary.json",
+          "completed_steps": 550000,
+          "production_steps": 500000,
+          "simulated_ps": 2750.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 11587.706323362072,
+          "model_and_graph_seconds": 10375.035104836454,
+          "ns_day_end_to_end": 20.504489272477734,
+          "peak_cuda_bytes": 138355200,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 38,
+          "checkpoint_sha256": "1356500973a132d0a89465f44584a7c6e45127dc9ae44f9239b867e0fe73b7bc",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/physics/nve_100ps_01/trajectory.summary.json",
+          "completed_steps": 20000,
+          "production_steps": 20000,
+          "simulated_ps": 100.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 605.1474056140287,
+          "model_and_graph_seconds": 573.3852732012747,
+          "ns_day_end_to_end": 14.277513081681638,
+          "peak_cuda_bytes": 136246272,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 38,
+          "checkpoint_sha256": "1356500973a132d0a89465f44584a7c6e45127dc9ae44f9239b867e0fe73b7bc",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/two_step/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 2000,
+          "production_steps": 2000,
+          "simulated_ps": 10.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 59.82901375798974,
+          "model_and_graph_seconds": 56.67677227500826,
+          "ns_day_end_to_end": 14.441153977481685,
+          "peak_cuda_bytes": 134709760,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 38,
+          "checkpoint_sha256": "1356500973a132d0a89465f44584a7c6e45127dc9ae44f9239b867e0fe73b7bc",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k3/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 2000,
+          "production_steps": 2000,
+          "simulated_ps": 10.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 48.48622395307757,
+          "model_and_graph_seconds": 45.359975080238655,
+          "ns_day_end_to_end": 17.81949447818692,
+          "peak_cuda_bytes": 136318976,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2571592,
+          "selected_epoch": 399,
+          "checkpoint_sha256": "fd691137b3918e06ebf4910fd77d2e253d56b544c1eb23974059bc69dde154d1",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    },
+    {
+      "system": "water",
+      "model": "k1_stage1",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/best.pt",
+      "checkpoint_sha256": "a68c30303eefe45f82cf0e0c8df6bb59c23315b9fc4ef5d2075e2b19faabdafe",
+      "selected_epoch": 399,
+      "selected_updates": 249375,
+      "status": {
+        "state": "endpoint_training_completed",
+        "optimizer_steps": 250000,
+        "selected_by": "validation endpoint only",
+        "best_selection_loss": 0.0002554887214442715,
+        "elapsed_seconds": 41700.29596066475,
+        "test_completed": true,
+        "physical_analysis_completed": false,
+        "endpoint_test_completed": true,
+        "multistep_test_completed": true
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/evaluation/test_modes.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/evaluation/test_query.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/evaluation/val_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/evaluation/val_query.json"
+      ],
+      "source_selection": null,
+      "config": {
+        "seed": 20261103,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/dsrt_5fs",
+        "dataset_name": "water5",
+        "atom_type_mapper": {
+          "1": 0,
+          "8": 1
+        },
+        "split_counts": {
+          "train": 5000,
+          "val": 1250,
+          "test": 1000
+        },
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 5.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "architecture": "smdpr",
+        "motion": {
+          "modes": 1,
+          "mode_dimension": 96,
+          "modulation": 0.1,
+          "query_head": true
+        },
+        "interior_labels": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_segments/cmis_5fs",
+        "system": "water",
+        "experiment": "K1 matched-total-latent-width control; no extra physical losses",
+        "query_training": "separate optimizer; detached backbone; 3 real interior frames per segment",
+        "frozen_protocol": "docs/SMDPR_PROTOCOL.md"
+      },
+      "parameters": 2647368,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 2000,
+          "production_steps": 2000,
+          "simulated_ps": 10.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 30.47242120699957,
+          "model_and_graph_seconds": 27.390055140829645,
+          "ns_day_end_to_end": 28.353506737480306,
+          "peak_cuda_bytes": 134355456,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 399,
+          "checkpoint_sha256": "a68c30303eefe45f82cf0e0c8df6bb59c23315b9fc4ef5d2075e2b19faabdafe",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    },
+    {
+      "system": "water",
+      "model": "k1_stage2",
+      "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/best.pt",
+      "checkpoint_sha256": "97667648b409622ca579a5001064f2be3baf61b847e6aa573d58a8c1521d39b0",
+      "selected_epoch": 40,
+      "selected_updates": 25000,
+      "status": {
+        "state": "two_step_training_completed",
+        "optimizer_steps": 25000,
+        "selected_by": "validation mean 1/2 endpoint loss",
+        "best_selection_loss": 0.0005638287318870426,
+        "test_completed": true,
+        "endpoint_test_completed": true,
+        "multistep_test_completed": true
+      },
+      "discovered_prediction_results": [
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/efficiency_supercell1.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/efficiency_supercell2.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/efficiency_supercell3.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/test_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/test_modes.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/test_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/test_query.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/val_endpoint.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/val_multistep.json",
+        "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/evaluation/val_query.json"
+      ],
+      "source_selection": {
+        "train_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_01/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_02/trajectory.h5",
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_03/trajectory.h5"
+        ],
+        "val_sources": [
+          "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5"
+        ],
+        "train_starts": 4998,
+        "val_starts": 1250,
+        "excluded_train_start_indices": [
+          1665,
+          1666
+        ],
+        "excluded_val_start_indices": [],
+        "reason": "two true future endpoints must exist"
+      },
+      "config": {
+        "seed": 20261103,
+        "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/dsrt_5fs",
+        "dataset_name": "water5",
+        "atom_type_mapper": {
+          "1": 0,
+          "8": 1
+        },
+        "split_counts": {
+          "train": 5000,
+          "val": 1250,
+          "test": 1000
+        },
+        "model": {
+          "scalar_channels": 192,
+          "vector_channels": 48,
+          "edge_channels": 96,
+          "radial_channels": 16,
+          "cutoff_angstrom": 4.5,
+          "horizon_fs": 5.0,
+          "proposal_layers": 2,
+          "refinement_layers": 2,
+          "velocity_scale": 0.01,
+          "block_type": "geometry_gated"
+        },
+        "batch_size": 8,
+        "precision": "fp32",
+        "learning_rate": 0.0003,
+        "max_epochs": 400,
+        "total_optimizer_steps": 250000,
+        "proposal_weight": 0.02,
+        "gradient_clip": 10.0,
+        "diagnostics_interval_epochs": 10,
+        "scheduler": {
+          "type": "warmup_cosine",
+          "initial_lr": 1e-05,
+          "warmup_steps": 5000,
+          "minimum_lr": 1e-05
+        },
+        "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
+        "architecture": "smdpr",
+        "motion": {
+          "modes": 1,
+          "mode_dimension": 96,
+          "modulation": 0.1,
+          "query_head": true
+        },
+        "interior_labels": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_segments/cmis_5fs",
+        "system": "water",
+        "experiment": "K1 matched-total-latent-width control; no extra physical losses",
+        "query_training": "separate optimizer; detached backbone; 3 real interior frames per segment",
+        "frozen_protocol": "docs/SMDPR_PROTOCOL.md",
+        "stage2": {
+          "total_updates": 25000,
+          "initial_lr": 3e-05,
+          "minimum_lr": 1e-05,
+          "loss": "mean of 2 autonomous normalized endpoint losses plus original proposal weight",
+          "selection": "validation mean 1/2 step final endpoint loss",
+          "initial_checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/best.pt",
+          "initial_selected_updates": 249375
+        }
+      },
+      "parameters": 2647368,
+      "existing_trajectory_summaries": [
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/physics/nve_100ps_02/trajectory.summary.json",
+          "completed_steps": 20000,
+          "production_steps": 20000,
+          "simulated_ps": 100.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 392.57404315890744,
+          "model_and_graph_seconds": 360.3525540342089,
+          "ns_day_end_to_end": 22.00858704380175,
+          "peak_cuda_bytes": 134990848,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 40,
+          "checkpoint_sha256": "97667648b409622ca579a5001064f2be3baf61b847e6aa573d58a8c1521d39b0",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/physics/nvt_production/trajectory.summary.json",
+          "completed_steps": 550000,
+          "production_steps": 500000,
+          "simulated_ps": 2750.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 11991.953446047031,
+          "model_and_graph_seconds": 10774.977246389724,
+          "ns_day_end_to_end": 19.813285722712784,
+          "peak_cuda_bytes": 134597632,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 40,
+          "checkpoint_sha256": "97667648b409622ca579a5001064f2be3baf61b847e6aa573d58a8c1521d39b0",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/physics/nve_100ps_01/trajectory.summary.json",
+          "completed_steps": 20000,
+          "production_steps": 20000,
+          "simulated_ps": 100.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 398.75542984402273,
+          "model_and_graph_seconds": 367.2127994529437,
+          "ns_day_end_to_end": 21.667416549988104,
+          "peak_cuda_bytes": 135116800,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 40,
+          "checkpoint_sha256": "97667648b409622ca579a5001064f2be3baf61b847e6aa573d58a8c1521d39b0",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/two_step/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 2000,
+          "production_steps": 2000,
+          "simulated_ps": 10.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 38.10716706898529,
+          "model_and_graph_seconds": 34.90782804903574,
+          "ns_day_end_to_end": 22.672900308645445,
+          "peak_cuda_bytes": 134657536,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 40,
+          "checkpoint_sha256": "97667648b409622ca579a5001064f2be3baf61b847e6aa573d58a8c1521d39b0",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        },
+        {
+          "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/smdpr/water5_20261107_k1/physics/validation_nve_10ps/trajectory.summary.json",
+          "completed_steps": 2000,
+          "production_steps": 2000,
+          "simulated_ps": 10.0,
+          "stable": true,
+          "failure_reason": null,
+          "elapsed_seconds": 30.47242120699957,
+          "model_and_graph_seconds": 27.390055140829645,
+          "ns_day_end_to_end": 28.353506737480306,
+          "peak_cuda_bytes": 134355456,
+          "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+          "parameters": 2647368,
+          "selected_epoch": 399,
+          "checkpoint_sha256": "a68c30303eefe45f82cf0e0c8df6bb59c23315b9fc4ef5d2075e2b19faabdafe",
+          "execution_note": "Shared Blackwell GPU; endpoint/query/neighbor/CSVR/storage included in production cost"
+        }
+      ]
+    }
+  ],
+  "all_checkpoints_frozen": true,
+  "split_sources": {
+    "quartz": {
+      "train": [
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_01/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_02/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_03/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_04/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_05/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/train_06/trajectory.h5"
+      ],
+      "val": [
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_07/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/val_08/trajectory.h5"
+      ],
+      "test": [
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_09/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/raw_nve/test_10/trajectory.h5"
+      ]
+    },
+    "water": {
+      "train": [
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_01/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_02/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_03/trajectory.h5"
+      ],
+      "val": [
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5"
+      ],
+      "test": [
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/test_05/trajectory.h5"
+      ]
+    }
+  },
+  "evaluation_source_split": "validation; no training or checkpoint selection"
+}
