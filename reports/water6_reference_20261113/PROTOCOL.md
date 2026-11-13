@@ -50,7 +50,7 @@ Velocity RBF maximum is 0.135 Å/fs; cutoff 6 Å; angular momentum constraint of
 native zero linear momentum setting retained. Do not claim energy conservation.
 
 `water_reference.train_native` uses upstream `Trainer`, its training-only RMS
-normalization, `TrajCastModel`, native momentum layer, MSE and `_train_epoch`.
+normalization, `EfficientTrajCastModel`, native momentum layer, MSE and `_train_epoch`.
 The six-component MSE equals .5 times the sum of normalized q/v MSEs for equal
 three-component outputs. Management additions are full validation, atomic
 best/last including optimizer/scheduler/RNG, resume, progress and nonfinite
@@ -59,6 +59,15 @@ Gradient clipping is left at the upstream default (infinity); the paper does
 not specify a clipping threshold. Plateau uses PyTorch defaults except the
 published factor/patience; this choice is recorded rather than claimed to be
 an unavailable exact historical training configuration.
+
+The pinned repository also contains an older `TrajCastModel` (1,993,000
+parameters). It has a different initialization/first layer and does not match
+the released Water state. The released Water model is `EfficientTrajCastModel`
+(2,258,856 parameters); all state key names and tensor shapes were compared
+against IBM's public e3nn state, without loading those parameters into training.
+The initial wrong-entry launch was stopped and retained under
+`rejected_wrong_native_class/`; it is excluded from model comparisons but its
+updates/time remain part of setup expenditure. DSRT was not interrupted.
 
 Official model config:
 [IBM Water YAML](https://huggingface.co/ibm-research/trajcast.models-arxiv2025/blob/main/water/config_e3nn.yaml).

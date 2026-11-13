@@ -1,0 +1,8 @@
+{
+  "native_class": "EfficientTrajCastModel",
+  "native_parameters": 2258856,
+  "missing": [],
+  "extra": [],
+  "mismatched_shapes": [],
+  "pretrained_parameters_loaded_into_training": false
+}

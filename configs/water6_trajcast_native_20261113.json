@@ -57,7 +57,7 @@
   "training": {
     "seed": 20261103,
     "device": "cuda",
-    "model_type": "TrajCast",
+    "model_type": "EfficientTrajCastModel",
     "reference_fields": [
       "displacements",
       "update_velocities"
