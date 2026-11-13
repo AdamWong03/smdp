@@ -1,0 +1,2 @@
+epoch,optimizer_steps,train_final_loss,val_final_loss,position_RMSE_A,velocity_RMSE_A_fs,lr,epoch_seconds,peak_cuda_bytes
+1,625,0.5417904257774353,0.26758632340431215,0.027132387523208963,0.007063188705771862,4.624999999999999e-05,234.92425191495568,7103729152

@@ -1,0 +1,645 @@
+{
+  "recorded_utc": "2026-11-13T06:47:37.858636+00:00",
+  "experiments": {
+    "dsrt_radius6": {
+      "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6",
+      "status": {
+        "state": "training",
+        "epoch": 1,
+        "train_total_loss": 0.5572371482849121,
+        "train_final_loss": 0.5417904257774353,
+        "train_proposal_loss": 0.7723322510719299,
+        "train_normalized_position_MSE": 0.4131816327571869,
+        "train_normalized_velocity_MSE": 0.6703989505767822,
+        "train_proposal_normalized_position_MSE": 0.5676783919334412,
+        "train_proposal_normalized_velocity_MSE": 0.9769858121871948,
+        "validation": {
+          "samples": 1250,
+          "position_RMSE_A": 0.027132387523208963,
+          "velocity_RMSE_A_fs": 0.007063188705771862,
+          "position_MAE_A": 0.01843811024427414,
+          "velocity_MAE_A_fs": 0.004915456129610539,
+          "selection_loss": 0.26758632340431215,
+          "proposal_loss": 0.6361384348869323,
+          "normalized_position_MSE": 0.2340621146440506,
+          "normalized_velocity_MSE": 0.3011105302810669,
+          "proposal_normalized_position_MSE": 0.4674320089817047,
+          "proposal_normalized_velocity_MSE": 0.8048448577880859
+        },
+        "train_seconds": 210.09189836098813,
+        "epoch_seconds": 234.92425191495568,
+        "samples_per_second": 23.79910905183409,
+        "lr": 4.624999999999999e-05,
+        "peak_cuda_bytes": 7103729152,
+        "improved": true,
+        "optimizer_steps": 625,
+        "diagnostics": {
+          "gradient_norms": {
+            "final": {
+              "input_encoder": 13.219643592834473,
+              "proposal_head": 9.73686695098877,
+              "correction_head": 3.819751739501953,
+              "proposal_block_0": 13.77669906616211,
+              "proposal_block_1": 6.498198986053467,
+              "refinement_block_0": 2.225874900817871,
+              "refinement_block_1": 2.2595622539520264
+            },
+            "weighted_proposal": {
+              "input_encoder": 0.02744046039879322,
+              "proposal_head": 0.02359202317893505,
+              "correction_head": 0.0,
+              "proposal_block_0": 0.023176640272140503,
+              "proposal_block_1": 0.011496211402118206,
+              "refinement_block_0": 0.0,
+              "refinement_block_1": 0.0
+            }
+          },
+          "blocks": [
+            {
+              "stage": "proposal",
+              "index": 0,
+              "scalar_rms": 1.0010026693344116,
+              "vector_rms": 1.2679473161697388,
+              "edge_rms": 1.0032222270965576,
+              "scalar_residual_ratio": 0.6137455701828003,
+              "vector_residual_ratio": 0.19822360575199127,
+              "edge_residual_ratio": 1.6319891214370728
+            },
+            {
+              "stage": "proposal",
+              "index": 1,
+              "scalar_rms": 1.0020406246185303,
+              "vector_rms": 1.281463623046875,
+              "edge_rms": 1.00356924533844,
+              "scalar_residual_ratio": 0.37782397866249084,
+              "vector_residual_ratio": 0.1541261374950409,
+              "edge_residual_ratio": 0.3708668649196625
+            },
+            {
+              "stage": "refinement",
+              "index": 0,
+              "scalar_rms": 1.0010284185409546,
+              "vector_rms": 1.2707418203353882,
+              "edge_rms": 1.004340410232544,
+              "scalar_residual_ratio": 0.38309353590011597,
+              "vector_residual_ratio": 0.13774007558822632,
+              "edge_residual_ratio": 0.38472315669059753
+            },
+            {
+              "stage": "refinement",
+              "index": 1,
+              "scalar_rms": 1.007656455039978,
+              "vector_rms": 1.2639055252075195,
+              "edge_rms": 1.0061168670654297,
+              "scalar_residual_ratio": 0.3805334270000458,
+              "vector_residual_ratio": 0.1292642205953598,
+              "edge_residual_ratio": 0.3981330096721649
+            }
+          ]
+        }
+      },
+      "progress": null,
+      "metadata": {
+        "config": {
+          "seed": 20261103,
+          "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/water6_reference_20261113",
+          "dataset_name": "water5",
+          "atom_type_mapper": {
+            "1": 0,
+            "8": 1
+          },
+          "split_counts": {
+            "train": 5000,
+            "val": 1250,
+            "test": 1000
+          },
+          "model": {
+            "scalar_channels": 192,
+            "vector_channels": 48,
+            "edge_channels": 96,
+            "radial_channels": 16,
+            "cutoff_angstrom": 6.0,
+            "horizon_fs": 5.0,
+            "proposal_layers": 2,
+            "refinement_layers": 2,
+            "velocity_scale": 0.01,
+            "block_type": "geometry_gated"
+          },
+          "batch_size": 8,
+          "precision": "fp32",
+          "learning_rate": 0.0003,
+          "max_epochs": 400,
+          "total_optimizer_steps": 250000,
+          "proposal_weight": 0.02,
+          "gradient_clip": 10.0,
+          "diagnostics_interval_epochs": 10,
+          "scheduler": {
+            "type": "warmup_cosine",
+            "initial_lr": 1e-05,
+            "warmup_steps": 5000,
+            "minimum_lr": 1e-05
+          },
+          "validation_selection": "normalized final endpoint position/velocity MSE; no test selection"
+        },
+        "normalization_train_only": [
+          0.0560818649828434,
+          0.01287175714969635
+        ],
+        "parameters": 2357616,
+        "hardware": "NVIDIA L40S",
+        "torch_version": "2.13.0+cu130",
+        "train_samples": 5000,
+        "val_samples": 1250,
+        "initialized_from_pretrained": false,
+        "optimizer_steps_per_epoch": 625,
+        "scheduler_type": "warmup_cosine"
+      },
+      "correctness": {
+        "real_training_samples": 5000,
+        "effective_batch": 8,
+        "finite_gradients": true,
+        "cached_online_max_difference": {
+          "displacements": 2.9802322387695312e-08,
+          "velocities": 7.450580596923828e-09
+        },
+        "model_changes": [
+          "cutoff_angstrom: 4.5 -> 6.0"
+        ],
+        "normalization_train_only": [
+          0.0560818649828434,
+          0.01287175714969635
+        ],
+        "peak_forward_backward_cuda_bytes": 6959885824,
+        "optimizer_updates": 0
+      },
+      "completed_epochs": 1,
+      "history": [
+        {
+          "epoch": 1,
+          "train_total_loss": 0.5572371482849121,
+          "train_final_loss": 0.5417904257774353,
+          "train_proposal_loss": 0.7723322510719299,
+          "train_normalized_position_MSE": 0.4131816327571869,
+          "train_normalized_velocity_MSE": 0.6703989505767822,
+          "train_proposal_normalized_position_MSE": 0.5676783919334412,
+          "train_proposal_normalized_velocity_MSE": 0.9769858121871948,
+          "validation": {
+            "samples": 1250,
+            "position_RMSE_A": 0.027132387523208963,
+            "velocity_RMSE_A_fs": 0.007063188705771862,
+            "position_MAE_A": 0.01843811024427414,
+            "velocity_MAE_A_fs": 0.004915456129610539,
+            "selection_loss": 0.26758632340431215,
+            "proposal_loss": 0.6361384348869323,
+            "normalized_position_MSE": 0.2340621146440506,
+            "normalized_velocity_MSE": 0.3011105302810669,
+            "proposal_normalized_position_MSE": 0.4674320089817047,
+            "proposal_normalized_velocity_MSE": 0.8048448577880859
+          },
+          "train_seconds": 210.09189836098813,
+          "epoch_seconds": 234.92425191495568,
+          "samples_per_second": 23.79910905183409,
+          "lr": 4.624999999999999e-05,
+          "peak_cuda_bytes": 7103729152,
+          "improved": true,
+          "optimizer_steps": 625,
+          "diagnostics": {
+            "gradient_norms": {
+              "final": {
+                "input_encoder": 13.219643592834473,
+                "proposal_head": 9.73686695098877,
+                "correction_head": 3.819751739501953,
+                "proposal_block_0": 13.77669906616211,
+                "proposal_block_1": 6.498198986053467,
+                "refinement_block_0": 2.225874900817871,
+                "refinement_block_1": 2.2595622539520264
+              },
+              "weighted_proposal": {
+                "input_encoder": 0.02744046039879322,
+                "proposal_head": 0.02359202317893505,
+                "correction_head": 0.0,
+                "proposal_block_0": 0.023176640272140503,
+                "proposal_block_1": 0.011496211402118206,
+                "refinement_block_0": 0.0,
+                "refinement_block_1": 0.0
+              }
+            },
+            "blocks": [
+              {
+                "stage": "proposal",
+                "index": 0,
+                "scalar_rms": 1.0010026693344116,
+                "vector_rms": 1.2679473161697388,
+                "edge_rms": 1.0032222270965576,
+                "scalar_residual_ratio": 0.6137455701828003,
+                "vector_residual_ratio": 0.19822360575199127,
+                "edge_residual_ratio": 1.6319891214370728
+              },
+              {
+                "stage": "proposal",
+                "index": 1,
+                "scalar_rms": 1.0020406246185303,
+                "vector_rms": 1.281463623046875,
+                "edge_rms": 1.00356924533844,
+                "scalar_residual_ratio": 0.37782397866249084,
+                "vector_residual_ratio": 0.1541261374950409,
+                "edge_residual_ratio": 0.3708668649196625
+              },
+              {
+                "stage": "refinement",
+                "index": 0,
+                "scalar_rms": 1.0010284185409546,
+                "vector_rms": 1.2707418203353882,
+                "edge_rms": 1.004340410232544,
+                "scalar_residual_ratio": 0.38309353590011597,
+                "vector_residual_ratio": 0.13774007558822632,
+                "edge_residual_ratio": 0.38472315669059753
+              },
+              {
+                "stage": "refinement",
+                "index": 1,
+                "scalar_rms": 1.007656455039978,
+                "vector_rms": 1.2639055252075195,
+                "edge_rms": 1.0061168670654297,
+                "scalar_residual_ratio": 0.3805334270000458,
+                "vector_residual_ratio": 0.1292642205953598,
+                "edge_residual_ratio": 0.3981330096721649
+              }
+            ]
+          }
+        }
+      ],
+      "test_metrics": null,
+      "trajectory_completed": false,
+      "physical_analysis_completed": false,
+      "physical_evaluation_status": "not_started"
+    },
+    "trajcast_native": {
+      "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/trajcast_native",
+      "status": null,
+      "progress": {
+        "state": "training",
+        "epoch_in_progress": 1,
+        "optimizer_steps": 25,
+        "elapsed_seconds": 56.57286430289969,
+        "lr": 0.01,
+        "peak_cuda_bytes": 13293097472
+      },
+      "metadata": {
+        "config": {
+          "model": {
+            "precision": 64,
+            "num_chem_elements": 2,
+            "edge_cutoff": 6,
+            "num_edge_rbf": 8,
+            "num_edge_poly_cutoff": 6,
+            "num_vel_rbf": 8,
+            "vel_max": 0.135,
+            "max_rotation_order": 2,
+            "num_hidden_channels": 64,
+            "num_mp_layers": 4,
+            "edge_mlp_kwargs": {
+              "n_neurons": [
+                64,
+                64,
+                64
+              ],
+              "activation": "silu"
+            },
+            "vel_mlp_kwargs": {
+              "n_neurons": [
+                64,
+                64,
+                64
+              ],
+              "activation": "silu"
+            },
+            "nl_gate_kwargs": {
+              "activation_scalars": {
+                "o": "tanh",
+                "e": "silu"
+              },
+              "activation_gates": {
+                "e": "silu"
+              }
+            },
+            "conserve_ang_mom": false,
+            "o3_backend": "e3nn",
+            "net_lin_mom": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "units": "real"
+          },
+          "data": {
+            "root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/water6_reference_20261113",
+            "name": "water5_train",
+            "cutoff_radius": 6.0,
+            "files": [],
+            "atom_type_mapper": {
+              "1": 0,
+              "8": 1
+            }
+          },
+          "training": {
+            "seed": 20261103,
+            "device": "cuda",
+            "model_type": "EfficientTrajCastModel",
+            "reference_fields": [
+              "displacements",
+              "update_velocities"
+            ],
+            "target_field": "target",
+            "batch_size": 2,
+            "num_epochs": 1500,
+            "criterion": "mse",
+            "optimizer": "adam",
+            "optimizer_settings": {
+              "lr": 0.01,
+              "amsgrad": true,
+              "weight_decay": 0.0
+            }
+          },
+          "experiment": {
+            "horizon_fs": 5.0,
+            "validation_split": "water5_val",
+            "test_split": "water5_test",
+            "early_stopping_patience": 100,
+            "scheduler": {
+              "factor": 0.8,
+              "patience": 20
+            },
+            "selection": "normalized_endpoint_MSE",
+            "upstream_commit": "c52f107a02176671b21a420b2d4c67e0327b04f7",
+            "initialized_from_pretrained": false,
+            "check_every_updates": 250
+          }
+        },
+        "resolved_native_model_config": {
+          "precision": 64,
+          "num_chem_elements": 2,
+          "edge_cutoff": 6,
+          "num_edge_rbf": 8,
+          "num_edge_poly_cutoff": 6,
+          "num_vel_rbf": 8,
+          "vel_max": 0.135,
+          "max_rotation_order": 2,
+          "num_hidden_channels": 64,
+          "num_mp_layers": 4,
+          "edge_mlp_kwargs": {
+            "n_neurons": [
+              64,
+              64,
+              64
+            ],
+            "activation": "silu"
+          },
+          "vel_mlp_kwargs": {
+            "n_neurons": [
+              64,
+              64,
+              64
+            ],
+            "activation": "silu"
+          },
+          "nl_gate_kwargs": {
+            "activation_scalars": {
+              "o": "tanh",
+              "e": "silu"
+            },
+            "activation_gates": {
+              "e": "silu"
+            }
+          },
+          "conserve_ang_mom": false,
+          "o3_backend": "e3nn",
+          "net_lin_mom": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "units": "real",
+          "avg_num_neighbors": 89.84304809570312
+        },
+        "parameters": 2258856,
+        "normalization_train_only": [
+          0.0560818661604584,
+          0.012871757333929994
+        ],
+        "hardware": "NVIDIA L40S",
+        "torch_version": "2.5.1+cu121",
+        "git_commit": "27076ebffec0bb2800f280cbe56a340a49e36b2b",
+        "initialized_from_pretrained": false,
+        "training_samples": 5000,
+        "optimizer_updates_per_epoch": 2500,
+        "maximum_optimizer_updates": 3750000,
+        "native_train_method": "trajcast.model.training.Trainer._train_epoch"
+      },
+      "correctness": {
+        "effective_batch": 2,
+        "gradient_finite": true,
+        "nonzero_gradients": true,
+        "improper_equivariance_max_normalized": 3.885780586188048e-16,
+        "periodic_reimage_max_normalized": 2.7755575615628914e-17,
+        "net_momentum_max_u_A_fs": 2.983724378680108e-16,
+        "peak_forward_backward_cuda_bytes": 13201141248,
+        "optimizer_updates": 0
+      },
+      "completed_epochs": 0,
+      "history": [],
+      "test_metrics": null,
+      "trajectory_completed": false,
+      "physical_analysis_completed": false,
+      "physical_evaluation_status": "not_started"
+    },
+    "rejected_wrong_native_class": {
+      "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/rejected_wrong_native_class",
+      "status": {
+        "state": "rejected_implementation_entry",
+        "epoch_in_progress": 1,
+        "optimizer_steps": 150,
+        "elapsed_seconds": 266.7571529811248,
+        "lr": 0.01,
+        "peak_cuda_bytes": 12177354752,
+        "reason": "TrajCastModel does not match released IBM Water state; correct class is EfficientTrajCastModel",
+        "no_valid_model_comparison": true
+      },
+      "progress": {
+        "state": "training",
+        "epoch_in_progress": 1,
+        "optimizer_steps": 150,
+        "elapsed_seconds": 266.7571529811248,
+        "lr": 0.01,
+        "peak_cuda_bytes": 12177354752
+      },
+      "metadata": {
+        "config": {
+          "model": {
+            "precision": 64,
+            "num_chem_elements": 2,
+            "edge_cutoff": 6,
+            "num_edge_rbf": 8,
+            "num_edge_poly_cutoff": 6,
+            "num_vel_rbf": 8,
+            "vel_max": 0.135,
+            "max_rotation_order": 2,
+            "num_hidden_channels": 64,
+            "num_mp_layers": 4,
+            "edge_mlp_kwargs": {
+              "n_neurons": [
+                64,
+                64,
+                64
+              ],
+              "activation": "silu"
+            },
+            "vel_mlp_kwargs": {
+              "n_neurons": [
+                64,
+                64,
+                64
+              ],
+              "activation": "silu"
+            },
+            "nl_gate_kwargs": {
+              "activation_scalars": {
+                "o": "tanh",
+                "e": "silu"
+              },
+              "activation_gates": {
+                "e": "silu"
+              }
+            },
+            "conserve_ang_mom": false,
+            "o3_backend": "e3nn",
+            "net_lin_mom": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "units": "real"
+          },
+          "data": {
+            "root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/water6_reference_20261113",
+            "name": "water5_train",
+            "cutoff_radius": 6.0,
+            "files": [],
+            "atom_type_mapper": {
+              "1": 0,
+              "8": 1
+            }
+          },
+          "training": {
+            "seed": 20261103,
+            "device": "cuda",
+            "model_type": "TrajCast",
+            "reference_fields": [
+              "displacements",
+              "update_velocities"
+            ],
+            "target_field": "target",
+            "batch_size": 2,
+            "num_epochs": 1500,
+            "criterion": "mse",
+            "optimizer": "adam",
+            "optimizer_settings": {
+              "lr": 0.01,
+              "amsgrad": true,
+              "weight_decay": 0.0
+            }
+          },
+          "experiment": {
+            "horizon_fs": 5.0,
+            "validation_split": "water5_val",
+            "test_split": "water5_test",
+            "early_stopping_patience": 100,
+            "scheduler": {
+              "factor": 0.8,
+              "patience": 20
+            },
+            "selection": "normalized_endpoint_MSE",
+            "upstream_commit": "c52f107a02176671b21a420b2d4c67e0327b04f7",
+            "initialized_from_pretrained": false,
+            "check_every_updates": 250
+          }
+        },
+        "resolved_native_model_config": {
+          "precision": 64,
+          "num_chem_elements": 2,
+          "edge_cutoff": 6,
+          "num_edge_rbf": 8,
+          "num_edge_poly_cutoff": 6,
+          "num_vel_rbf": 8,
+          "vel_max": 0.135,
+          "max_rotation_order": 2,
+          "num_hidden_channels": 64,
+          "num_mp_layers": 4,
+          "edge_mlp_kwargs": {
+            "n_neurons": [
+              64,
+              64,
+              64
+            ],
+            "activation": "silu"
+          },
+          "vel_mlp_kwargs": {
+            "n_neurons": [
+              64,
+              64,
+              64
+            ],
+            "activation": "silu"
+          },
+          "nl_gate_kwargs": {
+            "activation_scalars": {
+              "o": "tanh",
+              "e": "silu"
+            },
+            "activation_gates": {
+              "e": "silu"
+            }
+          },
+          "conserve_ang_mom": false,
+          "o3_backend": "e3nn",
+          "net_lin_mom": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "units": "real",
+          "avg_num_neighbors": 89.84304809570312
+        },
+        "parameters": 1993000,
+        "normalization_train_only": [
+          0.0560818661604584,
+          0.012871757333929994
+        ],
+        "hardware": "NVIDIA L40S",
+        "torch_version": "2.5.1+cu121",
+        "git_commit": "20974b8ccebf1785483818e732dadca2bbcac4e1",
+        "initialized_from_pretrained": false,
+        "training_samples": 5000,
+        "optimizer_updates_per_epoch": 2500,
+        "maximum_optimizer_updates": 3750000,
+        "native_train_method": "trajcast.model.training.Trainer._train_epoch"
+      },
+      "correctness": {
+        "effective_batch": 2,
+        "gradient_finite": true,
+        "nonzero_gradients": true,
+        "improper_equivariance_max_normalized": 1.0323214044661785e-21,
+        "periodic_reimage_max_normalized": 1.1249656330721176e-22,
+        "net_momentum_max_u_A_fs": 3.285457995484057e-23,
+        "peak_forward_backward_cuda_bytes": 12073240576,
+        "optimizer_updates": 0
+      },
+      "completed_epochs": 0,
+      "history": [],
+      "test_metrics": null,
+      "trajectory_completed": false,
+      "physical_analysis_completed": false,
+      "physical_evaluation_status": "not_started"
+    }
+  }
+}

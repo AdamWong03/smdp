@@ -1,0 +1,63 @@
+{
+  "cutoff_A": 6.0,
+  "label_changes": false,
+  "source_cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/dsrt_5fs",
+  "units": {
+    "position": "angstrom",
+    "velocity": "angstrom/fs",
+    "mass": "u"
+  },
+  "splits": {
+    "train": {
+      "samples": 5000,
+      "source_paths": [
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_01/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_02/trajectory.h5",
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/train_03/trajectory.h5"
+      ],
+      "mean_directed_neighbors": 89.84305416666666,
+      "maximum_mapping_error": {
+        "velocity": 0.0,
+        "final_velocity": 0.0,
+        "displacement": 1.4901161193847656e-08,
+        "mass": 0.0,
+        "cell": 0.0,
+        "position_modulo_cell": 1.7763568394002505e-15
+      },
+      "bytes": 3566236962
+    },
+    "val": {
+      "samples": 1250,
+      "source_paths": [
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5"
+      ],
+      "mean_directed_neighbors": 89.926625,
+      "maximum_mapping_error": {
+        "velocity": 0.0,
+        "final_velocity": 0.0,
+        "displacement": 7.450580596923828e-09,
+        "mass": 0.0,
+        "cell": 0.0,
+        "position_modulo_cell": 3.552713678800501e-15
+      },
+      "bytes": 892367650
+    },
+    "test": {
+      "samples": 1000,
+      "source_paths": [
+        "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/test_05/trajectory.h5"
+      ],
+      "mean_directed_neighbors": 89.87059375,
+      "maximum_mapping_error": {
+        "velocity": 0.0,
+        "final_velocity": 0.0,
+        "displacement": 1.4901161193847656e-08,
+        "mass": 0.0,
+        "cell": 0.0,
+        "position_modulo_cell": 1.7763568394002505e-15
+      },
+      "bytes": 713465794
+    }
+  },
+  "source_splits_disjoint": true
+}
