@@ -1,0 +1,90 @@
+{
+  "model": {
+    "precision": 64,
+    "num_chem_elements": 2,
+    "edge_cutoff": 6,
+    "num_edge_rbf": 8,
+    "num_edge_poly_cutoff": 6,
+    "num_vel_rbf": 8,
+    "vel_max": 0.135,
+    "max_rotation_order": 2,
+    "num_hidden_channels": 64,
+    "num_mp_layers": 4,
+    "edge_mlp_kwargs": {
+      "n_neurons": [
+        64,
+        64,
+        64
+      ],
+      "activation": "silu"
+    },
+    "vel_mlp_kwargs": {
+      "n_neurons": [
+        64,
+        64,
+        64
+      ],
+      "activation": "silu"
+    },
+    "nl_gate_kwargs": {
+      "activation_scalars": {
+        "o": "tanh",
+        "e": "silu"
+      },
+      "activation_gates": {
+        "e": "silu"
+      }
+    },
+    "conserve_ang_mom": false,
+    "o3_backend": "e3nn",
+    "net_lin_mom": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "units": "real"
+  },
+  "data": {
+    "root": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/water6_reference_20261113",
+    "name": "water5_train",
+    "cutoff_radius": 6.0,
+    "files": [],
+    "atom_type_mapper": {
+      "1": 0,
+      "8": 1
+    }
+  },
+  "training": {
+    "seed": 20261103,
+    "device": "cuda",
+    "model_type": "TrajCast",
+    "reference_fields": [
+      "displacements",
+      "update_velocities"
+    ],
+    "target_field": "target",
+    "batch_size": 2,
+    "num_epochs": 1500,
+    "criterion": "mse",
+    "optimizer": "adam",
+    "optimizer_settings": {
+      "lr": 0.01,
+      "amsgrad": true,
+      "weight_decay": 0.0
+    }
+  },
+  "experiment": {
+    "horizon_fs": 5.0,
+    "validation_split": "water5_val",
+    "test_split": "water5_test",
+    "early_stopping_patience": 100,
+    "scheduler": {
+      "factor": 0.8,
+      "patience": 20
+    },
+    "selection": "normalized_endpoint_MSE",
+    "upstream_commit": "c52f107a02176671b21a420b2d4c67e0327b04f7",
+    "initialized_from_pretrained": false,
+    "check_every_updates": 250
+  }
+}

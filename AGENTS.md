@@ -1,4 +1,15 @@
-# Conditional-transition experiment scope
+# Active scope: Water reference comparison (2026-11-13)
+
+The research lead accepted `paper/NMI_RESEARCH_PLAN_20261113.md` and authorized
+Stage A. Train unchanged R3-Opt with Water radius 6 Å and native pinned TrajCast
+on the same existing Water split, from random initialization. Rebuild graphs
+at the new cutoff; do not reuse the 4.5 Å cache under a different setting.
+Use the native baseline's documented optimization and report budget differences.
+Preserve all historical artifacts. Validation alone selects checkpoints.
+Do not introduce a new network, motion modes, physical losses or on-policy data.
+This authorization supersedes the older experiment scope below.
+
+## Historical conditional-transition scope
 
 The research lead authorized the protocol in
 `docs/CONDITIONAL_TRANSITION_LEARNING_PROPOSAL.md` on 2026-11-09 and requested
