@@ -12,6 +12,7 @@ BASE="$ROOT/experiments/water6_reference_20261113"
 DATA="$ROOT/data/smdp_reference_md_v1/water"
 exec 9>"$BASE/validation_physics.lock"
 flock -n 9 || exit 1
+FAILED=0
 for arm in dsrt_radius6 dsrt_radius4p5_historical; do
   if [ "$arm" = dsrt_radius6 ]; then
     CHECKPOINT="$BASE/dsrt_radius6/best.pt"
@@ -28,16 +29,23 @@ for arm in dsrt_radius6 dsrt_radius4p5_historical; do
       > "$OUT/rollout.log" 2>&1
   fi
   test -e "$OUT/trajectory.summary.json" || { echo 'Incomplete trajectory: inspect, no overwrite'; exit 1; }
-  "$PY" -u analyze_water.py --candidate "$OUT/trajectory.h5" \
+  if ! "$PY" -u analyze_water.py --candidate "$OUT/trajectory.h5" \
     --reference "$DATA/raw_nve/val_04/trajectory.h5" \
     --topology "$DATA/equilibration/snapshots/water_5.data" \
     --output "$OUT/analysis" --tasks motion energy full_energy rdf vdos diffusion \
-    --frames 2000 --model-label "$arm" > "$OUT/analysis.log" 2>&1
+    --frames 2000 --model-label "$arm" >> "$OUT/analysis.log" 2>&1; then
+    echo "$arm: analysis incomplete; retaining failure and continuing independent evaluations"
+    FAILED=1
+  fi
   mkdir -p "$BASE/$arm/evaluation"
   if [ ! -f "$BASE/$arm/evaluation/val_multistep.json" ]; then
-    "$PY" -u evaluate_relational_rollout.py --checkpoint "$CHECKPOINT" \
+    if ! "$PY" -u evaluate_relational_rollout.py --checkpoint "$CHECKPOINT" \
       --transitions "$DATA/transitions/5fs/val.h5" \
       --output "$BASE/$arm/evaluation/val_multistep.json" --batch-size 8 \
-      > "$BASE/$arm/evaluation/val_multistep.log" 2>&1
+      > "$BASE/$arm/evaluation/val_multistep.log" 2>&1; then
+      echo "$arm: multistep evaluation failed; inspect log"
+      FAILED=1
+    fi
   fi
 done
+exit "$FAILED"

@@ -1,5 +1,5 @@
 {
-  "recorded_utc": "2026-11-15T17:02:22.751338+00:00",
+  "recorded_utc": "2026-11-15T17:23:10.157243+00:00",
   "experiments": {
     "dsrt_radius6": {
       "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6",
@@ -15098,45 +15098,101 @@
         "selected_optimizer_steps": 248750,
         "actual_training_seconds": 90326.36647248268
       },
-      "validation_nve_summary": null,
-      "validation_analysis_status": null,
-      "trajectory_completed": false,
+      "validation_nve_summary": {
+        "completed_steps": 4000,
+        "production_steps": 4000,
+        "simulated_ps": 20.0,
+        "stable": true,
+        "failure_reason": null,
+        "elapsed_seconds": 193.6503531159833,
+        "model_and_graph_seconds": 186.84555430756882,
+        "ns_day_end_to_end": 8.923298988073862,
+        "peak_cuda_bytes": 159609856,
+        "hardware": "NVIDIA L40S",
+        "parameters": 2357616,
+        "selected_epoch": 398,
+        "checkpoint_sha256": "368697746f4cc48e27ee3953c3b7e253aef0f69abce9e7164e38b2a2cff0e0c1",
+        "execution_note": "Shared L40S; validation source val_04 frame 0; frozen validation endpoint best; not checkpoint selection"
+      },
+      "validation_analysis_status": {
+        "trajectory_completed": true,
+        "physical_analysis_completed": false,
+        "analysis_failure_reason": {
+          "energy": "ValueError: Reference energy/force verification failed; see reference_verification.json"
+        },
+        "common_duration_ps": 20.0,
+        "requested_tasks": [
+          "motion",
+          "energy",
+          "full_energy",
+          "rdf",
+          "vdos",
+          "diffusion"
+        ],
+        "task_status": {
+          "motion": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "energy": {
+            "completed": false,
+            "failure_reason": "ValueError: Reference energy/force verification failed; see reference_verification.json"
+          },
+          "rdf": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "vdos": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "full_energy": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "diffusion": {
+            "completed": true,
+            "failure_reason": null
+          }
+        }
+      },
+      "trajectory_completed": true,
       "physical_analysis_completed": false,
-      "physical_evaluation_status": "running_or_pending"
+      "physical_evaluation_status": "analysis_recorded"
     },
     "trajcast_native": {
       "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/trajcast_native",
       "status": {
         "state": "training",
-        "epoch": 59,
-        "optimizer_steps": 147500,
-        "train_final_loss": 2.711154076397192e-05,
+        "epoch": 60,
+        "optimizer_steps": 150000,
+        "train_final_loss": 2.644516803453915e-05,
         "train_normalized_MAE": {
-          "displacements": 0.0026156302824243854,
-          "update_velocities": 0.004622483414846504
+          "displacements": 0.0025767774626360425,
+          "update_velocities": 0.004575509418608873
         },
         "validation": {
           "samples": 1250,
-          "selection_loss": 2.6036705191048147e-05,
-          "normalized_position_MSE": 1.1447925961771477e-05,
-          "normalized_velocity_MSE": 4.0625484420324815e-05,
-          "position_RMSE_A": 0.00018975178177869863,
-          "velocity_RMSE_A_fs": 8.204216641384792e-05,
-          "position_MAE_A": 0.00013847668440374037,
-          "velocity_MAE_A_fs": 5.909405900888098e-05
+          "selection_loss": 2.7346783988221926e-05,
+          "normalized_position_MSE": 1.1280042400779802e-05,
+          "normalized_velocity_MSE": 4.341352557566405e-05,
+          "position_RMSE_A": 0.00018835529031516248,
+          "velocity_RMSE_A_fs": 8.481064606614978e-05,
+          "position_MAE_A": 0.00013655738100572945,
+          "velocity_MAE_A_fs": 6.02972061655066e-05
         },
         "lr": 0.01,
-        "epoch_seconds": 3087.4117165890057,
-        "improved": true,
-        "peak_cuda_bytes": 13416479744
+        "epoch_seconds": 3087.9722281249706,
+        "improved": false,
+        "peak_cuda_bytes": 13410464768
       },
       "progress": {
         "state": "training",
-        "epoch_in_progress": 60,
-        "optimizer_steps": 149350,
-        "elapsed_seconds": 209767.23697714997,
+        "epoch_in_progress": 61,
+        "optimizer_steps": 150250,
+        "elapsed_seconds": 211008.507845741,
         "lr": 0.01,
-        "peak_cuda_bytes": 13396937216
+        "peak_cuda_bytes": 13326575104
       },
       "metadata": {
         "config": {
@@ -15299,7 +15355,7 @@
         "peak_forward_backward_cuda_bytes": 13201141248,
         "optimizer_updates": 0
       },
-      "completed_epochs": 59,
+      "completed_epochs": 60,
       "history": [
         {
           "epoch": 1,
@@ -16657,6 +16713,29 @@
           "epoch_seconds": 3087.4117165890057,
           "improved": true,
           "peak_cuda_bytes": 13416479744
+        },
+        {
+          "epoch": 60,
+          "optimizer_steps": 150000,
+          "train_final_loss": 2.644516803453915e-05,
+          "train_normalized_MAE": {
+            "displacements": 0.0025767774626360425,
+            "update_velocities": 0.004575509418608873
+          },
+          "validation": {
+            "samples": 1250,
+            "selection_loss": 2.7346783988221926e-05,
+            "normalized_position_MSE": 1.1280042400779802e-05,
+            "normalized_velocity_MSE": 4.341352557566405e-05,
+            "position_RMSE_A": 0.00018835529031516248,
+            "velocity_RMSE_A_fs": 8.481064606614978e-05,
+            "position_MAE_A": 0.00013655738100572945,
+            "velocity_MAE_A_fs": 6.02972061655066e-05
+          },
+          "lr": 0.01,
+          "epoch_seconds": 3087.9722281249706,
+          "improved": false,
+          "peak_cuda_bytes": 13410464768
         }
       ],
       "test_metrics": null,
