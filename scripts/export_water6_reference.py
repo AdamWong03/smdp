@@ -24,12 +24,18 @@ def main():
                    if line.strip()] if (root/'history.jsonl').exists() else []
         status = read(root/'status.json')
         progress = read(root/'progress.json')
+        physical = root/'validation_nve_20ps'
+        trajectory = read(physical/'trajectory.summary.json')
+        analysis = read(physical/'analysis/status.json')
         result = dict(run_directory=str(root), status=status, progress=progress,
             metadata=read(root/'metadata.json'), correctness=read(root/'correctness.json'),
             completed_epochs=len(records), history=records,
             test_metrics=read(root/'test_metrics.json'),
-            trajectory_completed=False, physical_analysis_completed=False,
-            physical_evaluation_status='not_started')
+            validation_nve_summary=trajectory, validation_analysis_status=analysis,
+            trajectory_completed=bool(trajectory and trajectory.get('completed_steps') == 4000),
+            physical_analysis_completed=bool(analysis and analysis.get('physical_analysis_completed')),
+            physical_evaluation_status=('analysis_recorded' if analysis else
+                'trajectory_recorded' if trajectory else 'running_or_pending' if physical.exists() else 'not_started'))
         snapshot['experiments'][name] = result
         if name != 'rejected_wrong_native_class':
             dest = REPORT/name
@@ -41,7 +47,7 @@ def main():
             with (REPORT/f'{name}_history.csv').open('w') as f:
                 fields = ['epoch', 'optimizer_steps', 'train_final_loss', 'val_final_loss',
                     'position_RMSE_A', 'velocity_RMSE_A_fs', 'lr', 'epoch_seconds', 'peak_cuda_bytes']
-                writer = csv.DictWriter(f, fields)
+                writer = csv.DictWriter(f, fields, lineterminator='\n')
                 writer.writeheader()
                 for rec in records:
                     row = {key: rec.get(key) for key in fields}
