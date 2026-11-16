@@ -16,7 +16,8 @@ def read(path):
 
 def main():
     snapshot = dict(recorded_utc=datetime.now(timezone.utc).isoformat(), experiments={})
-    for name in ['dsrt_radius6', 'trajcast_native', 'rejected_wrong_native_class']:
+    for name in ['dsrt_radius6', 'trajcast_native', 'dsrt_radius4p5_historical',
+                 'rejected_wrong_native_class']:
         root = RUNS/name
         if not root.exists():
             continue
