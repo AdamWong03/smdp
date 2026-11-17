@@ -1,28 +1,38 @@
 # DSRT: future-conditioned relational refinement for learned MD
 
-## SMDP-R experiment branch (2026-11-07)
+## Active experiment: predicted future relations vs current-only (2026-11-17)
 
-**2026-11-08 update:** Both primary trainings and two-step fine tuning finished.
-Quartz completed its 15 ns NVT, but its two 100 ps NVE runs dissipate substantial
-energy. Water NVT and remaining analysis/controls are pending. Read the
-[interim results and recovery record](reports/smdpr/INTERIM_RESULTS_20261108.md).
+This branch tests DSRT's central mechanism. Reuse the completed Full Water 6 Å
+model and train a Current-Only control from scratch for the same 250,000 updates.
+The only network change is the geometric condition of refinement; both stages,
+heads, parameter count, proposal supervision and endpoint residual remain intact.
 
-The current user-authorized experiment extends the unchanged R3-Opt backbone
-with persistent, neighbor-propagated motion states and bounded conditioning of
-its existing scalar/vector messages. Quartz 30 fs and Water 5 fs official
-250,000-update trainings are running from random initialization. Historical
-DSRT results below remain baselines, **not SMDP-R results**.
+- [Frozen protocol and reproduction](reports/future_relation_control_20261117/PROTOCOL.md)
+- [Measured status](reports/future_relation_control_20261117/STATUS.md)
+- [Machine-readable snapshot](reports/future_relation_control_20261117/snapshot.json)
+- [Control configuration](configs/water6_current_only_20261117.json)
 
-- [Frozen SMDP-R protocol and commands](docs/SMDPR_PROTOCOL.md)
-- [Model](smdpr/model.py), [trainer](smdpr/train.py),
-  [two-step matched fine tuning](smdpr/finetune.py),
-  [guarded evaluation pipeline](smdpr/pipeline.py)
-- [Run status and server paths](reports/smdpr/IMPLEMENTATION_STATUS.md)
+Training is running on GPU 0 (shared RTX PRO 6000 Blackwell). Full's existing
+training used shared L40S: optimization budgets match, hardware/wall time do not.
+No conclusion about the mechanism is available from the initial epoch. The
+pipeline follows training with validation multistep prediction, paired-initial
+20 ps NVE, independent physical analysis and same-GPU endpoint timing.
 
-The endpoint model has 2,571,592 parameters including its gradient-isolated
-query reader (+9.08% relative to R3-Opt). Accuracy and long-time physical
-benefits are not established yet. K=1 and matched R3-Opt two-step controls are
-declared; no new force model, physical loss or numerical integrator is used.
+Server run: `/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only`.
+Logs: `train.log`, `history.jsonl`, `pipeline.log`, `pipeline_stages.txt`.
+Service: `systemctl --user status dsrt-current-only-water6-20261117`.
+
+## Historical SMDP-R and successor-supervision experiments
+
+The motion-mode and two-step controls are preserved, but are not the active
+method development. Their completed diagnosis did not establish robust benefits
+of multiple modes. Conditional-successor supervision also failed its fixed
+physical improvement criterion. Read the actual results rather than treating
+the older progress snapshots as current status:
+
+- [Frozen-model dynamics diagnosis](reports/dynamics_diagnosis_20261109/DIAGNOSIS.md)
+- [Conditional-successor results](reports/conditional_transition_20261109/RESULTS.md)
+- [Historical SMDP-R protocol](docs/SMDPR_PROTOCOL.md)
 
 ## Historical DSRT method and results
 

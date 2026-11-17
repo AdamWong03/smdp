@@ -1,5 +1,5 @@
 {
-  "recorded_utc": "2026-11-17T05:49:15.490462+00:00",
+  "recorded_utc": "2026-11-17T05:54:04.610579+00:00",
   "experiments": {
     "full": {
       "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6",
@@ -233,12 +233,173 @@
     },
     "current_only": {
       "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only",
-      "status": null,
-      "metadata": null,
-      "completed_epochs": 0,
-      "optimizer_steps": 0,
-      "best_validation": null,
-      "best_epoch": null,
+      "status": {
+        "state": "training",
+        "epoch": 1,
+        "train_total_loss": 0.5608282685279846,
+        "train_final_loss": 0.5454152226448059,
+        "train_proposal_loss": 0.7706376314163208,
+        "train_normalized_position_MSE": 0.4154892563819885,
+        "train_normalized_velocity_MSE": 0.6753413677215576,
+        "train_proposal_normalized_position_MSE": 0.565549373626709,
+        "train_proposal_normalized_velocity_MSE": 0.9757264256477356,
+        "validation": {
+          "samples": 1250,
+          "position_RMSE_A": 0.026036137358844386,
+          "velocity_RMSE_A_fs": 0.006769263016406819,
+          "position_MAE_A": 0.017659861874580383,
+          "velocity_MAE_A_fs": 0.004704455632716417,
+          "selection_loss": 0.24605076713562013,
+          "proposal_loss": 0.6107369924545288,
+          "normalized_position_MSE": 0.21553023903369903,
+          "normalized_velocity_MSE": 0.27657129487991333,
+          "proposal_normalized_position_MSE": 0.45114806623458864,
+          "proposal_normalized_velocity_MSE": 0.7703259176254272
+        },
+        "train_seconds": 99.98233784595504,
+        "epoch_seconds": 113.03160288091749,
+        "samples_per_second": 50.00883263705644,
+        "lr": 4.624999999999999e-05,
+        "peak_cuda_bytes": 7129583616,
+        "improved": true,
+        "optimizer_steps": 625,
+        "diagnostics": {
+          "gradient_norms": {
+            "final": {
+              "input_encoder": 1.8456734418869019,
+              "proposal_head": 0.24155066907405853,
+              "correction_head": 0.5784792900085449,
+              "proposal_block_0": 1.660152554512024,
+              "proposal_block_1": 0.5517320036888123,
+              "refinement_block_0": 0.4737338125705719,
+              "refinement_block_1": 0.4472435414791107
+            },
+            "weighted_proposal": {
+              "input_encoder": 0.026204649358987808,
+              "proposal_head": 0.008066056296229362,
+              "correction_head": 0.0,
+              "proposal_block_0": 0.02141602896153927,
+              "proposal_block_1": 0.004649334121495485,
+              "refinement_block_0": 0.0,
+              "refinement_block_1": 0.0
+            }
+          },
+          "blocks": [
+            {
+              "stage": "proposal",
+              "index": 0,
+              "scalar_rms": 1.000997543334961,
+              "vector_rms": 1.2750740051269531,
+              "edge_rms": 1.003706693649292,
+              "scalar_residual_ratio": 0.6167569160461426,
+              "vector_residual_ratio": 0.20758506655693054,
+              "edge_residual_ratio": 1.6368284225463867
+            },
+            {
+              "stage": "proposal",
+              "index": 1,
+              "scalar_rms": 1.0020571947097778,
+              "vector_rms": 1.3083300590515137,
+              "edge_rms": 1.0036624670028687,
+              "scalar_residual_ratio": 0.38524696230888367,
+              "vector_residual_ratio": 0.1567823886871338,
+              "edge_residual_ratio": 0.34946781396865845
+            },
+            {
+              "stage": "refinement",
+              "index": 0,
+              "scalar_rms": 1.0009969472885132,
+              "vector_rms": 1.30917489528656,
+              "edge_rms": 1.0040963888168335,
+              "scalar_residual_ratio": 0.3932596743106842,
+              "vector_residual_ratio": 0.17308185994625092,
+              "edge_residual_ratio": 0.3444328010082245
+            },
+            {
+              "stage": "refinement",
+              "index": 1,
+              "scalar_rms": 1.009122371673584,
+              "vector_rms": 1.3248059749603271,
+              "edge_rms": 1.004645586013794,
+              "scalar_residual_ratio": 0.38275831937789917,
+              "vector_residual_ratio": 0.1850293129682541,
+              "edge_residual_ratio": 0.2973642945289612
+            }
+          ]
+        }
+      },
+      "metadata": {
+        "config": {
+          "seed": 20261103,
+          "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/water6_reference_20261113",
+          "dataset_name": "water5",
+          "atom_type_mapper": {
+            "1": 0,
+            "8": 1
+          },
+          "split_counts": {
+            "train": 5000,
+            "val": 1250,
+            "test": 1000
+          },
+          "model": {
+            "scalar_channels": 192,
+            "vector_channels": 48,
+            "edge_channels": 96,
+            "radial_channels": 16,
+            "cutoff_angstrom": 6.0,
+            "horizon_fs": 5.0,
+            "proposal_layers": 2,
+            "refinement_layers": 2,
+            "velocity_scale": 0.01,
+            "block_type": "geometry_gated",
+            "relation_conditioning": "current_only"
+          },
+          "batch_size": 8,
+          "precision": "fp32",
+          "learning_rate": 0.0003,
+          "max_epochs": 400,
+          "total_optimizer_steps": 250000,
+          "proposal_weight": 0.02,
+          "gradient_clip": 10.0,
+          "diagnostics_interval_epochs": 10,
+          "scheduler": {
+            "type": "warmup_cosine",
+            "initial_lr": 1e-05,
+            "warmup_steps": 5000,
+            "minimum_lr": 1e-05
+          },
+          "validation_selection": "normalized final endpoint position/velocity MSE; no test selection"
+        },
+        "normalization_train_only": [
+          0.0560818649828434,
+          0.01287175714969635
+        ],
+        "parameters": 2357616,
+        "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+        "torch_version": "2.13.0+cu130",
+        "train_samples": 5000,
+        "val_samples": 1250,
+        "initialized_from_pretrained": false,
+        "optimizer_steps_per_epoch": 625,
+        "scheduler_type": "warmup_cosine"
+      },
+      "completed_epochs": 1,
+      "optimizer_steps": 625,
+      "best_validation": {
+        "samples": 1250,
+        "position_RMSE_A": 0.026036137358844386,
+        "velocity_RMSE_A_fs": 0.006769263016406819,
+        "position_MAE_A": 0.017659861874580383,
+        "velocity_MAE_A_fs": 0.004704455632716417,
+        "selection_loss": 0.24605076713562013,
+        "proposal_loss": 0.6107369924545288,
+        "normalized_position_MSE": 0.21553023903369903,
+        "normalized_velocity_MSE": 0.27657129487991333,
+        "proposal_normalized_position_MSE": 0.45114806623458864,
+        "proposal_normalized_velocity_MSE": 0.7703259176254272
+      },
+      "best_epoch": 1,
       "test_metrics": null,
       "correctness": {
         "accepted": true,
@@ -289,7 +450,7 @@
       "physical_analysis_status": null,
       "physical_analysis_completed": false,
       "validation_multistep": null,
-      "pipeline_stage": "prepared"
+      "pipeline_stage": "formal_training"
     }
   }
 }
