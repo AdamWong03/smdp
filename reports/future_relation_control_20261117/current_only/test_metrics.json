@@ -1,0 +1,17 @@
+{
+  "samples": 1000,
+  "position_RMSE_A": 0.00040136264119138,
+  "velocity_RMSE_A_fs": 0.00015130883816067187,
+  "position_MAE_A": 0.00028985297749750314,
+  "velocity_MAE_A_fs": 0.00011022228596266359,
+  "selection_loss": 9.470060595776886e-05,
+  "proposal_loss": 0.0012250459101051092,
+  "normalized_position_MSE": 5.121875260374509e-05,
+  "normalized_velocity_MSE": 0.0001381824593991041,
+  "proposal_normalized_position_MSE": 0.0006333744931034744,
+  "proposal_normalized_velocity_MSE": 0.0018167173229157924,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only/best.pt",
+  "selected_epoch": 393,
+  "selected_optimizer_steps": 245625,
+  "actual_training_seconds": 27977.89427089691
+}

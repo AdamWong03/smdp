@@ -1,5 +1,5 @@
 {
-  "recorded_utc": "2026-11-17T11:09:42.214750+00:00",
+  "recorded_utc": "2026-11-17T13:48:42.628208+00:00",
   "experiments": {
     "full": {
       "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6",
@@ -234,36 +234,22 @@
     "current_only": {
       "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only",
       "status": {
-        "state": "training",
-        "epoch": 255,
-        "train_total_loss": 0.00013978092465549707,
-        "train_final_loss": 0.0001109360164264217,
-        "train_proposal_loss": 0.001442249515093863,
-        "train_normalized_position_MSE": 5.9988509747199714e-05,
-        "train_normalized_velocity_MSE": 0.00016188340669032186,
-        "train_proposal_normalized_position_MSE": 0.0007755978149361908,
-        "train_proposal_normalized_velocity_MSE": 0.002108899876475334,
-        "validation": {
-          "samples": 1250,
-          "position_RMSE_A": 0.00042160562539301876,
-          "velocity_RMSE_A_fs": 0.00015824108387708555,
-          "position_MAE_A": 0.0003047011744696647,
-          "velocity_MAE_A_fs": 0.00011531606918433681,
-          "selection_loss": 0.00010382488364120945,
-          "proposal_loss": 0.0013515014903619886,
-          "normalized_position_MSE": 5.651554185315035e-05,
-          "normalized_velocity_MSE": 0.00015113422572612763,
-          "proposal_normalized_position_MSE": 0.0007259546854533255,
-          "proposal_normalized_velocity_MSE": 0.001977048296481371
-        },
-        "train_seconds": 52.4089806699194,
-        "epoch_seconds": 57.72757667093538,
-        "samples_per_second": 95.40349642537113,
-        "lr": 9.737089906023826e-05,
-        "peak_cuda_bytes": 7039182848,
-        "improved": true,
-        "optimizer_steps": 159375,
-        "diagnostics": null
+        "state": "training_and_test_completed",
+        "samples": 1000,
+        "position_RMSE_A": 0.00040136264119138,
+        "velocity_RMSE_A_fs": 0.00015130883816067187,
+        "position_MAE_A": 0.00028985297749750314,
+        "velocity_MAE_A_fs": 0.00011022228596266359,
+        "selection_loss": 9.470060595776886e-05,
+        "proposal_loss": 0.0012250459101051092,
+        "normalized_position_MSE": 5.121875260374509e-05,
+        "normalized_velocity_MSE": 0.0001381824593991041,
+        "proposal_normalized_position_MSE": 0.0006333744931034744,
+        "proposal_normalized_velocity_MSE": 0.0018167173229157924,
+        "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only/best.pt",
+        "selected_epoch": 393,
+        "selected_optimizer_steps": 245625,
+        "actual_training_seconds": 27977.89427089691
       },
       "metadata": {
         "config": {
@@ -321,23 +307,39 @@
         "optimizer_steps_per_epoch": 625,
         "scheduler_type": "warmup_cosine"
       },
-      "completed_epochs": 255,
-      "optimizer_steps": 159375,
+      "completed_epochs": 400,
+      "optimizer_steps": 250000,
       "best_validation": {
         "samples": 1250,
-        "position_RMSE_A": 0.00042160562539301876,
-        "velocity_RMSE_A_fs": 0.00015824108387708555,
-        "position_MAE_A": 0.0003047011744696647,
-        "velocity_MAE_A_fs": 0.00011531606918433681,
-        "selection_loss": 0.00010382488364120945,
-        "proposal_loss": 0.0013515014903619886,
-        "normalized_position_MSE": 5.651554185315035e-05,
-        "normalized_velocity_MSE": 0.00015113422572612763,
-        "proposal_normalized_position_MSE": 0.0007259546854533255,
-        "proposal_normalized_velocity_MSE": 0.001977048296481371
+        "position_RMSE_A": 0.00040200344405151133,
+        "velocity_RMSE_A_fs": 0.0001515548120749631,
+        "position_MAE_A": 0.0002903196754399687,
+        "velocity_MAE_A_fs": 0.00011040297729196027,
+        "selection_loss": 9.500726299593225e-05,
+        "proposal_loss": 0.0012508705642074347,
+        "normalized_position_MSE": 5.138243148685433e-05,
+        "normalized_velocity_MSE": 0.00013863209439441562,
+        "proposal_normalized_position_MSE": 0.0006503276869654655,
+        "proposal_normalized_velocity_MSE": 0.0018514134431257844
       },
-      "best_epoch": 255,
-      "test_metrics": null,
+      "best_epoch": 393,
+      "test_metrics": {
+        "samples": 1000,
+        "position_RMSE_A": 0.00040136264119138,
+        "velocity_RMSE_A_fs": 0.00015130883816067187,
+        "position_MAE_A": 0.00028985297749750314,
+        "velocity_MAE_A_fs": 0.00011022228596266359,
+        "selection_loss": 9.470060595776886e-05,
+        "proposal_loss": 0.0012250459101051092,
+        "normalized_position_MSE": 5.121875260374509e-05,
+        "normalized_velocity_MSE": 0.0001381824593991041,
+        "proposal_normalized_position_MSE": 0.0006333744931034744,
+        "proposal_normalized_velocity_MSE": 0.0018167173229157924,
+        "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only/best.pt",
+        "selected_epoch": 393,
+        "selected_optimizer_steps": 245625,
+        "actual_training_seconds": 27977.89427089691
+      },
       "correctness": {
         "accepted": true,
         "optimizer_updates": 0,
@@ -382,12 +384,105 @@
         "baseline_run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6",
         "checkpoint_loaded_only_for_compatibility_not_training": true
       },
-      "trajectory_completed": false,
-      "trajectory_summary": null,
-      "physical_analysis_status": null,
+      "trajectory_completed": true,
+      "trajectory_summary": {
+        "completed_steps": 4000,
+        "production_steps": 4000,
+        "simulated_ps": 20.0,
+        "stable": true,
+        "failure_reason": null,
+        "elapsed_seconds": 77.46042313519865,
+        "model_and_graph_seconds": 70.94039940694347,
+        "ns_day_end_to_end": 22.308166287498402,
+        "peak_cuda_bytes": 184979456,
+        "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+        "parameters": 2357616,
+        "selected_epoch": 393,
+        "checkpoint_sha256": "6c6fedf97f65240c470104dfab5dc9dca2aef8d5cb1e35a69df6cf8fb012b36e",
+        "execution_note": "Shared GPU; same val_04/frame0 as frozen Full 6A; validation-selected checkpoint"
+      },
+      "physical_analysis_status": {
+        "trajectory_completed": true,
+        "physical_analysis_completed": false,
+        "analysis_failure_reason": {
+          "energy": "ValueError: Reference energy/force verification failed; see reference_verification.json"
+        },
+        "common_duration_ps": 20.0,
+        "requested_tasks": [
+          "motion",
+          "energy",
+          "rdf",
+          "vdos",
+          "diffusion"
+        ],
+        "task_status": {
+          "motion": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "energy": {
+            "completed": false,
+            "failure_reason": "ValueError: Reference energy/force verification failed; see reference_verification.json"
+          },
+          "rdf": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "vdos": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "diffusion": {
+            "completed": true,
+            "failure_reason": null
+          }
+        }
+      },
       "physical_analysis_completed": false,
-      "validation_multistep": null,
-      "pipeline_stage": "formal_training"
+      "validation_multistep": {
+        "samples": 1249,
+        "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only/best.pt",
+        "selected_epoch": 393,
+        "batch_size": 8,
+        "elapsed_seconds": 399.53203404694796,
+        "model_seconds": 55.46078297868371,
+        "neighbor_graph_seconds": 343.71945954533294,
+        "horizons": {
+          "1": {
+            "time_fs": 5.0,
+            "position_RMSE_A": 0.0004019678245951599,
+            "position_MAE_A": 0.00029029838609756145,
+            "velocity_RMSE_A_fs": 0.00015153152528208307,
+            "velocity_MAE_A_fs": 0.00011038914969273475,
+            "temperature_RMSE_K": 0.34648611461889556
+          },
+          "2": {
+            "time_fs": 10.0,
+            "position_RMSE_A": 0.0011225223323296245,
+            "position_MAE_A": 0.0008072181663709321,
+            "velocity_RMSE_A_fs": 0.0002090331361540825,
+            "velocity_MAE_A_fs": 0.00015293541595110444,
+            "temperature_RMSE_K": 0.540395648474402
+          },
+          "4": {
+            "time_fs": 20.0,
+            "position_RMSE_A": 0.002698262075813195,
+            "position_MAE_A": 0.0019840776370854026,
+            "velocity_RMSE_A_fs": 0.00029827485308740596,
+            "velocity_MAE_A_fs": 0.0002202065166103523,
+            "temperature_RMSE_K": 0.8375562752505898
+          },
+          "8": {
+            "time_fs": 40.0,
+            "position_RMSE_A": 0.005863427214387995,
+            "position_MAE_A": 0.004435044919367565,
+            "velocity_RMSE_A_fs": 0.0005088839178275018,
+            "velocity_MAE_A_fs": 0.0003704073692327048,
+            "temperature_RMSE_K": 1.3127450640144842
+          }
+        }
+      },
+      "pipeline_stage": "analysis_incomplete"
     }
   }
 }

@@ -1,13 +1,13 @@
 # Full vs Current-Only: measured status
 
-Recorded UTC: 2026-11-17T11:09:42.214750+00:00
+Recorded UTC: 2026-11-17T13:48:42.628208+00:00
 
-Current-Only: formal_training; 255 epochs / 159,375 of 250,000 updates recorded.
+Current-Only: analysis_incomplete; 400 epochs / 250,000 of 250,000 updates recorded.
 
 | Model | Updates | Best epoch | Test q RMSE (Å) | Test v RMSE (Å/fs) |
 |---|---:|---:|---:|---:|
 | full | 250000 | 398 | 0.000409728997 | 0.000149672884 |
-| current_only | 159375 | 255 | pending | pending |
+| current_only | 250000 | 393 | 0.000401362641 | 0.000151308838 |
 
 A running model is not a completed comparison. This is one seed and one
 paired validation NVE start; no general mechanism claim is made automatically.

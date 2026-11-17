@@ -1,0 +1,37 @@
+{
+  "trajectory_completed": true,
+  "physical_analysis_completed": false,
+  "analysis_failure_reason": {
+    "energy": "ValueError: Reference energy/force verification failed; see reference_verification.json"
+  },
+  "common_duration_ps": 20.0,
+  "requested_tasks": [
+    "motion",
+    "energy",
+    "rdf",
+    "vdos",
+    "diffusion"
+  ],
+  "task_status": {
+    "motion": {
+      "completed": true,
+      "failure_reason": null
+    },
+    "energy": {
+      "completed": false,
+      "failure_reason": "ValueError: Reference energy/force verification failed; see reference_verification.json"
+    },
+    "rdf": {
+      "completed": true,
+      "failure_reason": null
+    },
+    "vdos": {
+      "completed": true,
+      "failure_reason": null
+    },
+    "diffusion": {
+      "completed": true,
+      "failure_reason": null
+    }
+  }
+}

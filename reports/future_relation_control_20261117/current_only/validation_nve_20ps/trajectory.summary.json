@@ -1,0 +1,16 @@
+{
+  "completed_steps": 4000,
+  "production_steps": 4000,
+  "simulated_ps": 20.0,
+  "stable": true,
+  "failure_reason": null,
+  "elapsed_seconds": 77.46042313519865,
+  "model_and_graph_seconds": 70.94039940694347,
+  "ns_day_end_to_end": 22.308166287498402,
+  "peak_cuda_bytes": 184979456,
+  "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "parameters": 2357616,
+  "selected_epoch": 393,
+  "checkpoint_sha256": "6c6fedf97f65240c470104dfab5dc9dca2aef8d5cb1e35a69df6cf8fb012b36e",
+  "execution_note": "Shared GPU; same val_04/frame0 as frozen Full 6A; validation-selected checkpoint"
+}

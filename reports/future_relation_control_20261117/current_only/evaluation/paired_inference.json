@@ -1,0 +1,68 @@
+{
+  "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "torch_version": "2.13.0+cu130",
+  "source": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5",
+  "source_frame": 0,
+  "atoms": 192,
+  "directed_edges": 17352,
+  "batch_size": 1,
+  "precision": "FP32 / TF32 off",
+  "graph_prebuilt": true,
+  "neighbor_update_thermostat_and_io_excluded": true,
+  "endpoint_only": true,
+  "shared_device": true,
+  "optimizer_updates": 0,
+  "full_checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+  "current_only_checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only/best.pt",
+  "results": {
+    "full": [
+      {
+        "repeat": 0,
+        "seconds_per_endpoint": 0.0125823696795851,
+        "incremental_peak_bytes": 140136960
+      },
+      {
+        "repeat": 1,
+        "seconds_per_endpoint": 0.011547207389958203,
+        "incremental_peak_bytes": 140136960
+      },
+      {
+        "repeat": 2,
+        "seconds_per_endpoint": 0.012338347530458123,
+        "incremental_peak_bytes": 140136960
+      },
+      {
+        "repeat": 3,
+        "seconds_per_endpoint": 0.009121050161775201,
+        "incremental_peak_bytes": 140136960
+      }
+    ],
+    "current_only": [
+      {
+        "repeat": 0,
+        "seconds_per_endpoint": 0.010178947830572724,
+        "incremental_peak_bytes": 140136960
+      },
+      {
+        "repeat": 1,
+        "seconds_per_endpoint": 0.009921798689756543,
+        "incremental_peak_bytes": 140136960
+      },
+      {
+        "repeat": 2,
+        "seconds_per_endpoint": 0.011788915030192583,
+        "incremental_peak_bytes": 140136960
+      },
+      {
+        "repeat": 3,
+        "seconds_per_endpoint": 0.009595452731009573,
+        "incremental_peak_bytes": 140136960
+      }
+    ]
+  },
+  "gpu_at_timing_end": "index, name, utilization.gpu [%], memory.used [MiB]\n0, NVIDIA RTX PRO 6000 Blackwell Server Edition, 95 %, 66429 MiB\n1, NVIDIA L40S, 100 %, 31461 MiB\n2, NVIDIA L40S, 100 %, 37912 MiB\n3, NVIDIA RTX PRO 6000 Blackwell Server Edition, 95 %, 84537 MiB\n4, NVIDIA L40S, 25 %, 3506 MiB\n5, NVIDIA L40S, 97 %, 19166 MiB\n",
+  "median_seconds_per_endpoint": {
+    "full": 0.011942777460208163,
+    "current_only": 0.010050373260164634
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "completed": false,
+  "metrics": {},
+  "failure_reason": "ValueError: Reference energy/force verification failed; see reference_verification.json",
+  "elapsed_s": 3.3063682259526104
+}
