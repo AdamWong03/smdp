@@ -28,6 +28,9 @@ class RelationalConfig:
     velocity_scale: float = 0.01
     # Default preserves historical checkpoints/configs exactly.
     block_type: str = 'legacy'
+    # Only the geometric condition of refinement changes in the control.
+    # Both prediction heads, the proposal output residual and all blocks remain.
+    relation_conditioning: str = 'predicted_future'
 
 
 def mass_mean(x, masses, batch):
@@ -403,6 +406,8 @@ class RelationalTransition(nn.Module):
                          'geometry_stable': StableGeometryRelationalBlock}
         if c.block_type not in block_classes:
             raise ValueError(f'Unknown block_type: {c.block_type}')
+        if c.relation_conditioning not in {'predicted_future', 'current_only'}:
+            raise ValueError(f'Unknown relation_conditioning: {c.relation_conditioning}')
         block_class = block_classes[c.block_type]
         if min(c.horizon_fs, c.velocity_scale, *rms_targets) <= 0:
             raise ValueError('Horizon and unit scales must be positive')
@@ -477,7 +482,10 @@ class RelationalTransition(nn.Module):
         # NO detach: final endpoint gradients pass through candidate relations.
         d1 = d0 + dq0[src] - dq0[dst]
         u1 = (v0[src] - v0[dst]) / self.cfg.velocity_scale
-        future = self.relations(d0, u0, d1, u1)
+        if self.cfg.relation_conditioning == 'current_only':
+            future = self.relations(d0, u0, d0, u0)
+        else:
+            future = self.relations(d0, u0, d1, u1)
         for index, block in enumerate(self.refinement_blocks, len(self.proposal_blocks)):
             s, v, e, motion = self.propagate_block(index, block, s, v, e, edges, future, motion)
         correction = self.correction_head(s, v)

@@ -1,4 +1,19 @@
-# Active scope: Water reference comparison (2026-11-13)
+# Active scope: future-relation mechanism control (2026-11-17)
+
+The user accepted the research decision and authorized autonomous execution.
+Follow `reports/future_relation_control_20261117/PROTOCOL.md`. Reuse the completed
+Water 6 Å Full DSRT run; train one Current-Only control from random initialization
+with exactly its data, parameters, optimizer and 250k-update budget. Change only
+the relation condition in refinement. Keep proposal/correction heads, all four
+blocks, proposal supervision and the final proposal residual. This supersedes
+the Stage A restriction on adding this controlled experiment.
+
+Use this isolated worktree; do not edit the original worktree serving the running
+TrajCast training. Preserve historical checkpoints and results. Do not add
+architecture, loss terms, data, physics correction or additional experiments
+to respond to intermediate metrics. Validation alone selects checkpoints.
+
+## Historical Water reference comparison (2026-11-13)
 
 The research lead accepted `paper/NMI_RESEARCH_PLAN_20261113.md` and authorized
 Stage A. Train unchanged R3-Opt with Water radius 6 Å and native pinned TrajCast

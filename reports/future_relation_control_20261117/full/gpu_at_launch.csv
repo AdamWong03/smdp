@@ -1,0 +1,7 @@
+index, name, uuid, memory.free [MiB], utilization.gpu [%]
+0, NVIDIA RTX PRO 6000 Blackwell Server Edition, GPU-f48b2c84-f983-64e3-000b-d669b9e64454, 47038 MiB, 92 %
+1, NVIDIA L40S, GPU-e021d5a1-42fd-70cc-8dd1-08de8f1d8987, 16585 MiB, 82 %
+2, NVIDIA L40S, GPU-83ddba27-1ec6-70a3-41f5-4b8a1d4e7900, 16582 MiB, 97 %
+3, NVIDIA RTX PRO 6000 Blackwell Server Edition, GPU-9e62da9a-1b28-25c8-e1a0-e96004a11a95, 44857 MiB, 57 %
+4, NVIDIA L40S, GPU-18ea7690-4b23-bbfd-b455-f6efe865ab85, 16583 MiB, 95 %
+5, NVIDIA L40S, GPU-ed405bf3-4069-2d20-0432-9ecda26de366, 16582 MiB, 84 %

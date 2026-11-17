@@ -1,0 +1,295 @@
+{
+  "recorded_utc": "2026-11-17T05:49:15.490462+00:00",
+  "experiments": {
+    "full": {
+      "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6",
+      "status": {
+        "state": "training_and_test_completed",
+        "samples": 1000,
+        "position_RMSE_A": 0.00040972899719262534,
+        "velocity_RMSE_A_fs": 0.0001496728840398697,
+        "position_MAE_A": 0.00029697639774531125,
+        "velocity_MAE_A_fs": 0.00010870963311754167,
+        "selection_loss": 9.429342718794942e-05,
+        "proposal_loss": 0.0014333051461726427,
+        "normalized_position_MSE": 5.3376305382698775e-05,
+        "normalized_velocity_MSE": 0.00013521054974989966,
+        "proposal_normalized_position_MSE": 0.0006926721497438848,
+        "proposal_normalized_velocity_MSE": 0.002173938144929707,
+        "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+        "selected_epoch": 398,
+        "selected_optimizer_steps": 248750,
+        "actual_training_seconds": 90326.36647248268
+      },
+      "metadata": {
+        "config": {
+          "seed": 20261103,
+          "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/water6_reference_20261113",
+          "dataset_name": "water5",
+          "atom_type_mapper": {
+            "1": 0,
+            "8": 1
+          },
+          "split_counts": {
+            "train": 5000,
+            "val": 1250,
+            "test": 1000
+          },
+          "model": {
+            "scalar_channels": 192,
+            "vector_channels": 48,
+            "edge_channels": 96,
+            "radial_channels": 16,
+            "cutoff_angstrom": 6.0,
+            "horizon_fs": 5.0,
+            "proposal_layers": 2,
+            "refinement_layers": 2,
+            "velocity_scale": 0.01,
+            "block_type": "geometry_gated"
+          },
+          "batch_size": 8,
+          "precision": "fp32",
+          "learning_rate": 0.0003,
+          "max_epochs": 400,
+          "total_optimizer_steps": 250000,
+          "proposal_weight": 0.02,
+          "gradient_clip": 10.0,
+          "diagnostics_interval_epochs": 10,
+          "scheduler": {
+            "type": "warmup_cosine",
+            "initial_lr": 1e-05,
+            "warmup_steps": 5000,
+            "minimum_lr": 1e-05
+          },
+          "validation_selection": "normalized final endpoint position/velocity MSE; no test selection"
+        },
+        "normalization_train_only": [
+          0.0560818649828434,
+          0.01287175714969635
+        ],
+        "parameters": 2357616,
+        "hardware": "NVIDIA L40S",
+        "torch_version": "2.13.0+cu130",
+        "train_samples": 5000,
+        "val_samples": 1250,
+        "initialized_from_pretrained": false,
+        "optimizer_steps_per_epoch": 625,
+        "scheduler_type": "warmup_cosine"
+      },
+      "completed_epochs": 400,
+      "optimizer_steps": 250000,
+      "best_validation": {
+        "samples": 1250,
+        "position_RMSE_A": 0.0004111163777392362,
+        "velocity_RMSE_A_fs": 0.00014992179081590952,
+        "position_MAE_A": 0.000297486199112609,
+        "velocity_MAE_A_fs": 0.00010873727522557601,
+        "selection_loss": 9.469951355131344e-05,
+        "proposal_loss": 0.001467519690655172,
+        "normalized_position_MSE": 5.373839137610048e-05,
+        "normalized_velocity_MSE": 0.0001356606355169788,
+        "proposal_normalized_position_MSE": 0.0007090370409190655,
+        "proposal_normalized_velocity_MSE": 0.002226002348214388
+      },
+      "best_epoch": 398,
+      "test_metrics": {
+        "samples": 1000,
+        "position_RMSE_A": 0.00040972899719262534,
+        "velocity_RMSE_A_fs": 0.0001496728840398697,
+        "position_MAE_A": 0.00029697639774531125,
+        "velocity_MAE_A_fs": 0.00010870963311754167,
+        "selection_loss": 9.429342718794942e-05,
+        "proposal_loss": 0.0014333051461726427,
+        "normalized_position_MSE": 5.3376305382698775e-05,
+        "normalized_velocity_MSE": 0.00013521054974989966,
+        "proposal_normalized_position_MSE": 0.0006926721497438848,
+        "proposal_normalized_velocity_MSE": 0.002173938144929707,
+        "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+        "selected_epoch": 398,
+        "selected_optimizer_steps": 248750,
+        "actual_training_seconds": 90326.36647248268
+      },
+      "correctness": {
+        "real_training_samples": 5000,
+        "effective_batch": 8,
+        "finite_gradients": true,
+        "cached_online_max_difference": {
+          "displacements": 2.9802322387695312e-08,
+          "velocities": 7.450580596923828e-09
+        },
+        "model_changes": [
+          "cutoff_angstrom: 4.5 -> 6.0"
+        ],
+        "normalization_train_only": [
+          0.0560818649828434,
+          0.01287175714969635
+        ],
+        "peak_forward_backward_cuda_bytes": 6959885824,
+        "optimizer_updates": 0
+      },
+      "trajectory_completed": true,
+      "trajectory_summary": {
+        "completed_steps": 4000,
+        "production_steps": 4000,
+        "simulated_ps": 20.0,
+        "stable": true,
+        "failure_reason": null,
+        "elapsed_seconds": 193.6503531159833,
+        "model_and_graph_seconds": 186.84555430756882,
+        "ns_day_end_to_end": 8.923298988073862,
+        "peak_cuda_bytes": 159609856,
+        "hardware": "NVIDIA L40S",
+        "parameters": 2357616,
+        "selected_epoch": 398,
+        "checkpoint_sha256": "368697746f4cc48e27ee3953c3b7e253aef0f69abce9e7164e38b2a2cff0e0c1",
+        "execution_note": "Shared L40S; validation source val_04 frame 0; frozen validation endpoint best; not checkpoint selection"
+      },
+      "physical_analysis_status": {
+        "trajectory_completed": true,
+        "physical_analysis_completed": false,
+        "analysis_failure_reason": {
+          "energy": "ValueError: Reference energy/force verification failed; see reference_verification.json"
+        },
+        "common_duration_ps": 20.0,
+        "requested_tasks": [
+          "motion",
+          "energy",
+          "full_energy",
+          "rdf",
+          "vdos",
+          "diffusion"
+        ],
+        "task_status": {
+          "motion": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "energy": {
+            "completed": false,
+            "failure_reason": "ValueError: Reference energy/force verification failed; see reference_verification.json"
+          },
+          "rdf": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "vdos": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "full_energy": {
+            "completed": true,
+            "failure_reason": null
+          },
+          "diffusion": {
+            "completed": true,
+            "failure_reason": null
+          }
+        }
+      },
+      "physical_analysis_completed": false,
+      "validation_multistep": {
+        "samples": 1249,
+        "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+        "selected_epoch": 398,
+        "batch_size": 8,
+        "elapsed_seconds": 545.7509480239823,
+        "model_seconds": 182.5494148931466,
+        "neighbor_graph_seconds": 362.34878673404455,
+        "horizons": {
+          "1": {
+            "time_fs": 5.0,
+            "position_RMSE_A": 0.0004110670235874648,
+            "position_MAE_A": 0.00029744809167322903,
+            "velocity_RMSE_A_fs": 0.0001498974004733015,
+            "velocity_MAE_A_fs": 0.00010872135244368064,
+            "temperature_RMSE_K": 0.33476824231982727
+          },
+          "2": {
+            "time_fs": 10.0,
+            "position_RMSE_A": 0.0011308127030602512,
+            "position_MAE_A": 0.000811863589868481,
+            "velocity_RMSE_A_fs": 0.00020886962082666114,
+            "velocity_MAE_A_fs": 0.0001519218369985851,
+            "temperature_RMSE_K": 0.4914528629157364
+          },
+          "4": {
+            "time_fs": 20.0,
+            "position_RMSE_A": 0.00273063955433095,
+            "position_MAE_A": 0.0019988119313883597,
+            "velocity_RMSE_A_fs": 0.0003016385433526251,
+            "velocity_MAE_A_fs": 0.00022131953919607146,
+            "temperature_RMSE_K": 0.734376947164516
+          },
+          "8": {
+            "time_fs": 40.0,
+            "position_RMSE_A": 0.005851530019714406,
+            "position_MAE_A": 0.004396513104438782,
+            "velocity_RMSE_A_fs": 0.000526536932701667,
+            "velocity_MAE_A_fs": 0.00037880369199685287,
+            "temperature_RMSE_K": 1.2163606885751403
+          }
+        }
+      }
+    },
+    "current_only": {
+      "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only",
+      "status": null,
+      "metadata": null,
+      "completed_epochs": 0,
+      "optimizer_steps": 0,
+      "best_validation": null,
+      "best_epoch": null,
+      "test_metrics": null,
+      "correctness": {
+        "accepted": true,
+        "optimizer_updates": 0,
+        "real_training_samples": 5000,
+        "effective_batch": 8,
+        "parameters": 2357616,
+        "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+        "torch_version": "2.13.0+cu130",
+        "normalization_train_only": [
+          0.0560818649828434,
+          0.01287175714969635
+        ],
+        "configuration_change": {
+          "model.relation_conditioning": [
+            "predicted_future",
+            "current_only"
+          ]
+        },
+        "deterministic_correctness_process": true,
+        "training_determinism_changed": false,
+        "identical_seeded_parameters_and_rng": true,
+        "legacy_random_forward_exact": true,
+        "control_equals_current_geometry_intervention": true,
+        "finite_final_loss_gradients": true,
+        "auxiliary_loss_used_in_gradient_check": false,
+        "head_gradient_norms": {
+          "proposal": 4.367860481190807,
+          "correction": 4.490203817080223
+        },
+        "cached_online_max_difference": {
+          "displacements": 0.0,
+          "velocities": 0.0
+        },
+        "peak_check_cuda_bytes": 7045456896,
+        "legacy_selected_checkpoint_forward_difference": {
+          "displacements": 0.0,
+          "velocities": 0.0,
+          "proposal_displacements": 0.0,
+          "proposal_velocities": 0.0
+        },
+        "baseline_commit": "b3b2f76",
+        "baseline_run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6",
+        "checkpoint_loaded_only_for_compatibility_not_training": true
+      },
+      "trajectory_completed": false,
+      "trajectory_summary": null,
+      "physical_analysis_status": null,
+      "physical_analysis_completed": false,
+      "validation_multistep": null,
+      "pipeline_stage": "prepared"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "samples": 1000,
+  "position_RMSE_A": 0.00040972899719262534,
+  "velocity_RMSE_A_fs": 0.0001496728840398697,
+  "position_MAE_A": 0.00029697639774531125,
+  "velocity_MAE_A_fs": 0.00010870963311754167,
+  "selection_loss": 9.429342718794942e-05,
+  "proposal_loss": 0.0014333051461726427,
+  "normalized_position_MSE": 5.3376305382698775e-05,
+  "normalized_velocity_MSE": 0.00013521054974989966,
+  "proposal_normalized_position_MSE": 0.0006926721497438848,
+  "proposal_normalized_velocity_MSE": 0.002173938144929707,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+  "selected_epoch": 398,
+  "selected_optimizer_steps": 248750,
+  "actual_training_seconds": 90326.36647248268
+}

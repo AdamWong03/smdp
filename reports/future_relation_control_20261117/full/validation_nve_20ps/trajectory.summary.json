@@ -1,0 +1,16 @@
+{
+  "completed_steps": 4000,
+  "production_steps": 4000,
+  "simulated_ps": 20.0,
+  "stable": true,
+  "failure_reason": null,
+  "elapsed_seconds": 193.6503531159833,
+  "model_and_graph_seconds": 186.84555430756882,
+  "ns_day_end_to_end": 8.923298988073862,
+  "peak_cuda_bytes": 159609856,
+  "hardware": "NVIDIA L40S",
+  "parameters": 2357616,
+  "selected_epoch": 398,
+  "checkpoint_sha256": "368697746f4cc48e27ee3953c3b7e253aef0f69abce9e7164e38b2a2cff0e0c1",
+  "execution_note": "Shared L40S; validation source val_04 frame 0; frozen validation endpoint best; not checkpoint selection"
+}

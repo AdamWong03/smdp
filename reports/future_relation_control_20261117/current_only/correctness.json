@@ -1,0 +1,44 @@
+{
+  "accepted": true,
+  "optimizer_updates": 0,
+  "real_training_samples": 5000,
+  "effective_batch": 8,
+  "parameters": 2357616,
+  "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "torch_version": "2.13.0+cu130",
+  "normalization_train_only": [
+    0.0560818649828434,
+    0.01287175714969635
+  ],
+  "configuration_change": {
+    "model.relation_conditioning": [
+      "predicted_future",
+      "current_only"
+    ]
+  },
+  "deterministic_correctness_process": true,
+  "training_determinism_changed": false,
+  "identical_seeded_parameters_and_rng": true,
+  "legacy_random_forward_exact": true,
+  "control_equals_current_geometry_intervention": true,
+  "finite_final_loss_gradients": true,
+  "auxiliary_loss_used_in_gradient_check": false,
+  "head_gradient_norms": {
+    "proposal": 4.367860481190807,
+    "correction": 4.490203817080223
+  },
+  "cached_online_max_difference": {
+    "displacements": 0.0,
+    "velocities": 0.0
+  },
+  "peak_check_cuda_bytes": 7045456896,
+  "legacy_selected_checkpoint_forward_difference": {
+    "displacements": 0.0,
+    "velocities": 0.0,
+    "proposal_displacements": 0.0,
+    "proposal_velocities": 0.0
+  },
+  "baseline_commit": "b3b2f76",
+  "baseline_run": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6",
+  "checkpoint_loaded_only_for_compatibility_not_training": true
+}

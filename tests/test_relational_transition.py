@@ -19,12 +19,17 @@ def graph(n=5):
         timestep=torch.tensor([30.], dtype=q.dtype)), r_cut=4.5, atom_type_mapper={8: 0, 14: 1})
 
 
-@pytest.fixture(params=['legacy', 'geometry', 'geometry_gated', 'geometry_stable'])
+@pytest.fixture(params=[('legacy', 'predicted_future'), ('geometry', 'predicted_future'),
+                        ('geometry_gated', 'predicted_future'),
+                        ('geometry_stable', 'predicted_future'),
+                        ('geometry_gated', 'current_only')])
 def setup(request):
     previous_dtype = torch.get_default_dtype()
     torch.set_default_dtype(torch.float64)
     torch.manual_seed(17)
-    model = RelationalTransition({'block_type': request.param}).double()
+    kind, conditioning = request.param
+    model = RelationalTransition({'block_type': kind,
+                                  'relation_conditioning': conditioning}).double()
     batch = Batch.from_data_list([graph(5), graph(7)])
     yield model, batch
     torch.set_default_dtype(previous_dtype)
@@ -106,7 +111,8 @@ def test_final_gradient_reaches_proposal_through_relations(setup):
     loss, _ = endpoint_objective(model, out, .2*g.velocities, .9*g.velocities,
                                  proposal_weight=0)
     loss.backward()
-    assert len(future_tensors) == 2
+    expected = 2 if model.cfg.relation_conditioning == 'predicted_future' else 0
+    assert len(future_tensors) == expected
     for value in future_tensors:
         assert value.grad is not None and value.grad.isfinite().all()
         assert value.grad.abs().sum() > 0
@@ -126,7 +132,10 @@ def test_feedback_changes_prediction(setup):
     without = model(g)
     handle.remove()
     torch.testing.assert_close(original['proposal_displacements'], without['proposal_displacements'])
-    assert (original['displacements'] - without['displacements']).abs().max() > 1e-9
+    if model.cfg.relation_conditioning == 'current_only':
+        compare(original, without)
+    else:
+        assert (original['displacements'] - without['displacements']).abs().max() > 1e-9
 
 
 def test_horizon_mismatch_rejected(setup):
@@ -196,3 +205,48 @@ def test_stable_residual_scales_and_checkpoint_compatibility():
         original = RelationalTransition({'block_type': kind})
         restored = RelationalTransition({'block_type': kind})
         restored.load_state_dict(original.state_dict(), strict=True)
+
+
+def test_conditioning_preserves_initialization_and_head_gradients():
+    models, rng_states = {}, {}
+    for conditioning in ['predicted_future', 'current_only']:
+        torch.manual_seed(20261103)
+        models[conditioning] = RelationalTransition({
+            'block_type': 'geometry_gated', 'relation_conditioning': conditioning}).double()
+        rng_states[conditioning] = torch.get_rng_state()
+    full, control = models.values()
+    assert torch.equal(*rng_states.values())
+    for name, value in full.state_dict().items():
+        assert torch.equal(value, control.state_dict()[name]), name
+    # Strict old-state loading has no new parameter/buffer requirements.
+    control.load_state_dict(full.state_dict(), strict=True)
+    old_dtype = torch.get_default_dtype()
+    torch.set_default_dtype(torch.float64)
+    try:
+        g = graph(6)
+    finally:
+        torch.set_default_dtype(old_dtype)
+    for conditioning, model in models.items():
+        out = model(g)
+        correction = out['correction_displacements'].square().sum()
+        correction = correction + out['correction_velocities'].square().sum()
+        grads = torch.autograd.grad(correction, tuple(model.proposal_head.parameters()),
+                                    retain_graph=True, allow_unused=True)
+        norm = sum(float(p.abs().sum()) for p in grads if p is not None)
+        if conditioning == 'current_only':
+            assert norm == 0, 'Candidate geometry leaked into refinement'
+        else:
+            assert norm > 0
+        loss, _ = endpoint_objective(model, out, .2*g.velocities, .9*g.velocities,
+                                     proposal_weight=0)
+        loss.backward()
+        for head in [model.proposal_head, model.correction_head]:
+            assert all(p.grad is not None and p.grad.isfinite().all()
+                       and p.grad.abs().sum() > 0 for p in head.parameters())
+    torch.testing.assert_close(full(g)['proposal_displacements'],
+                               control(g)['proposal_displacements'], rtol=0, atol=0)
+
+
+def test_unknown_relation_conditioning_rejected():
+    with pytest.raises(ValueError, match='relation_conditioning'):
+        RelationalTransition({'relation_conditioning': 'unregistered'})

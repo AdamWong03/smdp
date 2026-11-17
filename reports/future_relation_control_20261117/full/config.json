@@ -1,0 +1,41 @@
+{
+  "seed": 20261103,
+  "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/water6_reference_20261113",
+  "dataset_name": "water5",
+  "atom_type_mapper": {
+    "1": 0,
+    "8": 1
+  },
+  "split_counts": {
+    "train": 5000,
+    "val": 1250,
+    "test": 1000
+  },
+  "model": {
+    "scalar_channels": 192,
+    "vector_channels": 48,
+    "edge_channels": 96,
+    "radial_channels": 16,
+    "cutoff_angstrom": 6.0,
+    "horizon_fs": 5.0,
+    "proposal_layers": 2,
+    "refinement_layers": 2,
+    "velocity_scale": 0.01,
+    "block_type": "geometry_gated"
+  },
+  "batch_size": 8,
+  "precision": "fp32",
+  "learning_rate": 0.0003,
+  "max_epochs": 400,
+  "total_optimizer_steps": 250000,
+  "proposal_weight": 0.02,
+  "gradient_clip": 10.0,
+  "diagnostics_interval_epochs": 10,
+  "scheduler": {
+    "type": "warmup_cosine",
+    "initial_lr": 1e-05,
+    "warmup_steps": 5000,
+    "minimum_lr": 1e-05
+  },
+  "validation_selection": "normalized final endpoint position/velocity MSE; no test selection"
+}

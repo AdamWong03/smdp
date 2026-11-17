@@ -1,0 +1,18 @@
+{
+  "real_training_samples": 5000,
+  "effective_batch": 8,
+  "finite_gradients": true,
+  "cached_online_max_difference": {
+    "displacements": 2.9802322387695312e-08,
+    "velocities": 7.450580596923828e-09
+  },
+  "model_changes": [
+    "cutoff_angstrom: 4.5 -> 6.0"
+  ],
+  "normalization_train_only": [
+    0.0560818649828434,
+    0.01287175714969635
+  ],
+  "peak_forward_backward_cuda_bytes": 6959885824,
+  "optimizer_updates": 0
+}
