@@ -1,0 +1,14 @@
+{
+  "completed_steps": 4000,
+  "requested_steps": 4000,
+  "selected_epoch": 75,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/trajcast_native/interim_epoch75/snapshot.pt",
+  "stable": true,
+  "failure_reason": null,
+  "interim_validation_diagnosis": true,
+  "final_test_result": false,
+  "native_forecast_position_check_A": 1.7763568394002505e-15,
+  "native_forecast_velocity_check_A_fs": 1.5612511283791264e-17,
+  "elapsed_seconds": 656.6145797329955,
+  "peak_cuda_bytes": 2295210496
+}

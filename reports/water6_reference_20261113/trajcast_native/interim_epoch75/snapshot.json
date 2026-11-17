@@ -1,0 +1,6 @@
+{
+  "selected_epoch": 75,
+  "selected_optimizer_steps": 187500,
+  "selection": "validation endpoint only",
+  "purpose": "interim validation NVE; no checkpoint tuning; not final test"
+}

@@ -1,0 +1,44 @@
+{
+  "completed": true,
+  "metrics": {
+    "nyquist_THz": 100.0,
+    "cadence_fs": 5.0,
+    "elements": {
+      "1": {
+        "overlap": 0.8029862278737111,
+        "block_overlap": {
+          "mean": 0.8029862278737111,
+          "std": 0.0,
+          "variance": 0.0,
+          "block_mean_std": 0.0,
+          "blocks": 1
+        }
+      },
+      "8": {
+        "overlap": 0.8627492729524618,
+        "block_overlap": {
+          "mean": 0.8627492729524618,
+          "std": 0.0,
+          "variance": 0.0,
+          "block_mean_std": 0.0,
+          "blocks": 1
+        }
+      }
+    },
+    "interpretation": "Matched sampled spectra; NVE heating is nonstationary",
+    "VACF": {
+      "1": {
+        "normalized_curve_RMSE": 0.040743015823578914,
+        "windows": 1,
+        "maximum_lag_fs": 1000.0
+      },
+      "8": {
+        "normalized_curve_RMSE": 0.05484211127940284,
+        "windows": 1,
+        "maximum_lag_fs": 1000.0
+      }
+    }
+  },
+  "failure_reason": null,
+  "elapsed_s": 1.5109784719534218
+}

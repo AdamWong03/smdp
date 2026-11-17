@@ -1,0 +1,408 @@
+{
+  "completed": true,
+  "metrics": {
+    "kinetic_partition": {
+      "translation_eV": {
+        "SMDP": {
+          "mean": 3.7921644245131465,
+          "std": 0.8249179076819532,
+          "variance": 0.6804895544143714,
+          "block_mean_std": 0.7389366562232088,
+          "blocks": 8
+        },
+        "reference": {
+          "mean": 2.215248069018212,
+          "std": 0.2269468978780591,
+          "variance": 0.05150489445647419,
+          "block_mean_std": 0.10813392246656599,
+          "blocks": 8
+        },
+        "mean_difference": 1.5769163554949346,
+        "wasserstein": 1.5769163554949341
+      },
+      "rotation_eV": {
+        "SMDP": {
+          "mean": 4.090748005316621,
+          "std": 0.8823467982045538,
+          "variance": 0.7785358723018275,
+          "block_mean_std": 0.7873403731074797,
+          "blocks": 8
+        },
+        "reference": {
+          "mean": 2.236110400004296,
+          "std": 0.21245483657019482,
+          "variance": 0.04513705758206819,
+          "block_mean_std": 0.05463697045870787,
+          "blocks": 8
+        },
+        "mean_difference": 1.8546376053123255,
+        "wasserstein": 1.8546376053123266
+      },
+      "internal_eV": {
+        "SMDP": {
+          "mean": 6.623794789480465,
+          "std": 1.4464155937949492,
+          "variance": 2.0921180699731954,
+          "block_mean_std": 1.316944417716367,
+          "blocks": 8
+        },
+        "reference": {
+          "mean": 2.3378840097943483,
+          "std": 0.1867606282460344,
+          "variance": 0.03487953226285346,
+          "block_mean_std": 0.04669089926071884,
+          "blocks": 8
+        },
+        "mean_difference": 4.285910779686117,
+        "wasserstein": 4.285910779686114
+      },
+      "total_KE_eV": {
+        "SMDP": {
+          "mean": 14.506707219310233,
+          "std": 2.869814807946031,
+          "variance": 8.235837031906314,
+          "block_mean_std": 2.747065709689896,
+          "blocks": 8
+        },
+        "reference": {
+          "mean": 6.789242478816856,
+          "std": 0.3190470697742734,
+          "variance": 0.10179103273155006,
+          "block_mean_std": 0.07168385301502256,
+          "blocks": 8
+        },
+        "mean_difference": 7.7174647404933765,
+        "wasserstein": 7.717464740493377
+      }
+    },
+    "species_kinetic_energy_eV": {
+      "1": {
+        "SMDP": {
+          "mean": 10.53738361353667,
+          "std": 2.135664692058798,
+          "variance": 4.561063676906601,
+          "block_mean_std": 2.009682236727565,
+          "blocks": 8
+        },
+        "reference": {
+          "mean": 4.566718038209756,
+          "std": 0.27026990537556234,
+          "variance": 0.07304582175171541,
+          "block_mean_std": 0.05587868345156462,
+          "blocks": 8
+        },
+        "mean_difference": 5.970665575326914,
+        "wasserstein": 5.970665575326915
+      },
+      "8": {
+        "SMDP": {
+          "mean": 3.9693236057735635,
+          "std": 0.8417537000618276,
+          "variance": 0.7085492915677771,
+          "block_mean_std": 0.7511140465109052,
+          "blocks": 8
+        },
+        "reference": {
+          "mean": 2.222524440607101,
+          "std": 0.2280093294749211,
+          "variance": 0.05198825432760313,
+          "block_mean_std": 0.10094782726646569,
+          "blocks": 8
+        },
+        "mean_difference": 1.7467991651664625,
+        "wasserstein": 1.7467991651664618
+      }
+    },
+    "temperature_K": {
+      "SMDP": {
+        "mean": 587.5858527417348,
+        "std": 116.24020224887428,
+        "variance": 13511.784618859198,
+        "block_mean_std": 111.26832045090829,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 274.9943712985264,
+        "std": 12.922818508980832,
+        "variance": 166.9992382160576,
+        "block_mean_std": 2.903513337994273,
+        "blocks": 8
+      },
+      "mean_difference": 312.5914814432084,
+      "wasserstein": 312.5914814432083
+    },
+    "bond_lengths_A": {
+      "SMDP": {
+        "mean": 1.0357827094746621,
+        "std": 0.18883857915066082,
+        "variance": 0.03566000897564039,
+        "block_mean_std": 0.014919240415630367,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 1.031746663780532,
+        "std": 0.024558159538362098,
+        "variance": 0.0006031031999116453,
+        "block_mean_std": 0.00014118632788464046,
+        "blocks": 8
+      },
+      "mean_difference": 0.004036045694130186,
+      "wasserstein": 0.022555459885299327
+    },
+    "angles_deg": {
+      "SMDP": {
+        "mean": 107.80323666623502,
+        "std": 7.289246309632419,
+        "variance": 53.13311176248983,
+        "block_mean_std": 0.17916425100273586,
+        "blocks": 8
+      },
+      "reference": {
+        "mean": 107.71594286518547,
+        "std": 5.022174475164465,
+        "variance": 25.22223645899347,
+        "block_mean_std": 0.06563917481944433,
+        "blocks": 8
+      },
+      "mean_difference": 0.08729380104955453,
+      "wasserstein": 1.4943473887255128
+    },
+    "sampling": {
+      "frames": 2000,
+      "common_duration_ps": 20.0,
+      "frame_statistics_correlated": true
+    },
+    "windows": [
+      {
+        "start_ps": 0,
+        "stop_ps": 1,
+        "translation_eV": {
+          "SMDP": {
+            "mean": 2.4453608511249203,
+            "std": 0.2174889139337348,
+            "variance": 0.047301427684075505,
+            "block_mean_std": 0.165378681443231,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 2.4837179317632847,
+            "std": 0.23830997250514938,
+            "variance": 0.05679164299540505,
+            "block_mean_std": 0.19714846444831902,
+            "blocks": 8
+          },
+          "mean_difference": -0.038357080638364405,
+          "wasserstein": 0.04387227207981788
+        },
+        "rotation_eV": {
+          "SMDP": {
+            "mean": 2.496782560091555,
+            "std": 0.2812372152110673,
+            "variance": 0.0790943712196762,
+            "block_mean_std": 0.20711506699449792,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 2.19929709196967,
+            "std": 0.19031061272737043,
+            "variance": 0.03621812931666717,
+            "block_mean_std": 0.0745926555300551,
+            "blocks": 8
+          },
+          "mean_difference": 0.2974854681218848,
+          "wasserstein": 0.2974854681218844
+        },
+        "internal_eV": {
+          "SMDP": {
+            "mean": 2.809194928925216,
+            "std": 0.2673715066280909,
+            "variance": 0.07148752255657524,
+            "block_mean_std": 0.2107038727276614,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 2.379336607135414,
+            "std": 0.18710573148730344,
+            "variance": 0.0350085547553989,
+            "block_mean_std": 0.07652191458272108,
+            "blocks": 8
+          },
+          "mean_difference": 0.4298583217898022,
+          "wasserstein": 0.42985832178980227
+        },
+        "total_KE_eV": {
+          "SMDP": {
+            "mean": 7.751338340141692,
+            "std": 0.5853728268435126,
+            "variance": 0.342661346406765,
+            "block_mean_std": 0.527891943364973,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 7.062351630868367,
+            "std": 0.3332018877417533,
+            "variance": 0.11102349799466799,
+            "block_mean_std": 0.2076080121393704,
+            "blocks": 8
+          },
+          "mean_difference": 0.6889867092733253,
+          "wasserstein": 0.6889867092733222
+        }
+      },
+      {
+        "start_ps": 1,
+        "stop_ps": 5,
+        "translation_eV": {
+          "SMDP": {
+            "mean": 2.77959534183102,
+            "std": 0.27636100269450214,
+            "variance": 0.07637540381031062,
+            "block_mean_std": 0.15870803139328202,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 2.266755557914042,
+            "std": 0.22894297896474586,
+            "variance": 0.05241488761725206,
+            "block_mean_std": 0.12179865478341016,
+            "blocks": 8
+          },
+          "mean_difference": 0.512839783916978,
+          "wasserstein": 0.5128397839169775
+        },
+        "rotation_eV": {
+          "SMDP": {
+            "mean": 3.095447028327913,
+            "std": 0.3077271333998649,
+            "variance": 0.09469598863049825,
+            "block_mean_std": 0.13741125299404205,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 2.1956724654322124,
+            "std": 0.21209991542983653,
+            "variance": 0.04498637412534381,
+            "block_mean_std": 0.0911245181771743,
+            "blocks": 8
+          },
+          "mean_difference": 0.8997745628957006,
+          "wasserstein": 0.8997745628957007
+        },
+        "internal_eV": {
+          "SMDP": {
+            "mean": 5.005125012521323,
+            "std": 0.945448010463055,
+            "variance": 0.893871940488549,
+            "block_mean_std": 0.8826298090154802,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 2.306975916858111,
+            "std": 0.19644495124929973,
+            "variance": 0.038590618871339744,
+            "block_mean_std": 0.043592440163492514,
+            "blocks": 8
+          },
+          "mean_difference": 2.698149095663212,
+          "wasserstein": 2.6981490956632115
+        },
+        "total_KE_eV": {
+          "SMDP": {
+            "mean": 10.880167382680256,
+            "std": 1.2434086147486212,
+            "variance": 1.5460649832310853,
+            "block_mean_std": 1.1576857681279988,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 6.7694039402043655,
+            "std": 0.322389238327724,
+            "variance": 0.10393482098953,
+            "block_mean_std": 0.10148047156357527,
+            "blocks": 8
+          },
+          "mean_difference": 4.11076344247589,
+          "wasserstein": 4.11076344247589
+        }
+      },
+      {
+        "start_ps": 5,
+        "stop_ps": 20,
+        "translation_eV": {
+          "SMDP": {
+            "mean": 4.15200127918605,
+            "std": 0.5998281220441953,
+            "variance": 0.35979377599506607,
+            "block_mean_std": 0.4571200381674374,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 2.1839423599777397,
+            "std": 0.2113783528497569,
+            "variance": 0.04468080805347633,
+            "block_mean_std": 0.08974643966146544,
+            "blocks": 8
+          },
+          "mean_difference": 1.96805891920831,
+          "wasserstein": 1.96805891920831
+        },
+        "rotation_eV": {
+          "SMDP": {
+            "mean": 4.462974366521735,
+            "std": 0.6590316287272273,
+            "variance": 0.434322687662862,
+            "block_mean_std": 0.5058106951272475,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 2.249047974978078,
+            "std": 0.21249494795970092,
+            "variance": 0.045154102908396,
+            "block_mean_std": 0.05166591167279259,
+            "blocks": 8
+          },
+          "mean_difference": 2.213926391543657,
+          "wasserstein": 2.2139263915436564
+        },
+        "internal_eV": {
+          "SMDP": {
+            "mean": 7.311204333120751,
+            "std": 0.6337001617651217,
+            "variance": 0.40157589502114144,
+            "block_mean_std": 0.2618158873571249,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 2.3434363742306825,
+            "std": 0.18285309433439062,
+            "variance": 0.03343525410766156,
+            "block_mean_std": 0.053282767324154635,
+            "blocks": 8
+          },
+          "mean_difference": 4.967767958890068,
+          "wasserstein": 4.967767958890066
+        },
+        "total_KE_eV": {
+          "SMDP": {
+            "mean": 15.926179978828538,
+            "std": 1.4027054811609336,
+            "variance": 1.9675826668789265,
+            "block_mean_std": 1.1698514813752663,
+            "blocks": 8
+          },
+          "reference": {
+            "mean": 6.7764267091865005,
+            "std": 0.3086501785898185,
+            "variance": 0.09526493274352686,
+            "block_mean_std": 0.07015200692358868,
+            "blocks": 8
+          },
+          "mean_difference": 9.149753269642037,
+          "wasserstein": 9.149753269642034
+        }
+      }
+    ]
+  },
+  "failure_reason": null,
+  "elapsed_s": 0.8177149328403175
+}
