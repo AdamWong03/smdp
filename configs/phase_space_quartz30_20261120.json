@@ -35,5 +35,5 @@
     "minimum_lr": 1e-5
   },
   "validation_selection": "normalized final endpoint position/velocity MSE; no test selection",
-  "formal_training_started": false
+  "formal_training_started": true
 }

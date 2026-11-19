@@ -11,11 +11,13 @@ node-local equivariant products. It preserves the two-stage endpoint contract.
 - [Correctness checks and reproduction](reports/phase_space_design_20261120/IMPLEMENTATION.md)
 
 The 3,036,224-parameter prototype has passed algebra/gradient tests and full-width
-FP32 TRAIN-batch checks for Quartz and Water. It is now wired into the production
+FP32 TRAIN-batch checks for Quartz and Water. It is wired into the production
 trainer, checkpoint loader and diagnostics path behind the explicit
 `phase_space_operator_v0` architecture switch, with TRAIN-only normalization
-frozen into checkpoint configs. It remains **untrained**: no formal 250k run was
-launched and no physical performance was measured.
+frozen into checkpoint configs. Two formal 250k-update runs (Water 5 fs and
+Quartz 30 fs, random initialization) are **running since 2026-11-20**; no test,
+selected checkpoint or physical result exists yet.
+[Live status](reports/phase_space_training_20261120/STATUS.md).
 
 Same-device FP32 cost (one L40S, batch 8, shared load): the training step is
 +15% (Water) and +65% (Quartz) versus frozen DSRT; peak training memory falls

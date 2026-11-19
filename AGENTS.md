@@ -10,9 +10,13 @@ choose components. Preserve the old model, trainer, results and checkpoints.
 This phase implemented the calculation graph and then wired it into the
 production trainer/loader behind the explicit `phase_space_operator_v0`
 architecture switch. TRAIN-only normalization is frozen into checkpoint configs.
-It still does **not** launch formal training or reference reproduction.
+On 2026-11-20 the research lead authorized two parallel formal 250k-update runs
+(Water 5 fs and Quartz 30 fs, random initialization), launched as
+`dsrt-phase-*-20261120` user services. Do not change their configs or code while
+they run, except to fix and explicitly record a demonstrated bug. Live status:
+`reports/phase_space_training_20261120/STATUS.md`.
 Configs under `configs/design/` remain specifications; the flattened launch
-configs carry `"formal_training_started": false`. Measured same-device cost and
+configs carry `"formal_training_started": true`. Measured same-device cost and
 remaining limits are in `reports/phase_space_integration_20261120/INTEGRATION.md`.
 Any later integration must preserve target units, graph orientation, train-only
 normalization and validation-only model selection.

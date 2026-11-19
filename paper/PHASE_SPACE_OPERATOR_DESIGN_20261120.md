@@ -211,13 +211,16 @@ PyTorch 参考实现仍 materialize 窄边消息；没有 Triton 融合，没有
 **2026-11-20 更新：** 算子已通过显式 `phase_space_operator_v0` 架构开关接入
 正式 trainer、checkpoint loader 和 diagnostics；TRAIN-only 归一化冻结进
 checkpoint config。同设备 L40S、batch 8 实测：训练步 Water +15%、Quartz +65%，
-峰值训练显存降低 21–37%，单图纯模型前向慢 1.9–2.6 倍。尚无正式训练或物理结果。
-完整记录见[集成与成本报告](../reports/phase_space_integration_20261120/INTEGRATION.md)。
+峰值训练显存降低 21–37%，单图纯模型前向慢 1.9–2.6 倍。经研究负责人确认，
+Water 5 fs 与 Quartz 30 fs 两套 250k 正式训练已于 2026-11-20 并行启动
+（随机初始化，systemd 用户服务 `dsrt-phase-*-20261120`）。当前没有测试集、
+选中 checkpoint 或物理结果；运行状态见
+[训练状态](../reports/phase_space_training_20261120/STATUS.md)，
+完整成本记录见[集成与成本报告](../reports/phase_space_integration_20261120/INTEGRATION.md)。
 
-下一项决定是是否按冻结预算启动 250k 正式训练，还是先做不改变数学等价性的
-实现优化。在未完成这一决定前，不能把集成或一次 CPU/GPU 检查当作训练结果。
-优化实现只允许先做前后向等价的重排、融合与缓存；改变消息宽度、表示或非线性
-属于设计更改，要更新版本与文档。
+训练期间不得改动配置或代码，除非修复并明确记录已复现的 bug。优化实现只允许
+先做前后向等价的重排、融合与缓存；改变消息宽度、表示或非线性属于设计更改，
+要更新版本与文档。
 
 进入正式训练后，先检验终点预测与多步误差，然后按照既有协议检验能量、元素/分子运动分配、RDF、VDOS和扩散。
 这些物理指标是最终任务目标；目前的代数测试不能代替它们。
