@@ -58,9 +58,10 @@ The normalized-loss identity had maximum absolute discrepancy 1.46e-11.
 
 `SOURCE_MANIFEST.json` gives pinned commits, local locations, inspected scope
 and downloaded paths. Source downloads are small text files only; no new
-pretrained weights or training datasets were acquired. Upstream license files
-are retained next to those local files. No upstream code is vendored into this
-commit.
+pretrained weights or training datasets were acquired. Available upstream
+license files are retained next to those local files. The pinned E2Former-V2
+branch has no LICENSE file in the retrieved tree; its code was inspected, not
+copied into our model. No upstream code is vendored into this commit.
 
 For a listed file, its immutable upstream URL is:
 

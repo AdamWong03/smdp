@@ -230,7 +230,8 @@
         "src/molfm/utils/optimizer.py",
         "config_file/scheduler_config/groupWarmupDecayLR.yaml",
         "config_file/merged_config/demo.yaml"
-      ]
+      ],
+      "license_status": "No LICENSE file in pinned tree; inspected only, no code incorporated."
     },
     {
       "name": "equiformerv3",
