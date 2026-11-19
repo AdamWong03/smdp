@@ -60,8 +60,12 @@ end-to-end simulation rates and must not replace a rollout measurement.
 The new operator reduces peak training memory but is not cheaper in wall time.
 The wider 128-channel node state and node-local CG products dominate the narrow
 edge transport, especially at one-graph batch size where kernel launch and
-small-tensor overhead matter. The predicted gain from moving capacity off edges
-is therefore not realized by this unfused PyTorch reference implementation.
+small-tensor overhead matter. A five-step profiler trace (profiler overhead
+included, so not comparable to the table; record
+`quartz30_profile_l40s_20261120.json`) attributes the largest share (25.6%) to
+`aten::bmm` and a further ~26% to GEMMs inside the node tensor-product path,
+not to edge scatter. The predicted gain from moving capacity off edges is
+therefore not realized by this unfused PyTorch reference implementation.
 
 This changes the engineering premise, not the scientific question. A formal
 250k-update run is affordable in memory; its cost is roughly 1.15x (Water) to
@@ -92,3 +96,12 @@ CUDA_VISIBLE_DEVICES=2 PYTHONPATH=.:/data1/wyd/research/foundation_mlip_adaptati
 ```
 
 Raw records: `water5_l40s_20261120.json`, `quartz30_l40s_20261120.json`.
+Profiler record and reproduce command:
+`quartz30_profile_l40s_20261120.json`;
+
+```bash
+CUDA_VISIBLE_DEVICES=2 PYTHONPATH=.:/data1/wyd/research/foundation_mlip_adaptation/upstream/trajcast-c52f107 \
+  /data1/wyd/envs/trajcast-c52f107/bin/python scripts/profile_phase_space.py \
+  --system quartz30 --steps 5 \
+  --output reports/phase_space_integration_20261120/quartz30_profile_l40s_20261120.json
+```
