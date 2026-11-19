@@ -1,3 +1,14 @@
+# Latest instruction: implementation-first design (2026-11-19)
+
+The user explicitly said to stop making design judgments from historical
+experimental outcomes and instead inspect actual implementations together with
+frontier work. Preserve historical artifacts, but do not use their ranking to
+select or reject the next architecture. Audit effective config dispatch, tensor
+operations, training targets and execution cost. Reference code is not assumed
+correct or equivalent to a paper configuration merely because it is official.
+See `reports/implementation_audit_20261119/`. No new model/training is launched
+by this audit. This instruction supersedes outcome-driven rationale below.
+
 # Active priority: develop our method (2026-11-19)
 
 The user explicitly redirected work away from continued TrajCast reproduction.

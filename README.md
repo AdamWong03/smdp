@@ -1,6 +1,20 @@
 # DSRT: future-conditioned relational refinement for learned MD
 
-## Current focus: our propagator, following the completed control (2026-11-19)
+## Current work: source-level network and training audit (updated 2026-11-20)
+
+Architecture decisions now follow the implemented operators, effective configs,
+training definitions and computational cost, rather than historical experiment
+rankings. The audit covers our propagator and pinned TrajCast, MDtrajNet, PaiNN,
+GotenNet, GNS, FlashMD, E2Former-V2 and EquiformerV3 source paths.
+
+- [Implementation and training audit](reports/implementation_audit_20261119/AUDIT.md)
+- [Frontier operators and execution cost](reports/implementation_audit_20261119/FRONTIER_OPERATORS.md)
+- [Source provenance and reproduction](reports/implementation_audit_20261119/REPRODUCE.md)
+
+CPU checks verify tensor/target contracts only. No new architecture, training,
+MD simulation or external-method reproduction is claimed by this audit.
+
+## Prior status: completed control and reference-training stop (2026-11-19)
 
 The Full / Current-Only training, endpoint tests and paired 20 ps NVE runs are
 complete. Their comparison does not demonstrate an overall benefit of predicted

@@ -1,0 +1,305 @@
+{
+  "date": "2026-11-19",
+  "own_repository": "AdamWong03/smdp",
+  "own_source_base": "ce5c6ee",
+  "selection_rule": "Audit implementation and effective configs; historical outcome ranking is excluded from design decisions.",
+  "sources": [
+    {
+      "name": "trajcast",
+      "repository": "IBM/trajcast",
+      "commit": "c52f107a02176671b21a420b2d4c67e0327b04f7",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/upstream/trajcast-c52f107",
+      "scope": "Model construction, encoding, both tensor products, normalization, readout, training and forecast; existing frozen checkpoint CPU contract trace only.",
+      "reviewed_paths": [
+        "trajcast/model/models.py",
+        "trajcast/model/training.py",
+        "trajcast/model/forecast.py",
+        "trajcast/nn/_message_passing.py",
+        "trajcast/nn/_encoding.py",
+        "trajcast/nn/_radial_basis.py",
+        "trajcast/nn/_tensor_cross_interactions.py",
+        "trajcast/nn/_normalization.py",
+        "trajcast/nn/modules.py"
+      ]
+    },
+    {
+      "name": "gotennet",
+      "repository": "sarpaykent/GotenNet",
+      "commit": "44c945bccf5ae2cf68d61b2fd32ae1e5be3db8d6",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/literature/source_audit/20261119/gotennet",
+      "downloaded_paths": [
+        "LICENSE",
+        "README.md",
+        "gotennet/configs/callbacks/default.yaml",
+        "gotennet/configs/callbacks/none.yaml",
+        "gotennet/configs/datamodule/qm9.yaml",
+        "gotennet/configs/experiment/qm9.yaml",
+        "gotennet/configs/experiment/qm9_u0.yaml",
+        "gotennet/configs/hydra/default.yaml",
+        "gotennet/configs/hydra/job_logging/logger.yaml",
+        "gotennet/configs/logger/comet.yaml",
+        "gotennet/configs/logger/csv.yaml",
+        "gotennet/configs/logger/default.yaml",
+        "gotennet/configs/logger/many_loggers.yaml",
+        "gotennet/configs/logger/mlflow.yaml",
+        "gotennet/configs/logger/neptune.yaml",
+        "gotennet/configs/logger/tensorboard.yaml",
+        "gotennet/configs/logger/wandb.yaml",
+        "gotennet/configs/model/gotennet.yaml",
+        "gotennet/configs/paths/default.yaml",
+        "gotennet/configs/test.yaml",
+        "gotennet/configs/train.yaml",
+        "gotennet/configs/trainer/default.yaml",
+        "gotennet/datamodules/datamodule.py",
+        "gotennet/models/__init__.py",
+        "gotennet/models/components/__init__.py",
+        "gotennet/models/components/layers.py",
+        "gotennet/models/components/outputs.py",
+        "gotennet/models/goten_model.py",
+        "gotennet/models/representation/gotennet.py",
+        "gotennet/models/tasks/QM9Task.py",
+        "gotennet/models/tasks/Task.py",
+        "gotennet/models/tasks/__init__.py",
+        "gotennet/training_pipeline.py"
+      ],
+      "scope": "Source reading only; no upstream training or numerical reproduction in this audit.",
+      "license_files": [
+        "LICENSE"
+      ],
+      "reviewed_paths": [
+        "gotennet/models/representation/gotennet.py",
+        "gotennet/models/components/layers.py",
+        "gotennet/models/goten_model.py",
+        "gotennet/configs/model/gotennet.yaml",
+        "gotennet/configs/experiment/qm9.yaml",
+        "gotennet/configs/experiment/qm9_u0.yaml",
+        "gotennet/configs/trainer/default.yaml"
+      ]
+    },
+    {
+      "name": "schnetpack",
+      "repository": "atomistic-machine-learning/schnetpack",
+      "commit": "69d26f3842a012f1f1e461ad7f1984d353843c8d",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/literature/source_audit/20261119/schnetpack",
+      "downloaded_paths": [
+        "LICENSE",
+        "README.md",
+        "examples/trained_models/rmd17_ethanol/painn_1/config.yaml",
+        "src/schnetpack/configs/model/representation/painn.yaml",
+        "src/schnetpack/nn/activations.py",
+        "src/schnetpack/nn/blocks.py",
+        "src/schnetpack/nn/radial.py",
+        "src/schnetpack/nn/scatter.py",
+        "src/schnetpack/representation/painn.py",
+        "src/schnetpack/task.py"
+      ],
+      "scope": "Source reading only; no upstream training or numerical reproduction in this audit.",
+      "license_files": [
+        "LICENSE"
+      ],
+      "reviewed_paths": [
+        "src/schnetpack/representation/painn.py",
+        "src/schnetpack/task.py",
+        "examples/trained_models/rmd17_ethanol/painn_1/config.yaml"
+      ]
+    },
+    {
+      "name": "mlatom",
+      "repository": "dralgroup/mlatom",
+      "commit": "c34839eb354c7a8fb264b34b82c6b90043f6572e",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/literature/source_audit/20261119/mlatom",
+      "downloaded_paths": [
+        "LICENSE",
+        "README.md",
+        "mlatom/EEEDDDD.py",
+        "mlatom/EEEDDDD_descriptor.py",
+        "mlatom/EEEDDDD_nn.py"
+      ],
+      "scope": "Source reading only; no upstream training or numerical reproduction in this audit.",
+      "license_files": [
+        "LICENSE"
+      ],
+      "reviewed_paths": [
+        "mlatom/EEEDDDD.py",
+        "mlatom/EEEDDDD_nn.py",
+        "mlatom/EEEDDDD_descriptor.py"
+      ]
+    },
+    {
+      "name": "gns",
+      "repository": "google-deepmind/deepmind-research",
+      "commit": "f5de0ede8430809180254ee957abf36ed62579ef",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/literature/source_audit/20261119/gns",
+      "downloaded_paths": [
+        "LICENSE",
+        "learning_to_simulate/README.md",
+        "learning_to_simulate/graph_network.py",
+        "learning_to_simulate/learned_simulator.py",
+        "learning_to_simulate/noise_utils.py",
+        "learning_to_simulate/train.py"
+      ],
+      "scope": "Source reading only; no upstream training or numerical reproduction in this audit.",
+      "license_files": [
+        "LICENSE"
+      ],
+      "reviewed_paths": [
+        "learning_to_simulate/graph_network.py",
+        "learning_to_simulate/learned_simulator.py",
+        "learning_to_simulate/train.py",
+        "learning_to_simulate/noise_utils.py"
+      ]
+    },
+    {
+      "name": "flashmd-v0.1.2",
+      "repository": "lab-cosmo/flashmd",
+      "commit": "1189ebe1d5ebab650a2b4eb87b42f680298d1481",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/literature/source_audit/20261119/flashmd-v0.1.2",
+      "downloaded_paths": [
+        "LICENSE",
+        "README.md",
+        "pyproject.toml",
+        "src/flashmd/__init__.py",
+        "src/flashmd/ase/__init__.py",
+        "src/flashmd/ase/bussi.py",
+        "src/flashmd/ase/langevin.py",
+        "src/flashmd/ase/npt.py",
+        "src/flashmd/ase/velocity_verlet.py",
+        "src/flashmd/ipi.py",
+        "src/flashmd/models.py",
+        "src/flashmd/stepper.py"
+      ],
+      "scope": "Source reading only; no upstream training or numerical reproduction in this audit.",
+      "license_files": [
+        "LICENSE"
+      ],
+      "reviewed_paths": [
+        "README.md",
+        "src/flashmd/stepper.py",
+        "src/flashmd/ase/velocity_verlet.py",
+        "src/flashmd/ase/bussi.py",
+        "src/flashmd/ase/langevin.py",
+        "src/flashmd/ipi.py"
+      ]
+    },
+    {
+      "name": "e2formerv2",
+      "repository": "IQuestLab/UBio-MolFM",
+      "commit": "24c49d48260c252b888aacbf4a1493a074818b7a",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/literature/source_audit/20261119/e2formerv2",
+      "downloaded_paths": [
+        "README.md",
+        "config_file/backbone_config/e2former.yaml",
+        "config_file/config_molfm.yaml",
+        "config_file/merged_config/demo.yaml",
+        "config_file/scheduler_config/groupWarmupDecayLR.yaml",
+        "src/molfm/models/e2former/__init__.py",
+        "src/molfm/models/e2former/e2former.py",
+        "src/molfm/models/e2former/e2former_cluster.py",
+        "src/molfm/models/e2former/e2former_wrapper.py",
+        "src/molfm/models/e2former/eqv2_block.py",
+        "src/molfm/models/e2former/lsrm.py",
+        "src/molfm/models/e2former/maceblocks.py",
+        "src/molfm/models/e2former/module_utils.py",
+        "src/molfm/models/e2former/so2.py",
+        "src/molfm/models/e2former/triton_dr/sparse_v_agg_lastdim_autograd.py",
+        "src/molfm/models/e2former/triton_dr/triton_sparse_qk_autograd.py",
+        "src/molfm/models/e2former/triton_dr/v.py",
+        "src/molfm/models/e2former/uma_utils.py",
+        "src/molfm/models/e2former/utils/graph_utils.py",
+        "src/molfm/models/e2former/wigner6j/__init__.py",
+        "src/molfm/models/e2former/wigner6j/base_tensor_product.py",
+        "src/molfm/models/e2former/wigner6j/so2_tensor_product.py",
+        "src/molfm/models/e2former/wigner6j/tensor_product.py",
+        "src/molfm/models/e2former/wigner6j/utils.py",
+        "src/molfm/pipeline/trainer.py",
+        "src/molfm/tasks/pretrain_smallmol.py",
+        "src/molfm/utils/optimizer.py"
+      ],
+      "scope": "Source reading only; no upstream training or numerical reproduction in this audit.",
+      "license_files": [],
+      "reviewed_paths": [
+        "README.md",
+        "config_file/backbone_config/e2former.yaml",
+        "src/molfm/models/e2former/e2former.py",
+        "src/molfm/models/e2former/e2former_wrapper.py",
+        "src/molfm/models/e2former/wigner6j/so2_tensor_product.py",
+        "src/molfm/models/e2former/triton_dr/triton_sparse_qk_autograd.py",
+        "src/molfm/models/e2former/triton_dr/sparse_v_agg_lastdim_autograd.py",
+        "src/molfm/pipeline/trainer.py",
+        "src/molfm/tasks/pretrain_smallmol.py",
+        "src/molfm/utils/optimizer.py",
+        "config_file/scheduler_config/groupWarmupDecayLR.yaml",
+        "config_file/merged_config/demo.yaml"
+      ]
+    },
+    {
+      "name": "equiformerv3",
+      "repository": "atomicarchitects/equiformer_v3",
+      "commit": "a7300c58df683dc99cb48027d5bfd4c887486c48",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/literature/source_audit/20261119/equiformerv3",
+      "downloaded_paths": [
+        "LICENSE",
+        "README.md",
+        "experimental/configs/oc20/2M/equiformer_v3/experiments/base_N@8-L@6-C@128-attn-hidden@64-ffn@512-envelope-num-rbf@128_merge-layer-norm_gates2-gridmlp_use-gate-force-head_wd@1e-3-grad-clip@100_lin-ref-e@4.yml",
+        "experimental/configs/omat24/mptrj/experiments/direct/equiformer_v3_N@7_L@4_attn-hidden@32_rbf@10_max-neighbors@300_attn-grid@14-8_ffn-grid@14_use-gate-force-head_merge-layer-norm_epochs@70-bs@512-wd@1e-3-beta2@0.95_dens-p@0.5-std@0.025-r@0.5-w@10-strict-max-r@0.75-no-stress.yml",
+        "experimental/configs/omat24/mptrj/experiments/gradient/equiformer_v3_grad-finetune_N@7_L@4_attn-hidden@32_rbf@10_max-neighbors@300_attn-grid@14-8_ffn-grid@14_pt-reg-dens-no-stress-strict-max-r@0.75-ft-no-reg_lr@0-5e-5-epochs@10-bs@64x8-wd@1e-3-beta2@0.95.yml",
+        "experimental/configs/omat24/omat24/experiments/direct/equiformer_v3_N@7_L@4_attn-hidden@32_rbf@64_max-neighbors@300_attn-grid@14-8_ffn-grid@14_use-gate-force-head_merge-layer-norm_epochs@4-bs@512-wd@1e-3-beta2@0.98-eps@1e-6_dens-p@0.5-std@0.025-r@0.5-0.75-w@1-no-stress-max-f@2.5_no-amp.yml",
+        "experimental/configs/omat24/omat24/experiments/direct/equiformer_v3_N@7_L@6_attn-hidden@32_rbf@64_max-neighbors@300_attn-grid@20-8_ffn-grid@20_use-gate-force-head_merge-layer-norm_epochs@4-bs@512-wd@1e-3-beta2@0.98-eps@1e-6_dens-p@0.5-std@0.025-r@0.5-0.75-w@1-no-stress-max-f@2.5_no-amp.yml",
+        "experimental/configs/omat24/omat24/experiments/gradient/equiformer_v3_grad-finetune_N@7_L@4_attn-hidden@32_rbf@64_max-neighbors@300_attn-grid@14-8_ffn-grid@14_merge-layer-norm_lr@0-1e-4-epochs@2-bs@512-wd@1e-3-beta2@0.98-eps@1e-6_pt-reg-dens-ft-no-reg.yml",
+        "experimental/configs/omat24/omat24/experiments/gradient/equiformer_v3_grad-finetune_N@7_L@6_attn-hidden@32_rbf@64_max-neighbors@300_attn-grid@20-8_ffn-grid@20_merge-layer-norm_lr@0-1e-4-epochs@2-bs@512-wd@1e-3-beta2@0.98-eps@1e-6_pt-reg-dens-ft-no-reg.yml",
+        "experimental/configs/omat24/salex_mptrj/experiments/gradient/equiformer_v3_grad-finetune_N@7_L@4_attn-hidden@32_rbf@64_max-neighbors@300_attn-grid@14-8_ffn-grid@14_attn-eps@1e-8_lr@0-5e-5-warmup@0.1-epochs@2-mptrj-salex-ratio@8-bs@256-wd@1e-3-beta2@0.98-eps@1e-6_pt-reg-dens-ft-no-reg-lr@1e-4.yml",
+        "experimental/models/equiformer_v3/activation.py",
+        "experimental/models/equiformer_v3/drop.py",
+        "experimental/models/equiformer_v3/edge_rot_mat.py",
+        "experimental/models/equiformer_v3/envelope.py",
+        "experimental/models/equiformer_v3/equiformer_v3.py",
+        "experimental/models/equiformer_v3/equiformer_v3_dens.py",
+        "experimental/models/equiformer_v3/input_block.py",
+        "experimental/models/equiformer_v3/layer_norm.py",
+        "experimental/models/equiformer_v3/output_block.py",
+        "experimental/models/equiformer_v3/radial_function.py",
+        "experimental/models/equiformer_v3/so2_ops.py",
+        "experimental/models/equiformer_v3/so3.py",
+        "experimental/models/equiformer_v3/softmax.py",
+        "experimental/models/equiformer_v3/transformer_block.py",
+        "experimental/models/equiformer_v3/utils.py",
+        "experimental/models/equiformer_v3/wigner.py",
+        "experimental/trainers/equiformer_v3_dens_trainer.py"
+      ],
+      "scope": "Source reading only; no upstream training or numerical reproduction in this audit.",
+      "license_files": [
+        "LICENSE"
+      ],
+      "reviewed_paths": [
+        "README.md",
+        "experimental/models/equiformer_v3/transformer_block.py",
+        "experimental/models/equiformer_v3/layer_norm.py",
+        "experimental/models/equiformer_v3/activation.py",
+        "experimental/models/equiformer_v3/softmax.py",
+        "experimental/trainers/equiformer_v3_dens_trainer.py"
+      ]
+    },
+    {
+      "name": "flashmd-current",
+      "repository": "lab-cosmo/flashmd",
+      "commit": "d516b631334ebda8f740552787eee786408b5496",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/literature/source_audit/flashmd",
+      "scope": "Current implementation; NOT assumed identical to the FlashMD paper model/training. Current model, encoder, additive, trainer, PET transformer and stepper paths inspected."
+    },
+    {
+      "name": "metatrain-2026.3.1",
+      "repository": "metatensor/metatrain",
+      "commit": "f01e79535305e9c48eb39baa9f6b7cf75d9b6f07",
+      "local_path": "/data1/wyd/research/foundation_mlip_adaptation/literature/source_audit/metatrain-2026.3.1",
+      "scope": "Current implementation; NOT assumed identical to the FlashMD paper model/training. Current model, encoder, additive, trainer, PET transformer and stepper paths inspected."
+    }
+  ],
+  "not_verified": [
+    "External code training reproduction except already existing assets",
+    "FlashMD paper training package mapped to all published runs",
+    "MDtrajNet paper-specific resolved hyperparameters",
+    "E2Former-V2 paper-specific resolved hyperparameters and local kernel speed",
+    "EquiformerV3 local speed or numerical equivariance of imported operators"
+  ],
+  "updated": "2026-11-20"
+}
