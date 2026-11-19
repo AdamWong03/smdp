@@ -46,6 +46,42 @@ The trainer writes `status.json` after every epoch, `best.pt` on validation
 improvement and `last.pt` atomically. On `SIGTERM` it pauses after the current
 epoch; resume with `--resume`.
 
+## Post-training pipeline
+
+Two user services wait for their training run and then execute the frozen
+evaluation sequence automatically:
+
+- `dsrt-phase-water5-pipeline-20261120`
+- `dsrt-phase-quartz30-pipeline-20261120`
+
+Stages: validation and test multistep (1/2/4/8 horizons), system NVE protocol
+(Water: 20 ps from `val_04`; Quartz: 100 ps from `test_09` and `test_10`),
+offline physical analysis, and a machine-readable/markdown comparison against
+the frozen baselines. The pipeline refuses to overwrite partial trajectories and
+records analysis failures without hiding completed tasks. Water `energy`
+remains gated by the known reference verification failure; `full_energy`,
+motion, RDF, VDOS and diffusion still run.
+
+Outputs per run:
+
+```text
+evaluation/{val,test}_multistep.json
+physics/<protocol>/{trajectory.h5,trajectory.summary.json,analysis/}
+pipeline_stages.txt, pipeline_stage.txt, pipeline.log
+summary.json, SUMMARY.md
+```
+
+Exit codes: 0 complete, 1 fatal (training/checkpoint/lock), 2 partial evidence
+retained. `--summary-only` regenerates the report without rerunning stages;
+`--include-nvt` adds the long NVT protocol. The pipeline is launched already and
+is currently waiting for training to finish.
+
+```bash
+systemctl --user status dsrt-phase-water5-pipeline-20261120
+journalctl --user -u dsrt-phase-quartz30-pipeline-20261120 -f
+tail -f experiments/phase_space_20261120/water5/pipeline.log
+```
+
 ## Not yet done
 
 - No completed 250k budget, so no best checkpoint has been selected.

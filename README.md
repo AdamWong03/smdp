@@ -17,7 +17,10 @@ trainer, checkpoint loader and diagnostics path behind the explicit
 frozen into checkpoint configs. Two formal 250k-update runs (Water 5 fs and
 Quartz 30 fs, random initialization) are **running since 2026-11-20**; no test,
 selected checkpoint or physical result exists yet.
-[Live status](reports/phase_space_training_20261120/STATUS.md).
+[Live status](reports/phase_space_training_20261120/STATUS.md). Post-training
+evaluation is queued as `dsrt-phase-*-pipeline-20261120`: it waits for the
+selected checkpoint, then runs validation/test multistep, NVE, offline physical
+analysis and a frozen-baseline comparison.
 
 Same-device FP32 cost (one L40S, batch 8, shared load): the training step is
 +15% (Water) and +65% (Quartz) versus frozen DSRT; peak training memory falls
