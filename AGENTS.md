@@ -1,4 +1,19 @@
-# Latest instruction: implementation-first design (2026-11-19)
+# Latest instruction: next operator design (2026-11-20)
+
+The user authorized design of the next code version. Work is on
+`research/phase-space-operator-20261120`, with a separately implemented
+`PhaseSpaceTransition` prototype and an explicit operator specification in
+`paper/PHASE_SPACE_OPERATOR_DESIGN_20261120.md`. This supersedes the older
+architecture freeze for this design work. Do not rank historical outcomes to
+choose components. Preserve the old model, trainer, results and checkpoints.
+
+This phase implements/checks the calculation graph; it does not launch formal
+training or reference reproduction. The prototype is not yet dispatched by the
+production trainer/loader. Configs under `configs/design/` are specifications,
+not launch configs. Any later integration must preserve target units, graph
+orientation, train-only normalization and validation-only model selection.
+
+# Implementation-first design (2026-11-19)
 
 The user explicitly said to stop making design judgments from historical
 experimental outcomes and instead inspect actual implementations together with

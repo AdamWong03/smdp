@@ -1,0 +1,61 @@
+{
+  "status": "design specification; not accepted by the production trainer",
+  "architecture": "phase_space_operator_v0",
+  "model": {
+    "node_channels": 128,
+    "message_channels": 32,
+    "edge_channels": 64,
+    "geometry_channels": 4,
+    "radial_channels": 16,
+    "speed_channels": 8,
+    "expansion": 4,
+    "proposal_layers": 2,
+    "refinement_layers": 2,
+    "velocity_scale": 0.01,
+    "relation_conditioning": "predicted_future",
+    "cutoff_angstrom": 4.5,
+    "horizon_fs": 30.0
+  },
+  "data": {
+    "dataset_name": "quartz30",
+    "atom_type_mapper": {
+      "8": 0,
+      "14": 1
+    },
+    "split_counts": {
+      "train": 5000,
+      "val": 1250,
+      "test": 1000
+    },
+    "cache_relative_to_reference_data": "quartz/derived_graphs/trajcast_p64_30fs"
+  },
+  "normalization": {
+    "source": "complete TRAIN split",
+    "position_scale": "RMS physical target displacement",
+    "velocity_scale": "RMS absolute endpoint velocity",
+    "aggregation_scale": "sqrt(mean over train atoms of sum cosine_cutoff^2)"
+  },
+  "planned_training": {
+    "seed": 20261120,
+    "batch_size": 8,
+    "precision": "fp32",
+    "optimizer": "AdamW",
+    "amsgrad": true,
+    "weight_decay": 0.0,
+    "gradient_clip": 10.0,
+    "proposal_weight": 0.02,
+    "total_optimizer_steps": 250000,
+    "scheduler": {
+      "type": "warmup_cosine",
+      "initial_lr": 1e-05,
+      "peak_lr": 0.0003,
+      "warmup_steps": 5000,
+      "minimum_lr": 1e-05
+    },
+    "selection": "validation final normalized endpoint loss only",
+    "initialization": "random; no pretrained weights",
+    "extra_losses": [],
+    "extra_rollout_training": false
+  },
+  "formal_training_started": false
+}

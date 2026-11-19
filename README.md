@@ -1,6 +1,21 @@
 # DSRT: future-conditioned relational refinement for learned MD
 
-## Current work: source-level network and training audit (updated 2026-11-20)
+## Current work: executable operator design (2026-11-20)
+
+A new design prototype keeps wide `0e + 1o + 2e` node states, transports narrow
+edge messages, and couples the aggregated environment with node motion through
+node-local equivariant products. It preserves the two-stage endpoint contract.
+
+- [Full operator specification and limitations](paper/PHASE_SPACE_OPERATOR_DESIGN_20261120.md)
+- [Independent reference implementation](phase_space_transition.py)
+- [Correctness checks and reproduction](reports/phase_space_design_20261120/IMPLEMENTATION.md)
+
+The 3,036,224-parameter prototype has passed algebra/gradient tests and full-width
+FP32 TRAIN-batch checks for Quartz and Water. It is **untrained**, is not yet
+dispatched by the production trainer, and has no measured GPU speed or physical
+performance result. Historical model code and artifacts remain unchanged.
+
+## Completed basis: source-level network and training audit (2026-11-20)
 
 Architecture decisions now follow the implemented operators, effective configs,
 training definitions and computational cost, rather than historical experiment

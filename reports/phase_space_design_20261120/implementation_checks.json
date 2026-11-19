@@ -1,0 +1,479 @@
+{
+  "purpose": "Trace the new operator on existing TRAIN graphs, without fitting a model.\n\nAll train graphs determine frozen normalization statistics; eight fixed graphs\nper system check the full-size FP32 forward/backward and record tensor shapes.\nNo optimizer, test/validation access, MD labels or trajectory generation.\n",
+  "torch": "2.5.1+cu121",
+  "e3nn": "0.5.9",
+  "device": "cpu",
+  "threads": 2,
+  "seed": 20261120,
+  "optimizer_updates": 0,
+  "trained": false,
+  "physical_performance_evaluated": false,
+  "systems": [
+    {
+      "system": "quartz30",
+      "config": {
+        "node_channels": 128,
+        "message_channels": 32,
+        "edge_channels": 64,
+        "geometry_channels": 4,
+        "radial_channels": 16,
+        "speed_channels": 8,
+        "expansion": 4,
+        "proposal_layers": 2,
+        "refinement_layers": 2,
+        "cutoff_angstrom": 4.5,
+        "horizon_fs": 30.0,
+        "velocity_scale": 0.01,
+        "relation_conditioning": "predicted_future"
+      },
+      "parameters": 3036224,
+      "parameter_groups": {
+        "embedding": 82432,
+        "relations": 0,
+        "edge_initial": 6592,
+        "proposal_blocks": 1358400,
+        "refinement_blocks": 1358400,
+        "proposal_head": 115200,
+        "correction_head": 115200
+      },
+      "block_parameter_groups": {
+        "state_norm": 384,
+        "edge_norm": 64,
+        "geometry_projection": 1024,
+        "sender_scalar": 8192,
+        "receiver_scalar": 8192,
+        "edge_extra": 11136,
+        "edge_out": 4160,
+        "message_gates": 28960,
+        "down": 12288,
+        "up": 12288,
+        "coupling": 592512
+      },
+      "cg_paths": [
+        {
+          "input_orders": [
+            0,
+            0
+          ],
+          "output_order": 0,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            0,
+            1
+          ],
+          "output_order": 1,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            0,
+            2
+          ],
+          "output_order": 2,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            1,
+            0
+          ],
+          "output_order": 1,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            1,
+            1
+          ],
+          "output_order": 0,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            1,
+            1
+          ],
+          "output_order": 2,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            1,
+            2
+          ],
+          "output_order": 1,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            2,
+            0
+          ],
+          "output_order": 2,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            2,
+            1
+          ],
+          "output_order": 1,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            2,
+            2
+          ],
+          "output_order": 0,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            2,
+            2
+          ],
+          "output_order": 2,
+          "mode": "uuu"
+        }
+      ],
+      "train_statistics": {
+        "rms_targets": [
+          0.07108993560225706,
+          0.003614269834020383
+        ],
+        "aggregation_scale": 1.428897301200149,
+        "samples": 5000,
+        "atoms": 810000,
+        "edges": 23235012,
+        "normalization_source": "all original TRAIN graphs only",
+        "aggregation_definition": "sqrt(mean over atoms of sum over incoming edges of cosine_cutoff^2)"
+      },
+      "train_indices": [
+        0,
+        714,
+        1428,
+        2142,
+        2856,
+        3570,
+        4284,
+        4999
+      ],
+      "batch_atoms": 1296,
+      "batch_edges": 37240,
+      "batch_size": 8,
+      "all_parameter_gradients_finite": true,
+      "initialized_from_pretrained": false,
+      "optimizer_updates": 0,
+      "random_initialization_objective": 2.191922903060913,
+      "cpu_forward_seconds": 1.5518010989762843,
+      "cpu_backward_seconds": 2.04400931391865,
+      "timing_scope": "one cold CPU pass, 2 threads; correctness trace, not a performance benchmark",
+      "activations": [
+        {
+          "block": "proposal_0",
+          "node_shape": [
+            1296,
+            1152
+          ],
+          "edge_shape": [
+            37240,
+            64
+          ],
+          "node_rms": 0.08230862766504288,
+          "edge_rms": 0.15101875364780426
+        },
+        {
+          "block": "proposal_1",
+          "node_shape": [
+            1296,
+            1152
+          ],
+          "edge_shape": [
+            37240,
+            64
+          ],
+          "node_rms": 0.0728432834148407,
+          "edge_rms": 0.22333461046218872
+        },
+        {
+          "block": "refinement_0",
+          "node_shape": [
+            1296,
+            1152
+          ],
+          "edge_shape": [
+            37240,
+            64
+          ],
+          "node_rms": 0.07875126600265503,
+          "edge_rms": 0.23684494197368622
+        },
+        {
+          "block": "refinement_1",
+          "node_shape": [
+            1296,
+            1152
+          ],
+          "edge_shape": [
+            37240,
+            64
+          ],
+          "node_rms": 0.07846251875162125,
+          "edge_rms": 0.23198555409908295
+        }
+      ],
+      "tensor_widths": {
+        "geometry_descriptor": 72,
+        "edge_extras": 173,
+        "transport_gates": 160,
+        "largest_order_message": 160,
+        "node_representation": 1152,
+        "message_representation": 288
+      },
+      "single_first_graph_fp32_tensor_MiB": {
+        "geometry_descriptor": 1.27935791015625,
+        "edge_extras": 3.0740127563476562,
+        "transport_gates": 2.843017578125,
+        "largest_order_message": 2.843017578125
+      },
+      "memory_scope": "single tensor sizes, not measured peak memory or sum of concurrent allocations",
+      "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/quartz/derived_graphs/trajcast_p64_30fs/quartz30_train;P:64.pt"
+    },
+    {
+      "system": "water5",
+      "config": {
+        "node_channels": 128,
+        "message_channels": 32,
+        "edge_channels": 64,
+        "geometry_channels": 4,
+        "radial_channels": 16,
+        "speed_channels": 8,
+        "expansion": 4,
+        "proposal_layers": 2,
+        "refinement_layers": 2,
+        "cutoff_angstrom": 6.0,
+        "horizon_fs": 5.0,
+        "velocity_scale": 0.01,
+        "relation_conditioning": "predicted_future"
+      },
+      "parameters": 3036224,
+      "parameter_groups": {
+        "embedding": 82432,
+        "relations": 0,
+        "edge_initial": 6592,
+        "proposal_blocks": 1358400,
+        "refinement_blocks": 1358400,
+        "proposal_head": 115200,
+        "correction_head": 115200
+      },
+      "block_parameter_groups": {
+        "state_norm": 384,
+        "edge_norm": 64,
+        "geometry_projection": 1024,
+        "sender_scalar": 8192,
+        "receiver_scalar": 8192,
+        "edge_extra": 11136,
+        "edge_out": 4160,
+        "message_gates": 28960,
+        "down": 12288,
+        "up": 12288,
+        "coupling": 592512
+      },
+      "cg_paths": [
+        {
+          "input_orders": [
+            0,
+            0
+          ],
+          "output_order": 0,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            0,
+            1
+          ],
+          "output_order": 1,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            0,
+            2
+          ],
+          "output_order": 2,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            1,
+            0
+          ],
+          "output_order": 1,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            1,
+            1
+          ],
+          "output_order": 0,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            1,
+            1
+          ],
+          "output_order": 2,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            1,
+            2
+          ],
+          "output_order": 1,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            2,
+            0
+          ],
+          "output_order": 2,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            2,
+            1
+          ],
+          "output_order": 1,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            2,
+            2
+          ],
+          "output_order": 0,
+          "mode": "uuu"
+        },
+        {
+          "input_orders": [
+            2,
+            2
+          ],
+          "output_order": 2,
+          "mode": "uuu"
+        }
+      ],
+      "train_statistics": {
+        "rms_targets": [
+          0.05608186616045841,
+          0.012871757333929998
+        ],
+        "aggregation_scale": 2.7347488293694986,
+        "samples": 5000,
+        "atoms": 960000,
+        "edges": 86249332,
+        "normalization_source": "all original TRAIN graphs only",
+        "aggregation_definition": "sqrt(mean over atoms of sum over incoming edges of cosine_cutoff^2)"
+      },
+      "train_indices": [
+        0,
+        714,
+        1428,
+        2142,
+        2856,
+        3570,
+        4284,
+        4999
+      ],
+      "batch_atoms": 1536,
+      "batch_edges": 137898,
+      "batch_size": 8,
+      "all_parameter_gradients_finite": true,
+      "initialized_from_pretrained": false,
+      "optimizer_updates": 0,
+      "random_initialization_objective": 1.1976650953292847,
+      "cpu_forward_seconds": 3.7249104911461473,
+      "cpu_backward_seconds": 7.995361851993948,
+      "timing_scope": "one cold CPU pass, 2 threads; correctness trace, not a performance benchmark",
+      "activations": [
+        {
+          "block": "proposal_0",
+          "node_shape": [
+            1536,
+            1152
+          ],
+          "edge_shape": [
+            137898,
+            64
+          ],
+          "node_rms": 0.15453949570655823,
+          "edge_rms": 0.5588210225105286
+        },
+        {
+          "block": "proposal_1",
+          "node_shape": [
+            1536,
+            1152
+          ],
+          "edge_shape": [
+            137898,
+            64
+          ],
+          "node_rms": 0.15393172204494476,
+          "edge_rms": 0.4236459732055664
+        },
+        {
+          "block": "refinement_0",
+          "node_shape": [
+            1536,
+            1152
+          ],
+          "edge_shape": [
+            137898,
+            64
+          ],
+          "node_rms": 0.16073791682720184,
+          "edge_rms": 0.3551900088787079
+        },
+        {
+          "block": "refinement_1",
+          "node_shape": [
+            1536,
+            1152
+          ],
+          "edge_shape": [
+            137898,
+            64
+          ],
+          "node_rms": 0.14948511123657227,
+          "edge_rms": 0.35578852891921997
+        }
+      ],
+      "tensor_widths": {
+        "geometry_descriptor": 72,
+        "edge_extras": 173,
+        "transport_gates": 160,
+        "largest_order_message": 160,
+        "node_representation": 1152,
+        "message_representation": 288
+      },
+      "single_first_graph_fp32_tensor_MiB": {
+        "geometry_descriptor": 4.7449951171875,
+        "edge_extras": 11.401168823242188,
+        "transport_gates": 10.54443359375,
+        "largest_order_message": 10.54443359375
+      },
+      "memory_scope": "single tensor sizes, not measured peak memory or sum of concurrent allocations",
+      "cache": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/derived_graphs/water6_reference_20261113/water5_train;P:64.pt"
+    }
+  ]
+}
