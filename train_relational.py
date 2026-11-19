@@ -14,6 +14,7 @@ import torch
 from torch_geometric.loader import DataLoader
 from trajcast.data.dataset import AtomicGraphDataset
 
+from phase_space_transition import PhaseSpaceTransition, train_normalization
 from relational_transition import (RelationalConfig, RelationalTransition,
                                    endpoint_loss_components, endpoint_objective)
 
@@ -65,15 +66,54 @@ def module_gradient_norm(module):
 
 
 def gradient_groups(model):
-    groups = {
-        'input_encoder': torch.nn.ModuleList([
-            model.element, model.kinematics, model.velocity_embedding, model.edge_embedding]),
-        'proposal_head': model.proposal_head,
-        'correction_head': model.correction_head,
-    }
+    if isinstance(model, PhaseSpaceTransition):
+        groups = {
+            'input_encoder': torch.nn.ModuleList([
+                model.embedding, model.relations, model.edge_initial]),
+            'proposal_head': model.proposal_head,
+            'correction_head': model.correction_head,
+        }
+    else:
+        groups = {
+            'input_encoder': torch.nn.ModuleList([
+                model.element, model.kinematics, model.velocity_embedding, model.edge_embedding]),
+            'proposal_head': model.proposal_head,
+            'correction_head': model.correction_head,
+        }
     groups.update({f'proposal_block_{i}': block for i, block in enumerate(model.proposal_blocks)})
     groups.update({f'refinement_block_{i}': block for i, block in enumerate(model.refinement_blocks)})
     return groups
+
+
+def is_phase_space(cfg):
+    """True only for explicitly versioned phase-space configs."""
+    architecture = cfg.get('architecture')
+    if architecture in (None, 'dsrt', 'smdpr'):
+        return False
+    if architecture != 'phase_space_operator_v0':
+        raise ValueError(f'Unknown architecture: {architecture}')
+    return True
+
+
+def build_model(cfg, rms_targets, aggregation_scale=None):
+    if is_phase_space(cfg):
+        if aggregation_scale is None:
+            raise ValueError('Phase-space model requires the TRAIN aggregation scale')
+        return PhaseSpaceTransition(cfg['model'], rms_targets=rms_targets,
+                                    aggregation_scale=aggregation_scale)
+    return RelationalTransition(cfg['model'], rms_targets)
+
+
+def train_statistics(cfg, graphs):
+    """Normalization scalars with one explicit source: the full TRAIN split."""
+    if is_phase_space(cfg):
+        stats = train_normalization(graphs, float(cfg['model']['cutoff_angstrom']))
+        return (stats['rms_targets'][0], stats['rms_targets'][1],
+                stats['aggregation_scale'], stats)
+    sq = torch.cat([g.displacements for g in graphs]).square().mean().sqrt().item()
+    sv = torch.cat([g.update_velocities for g in graphs]).square().mean().sqrt().item()
+    return sq, sv, None, dict(rms_targets=[sq, sv], aggregation_scale=None,
+                              source='complete TRAIN split only')
 
 
 def training_diagnostics(model, batch, precision, proposal_weight):
@@ -136,6 +176,8 @@ def evaluate(model, loader, device, precision='fp32'):
     count = 0
     for batch in loader:
         batch = batch.to(device, non_blocking=True)
+        if hasattr(model, 'validate_graph'):
+            model.validate_graph(batch)
         with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
                             enabled=precision == 'bf16'):
             out = model(batch)
@@ -179,9 +221,12 @@ def main():
     start = time.time()
     train = read_graphs(Path(cfg['cache']), 'train', cfg)
     val = read_graphs(Path(cfg['cache']), 'val', cfg)
-    sq = torch.cat([g.displacements for g in train]).square().mean().sqrt().item()
-    sv = torch.cat([g.update_velocities for g in train]).square().mean().sqrt().item()
-    model = RelationalTransition(cfg['model'], (sq,sv)).to(device)
+    sq, sv, aggregation_scale, normalization = train_statistics(cfg, train)
+    # Persist the frozen normalization inside every checkpoint config so the
+    # inference loader never has to recompute it from a different data split.
+    cfg = dict(cfg, normalization=dict(normalization, rms_targets=[sq, sv],
+                                       aggregation_scale=aggregation_scale))
+    model = build_model(cfg, (sq, sv), aggregation_scale).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=cfg['learning_rate'],
                                   weight_decay=0., amsgrad=True)
     scheduler, scheduler_type = make_scheduler(optimizer, cfg)
@@ -192,6 +237,8 @@ def main():
     train_loader, val_loader = loader(train, True), loader(val, False)
     diagnostic_batch = next(iter(loader(train[:cfg['batch_size']], False))).to(
         device, non_blocking=True)
+    if hasattr(model, 'validate_graph'):
+        model.validate_graph(diagnostic_batch)
     if args.evaluate_best:
         saved = torch.load(args.run/'best.pt', map_location='cpu', weights_only=False)
         model.load_state_dict(saved['model'])
@@ -220,7 +267,9 @@ def main():
     elif (args.run/'last.pt').exists():
         raise FileExistsError('Use --resume; never overwrite an experiment')
     signal.signal(signal.SIGTERM, request_stop); signal.signal(signal.SIGINT, request_stop)
-    metadata = dict(config=cfg, normalization_train_only=[sq,sv], parameters=sum(p.numel() for p in model.parameters()),
+    metadata = dict(architecture=cfg.get('architecture', 'dsrt'), config=cfg,
+                    normalization_train_only=[sq,sv], aggregation_scale=aggregation_scale,
+                    parameters=sum(p.numel() for p in model.parameters()),
                     hardware=torch.cuda.get_device_name(), torch_version=torch.__version__,
                     train_samples=len(train), val_samples=len(val), initialized_from_pretrained=False,
                     optimizer_steps_per_epoch=len(train_loader), scheduler_type=scheduler_type)

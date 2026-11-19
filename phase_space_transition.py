@@ -61,6 +61,37 @@ def motion_harmonics(u):
                                  normalization="component")
 
 
+def train_normalization(graphs, cutoff):
+    """Frozen TRAIN-only scales required by PhaseSpaceTransition.
+
+    ``graphs`` must yield AtomicGraph-like items with float position targets,
+    ``edge_index`` in [central, neighbor] layout, periodic ``shifts`` and the
+    formal endpoint targets. The function never reads validation/test data.
+    """
+    q2 = v2 = squared_cutoff = 0.
+    atoms = components = edges = 0
+    for g in graphs:
+        q2 += g.displacements.double().square().sum().item()
+        v2 += g.update_velocities.double().square().sum().item()
+        src, dst = g.edge_index.flip(0)
+        r = (g.pos[src]-g.pos[dst]+g.shifts).norm(dim=-1)
+        if bool((r > cutoff+1e-6).any()):
+            raise ValueError("Cache contains edges outside requested cutoff")
+        squared_cutoff += cutoff_envelope(r, cutoff).double().square().sum().item()
+        atoms += len(g.pos)
+        components += g.displacements.numel()
+        edges += int(g.num_edges)
+    if not (atoms and components and edges):
+        raise ValueError("TRAIN normalization requires non-empty graphs")
+    return dict(rms_targets=[(q2/components)**.5, (v2/components)**.5],
+                aggregation_scale=(squared_cutoff/atoms)**.5,
+                samples=len(graphs) if hasattr(graphs, '__len__') else None,
+                atoms=atoms, edges=edges,
+                source="complete TRAIN split only",
+                aggregation_definition=("sqrt(mean over atoms of sum over "
+                                        "incoming edges of cosine_cutoff^2)"))
+
+
 def center_by_mass(value, masses, batch, n_graphs):
     weights = masses.to(value.dtype)
     total = value.new_zeros(n_graphs).index_add(0, batch, weights)
@@ -342,3 +373,30 @@ class PhaseSpaceTransition(nn.Module):
         if return_context:
             output["context"] = dict(node=state, edge=edge_state, motion=motion)
         return output
+
+    def set_diagnostics(self, enabled):
+        """Observe block output RMS; hooks are removed outside diagnostic batches."""
+        hooks = getattr(self, "_diagnostic_hooks", None)
+        if enabled and hooks is None:
+            self._diagnostic_records = []
+            self._diagnostic_hooks = []
+            for stage, blocks in [("proposal", self.proposal_blocks),
+                                  ("refinement", self.refinement_blocks)]:
+                for index, block in enumerate(blocks):
+                    def capture(_module, _inputs, outputs, stage=stage, index=index):
+                        state, edge_state = outputs
+                        self._diagnostic_records.append(dict(
+                            stage=stage, index=index,
+                            node_rms=float(state.detach().square().mean().sqrt()),
+                            edge_rms=float(edge_state.detach().square().mean().sqrt())))
+                    self._diagnostic_hooks.append(block.register_forward_hook(capture))
+        elif not enabled and hooks is not None:
+            for hook in hooks:
+                hook.remove()
+            self._diagnostic_hooks = None
+
+    def diagnostics(self):
+        latest = {}
+        for row in getattr(self, "_diagnostic_records", []):
+            latest[(row["stage"], row["index"])] = row
+        return list(latest.values())

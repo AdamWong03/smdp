@@ -1,0 +1,74 @@
+{
+  "purpose": "Same-device cost of the phase-space operator versus the frozen DSRT model.\n\nTimes a real TRAIN-batch optimizer iteration (forward + endpoint loss +\nbackward + AdamW lr=0) and a one-graph autoregressive model call. Graphs are\nresident on the device; neighbor-list rebuild and I/O are excluded. This is a\ncost measurement, not training and not a physical evaluation.\n",
+  "device": "cuda",
+  "hardware": "NVIDIA L40S",
+  "torch": "2.5.1+cu121",
+  "seed": 20261120,
+  "system": "quartz30",
+  "cutoff_angstrom": 4.5,
+  "horizon_fs": 30.0,
+  "batch_size": 8,
+  "batch_atoms": 1296,
+  "batch_edges": 37150,
+  "normalization": {
+    "rms_targets": [
+      0.07108993560225706,
+      0.003614269834020383
+    ],
+    "aggregation_scale": 1.428897301200149,
+    "samples": 5000,
+    "atoms": 810000,
+    "edges": 23235012,
+    "source": "complete TRAIN split only",
+    "aggregation_definition": "sqrt(mean over atoms of sum over incoming edges of cosine_cutoff^2)"
+  },
+  "optimizer": "AdamW lr=0, amsgrad=True",
+  "includes_neighbor_rebuild": false,
+  "includes_io": false,
+  "models": {
+    "dsrt_frozen": {
+      "parameters": 2357616,
+      "train_batch": {
+        "median_seconds": 0.04224258998874575,
+        "min_seconds": 0.041224302956834435,
+        "max_seconds": 0.04523382498882711,
+        "peak_cuda_bytes": 1994097664,
+        "iterations": 10,
+        "warmup": 3,
+        "fitted": false
+      },
+      "single_graph_inference": {
+        "median_seconds": 0.005534790456295013,
+        "min_seconds": 0.005501504987478256,
+        "max_seconds": 0.005568629829213023,
+        "peak_cuda_bytes": 75361792,
+        "iterations": 10,
+        "warmup": 3,
+        "fitted": false
+      },
+      "train_seconds_ratio_to_dsrt": 1.0
+    },
+    "phase_space_operator_v0": {
+      "parameters": 3036224,
+      "train_batch": {
+        "median_seconds": 0.06973254308104515,
+        "min_seconds": 0.06699217692948878,
+        "max_seconds": 0.0740293760318309,
+        "peak_cuda_bytes": 1590167040,
+        "iterations": 10,
+        "warmup": 3,
+        "fitted": false
+      },
+      "single_graph_inference": {
+        "median_seconds": 0.014589241007342935,
+        "min_seconds": 0.014373151119798422,
+        "max_seconds": 0.017302918015047908,
+        "peak_cuda_bytes": 88804352,
+        "iterations": 10,
+        "warmup": 3,
+        "fitted": false
+      },
+      "train_seconds_ratio_to_dsrt": 1.6507639114841979
+    }
+  }
+}

@@ -23,28 +23,14 @@ from e3nn import __version__ as e3nn_version
 from torch_geometric.data import Batch
 from trajcast.data.dataset import AtomicGraphDataset
 
-from phase_space_transition import PhaseSpaceTransition, cutoff_envelope
+from phase_space_transition import PhaseSpaceTransition, train_normalization
 from relational_transition import endpoint_loss_components
 
 
 def train_statistics(dataset, cutoff):
-    q2 = v2 = squared_cutoff = 0.
-    atoms = components = edges = 0
-    for g in dataset:
-        q2 += g.displacements.double().square().sum().item()
-        v2 += g.update_velocities.double().square().sum().item()
-        src, dst = g.edge_index.flip(0)
-        r = (g.pos[src]-g.pos[dst]+g.shifts).norm(dim=-1)
-        if (r > cutoff+1e-6).any():
-            raise ValueError("Cache contains edges outside requested cutoff")
-        squared_cutoff += cutoff_envelope(r, cutoff).square().sum().item()
-        atoms += len(g.pos)
-        components += g.displacements.numel()
-        edges += g.num_edges
-    return dict(rms_targets=[(q2/components)**.5, (v2/components)**.5],
-        aggregation_scale=(squared_cutoff/atoms)**.5, samples=len(dataset),
-        atoms=atoms, edges=edges, normalization_source="all original TRAIN graphs only",
-        aggregation_definition="sqrt(mean over atoms of sum over incoming edges of cosine_cutoff^2)")
+    stats = train_normalization(dataset, cutoff)
+    stats['normalization_source'] = stats.pop('source')
+    return stats
 
 
 def count(module):

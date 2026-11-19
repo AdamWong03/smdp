@@ -6,16 +6,25 @@ from trajcast.data.atomic_graph import AtomicGraph
 from torch_geometric.data import Data
 
 from periodic import PeriodicGraphBuilder
+from phase_space_transition import PhaseSpaceTransition
 from relational_transition import RelationalTransition
 
 
 def load_relational(checkpoint, device="cuda"):
     saved = torch.load(Path(checkpoint), map_location="cpu", weights_only=False)
-    if saved['config'].get('architecture') == 'smdpr':
+    cfg = saved['config']
+    architecture = cfg.get('architecture')
+    normalization = cfg.get('normalization') or {}
+    if architecture == 'smdpr':
         from smdpr.model import SMDPR
-        model = SMDPR(saved['config']['model'], **saved['config']['motion'])
+        model = SMDPR(cfg['model'], **cfg['motion'])
+    elif architecture == 'phase_space_operator_v0':
+        model = PhaseSpaceTransition(
+            cfg['model'],
+            rms_targets=normalization.get('rms_targets', [0.07, 0.004]),
+            aggregation_scale=normalization.get('aggregation_scale', 1.0))
     else:
-        model = RelationalTransition(saved["config"]["model"])
+        model = RelationalTransition(cfg['model'])
     model.load_state_dict(saved["model"], strict=True)
     model.to(device).eval()
     return model, saved

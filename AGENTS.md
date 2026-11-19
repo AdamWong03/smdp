@@ -7,11 +7,15 @@ The user authorized design of the next code version. Work is on
 architecture freeze for this design work. Do not rank historical outcomes to
 choose components. Preserve the old model, trainer, results and checkpoints.
 
-This phase implements/checks the calculation graph; it does not launch formal
-training or reference reproduction. The prototype is not yet dispatched by the
-production trainer/loader. Configs under `configs/design/` are specifications,
-not launch configs. Any later integration must preserve target units, graph
-orientation, train-only normalization and validation-only model selection.
+This phase implemented the calculation graph and then wired it into the
+production trainer/loader behind the explicit `phase_space_operator_v0`
+architecture switch. TRAIN-only normalization is frozen into checkpoint configs.
+It still does **not** launch formal training or reference reproduction.
+Configs under `configs/design/` remain specifications; the flattened launch
+configs carry `"formal_training_started": false`. Measured same-device cost and
+remaining limits are in `reports/phase_space_integration_20261120/INTEGRATION.md`.
+Any later integration must preserve target units, graph orientation, train-only
+normalization and validation-only model selection.
 
 # Implementation-first design (2026-11-19)
 
