@@ -49,6 +49,8 @@ def main():
             trajectory_summary=trajectory, physical_analysis_status=analysis,
             physical_analysis_completed=bool(analysis and analysis.get('physical_analysis_completed')),
             validation_multistep=read(run/'evaluation/val_multistep.json'))
+        entry['training_completed'] = entry['optimizer_steps'] == 250000
+        entry['endpoint_test_completed'] = entry['test_metrics'] is not None
         if name == 'current_only':
             stage = run/'pipeline_stage.txt'
             entry['pipeline_stage'] = stage.read_text().strip() if stage.exists() else 'prepared'
@@ -83,8 +85,11 @@ def main():
         table.append(dict(model=name, completed_epochs=len(history), optimizer_steps=entry['optimizer_steps'],
             best_epoch=entry['best_epoch'], test_position_RMSE_A=test.get('position_RMSE_A'),
             test_velocity_RMSE_A_fs=test.get('velocity_RMSE_A_fs'),
+            training_completed=entry['training_completed'],
+            endpoint_test_completed=entry['endpoint_test_completed'],
             trajectory_completed=trajectory_complete,
-            physical_analysis_completed=entry['physical_analysis_completed']))
+            physical_analysis_completed=entry['physical_analysis_completed'],
+            analysis_failure_reason=json.dumps((analysis or {}).get('analysis_failure_reason', {}))))
         if motion and motion.get('completed'):
             for component, values in motion['metrics']['kinetic_partition'].items():
                 motion_table.append(dict(model=name, component=component,
@@ -124,7 +129,18 @@ def main():
         lines.append(f"| {row['model']} | {row['optimizer_steps']} | {row['best_epoch'] or 'pending'} | "
                      f"{format(q, '.9g') if q is not None else 'pending'} | "
                      f"{format(v, '.9g') if v is not None else 'pending'} |")
-    lines += ['', 'A running model is not a completed comparison. This is one seed and one',
+    lines += ['', '| Model | Training | Endpoint test | 20 ps trajectory | Physical analysis |',
+        '|---|---|---|---|---|']
+    for name, entry in snapshot['experiments'].items():
+        states = ['completed' if entry[key] else 'incomplete' for key in
+                  ['training_completed', 'endpoint_test_completed', 'trajectory_completed',
+                   'physical_analysis_completed']]
+        lines.append('| '+name+' | '+' | '.join(states)+' |')
+        for task, reason in (entry['physical_analysis_status'] or {}).get('analysis_failure_reason', {}).items():
+            lines.append(f'\n{name}, {task}: {reason}\n')
+    if (REPORT/'RESULTS.md').exists():
+        lines += ['', '[Scientific comparison and limitations](RESULTS.md).']
+    lines += ['', 'This is one seed and one',
         'paired validation NVE start; no general mechanism claim is made automatically.',
         'Full trained on shared L40S; Current-Only on shared Blackwell. Optimization',
         'budgets match, wall time and bitwise GPU arithmetic do not.', '',

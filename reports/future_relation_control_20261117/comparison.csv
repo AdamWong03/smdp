@@ -1,3 +1,3 @@
-model,completed_epochs,optimizer_steps,best_epoch,test_position_RMSE_A,test_velocity_RMSE_A_fs,trajectory_completed,physical_analysis_completed
-full,400,250000,398,0.00040972899719262534,0.0001496728840398697,True,False
-current_only,400,250000,393,0.00040136264119138,0.00015130883816067187,True,False
+model,completed_epochs,optimizer_steps,best_epoch,test_position_RMSE_A,test_velocity_RMSE_A_fs,training_completed,endpoint_test_completed,trajectory_completed,physical_analysis_completed,analysis_failure_reason
+full,400,250000,398,0.00040972899719262534,0.0001496728840398697,True,True,True,False,"{""energy"": ""ValueError: Reference energy/force verification failed; see reference_verification.json""}"
+current_only,400,250000,393,0.00040136264119138,0.00015130883816067187,True,True,True,False,"{""energy"": ""ValueError: Reference energy/force verification failed; see reference_verification.json""}"

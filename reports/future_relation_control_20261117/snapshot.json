@@ -1,5 +1,5 @@
 {
-  "recorded_utc": "2026-11-17T13:48:42.628208+00:00",
+  "recorded_utc": "2026-11-19T07:14:35.534252+00:00",
   "experiments": {
     "full": {
       "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6",
@@ -229,7 +229,9 @@
             "temperature_RMSE_K": 1.2163606885751403
           }
         }
-      }
+      },
+      "training_completed": true,
+      "endpoint_test_completed": true
     },
     "current_only": {
       "run_directory": "/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only",
@@ -482,6 +484,8 @@
           }
         }
       },
+      "training_completed": true,
+      "endpoint_test_completed": true,
       "pipeline_stage": "analysis_incomplete"
     }
   }
