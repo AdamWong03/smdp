@@ -1,0 +1,75 @@
+{
+  "recorded_utc": "2026-11-19T07:18:43.427094+00:00",
+  "state": "stopped_by_research_decision",
+  "reason": "Research lead redirected effort from continued external-reference training to development of our method. No automatic resume or further reference production.",
+  "pid": 3805215,
+  "command": "/data1/wyd/envs/trajcast-c52f107/bin/python -u -m water_reference.train_native --run /data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/trajcast_native ",
+  "previous_status": {
+    "state": "training",
+    "epoch": 149,
+    "optimizer_steps": 372500,
+    "train_final_loss": 1.3898142388960346e-05,
+    "train_normalized_MAE": {
+      "displacements": 0.0018491335042245568,
+      "update_velocities": 0.0033390436864861517
+    },
+    "validation": {
+      "samples": 1250,
+      "selection_loss": 1.655369169747985e-05,
+      "normalized_position_MSE": 7.324615452392174e-06,
+      "normalized_velocity_MSE": 2.578276794256753e-05,
+      "position_RMSE_A": 0.0001517801127318516,
+      "velocity_RMSE_A_fs": 6.535858082136126e-05,
+      "position_MAE_A": 0.00010826136269310046,
+      "velocity_MAE_A_fs": 4.62960755348884e-05
+    },
+    "lr": 0.01,
+    "epoch_seconds": 5426.050129347015,
+    "improved": false,
+    "peak_cuda_bytes": 13440588800
+  },
+  "last_observed_progress": {
+    "state": "training",
+    "epoch_in_progress": 150,
+    "optimizer_steps": 373550,
+    "elapsed_seconds": 520333.86591758695,
+    "lr": 0.01,
+    "peak_cuda_bytes": 13344860160
+  },
+  "checkpoints": {
+    "best.pt": {
+      "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/trajcast_native/best.pt",
+      "epoch": 145,
+      "optimizer_steps": 362500,
+      "validation": {
+        "samples": 1250,
+        "selection_loss": 1.5372495970974835e-05,
+        "normalized_position_MSE": 6.592267014401272e-06,
+        "normalized_velocity_MSE": 2.4152724927548398e-05,
+        "position_RMSE_A": 0.00014399249321049514,
+        "velocity_RMSE_A_fs": 6.325879446428368e-05,
+        "position_MAE_A": 0.00010371976960415149,
+        "velocity_MAE_A_fs": 4.5117986266473325e-05
+      }
+    },
+    "last.pt": {
+      "path": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/trajcast_native/last.pt",
+      "epoch": 149,
+      "optimizer_steps": 372500,
+      "validation": {
+        "samples": 1250,
+        "selection_loss": 1.655369169747985e-05,
+        "normalized_position_MSE": 7.324615452392174e-06,
+        "normalized_velocity_MSE": 2.578276794256753e-05,
+        "position_RMSE_A": 0.0001517801127318516,
+        "velocity_RMSE_A_fs": 6.535858082136126e-05,
+        "position_MAE_A": 0.00010826136269310046,
+        "velocity_MAE_A_fs": 4.62960755348884e-05
+      }
+    }
+  },
+  "stop_method": "Validated existing atomic best/last checkpoints, then stopped this trainer immediately. Its SIGTERM handler only exits after an epoch.",
+  "partial_epoch_disposition": "Incomplete epoch 150 updates after last.pt are not retained; latest progress is a lower bound on executed updates, not a resumable checkpoint. Complete history, best/last weights and optimizer/RNG states remain.",
+  "native_protocol_completed": false,
+  "final_test_completed": false
+}

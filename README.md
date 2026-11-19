@@ -1,6 +1,18 @@
 # DSRT: future-conditioned relational refinement for learned MD
 
-## Active experiment: predicted future relations vs current-only (2026-11-17)
+## Current focus: our propagator, following the completed control (2026-11-19)
+
+The Full / Current-Only training, endpoint tests and paired 20 ps NVE runs are
+complete. Their comparison does not demonstrate an overall benefit of predicted
+future geometry. Both retain a large internal-motion kinetic-energy error.
+[Results and limitations](reports/future_relation_control_20261117/RESULTS.md).
+
+Native TrajCast reference training was stopped on November 19, preserving its
+epoch-149 resumable state and epoch-145 validation-best checkpoint. It is not a
+completed native-protocol baseline. Method development will not wait for more
+reference training. [Research focus and stopping record](paper/RESEARCH_FOCUS_20261119.md).
+
+## Completed experiment: predicted future relations vs current-only (2026-11-17)
 
 This branch tests DSRT's central mechanism. Reuse the completed Full Water 6 Å
 model and train a Current-Only control from scratch for the same 250,000 updates.
@@ -12,11 +24,11 @@ heads, parameter count, proposal supervision and endpoint residual remain intact
 - [Machine-readable snapshot](reports/future_relation_control_20261117/snapshot.json)
 - [Control configuration](configs/water6_current_only_20261117.json)
 
-Training is running on GPU 0 (shared RTX PRO 6000 Blackwell). Full's existing
-training used shared L40S: optimization budgets match, hardware/wall time do not.
-No conclusion about the mechanism is available from the initial epoch. The
-pipeline follows training with validation multistep prediction, paired-initial
-20 ps NVE, independent physical analysis and same-GPU endpoint timing.
+Current-Only trained on shared RTX PRO 6000 Blackwell and Full on shared L40S:
+optimization budgets match, hardware/wall time do not. Both completed 250,000
+updates. The pipeline also completed validation multistep prediction, paired
+20 ps trajectories and endpoint timing. PE/total-energy analysis remains
+unverified; the service's failure status refers to that postprocessing gate.
 
 Server run: `/data1/wyd/research/foundation_mlip_adaptation/experiments/future_relation_control_20261117/current_only`.
 Logs: `train.log`, `history.jsonl`, `pipeline.log`, `pipeline_stages.txt`.
@@ -41,7 +53,7 @@ during inference. It first proposes the future atomic state from current
 periodic relations, converts that proposal into predicted future pair geometry,
 and uses the future-conditioned relations to refine the endpoint.
 
-The paper-stage method is frozen at R3-Opt. The active question is not whether
+Historical evaluations keep R3-Opt frozen. The research question is not whether
 a neural network can directly propagate MD—prior work already establishes
 that—but whether predicted future geometry is a useful conditioning signal for
 finite-time relational propagation and whether any gain survives long-time
@@ -78,8 +90,9 @@ of 0.946/0.950 within the 30 fs-resolvable band and 106.1 ns/day end-to-end on
 one L40S. Full numbers and limitations are in
 [`R3_OPT_PHYSICS_RESULTS.md`](reports/stable_geometry_optimization/R3_OPT_PHYSICS_RESULTS.md).
 
-These results do **not** yet establish that future geometry is necessary. That
-claim requires matched Current-Only and Ballistic-Geometry controls.
+These results do **not** establish that future geometry is necessary. The Water
+Current-Only control now supplies negative/mixed evidence for that hypothesis;
+further ablations are not scheduled automatically to preserve the old narrative.
 
 ## Water 5 fs result and diagnosis
 

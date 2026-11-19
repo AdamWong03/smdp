@@ -1,4 +1,19 @@
-# Active scope: future-relation mechanism control (2026-11-17)
+# Active priority: develop our method (2026-11-19)
+
+The user explicitly redirected work away from continued TrajCast reproduction.
+The native reference trainer has been stopped with best/last checkpoints kept.
+Do not restart it or schedule further reference runs automatically. The Full /
+Current-Only formal comparison is complete except for the disclosed energy
+verification. Its result does not establish an overall future-feedback benefit.
+
+The next primary deliverable is an implementable optimization of our neural
+state propagator, grounded in the shared molecular-motion error and prior
+negative results. Do not substitute another broad diagnostic campaign or a
+baseline completion milestone for that deliverable. No new architecture or
+training is represented as already implemented by this change of priority.
+See `paper/RESEARCH_FOCUS_20261119.md`. Preserve all existing artifacts.
+
+## Completed scope: future-relation mechanism control (2026-11-17)
 
 The user accepted the research decision and authorized autonomous execution.
 Follow `reports/future_relation_control_20261117/PROTOCOL.md`. Reuse the completed
