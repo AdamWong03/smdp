@@ -17,6 +17,8 @@ from trajcast.data.dataset import AtomicGraphDataset
 from phase_space_transition import PhaseSpaceTransition, train_normalization
 from relational_transition import (RelationalConfig, RelationalTransition,
                                    endpoint_loss_components, endpoint_objective)
+from selection_metrics import molecular_kinetic_partition, partition_relative_error
+from validation_rollout import build_rollout_starts, rollout_partition_error
 
 STOP = False
 
@@ -83,6 +85,16 @@ def gradient_groups(model):
     groups.update({f'proposal_block_{i}': block for i, block in enumerate(model.proposal_blocks)})
     groups.update({f'refinement_block_{i}': block for i, block in enumerate(model.refinement_blocks)})
     return groups
+
+
+def dataset_system(cfg):
+    """Physical system label used to gate the molecular partition proxy."""
+    name = str(cfg.get('dataset_name', '')).lower()
+    if 'water' in name:
+        return 'water'
+    if 'quartz' in name:
+        return 'quartz'
+    return None
 
 
 def is_phase_space(cfg):
@@ -166,14 +178,32 @@ def read_graphs(cache, split, cfg=None):
         torch.set_default_dtype(old)
     if len(graphs) != int(counts[split]):
         raise ValueError(f'Incomplete formal {split} dataset')
+    # Attach molecule identities for the physical-proxy selection metric.
+    # The cache itself does not carry them; the transition HDF5 does.  A
+    # missing file or key leaves the graphs unchanged and disables the proxy.
+    horizon = float(cfg.get('model', {}).get('horizon_fs', 0.0))
+    transition = (Path(cache).parent.parent / 'transitions'
+                  / f'{horizon:g}fs' / f'{split}.h5')
+    if transition.is_file():
+        import h5py
+        with h5py.File(transition, 'r') as handle:
+            if 'molecule_ids' in handle:
+                ids = torch.as_tensor(handle['molecule_ids'][:], dtype=torch.long)
+                if ids.numel() != len(graphs[0].pos):
+                    raise ValueError('molecule_ids length does not match atoms')
+                for graph in graphs:
+                    graph.molecule_ids = ids.clone()
     return graphs
 
 
 @torch.no_grad()
-def evaluate(model, loader, device, precision='fp32'):
+def evaluate(model, loader, device, precision='fp32', selection_cfg=None, system=None):
     model.eval()
     total = np.zeros(10, dtype=np.float64)
     count = 0
+    partition_pred = {k: 0.0 for k in ('translation', 'rotation', 'internal', 'total')}
+    partition_ref = {k: 0.0 for k in ('translation', 'rotation', 'internal', 'total')}
+    partition_count = 0
     for batch in loader:
         batch = batch.to(device, non_blocking=True)
         if hasattr(model, 'validate_graph'):
@@ -191,14 +221,87 @@ def evaluate(model, loader, device, precision='fp32'):
                            float(pieces['final_position']), float(pieces['final_velocity']),
                            float(pieces['proposal_position']), float(pieces['proposal_velocity'])])*n
         count += n
+        # One-step physical proxy: only for molecular systems whose cache
+        # carries molecule_ids.  Rollout modes compute the proxy separately in
+        # the training loop; one-step partition is almost perfect on reference
+        # states and is not used for rollout selection.
+        selection_mode = (selection_cfg or {}).get('mode', 'endpoint')
+        if (selection_cfg and selection_mode in ('endpoint_partition', 'partition')
+                and system == 'water'
+                and getattr(batch, 'molecule_ids', None) is not None):
+            for index in range(n):
+                mask = batch.batch == index
+                cell = batch.cell
+                if cell.ndim == 3:
+                    cell = cell[index]
+                elif cell.shape == (3, 3):
+                    cell = cell
+                elif cell.shape[0] == n*3:
+                    cell = cell.reshape(n, 3, 3)[index]
+                else:
+                    raise ValueError(f'unexpected batched cell shape {tuple(cell.shape)}')
+                masses = batch.atomic_masses[mask].reshape(-1)
+                molecules = batch.molecule_ids[mask]
+                reference_positions = batch.pos[mask] + batch.displacements[mask]
+                predicted = molecular_kinetic_partition(
+                    out['positions'][mask], out['velocities'][mask],
+                    masses, molecules, cell)
+                reference = molecular_kinetic_partition(
+                    reference_positions, batch.update_velocities[mask],
+                    masses, molecules, cell)
+                for name in partition_pred:
+                    partition_pred[name] += float(predicted[name])
+                    partition_ref[name] += float(reference[name])
+                partition_count += 1
+    if count == 0:
+        raise ValueError('empty evaluation loader')
     total /= count
-    return dict(samples=count, position_RMSE_A=float(np.sqrt(total[0])),
-                velocity_RMSE_A_fs=float(np.sqrt(total[1])), position_MAE_A=float(total[2]),
-                velocity_MAE_A_fs=float(total[3]), selection_loss=float(total[4]),
-                proposal_loss=float(total[5]), normalized_position_MSE=float(total[6]),
-                normalized_velocity_MSE=float(total[7]),
-                proposal_normalized_position_MSE=float(total[8]),
-                proposal_normalized_velocity_MSE=float(total[9]))
+    result = dict(samples=count, position_RMSE_A=float(np.sqrt(total[0])),
+                  velocity_RMSE_A_fs=float(np.sqrt(total[1])), position_MAE_A=float(total[2]),
+                  velocity_MAE_A_fs=float(total[3]), selection_loss=float(total[4]),
+                  endpoint_selection_loss=float(total[4]),
+                  proposal_loss=float(total[5]), normalized_position_MSE=float(total[6]),
+                  normalized_velocity_MSE=float(total[7]),
+                  proposal_normalized_position_MSE=float(total[8]),
+                  proposal_normalized_velocity_MSE=float(total[9]))
+    if partition_count:
+        pred = {k: v/partition_count for k, v in partition_pred.items()}
+        ref = {k: v/partition_count for k, v in partition_ref.items()}
+        components = tuple(selection_cfg.get('partition_components',
+                                             ('translation', 'rotation', 'internal')))
+        error = float(partition_relative_error(
+            {k: torch.tensor(v) for k, v in pred.items()},
+            {k: torch.tensor(v) for k, v in ref.items()}, components))
+        weight = float(selection_cfg.get('partition_weight', 0.0))
+        mode = selection_cfg.get('mode', 'endpoint')
+        if mode == 'endpoint':
+            selection = result['endpoint_selection_loss']
+        elif mode == 'partition':
+            selection = error
+        elif mode == 'endpoint_partition':
+            selection = result['endpoint_selection_loss'] + weight*error
+        elif mode in ('endpoint_rollout', 'rollout'):
+            # The rollout proxy is computed by the training loop, which has
+            # the model and the fixed validation starts.  Keep the endpoint
+            # value here as the fallback for --evaluate-best or logging.
+            selection = result['endpoint_selection_loss']
+        else:
+            raise ValueError(f'Unknown selection mode: {mode}')
+        result.update(selection_loss=float(selection),
+                      partition_selection_loss=error,
+                      partition_mode=mode,
+                      partition_weight=weight,
+                      partition_translation_pred_eV=pred['translation'],
+                      partition_translation_ref_eV=ref['translation'],
+                      partition_rotation_pred_eV=pred['rotation'],
+                      partition_rotation_ref_eV=ref['rotation'],
+                      partition_internal_pred_eV=pred['internal'],
+                      partition_internal_ref_eV=ref['internal'],
+                      partition_total_pred_eV=pred['total'],
+                      partition_total_ref_eV=ref['total'])
+    else:
+        result.update(partition_selection_loss=None, partition_mode=None)
+    return result
 
 
 def main():
@@ -235,6 +338,20 @@ def main():
         return DataLoader(graphs, batch_size=cfg['batch_size'], shuffle=shuffle,
                           num_workers=0, pin_memory=True, generator=generator if shuffle else None)
     train_loader, val_loader = loader(train, True), loader(val, False)
+    selection_cfg = cfg.get('selection') or {}
+    system = dataset_system(cfg)
+    rollout_starts = None
+    if selection_cfg.get('mode') in ('endpoint_rollout', 'rollout'):
+        if system != 'water':
+            raise ValueError('Rollout partition selection is defined for water only')
+        rollout_starts = build_rollout_starts(
+            Path(cfg['cache']), 'val', cfg,
+            steps=int(selection_cfg['rollout_steps']),
+            samples=int(selection_cfg['rollout_samples']),
+            seed=int(seed) + 17)
+        print(json.dumps(dict(event='rollout_selection_starts',
+                              samples=len(rollout_starts),
+                              steps=int(selection_cfg['rollout_steps']))), flush=True)
     diagnostic_batch = next(iter(loader(train[:cfg['batch_size']], False))).to(
         device, non_blocking=True)
     if hasattr(model, 'validate_graph'):
@@ -243,7 +360,8 @@ def main():
         saved = torch.load(args.run/'best.pt', map_location='cpu', weights_only=False)
         model.load_state_dict(saved['model'])
         test = read_graphs(Path(cfg['cache']), 'test', cfg)
-        result = evaluate(model, loader(test, False), device, cfg['precision'])
+        result = evaluate(model, loader(test, False), device, cfg['precision'],
+                          cfg.get('selection'), dataset_system(cfg))
         result.update(checkpoint=str(args.run/'best.pt'), selected_epoch=saved['epoch']+1,
                       selected_optimizer_steps=saved.get('optimizer_steps'),
                       stopped_epoch=json.loads((args.run/'status.json').read_text()).get('last_epoch'),
@@ -302,7 +420,22 @@ def main():
         if seen == 0:
             break
         torch.cuda.synchronize(); train_seconds=time.perf_counter()-tic
-        validation=evaluate(model,val_loader,device,cfg['precision'])
+        validation=evaluate(model,val_loader,device,cfg['precision'],
+                            cfg.get('selection'), dataset_system(cfg))
+        if rollout_starts is not None:
+            rollout = rollout_partition_error(
+                model, rollout_starts, device,
+                steps=int(selection_cfg['rollout_steps']),
+                components=tuple(selection_cfg.get(
+                    'partition_components', ('translation', 'rotation', 'internal'))))
+            validation.update(rollout)
+            weight = float(selection_cfg.get('partition_weight', 0.0))
+            if selection_cfg.get('mode') == 'endpoint_rollout':
+                validation['selection_loss'] = (
+                    validation['endpoint_selection_loss']
+                    + weight*rollout['rollout_partition_error'])
+            else:
+                validation['selection_loss'] = rollout['rollout_partition_error']
         score=validation['selection_loss']; improved=score<best
         if improved: best=score; stale=0
         else: stale+=1
@@ -343,7 +476,8 @@ def main():
     model.load_state_dict(saved['model'])
     # First test access occurs AFTER validation-only model selection is finished.
     test=read_graphs(Path(cfg['cache']),'test',cfg)
-    result=evaluate(model,loader(test,False),device,cfg['precision'])
+    result=evaluate(model,loader(test,False),device,cfg['precision'],
+                    cfg.get('selection'),dataset_system(cfg))
     result.update(checkpoint=str(args.run/'best.pt'),selected_epoch=saved['epoch']+1,
                   selected_optimizer_steps=saved.get('optimizer_steps'),
                   actual_training_seconds=previous_seconds+time.time()-start)
