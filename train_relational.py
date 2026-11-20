@@ -17,6 +17,7 @@ from trajcast.data.dataset import AtomicGraphDataset
 from phase_space_transition import PhaseSpaceTransition, train_normalization
 from relational_transition import (RelationalConfig, RelationalTransition,
                                    endpoint_loss_components, endpoint_objective)
+from motion_loss import motion_balanced_objective, train_mode_rms
 from selection_metrics import molecular_kinetic_partition, partition_relative_error
 from validation_rollout import build_rollout_starts, rollout_partition_error
 
@@ -118,14 +119,23 @@ def build_model(cfg, rms_targets, aggregation_scale=None):
 
 def train_statistics(cfg, graphs):
     """Normalization scalars with one explicit source: the full TRAIN split."""
+    motion = cfg.get('loss', {}).get('mode') == 'motion_balanced'
+    if motion and dataset_system(cfg) != 'water':
+        raise ValueError('motion-balanced loss is defined for molecular water only')
+    mode_rms = train_mode_rms(graphs) if motion else None
     if is_phase_space(cfg):
         stats = train_normalization(graphs, float(cfg['model']['cutoff_angstrom']))
+        if mode_rms is not None:
+            stats['mode_rms'] = mode_rms
         return (stats['rms_targets'][0], stats['rms_targets'][1],
                 stats['aggregation_scale'], stats)
     sq = torch.cat([g.displacements for g in graphs]).square().mean().sqrt().item()
     sv = torch.cat([g.update_velocities for g in graphs]).square().mean().sqrt().item()
-    return sq, sv, None, dict(rms_targets=[sq, sv], aggregation_scale=None,
-                              source='complete TRAIN split only')
+    stats = dict(rms_targets=[sq, sv], aggregation_scale=None,
+                 source='complete TRAIN split only')
+    if mode_rms is not None:
+        stats['mode_rms'] = mode_rms
+    return sq, sv, None, stats
 
 
 def training_diagnostics(model, batch, precision, proposal_weight):
@@ -197,10 +207,14 @@ def read_graphs(cache, split, cfg=None):
 
 
 @torch.no_grad()
-def evaluate(model, loader, device, precision='fp32', selection_cfg=None, system=None):
+def evaluate(model, loader, device, precision='fp32', selection_cfg=None, system=None,
+             loss_cfg=None, mode_rms=None, proposal_weight=0.02):
     model.eval()
     total = np.zeros(10, dtype=np.float64)
     count = 0
+    motion_final = 0.0
+    mode_sums = {k: 0.0 for k in ('translation', 'rotation', 'internal')}
+    motion_loss = bool(loss_cfg and loss_cfg.get('mode') == 'motion_balanced')
     partition_pred = {k: 0.0 for k in ('translation', 'rotation', 'internal', 'total')}
     partition_ref = {k: 0.0 for k in ('translation', 'rotation', 'internal', 'total')}
     partition_count = 0
@@ -213,19 +227,37 @@ def evaluate(model, loader, device, precision='fp32', selection_cfg=None, system
             out = model(batch)
             qe = out['displacements']-batch.displacements
             ve = out['velocities']-batch.update_velocities
-            loss, pieces = endpoint_objective(model, out, batch.displacements, batch.update_velocities)
+            endpoint_loss, endpoint_pieces = endpoint_objective(
+                model, out, batch.displacements, batch.update_velocities)
+            if motion_loss:
+                loss, pieces = motion_balanced_objective(
+                    model, out, batch, mode_rms,
+                    velocity_weights=(loss_cfg or {}).get('velocity_weights'),
+                    position_weight=float((loss_cfg or {}).get('position_weight', 1.0)),
+                    proposal_weight=proposal_weight)
+            else:
+                loss, pieces = endpoint_loss, endpoint_pieces
         n = batch.num_graphs
+        # Endpoint metrics stay comparable across loss variants; the training
+        # loss pieces are accumulated separately below.
         total += np.array([float(qe.square().mean()), float(ve.square().mean()),
                            float(qe.abs().mean()), float(ve.abs().mean()),
-                           float(pieces['final']), float(pieces['proposal']),
-                           float(pieces['final_position']), float(pieces['final_velocity']),
-                           float(pieces['proposal_position']), float(pieces['proposal_velocity'])])*n
+                           float(endpoint_pieces['final']), float(endpoint_pieces['proposal']),
+                           float(endpoint_pieces['final_position']),
+                           float(endpoint_pieces['final_velocity']),
+                           float(endpoint_pieces['proposal_position']),
+                           float(endpoint_pieces['proposal_velocity'])])*n
+        if motion_loss:
+            motion_final += float(pieces['final'])*n
+            for key in mode_sums:
+                mode_sums[key] += float(pieces[f'mode_{key}'])*n
         count += n
         # One-step physical proxy: only for molecular systems whose cache
         # carries molecule_ids.  Rollout modes compute the proxy separately in
         # the training loop; one-step partition is almost perfect on reference
         # states and is not used for rollout selection.
-        selection_mode = (selection_cfg or {}).get('mode', 'endpoint')
+        selection_mode = (selection_cfg or {}).get(
+            'mode', 'loss' if motion_loss else 'endpoint')
         if (selection_cfg and selection_mode in ('endpoint_partition', 'partition')
                 and system == 'water'
                 and getattr(batch, 'molecule_ids', None) is not None):
@@ -256,14 +288,24 @@ def evaluate(model, loader, device, precision='fp32', selection_cfg=None, system
     if count == 0:
         raise ValueError('empty evaluation loader')
     total /= count
+    selection_loss = (motion_final/count) if motion_loss else float(total[4])
     result = dict(samples=count, position_RMSE_A=float(np.sqrt(total[0])),
                   velocity_RMSE_A_fs=float(np.sqrt(total[1])), position_MAE_A=float(total[2]),
-                  velocity_MAE_A_fs=float(total[3]), selection_loss=float(total[4]),
+                  velocity_MAE_A_fs=float(total[3]), selection_loss=float(selection_loss),
                   endpoint_selection_loss=float(total[4]),
+                  motion_selection_loss=(float(motion_final/count) if motion_loss else None),
+                  mode_translation_loss=(float(mode_sums['translation']/count) if motion_loss else None),
+                  mode_rotation_loss=(float(mode_sums['rotation']/count) if motion_loss else None),
+                  mode_internal_loss=(float(mode_sums['internal']/count) if motion_loss else None),
                   proposal_loss=float(total[5]), normalized_position_MSE=float(total[6]),
                   normalized_velocity_MSE=float(total[7]),
                   proposal_normalized_position_MSE=float(total[8]),
                   proposal_normalized_velocity_MSE=float(total[9]))
+    # E1 isolates the training loss: both arms select on the same endpoint
+    # metric.  Without this, a motion-balanced training loss would silently
+    # become the selection metric even when selection.mode == "endpoint".
+    if selection_cfg and selection_cfg.get('mode') == 'endpoint':
+        result['selection_loss'] = result['endpoint_selection_loss']
     if partition_count:
         pred = {k: v/partition_count for k, v in partition_pred.items()}
         ref = {k: v/partition_count for k, v in partition_ref.items()}
@@ -273,18 +315,18 @@ def evaluate(model, loader, device, precision='fp32', selection_cfg=None, system
             {k: torch.tensor(v) for k, v in pred.items()},
             {k: torch.tensor(v) for k, v in ref.items()}, components))
         weight = float(selection_cfg.get('partition_weight', 0.0))
-        mode = selection_cfg.get('mode', 'endpoint')
-        if mode == 'endpoint':
-            selection = result['endpoint_selection_loss']
+        mode = selection_cfg.get('mode', 'loss' if motion_loss else 'endpoint')
+        if mode in ('endpoint', 'loss'):
+            selection = result['selection_loss']
         elif mode == 'partition':
             selection = error
         elif mode == 'endpoint_partition':
             selection = result['endpoint_selection_loss'] + weight*error
         elif mode in ('endpoint_rollout', 'rollout'):
             # The rollout proxy is computed by the training loop, which has
-            # the model and the fixed validation starts.  Keep the endpoint
-            # value here as the fallback for --evaluate-best or logging.
-            selection = result['endpoint_selection_loss']
+            # the model and the fixed validation starts.  Keep the selection
+            # loss as the fallback for --evaluate-best or logging.
+            selection = result['selection_loss']
         else:
             raise ValueError(f'Unknown selection mode: {mode}')
         result.update(selection_loss=float(selection),
@@ -339,7 +381,11 @@ def main():
                           num_workers=0, pin_memory=True, generator=generator if shuffle else None)
     train_loader, val_loader = loader(train, True), loader(val, False)
     selection_cfg = cfg.get('selection') or {}
+    loss_cfg = cfg.get('loss') or {}
+    motion_loss = loss_cfg.get('mode') == 'motion_balanced'
     system = dataset_system(cfg)
+    if motion_loss and system != 'water':
+        raise ValueError('motion-balanced loss is defined for molecular water only')
     rollout_starts = None
     if selection_cfg.get('mode') in ('endpoint_rollout', 'rollout'):
         if system != 'water':
@@ -361,7 +407,10 @@ def main():
         model.load_state_dict(saved['model'])
         test = read_graphs(Path(cfg['cache']), 'test', cfg)
         result = evaluate(model, loader(test, False), device, cfg['precision'],
-                          cfg.get('selection'), dataset_system(cfg))
+                          cfg.get('selection'), dataset_system(cfg),
+                          loss_cfg=loss_cfg,
+                          mode_rms=cfg.get('normalization', {}).get('mode_rms'),
+                          proposal_weight=cfg['proposal_weight'])
         result.update(checkpoint=str(args.run/'best.pt'), selected_epoch=saved['epoch']+1,
                       selected_optimizer_steps=saved.get('optimizer_steps'),
                       stopped_epoch=json.loads((args.run/'status.json').read_text()).get('last_epoch'),
@@ -405,8 +454,15 @@ def main():
             with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
                                 enabled=cfg['precision'] == 'bf16'):
                 out=model(batch)
-                loss, pieces=endpoint_objective(model,out,batch.displacements,batch.update_velocities,
-                                                proposal_weight=cfg['proposal_weight'])
+                if motion_loss:
+                    loss, pieces = motion_balanced_objective(
+                        model, out, batch, cfg['normalization']['mode_rms'],
+                        velocity_weights=loss_cfg.get('velocity_weights'),
+                        position_weight=float(loss_cfg.get('position_weight', 1.0)),
+                        proposal_weight=cfg['proposal_weight'])
+                else:
+                    loss, pieces=endpoint_objective(model,out,batch.displacements,batch.update_velocities,
+                                                    proposal_weight=cfg['proposal_weight'])
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(),cfg['gradient_clip'],error_if_nonfinite=True)
             optimizer.step()
@@ -421,7 +477,10 @@ def main():
             break
         torch.cuda.synchronize(); train_seconds=time.perf_counter()-tic
         validation=evaluate(model,val_loader,device,cfg['precision'],
-                            cfg.get('selection'), dataset_system(cfg))
+                            cfg.get('selection'), dataset_system(cfg),
+                            loss_cfg=loss_cfg,
+                            mode_rms=cfg.get('normalization', {}).get('mode_rms'),
+                            proposal_weight=cfg['proposal_weight'])
         if rollout_starts is not None:
             rollout = rollout_partition_error(
                 model, rollout_starts, device,
@@ -477,7 +536,10 @@ def main():
     # First test access occurs AFTER validation-only model selection is finished.
     test=read_graphs(Path(cfg['cache']),'test',cfg)
     result=evaluate(model,loader(test,False),device,cfg['precision'],
-                    cfg.get('selection'),dataset_system(cfg))
+                    cfg.get('selection'),dataset_system(cfg),
+                    loss_cfg=loss_cfg,
+                    mode_rms=cfg.get('normalization', {}).get('mode_rms'),
+                    proposal_weight=cfg['proposal_weight'])
     result.update(checkpoint=str(args.run/'best.pt'),selected_epoch=saved['epoch']+1,
                   selected_optimizer_steps=saved.get('optimizer_steps'),
                   actual_training_seconds=previous_seconds+time.time()-start)
