@@ -2,8 +2,12 @@
 
 Started 2026-11-20 02:12 CST. Two independent 250,000-update runs of the
 3,036,224-parameter `phase_space_operator_v0` from random initialization. This
-is the first formal training of the design prototype. No test split, checkpoint
-selection or physical evaluation has been completed yet.
+is the first formal training of the design prototype. No test split was used
+for checkpoint selection.
+
+**Status 10:22 CST:** Quartz completed all 400 epochs and its pipeline finished
+successfully; results are in [QUARTZ_RESULTS.md](QUARTZ_RESULTS.md). Water is
+still training (epoch 214/400 at 10:19).
 
 ## Runs
 
@@ -23,14 +27,18 @@ gradient clip 10, and validation-only model selection (`selection_loss`). The
 TRAIN-only normalization is stored in `metadata.json` and in every checkpoint
 config. Test split is read only after validation selection ends.
 
-## First recorded epochs
+## Latest recorded epochs
 
-Snapshot 2026-11-20 02:15 CST; these are early optimization values, not results.
+Snapshot 2026-11-20 10:19-10:22 CST. These are optimization values, not physical
+results. Quartz has completed; Water continues.
 
-| Run | Epoch | Train seconds | Samples/s | Peak CUDA | Val position RMSE | Val velocity RMSE | Selection loss |
+| Run | Epoch | Optimizer steps | Epoch seconds | Peak CUDA | Val position RMSE | Val velocity RMSE | Selection loss |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Water | 1 | 133.4 | 37.5 | 4.18 GB | 0.026258 Å | 0.006482 Å/fs | 0.2364 |
-| Quartz | 3 | 48.8 | 102.5 | 1.51 GB | 0.007761 Å | 0.000669 Å/fs | 0.0231 |
+| Water | 214 | 133,750 | 147.5 | 4.18 GB | 0.000537 Å | 0.000183 Å/fs | 1.47e-4 |
+| Quartz | 400 | 250,000 | 49.1 | 1.51 GB | 0.001852 Å | 0.000127 Å/fs | 9.57e-4 |
+
+Quartz selected epoch 396 for test evaluation. Water ETA under current shared
+load is roughly 18:00 CST.
 
 ## Monitoring
 

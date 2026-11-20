@@ -233,15 +233,56 @@ def analysis_command(spec, trajectory, reference, output):
             '--reference', reference, '--output', output, '--tasks', *tasks]
 
 
-def failed_analysis_tasks(directory, style):
+def requested_tasks(spec):
+    return set(spec.get('tasks', 'thermo rdf energy vdos_macro').split())
+
+
+def failed_analysis_tasks(directory, style, requested):
+    directory = Path(directory)
     if style == 'water':
-        status = read_json(Path(directory)/'status.json') or {}
-        task_status = status.get('task_status') or {}
+        path = directory/'status.json'
     else:
-        metrics = read_json(Path(directory)/'metrics.json') or {}
-        task_status = metrics.get('task_status') or {}
-    return {key: value.get('failure_reason') for key, value in task_status.items()
-            if not value.get('completed')}
+        path = directory/'metrics.json'
+    value = read_json(path) or {}
+    task_status = value.get('task_status') or {}
+    failed = {}
+    for key in requested:
+        row = task_status.get(key)
+        if row is None:
+            failed[key] = 'missing'
+        elif not row.get('completed'):
+            failed[key] = row.get('failure_reason') or 'incomplete'
+    return failed, path.is_file()
+
+
+def add_failure(failures, stage_name, reason):
+    item = dict(stage=stage_name, reason=reason)
+    if item not in failures:
+        failures.append(item)
+
+
+def run_analysis(run, data, spec, trajectory, out, failures):
+    analysis = out/'analysis'
+    marker = analysis/'.pipeline_attempted'
+    if not marker.is_file():
+        analysis.mkdir(parents=True, exist_ok=True)
+        stage(run, f"{spec['name']}_analysis")
+        code = run_command(analysis_command(
+            spec, trajectory, data/spec['analysis_reference'], analysis),
+            out/'analysis.log')
+        marker.write_text(f'{now()} exit={code}\n')
+        if code:
+            add_failure(failures, f"{spec['name']}_analysis", f'exit {code}')
+    failed, present = failed_analysis_tasks(analysis, spec['analysis'],
+                                            requested_tasks(spec))
+    if not present:
+        add_failure(failures, f"{spec['name']}_analysis", 'analysis outputs missing')
+        stage(run, f"{spec['name']}_analysis", 'incomplete')
+    elif failed:
+        add_failure(failures, f"{spec['name']}_analysis", failed)
+        stage(run, f"{spec['name']}_analysis", 'incomplete')
+    else:
+        stage(run, f"{spec['name']}_analysis", 'completed')
 
 
 def nve_stage(run, data, spec, checkpoint, device, failures):
@@ -263,30 +304,15 @@ def nve_stage(run, data, spec, checkpoint, device, failures):
                                 'checkpoint; shared GPU; no checkpoint selection'],
             out/'rollout.log')
         if code or not summary.is_file():
-            failures.append(dict(stage=spec['name'], reason=f'exit {code}'))
+            add_failure(failures, spec['name'], f'exit {code}')
             stage(run, spec['name'], 'failed')
             return out
         stage(run, spec['name'], 'completed')
     result = read_json(summary) or {}
     if not result.get('stable'):
-        failures.append(dict(stage=spec['name'],
-                             reason=result.get('failure_reason') or 'unstable'))
-    marker = out/'analysis'/'.pipeline_attempted'
-    if not marker.is_file():
-        analysis = out/'analysis'
-        analysis.mkdir(parents=True, exist_ok=True)
-        stage(run, f"{spec['name']}_analysis")
-        code = run_command(analysis_command(
-            spec, trajectory, data/spec['analysis_reference'], analysis),
-            out/'analysis.log')
-        marker.write_text(f'{now()} exit={code}\n')
-        failed_tasks = failed_analysis_tasks(analysis, spec['analysis'])
-        if code or failed_tasks:
-            failures.append(dict(stage=f"{spec['name']}_analysis",
-                                 reason=failed_tasks or f'exit {code}'))
-            stage(run, f"{spec['name']}_analysis", 'incomplete')
-        else:
-            stage(run, f"{spec['name']}_analysis", 'completed')
+        add_failure(failures, spec['name'],
+                    result.get('failure_reason') or 'unstable')
+    run_analysis(run, data, spec, trajectory, out, failures)
     return out
 
 
@@ -312,30 +338,15 @@ def nvt_stage(run, data, spec, checkpoint, device, failures):
                                 'checkpoint; shared GPU; no checkpoint selection'],
             out/'rollout.log')
         if code or not summary.is_file():
-            failures.append(dict(stage=spec['name'], reason=f'exit {code}'))
+            add_failure(failures, spec['name'], f'exit {code}')
             stage(run, spec['name'], 'failed')
             return out
         stage(run, spec['name'], 'completed')
     result = read_json(summary) or {}
     if not result.get('stable'):
-        failures.append(dict(stage=spec['name'],
-                             reason=result.get('failure_reason') or 'unstable'))
-    marker = out/'analysis'/'.pipeline_attempted'
-    if not marker.is_file():
-        analysis = out/'analysis'
-        analysis.mkdir(parents=True, exist_ok=True)
-        stage(run, f"{spec['name']}_analysis")
-        code = run_command(analysis_command(
-            spec, trajectory, data/spec['analysis_reference'], analysis),
-            out/'analysis.log')
-        marker.write_text(f'{now()} exit={code}\n')
-        failed_tasks = failed_analysis_tasks(analysis, spec['analysis'])
-        if code or failed_tasks:
-            failures.append(dict(stage=f"{spec['name']}_analysis",
-                                 reason=failed_tasks or f'exit {code}'))
-            stage(run, f"{spec['name']}_analysis", 'incomplete')
-        else:
-            stage(run, f"{spec['name']}_analysis", 'completed')
+        add_failure(failures, spec['name'],
+                    result.get('failure_reason') or 'unstable')
+    run_analysis(run, data, spec, trajectory, out, failures)
     return out
 
 
@@ -529,7 +540,10 @@ def write_markdown(summary, path):
         for horizon, row in baseline_ms['horizons'].items():
             lines.append(f"| {horizon} | {fmt(row.get('position_RMSE_A'))} "
                          f"| {fmt(row.get('velocity_RMSE_A_fs'))} |")
-    lines += ['', '## NVE physics', '']
+    lines += ['', '## NVE physics', '',
+              '_ns/day is reported by the producing run under its own shared-GPU '
+              'load and is not comparable across runs; use the same-device '
+              'benchmark for cost._', '']
     records = [(name, value) for name, value in summary['nve'].items()]
     for baseline in summary['baselines']:
         records += [(f"{baseline['name']}/{name}", value)
