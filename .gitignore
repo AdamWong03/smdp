@@ -35,3 +35,6 @@ tensorboard/
 !reports/smdpr/results/**/*.json
 !reports/smdpr/results/**/*.csv
 !reports/smdpr/results/**/*.png
+
+# research snapshot JSON/PDF sources
+!research/**/*.json
