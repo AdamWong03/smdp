@@ -1,0 +1,27 @@
+% Table 3 — Backbone-agnostic test: v0 phase-space vs 250k relational.
+\begin{table}[t]
+\centering
+\small
+\caption{The same GLR coefficients applied to two different frozen backbones. The v0 phase-space
+operator fails the NVT screen without the readout; with the GLR it becomes stable and partitioned,
+with structure and VDOS comparable to the 250k relational backbone. All rows are 100 ps;
+the reference partition is the 2.5 ns mean.}
+\label{tab:backbones}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Backbone & Readout & Partition (eV) & O--O / O--H / H--H RDF & H / O VDOS \\
+\midrule
+250k relational (2.36M) & none & 0.538 / 0.786 / 6.044 & 0.646 / 1.312 / 0.249 & 0.406 / 0.487 \\
+250k relational (2.36M) & GLR & 2.482 / 2.526 / 2.399 & 0.032 / 0.104 / 0.026 & 0.848 / 0.964 \\
+v0 phase-space (3.04M) & none & 0.111 / 0.808 / 6.338 & 0.944 / 1.409 / 0.229 & 0.356 / 0.236 \\
+v0 phase-space (3.04M) & GLR & 2.482 / 2.529 / 2.396 & 0.042 / 0.109 / 0.019 & 0.855 / 0.969 \\
+\bottomrule
+\end{tabular}}
+\vspace{2pt}
+\begin{flushleft}
+\footnotesize
+v0 + GLR independent start: partition 2.482/2.527/2.398 eV; RDF 0.050/0.131/0.023;
+H/O VDOS 0.857/0.977. The rescue is not specific to val\_04.
+\end{flushleft}
+\end{table}

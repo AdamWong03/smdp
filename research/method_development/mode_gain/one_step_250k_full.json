@@ -1,0 +1,34 @@
+{
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+  "split": "val",
+  "graphs": 1250,
+  "modes": {
+    "translation": {
+      "alpha_ref": 0.9813279417577006,
+      "alpha_pred": 0.9815430485680239,
+      "ke_ref_eV": 2843.423065821853,
+      "ke_pred_eV": 2844.661154582227,
+      "variance_ratio": 1.0004354219304386,
+      "residual_norm_per_graph": 9.362454699026879e-06,
+      "residual_norm_ratio": 0.00021328825493688438
+    },
+    "rotation": {
+      "alpha_ref": 0.8370925857302962,
+      "alpha_pred": 0.8367994427435789,
+      "ke_ref_eV": 2469.7446437851277,
+      "ke_pred_eV": 2467.706109963248,
+      "variance_ratio": 0.9991745973305339,
+      "residual_norm_per_graph": 7.828832463439996e-06,
+      "residual_norm_ratio": 0.000205335311211237
+    },
+    "internal": {
+      "alpha_ref": -0.39310362818280936,
+      "alpha_pred": -0.3931369637230027,
+      "ke_ref_eV": 3236.142094457095,
+      "ke_pred_eV": 3235.2600407899477,
+      "variance_ratio": 0.9997274366695276,
+      "residual_norm_per_graph": 6.318639841132849e-06,
+      "residual_norm_ratio": 0.0001264779193792721
+    }
+  }
+}

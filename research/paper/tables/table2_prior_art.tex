@@ -1,0 +1,28 @@
+% Table 2 — Conceptual comparison with the closest prior art.
+\begin{table}[t]
+\centering
+\small
+\caption{What the GLR controls compared with the closest prior art. The distinction is the
+object (a readout on a frozen force-free propagator) and the target (the canonical mean mode/group
+kinetic partition, with a stochastic marginal option, plus the multi-lag velocity ACF), not the
+use of a memory kernel per se.}
+\label{tab:prior}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}p{2.1cm}p{3.1cm}p{4.0cm}p{3.6cm}@{}}
+\toprule
+Approach & Object & What is controlled or learned & Evidence \\
+\midrule
+TrajCast & force-free propagator + global CSVR & one-step displacement/velocity; total
+temperature & water RDF/VDOS/diffusion \\
+Bigi--Ceriotti & deterministic structure-preserving map & symplectic/time-reversible structure;
+energy/equipartition & water, GeTe, Ar, Al \\
+MAMD & LSTM velocity update & stability via periodic learned velocity injection & several MD
+systems \\
+GLE thermostat & memory kernel + colored noise in an integrator & FD stationary distribution of
+the integrator & generic MD \\
+\textbf{GLR} & \textbf{readout on a frozen force-free propagator} & \textbf{mean mode kinetic
+partition (+ stochastic marginal) + multi-lag velocity ACF} & \textbf{water NVT, two 2.5 ns
+starts; quartz 5 fs, two seeds} \\
+\bottomrule
+\end{tabular}}
+\end{table}

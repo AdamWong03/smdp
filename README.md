@@ -1,5 +1,16 @@
 # DSRT: future-conditioned relational refinement for learned MD
 
+> **Status 2026-11-24 — research reset; no submission claim.** The 1 fs backbone trained
+> (test position RMSE \(3.16\times10^{-5}\) Å, velocity RMSE \(4.58\times10^{-5}\) Å/fs).
+> The frozen-backbone + post-hoc GLR/Langevin integrator family failed the water hard gate at
+> both 5 fs and 1 fs: no configuration simultaneously matched the mode partition, RDF/VDOS,
+> and transport. The paper is **not submittable** as a method paper. The remaining decision is
+> end-to-end training with the integrator in the loop vs stopping/pivoting.
+>
+> Project state and paper snapshot: `research/RESEARCH_CONTRACT.md`, `research/RESEARCH.md`,
+> `research/paper/CLAIM_BOUNDARY.md`, `research/paper/latex/main_clean.pdf`.
+> This branch contains the GLR/1 fs experiment code and the research records.
+
 ## Current work: executable operator design (2026-11-20)
 
 A new design prototype keeps wide `0e + 1o + 2e` node states, transports narrow
@@ -15,12 +26,11 @@ FP32 TRAIN-batch checks for Quartz and Water. It is wired into the production
 trainer, checkpoint loader and diagnostics path behind the explicit
 `phase_space_operator_v0` architecture switch, with TRAIN-only normalization
 frozen into checkpoint configs. Two formal 250k-update runs (Water 5 fs and
-Quartz 30 fs, random initialization) are **running since 2026-11-20**; no test,
-selected checkpoint or physical result exists yet.
-[Live status](reports/phase_space_training_20261120/STATUS.md). Post-training
-evaluation is queued as `dsrt-phase-*-pipeline-20261120`: it waits for the
-selected checkpoint, then runs validation/test multistep, NVE, offline physical
-analysis and a frozen-baseline comparison.
+Quartz 30 fs, random initialization) **completed on 2026-11-22**. Test metrics:
+water position MAE \(4.9\times10^{-4}\) Å, quartz \(1.9\times10^{-3}\) Å. The raw
+water v0 NVT still fails long-time dynamics (VDOS 0.356/0.236, \(D=2.8\times10^{-13}\)
+m²/s); the paper's method is the frozen-backbone + GLR readout, not the raw network.
+[Training status](reports/phase_space_training_20261120/STATUS.md).
 
 Same-device FP32 cost (one L40S, batch 8, shared load): the training step is
 +15% (Water) and +65% (Quartz) versus frozen DSRT; peak training memory falls

@@ -1,0 +1,161 @@
+{
+  "label": "published_trajcast",
+  "trajectory": "/data2/wyd/research/foundation_mlip_adaptation/experiments/nvt_screen_published_trajcast_20261121/trajectory.h5",
+  "start": 0,
+  "stop": 30000,
+  "stride": 1,
+  "dt_fs": 5.0,
+  "frames": 30000,
+  "windows": [
+    {
+      "window_ps": [
+        0.0,
+        10.0
+      ],
+      "translation_eV": 2.522480791898594,
+      "rotation_eV": 2.4620146142405974,
+      "internal_eV": 2.514761427409629,
+      "total_eV": 7.49925683354882
+    },
+    {
+      "window_ps": [
+        10.0,
+        20.0
+      ],
+      "translation_eV": 2.5837916827862197,
+      "rotation_eV": 2.4888383883010654,
+      "internal_eV": 2.36812786856031,
+      "total_eV": 7.440757939647595
+    },
+    {
+      "window_ps": [
+        20.0,
+        30.0
+      ],
+      "translation_eV": 2.508017400055518,
+      "rotation_eV": 2.427679039917896,
+      "internal_eV": 2.4382023419724317,
+      "total_eV": 7.3738987819458455
+    },
+    {
+      "window_ps": [
+        30.0,
+        40.0
+      ],
+      "translation_eV": 2.678441785833003,
+      "rotation_eV": 2.5544180491255895,
+      "internal_eV": 2.237866094305084,
+      "total_eV": 7.4707259292636765
+    },
+    {
+      "window_ps": [
+        40.0,
+        50.0
+      ],
+      "translation_eV": 2.5019558085978844,
+      "rotation_eV": 2.5213673171594495,
+      "internal_eV": 2.405109558903793,
+      "total_eV": 7.428432684661127
+    },
+    {
+      "window_ps": [
+        50.0,
+        60.0
+      ],
+      "translation_eV": 2.4567006993892573,
+      "rotation_eV": 2.4383204940580647,
+      "internal_eV": 2.523502306533297,
+      "total_eV": 7.418523499980619
+    },
+    {
+      "window_ps": [
+        60.0,
+        70.0
+      ],
+      "translation_eV": 2.533909856279118,
+      "rotation_eV": 2.513253005956398,
+      "internal_eV": 2.3950887055636882,
+      "total_eV": 7.442251567799204
+    },
+    {
+      "window_ps": [
+        70.0,
+        80.0
+      ],
+      "translation_eV": 2.600241156377748,
+      "rotation_eV": 2.5319274456947505,
+      "internal_eV": 2.318257937805409,
+      "total_eV": 7.450426539877908
+    },
+    {
+      "window_ps": [
+        80.0,
+        90.0
+      ],
+      "translation_eV": 2.3829844995463554,
+      "rotation_eV": 2.440592277875279,
+      "internal_eV": 2.6787859149791524,
+      "total_eV": 7.502362692400787
+    },
+    {
+      "window_ps": [
+        90.0,
+        100.0
+      ],
+      "translation_eV": 2.446420621239752,
+      "rotation_eV": 2.5103074525326927,
+      "internal_eV": 2.423108227373683,
+      "total_eV": 7.379836301146128
+    },
+    {
+      "window_ps": [
+        100.0,
+        110.0
+      ],
+      "translation_eV": 2.5166819348766336,
+      "rotation_eV": 2.463004346765267,
+      "internal_eV": 2.417019324702947,
+      "total_eV": 7.396705606344847
+    },
+    {
+      "window_ps": [
+        110.0,
+        120.0
+      ],
+      "translation_eV": 2.5306239062323885,
+      "rotation_eV": 2.425228358059953,
+      "internal_eV": 2.429034762383881,
+      "total_eV": 7.384887026676223
+    },
+    {
+      "window_ps": [
+        120.0,
+        130.0
+      ],
+      "translation_eV": 2.5008880487193053,
+      "rotation_eV": 2.4439771929742307,
+      "internal_eV": 2.404985262010006,
+      "total_eV": 7.349850503703542
+    },
+    {
+      "window_ps": [
+        130.0,
+        140.0
+      ],
+      "translation_eV": 2.5593035918296514,
+      "rotation_eV": 2.461792526968292,
+      "internal_eV": 2.377076665916315,
+      "total_eV": 7.398172784714259
+    },
+    {
+      "window_ps": [
+        140.0,
+        150.0
+      ],
+      "translation_eV": 2.539872089418005,
+      "rotation_eV": 2.4566519186778324,
+      "internal_eV": 2.40936863251048,
+      "total_eV": 7.405892640606318
+    }
+  ]
+}

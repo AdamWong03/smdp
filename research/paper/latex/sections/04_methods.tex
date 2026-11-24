@@ -1,0 +1,184 @@
+\section{Methods}
+
+\subsection{Reference data and force-free backbone}
+
+We use the flexible SPC/Fw water model \citep{spcfw} with 64 molecules (192 atoms) in a periodic
+cubic cell. The NVE training data, the NVT reference, and the independent NVT trajectory are
+described in the main text. The reference NVT trajectory is 2.5 ns at 300 K with a CSVR
+thermostat \citep{csvr}, a 50 fs thermostat damping time, and a 0.5 fs saving interval; the
+readout is fitted on a 100 ps block starting at 500 ps (20,000 frames at a 5 fs stride). The fit
+uses only the mode velocity ACF. The RDF, VDOS, and diffusion are not used to fit any readout
+parameter and are held out as evaluation observables. As a block-sensitivity check, we refitted
+the AR(10) coefficients on the 0--100 ps block: the coefficients agree with the 500--600 ps fit
+to \(r=0.999\) (maximum coefficient difference 0.08), with prediction-error ratios
+0.0044/0.058/0.107 versus 0.0042/0.058/0.115 for translation/rotation/internal motion. The fit is
+therefore not sensitive to the choice of reference block. The
+independent NVT trajectory uses a different initial condition and seed: 100 ps of thermalization
+followed by 500 ps of production at 300 K, with the first production frame at 301.8 K. The
+reference data are read-only; no reference force is used during propagation.
+
+The backbone is a relational equivariant message-passing network with a 6 \AA{} cutoff,
+192 scalar channels, 48 vector channels, 96 edge channels, 16 radial channels, and a 5 fs
+horizon. It is trained on 5 fs pairs from the NVE trajectories (5,000 training, 1,250 validation,
+and 1,000 test graphs) by minimizing a normalized endpoint position and velocity loss, with batch
+size 8, a learning rate of \(3\times10^{-4}\), warmup--cosine scheduling, gradient clipping at 10,
+and 250,000 optimizer steps. The selected checkpoint is epoch 398 (2,357,616 parameters). The
+published TrajCast water checkpoint \citep{trajcast} has 2,258,856 parameters, uses the native e3nn
+backend \citep{e3nn} and a 5 fs horizon, and is evaluated under the same 100 ps protocol with its
+native CSVR thermostat. In the GLR experiments the backbone is frozen: no backbone parameter is updated, and
+the readout is fitted separately.
+
+\subsection{Mode decomposition}
+
+For each molecule \(m\), let \(M_m=\sum_{i\in m}m_i\), \(R_m=M_m^{-1}\sum_{i\in m}m_i r_i\), and
+\(V_m=M_m^{-1}\sum_{i\in m}m_i v_i\). With \(r_{mi}=r_i-R_m\) (minimum image) and
+\(v_{mi}=v_i-V_m\), the angular velocity is
+\begin{equation}
+\omega_m=I_m^{-1}\sum_{i\in m}m_i\,r_{mi}\times v_{mi},\qquad
+I_m=\sum_{i\in m}m_i\left(|r_{mi}|^2\mathbf 1-r_{mi}r_{mi}^{\mathsf T}\right),
+\end{equation}
+using a pseudo-inverse for linear molecules. The three mass-weighted modes are
+\begin{equation}
+v_i^{\rm trans}=V_m,\qquad
+v_i^{\rm rot}=\omega_m\times r_{mi},\qquad
+v_i^{\rm int}=v_{mi}-v_i^{\rm rot}.
+\end{equation}
+They are orthogonal under the mass-weighted inner product, so
+\(K=\sum_a K_a\) with \(K_a=\tfrac12\sum_i m_i|v_i^a|^2\). The mode degrees of freedom are
+\(N_{\rm trans}=3N_{\rm mol}-3\), \(N_{\rm rot}=3N_{\rm mol}\), and
+\(N_{\rm int}=3N_{\rm atom}-6N_{\rm mol}\).
+
+\subsection{Mode-resolved AR($p$) readout}
+
+For each mode \(a\), the reference velocity autocorrelation is
+\begin{equation}
+\alpha_a(\ell)=\frac{\sum_i m_i\langle v_i^a(t)\cdot v_i^a(t+\ell\Delta t)\rangle}
+{\sum_i m_i\langle |v_i^a(t)|^2\rangle}.
+\end{equation}
+We fit an AR(\(p\)) process by Yule--Walker,
+\begin{equation}
+v^a(t)=\sum_{k=1}^{p}c_k^a v^a(t-k\Delta t)+\varepsilon^a(t),\qquad
+\mathbf R_a\mathbf c_a=\mathbf r_a,
+\end{equation}
+where \((\mathbf R_a)_{ij}=\alpha_a(|i-j|)\) and \((\mathbf r_a)_k=\alpha_a(k)\). The
+prediction-error ratio is
+\begin{equation}
+\rho_a=1-\sum_{k=1}^{p}c_k^a\alpha_a(k)
+=\operatorname{Var}(\varepsilon^a)/\operatorname{Var}(v^a).
+\end{equation}
+The fluctuation--dissipation condition fixes the noise variance,
+\begin{equation}
+\operatorname{Var}(\varepsilon^a)=\rho_a\,N_a k_BT/2.
+\end{equation}
+At each step a fresh Gaussian field is decomposed into the three modes and each mode component is
+rescaled to this target noise kinetic energy before it is added to the AR prediction. The main
+configuration uses \(p=10\); the order ablation uses \(p=1,5,20\).
+
+\subsection{Readout, blend, and variance rescaling}
+
+The readout velocity is
+\begin{equation}
+\tilde v_t=\sum_a\left(\sum_{k=1}^{p}c_k^a v_{t-k}^a+\varepsilon_t^a\right).
+\end{equation}
+It is blended with the backbone velocity,
+\begin{equation}
+v_t^{\rm blend}=(1-\lambda)v_t^{\rm pred}+\lambda\tilde v_t,
+\end{equation}
+with \(\lambda=0.1\), and each mode is rescaled to its canonical mean kinetic energy:
+\begin{equation}
+v_t^{\rm GLR}=\sum_a s_a\,(v_t^{\rm blend})^a,\qquad
+s_a=\sqrt{\frac{N_a k_BT/2}
+{\tfrac12\sum_i m_i|(v_t^{\rm blend})_i^a|^2}}.
+\end{equation}
+Equation~(11) uses the canonical mean. In the stochastic configuration, the group kinetic energy
+is drawn from \(K_a\sim\Gamma(N_a/2,k_BT)\) and the group is rescaled to that target; the
+deterministic rescale is the mean-only limit and is reported as an ablation. The stochastic target
+restores the canonical kinetic-energy variance. The water 2.5 ns production uses the deterministic
+mean target because the stochastic variant restores the KE variance (0.437/0.429 versus 0.440 eV)
+but gives a Green--Kubo integral (\(1.16\times10^{-9}\)) inconsistent with the MSD
+(\(1.44\times10^{-9}\)). Quartz uses the stochastic target (0.398 versus 0.4017 eV) because the
+deterministic species rescale suppresses the total KE variance to 0.0036 eV. The rescale
+partition \(a\) is not
+necessarily the memory-mode basis. Water uses translation, rotation, and internal modes; quartz
+uses five phonon bands (0--5, 5--10, 10--20, 20--30, and 30--40 THz), with a coarser Si/O species
+partition as a control. The partition must contain enough degrees of freedom that the Gamma scale
+factor is close to one; a per-mode rescale with one degree of freedom per group gives an
+\(O(1)\) random scale every step and destroys the mode phase coherence (Supplementary
+Information). The quartz configuration is the phonon-band stochastic rescale with the memory
+kernel switched off; the phonon memory kernel is a negative control because the 5 fs backbone's
+mode ACF is already correct.
+
+The total centre-of-mass velocity is projected out after the rescale. The position update remains
+\(q_{t+1}=q_t+\Delta q_t\), where \(\Delta q_t\) is the backbone displacement; the readout is not
+integrated as a second position update. We tested the alternative
+\(q_{t+1}=q_t+\Delta q_t+\Delta t(v_t^{\rm GLR}-v_t^{\rm pred})\) and partial
+translation-only and molecule-COM variants in the ablation. The full correction is unstable, and
+the partial variants do not close the diffusion gap without breaking the MSD--Green--Kubo
+consistency or the RDF (see main text and Supplementary Information).
+
+\subsection{Rollout protocol and metrics}
+
+All rollouts use a 5 fs horizon, no external thermostat, and the same safety stop as the
+production screens (minimum interatomic distance 0.65 \AA, pre-thermostat temperature 3000 K).
+The 100 ps screens (20,000 steps) use the val\_04 NVE frame and the independent NVT frame as
+initial conditions; the 2.5 ns production runs (500,000 steps) start from the same frames with
+no thermalization. The seeds are 2026110401 (val\_04), 2026110402 (independent), and
+2026110401/02/03 for the seed study. The published checkpoint is run with its native CSVR
+thermostat under the same 100 ps protocol; its 2.5 ns diffusion is taken from the published value
+because the native float64 rollout is prohibitively slow on our contended GPU.
+
+The mode kinetic partition is the mean \(K_a\) over the production window. The ACF is computed
+from the mode velocities with the same mass-weighted estimator as the fit, at lags 5--1000 fs.
+RDFs are computed on 512 uniformly spaced frames with a 6 \AA{} maximum radius. VDOS overlaps use
+the same block spectral estimator as the reference: six blocks of 4.096 ps, a 100 THz Nyquist
+frequency, and a Hann window. The diffusion coefficient is obtained from the molecular
+centre-of-mass mean-squared displacement with time-origin averaging, eight blocks, a 50 fs
+sampling cadence, and a linear fit over 10--100 ps per block; the global centre-of-mass drift is
+removed. For 2.5 ns, each block is 312.5 ps long. The diffusion coefficient is
+\(D=\mathrm{slope}/6\times10^{-8}\) m\(^2\) s\(^{-1}\) when the MSD is in \AA\(^2\) and the lag in
+ps. Error bars are block means and standard deviations; the seed study uses three independent
+noise realizations.
+
+The GLR rollout costs 15.4 ns day\(^{-1}\) end-to-end on an NVIDIA RTX PRO 6000 Blackwell GPU for
+100 ps, with a peak memory of 185 MB and 2.36M parameters. The readout adds a mode decomposition
+and a \(p\)-step history per step; it is negligible compared with the backbone forward pass.
+
+\subsection{Baselines and controls}
+
+The structure-only control is the 250k backbone without the readout. FDR v1 is the AR(1) readout
+with the same blend and rescale. M0 is the 250k backbone fine-tuned on 5 fs pairs from the
+reference NVT trajectory. The CSRV control is the 5-step moment-loss rollout. The native ep145
+checkpoint is a partially trained TrajCast architecture and is reported as a diagnostic, not a
+fair architecture baseline. The published TrajCast checkpoint is the external baseline.
+
+\subsection{Statistics and reproducibility}
+
+The reference partition has substantial block-to-block scatter: the first 100 ps block gives
+2.373/2.430/2.609 eV, while the 2.5 ns mean is 2.459/2.502/2.450 eV. We therefore use the 2.5 ns
+mean for long-time partition comparisons and report the 100 ps block separately. All error bars
+are block means and standard deviations over eight contiguous blocks unless stated otherwise. The
+diffusion fits use the same eight-block protocol and report the block mean and standard
+deviation; the fit quality is summarized by \(R^2\). The seed study repeats the full 100 ps
+rollout with independent noise realizations and reports the seed-to-seed spread of the partition,
+RDF, VDOS, and diffusion. The reference trajectories are read-only; the rollout code writes a new
+HDF5 file and refuses to overwrite an existing one. Each rollout records the checkpoint SHA-256,
+the seed, the initial frame, the integration step, and the safety-stop status. No reference force
+is used during propagation; the reference forces are used only in the independent energy
+verification of the NVT trajectory.
+
+\subsection{Computational cost}
+
+The GLR rollout costs 15.4 ns day\(^{-1}\) end-to-end on an NVIDIA RTX PRO 6000 Blackwell GPU for
+a 100 ps run, with a peak memory of 185 MB. The readout adds a mode decomposition and a \(p\)-step
+history per step; the cost is negligible compared with the backbone forward pass. The published
+native checkpoint is about an order of magnitude slower in our environment because it uses
+float64 and the native e3nn path, which is why its 2.5 ns baseline is taken from the published
+value rather than re-run.
+
+\subsection{Data and code availability}
+
+The reference NVT trajectory, the independent NVT trajectory, and the rollout trajectories are
+available at [repository/DOI to be supplied]. The published TrajCast checkpoint is available from
+the IBM Hugging Face repository \texttt{ibm-research/trajcast.models-arxiv2025}. The GLR readout,
+the Yule--Walker fit, and the rollout code are available at [repository URL to be supplied]. No
+reference force is used during propagation.

@@ -23,6 +23,14 @@ def load_relational(checkpoint, device="cuda"):
             cfg['model'],
             rms_targets=normalization.get('rms_targets', [0.07, 0.004]),
             aggregation_scale=normalization.get('aggregation_scale', 1.0))
+    elif architecture == 'mode_aware_finetune':
+        from mode_aware import ModeAwareTransition
+        base_cfg = cfg['base_config']
+        base_normalization = base_cfg.get('normalization') or {}
+        base = RelationalTransition(
+            base_cfg['model'],
+            rms_targets=base_normalization.get('rms_targets', [0.07, 0.004]))
+        model = ModeAwareTransition(base)
     else:
         model = RelationalTransition(cfg['model'])
     model.load_state_dict(saved["model"], strict=True)
@@ -67,9 +75,13 @@ def vesin_graph(positions, velocities, cell, atomic_numbers, masses, model, buil
 
 
 @torch.inference_mode()
-def step(model, positions, velocities, cell, atomic_numbers, masses, device="cuda", builder=None):
+def step(model, positions, velocities, cell, atomic_numbers, masses, device="cuda", builder=None,
+         molecule_ids=None):
     graph = (atomic_graph(positions, velocities, cell, atomic_numbers, masses, model, device)
              if builder is None else
              vesin_graph(positions, velocities, cell, atomic_numbers, masses, model, builder, device))
+    if molecule_ids is not None:
+        graph.molecule_ids = torch.as_tensor(
+            molecule_ids, dtype=torch.long, device=device).reshape(-1)
     output = model(graph)
     return output["positions"], output["velocities"]

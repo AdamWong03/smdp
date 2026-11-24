@@ -1,0 +1,43 @@
+% Table 1 — long-time NVT comparison. Values from our 100 ps / 2.5 ns screens.
+% Diffusion for GLR is a placeholder until the 2.5 ns analysis finishes.
+\begin{table*}[t]
+\centering
+\small
+\caption{Long-time NVT behaviour of force-free propagators and readouts on SPC/Fw water.
+Partition is translation/rotation/internal kinetic energy; the reference is the 2.5 ns NVT mean
+(2.459/2.502/2.450 eV). The first 100 ps reference block is an outlier (2.373/2.430/2.609 eV);
+using it would exaggerate the GLR/published residuals but not change the ranking. RDF is RMSE
+against the reference NVT; VDOS is the overlap. RDF/VDOS columns are 100 ps for all rows except
+the GLR 2.5 ns row; this keeps the published comparison length-matched. Diffusion is from 2.5 ns
+rollouts where available (the 100 ps GLR row shows the seed range). ``Stable'' is the longest NVT
+run without a safety stop; a stable run can still have the wrong partition.}
+\label{tab:comparison}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Method & Stable NVT & Partition (eV) & O--O / O--H / H--H RDF & VDOS (H/O) & $D$ ($10^{-9}$ m$^2$ s$^{-1}$) & Verdict \\
+\midrule
+Reference & 2.5 ns & 2.459 / 2.502 / 2.450 & 0 / 0 / 0 & 1 / 1 & 1.84--1.88 & --- \\
+v0 & 2.75 ns & 0.111 / 0.808 / 6.338 & 0.944 / 1.409 / 0.229 & 0.356 / 0.236 & 0.0003 & fail \\
+250k & 150 ps & 0.538 / 0.786 / 6.044 & 0.646 / 1.312 / 0.249 & 0.406 / 0.487 & --- & fail \\
+Current-Only & 150 ps & 0.646 / 0.535 / 6.384 & 0.631 / 1.345 / 0.232 & 0.348 / 0.600 & --- & fail \\
+Native ep145 & 150 ps & 3.256 / 3.105 / 1.041 & 0.180 / 1.584 / 0.074 & 0.683 / 0.905 & --- & fail \\
+M0 & 150 ps & 3.373 / 3.270 / 1.000 & 0.191 / 1.790 / 0.082 & 0.668 / 0.888 & --- & fail$^a$ \\
+FDR v1 (AR1) & 2.5 ns & 2.482 / 2.533 / 2.392 & 0.062 / 0.301 / 0.110 & 0.807 / 0.851 & 3.59 & pass \\
+GLR (AR10) & 100 ps & 2.482 / 2.526 / 2.399 & 0.032 / 0.104 / 0.026 & 0.848 / 0.964 & 1.20--1.45 & pass \\
+\textbf{GLR (AR10)} & \textbf{2.5 ns} & \textbf{2.482 / 2.526 / 2.399} & \textbf{0.031 / 0.038 / 0.028} & \textbf{0.847 / 0.953} & \textbf{1.39--1.41} & \textbf{pass}$^b$ \\
+Published TrajCast & 2.5 ns & 2.505 / 2.463 / 2.444 & 0.043 / 0.118 / 0.096 & 0.624 / 0.937 & 2.18 & pass \\
+\bottomrule
+\end{tabular}}
+\begin{flushleft}
+\footnotesize
+$^a$M0 passes on the val\_04 start but blows up at 130 ps on an independent start.\\
+$^b$GLR diffusion is 26\% below the reference on two starts (independent 2.5 ns: RDF
+0.028/0.044/0.027, VDOS 0.847/0.953, D 1.39); partition, RDF, and VDOS pass. A stochastic-target
+2.5 ns variant restores the KE variance (0.437/0.429 versus 0.440 eV) but its Green--Kubo integral
+is \(1.16\times10^{-9}\), inconsistent with the MSD \(1.44\times10^{-9}\); it is reported as an
+ablation, and the deterministic target is used for production.\\
+H VDOS overlap is sensitive to the reference H-stretch frequency; O VDOS and the RDFs are the
+robust comparisons.\\
+\end{flushleft}
+\end{table*}

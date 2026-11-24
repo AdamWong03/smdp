@@ -1,0 +1,110 @@
+\section{Discussion}
+
+We have shown that the long-time failure of force-free molecular dynamics propagators is not
+primarily a one-step accuracy problem. A published propagator with a fifteen-fold larger pointwise
+error reproduces the canonical water ensemble, while a pointwise-better model develops a large mode
+imbalance and fails the same NVT screen. The failure is also not an energy-drift problem: the model
+that heats most strongly in NVE passes NVT, and the most NVE-stable model fails. The discriminating
+object is the mode-resolved stationary measure of the composed propagator plus thermostat. This
+diagnostic is, to our knowledge, the first systematic demonstration of the pointwise--ensemble
+decoupling for force-free MD, and it changes what a training or acceptance criterion should
+measure.
+
+The remedy follows from the diagnosis. A frozen backbone supplies the structure---the displacement
+that determines the position marginal---while a mode-resolved generalized-Langevin readout supplies
+the velocity that enters the next backbone call. The readout fits a per-mode AR(\(p\)) memory
+kernel to the reference velocity autocorrelation, injects noise with the fluctuation--dissipation
+consistent variance, and rescales each mode or group to its canonical kinetic-energy target at every step.
+The partition is guaranteed by construction; the memory kernel matches the multi-lag dynamics that
+a single gain cannot. The backbone is not retrained, and the readout is fitted from a short
+reference NVT trajectory. Importantly, we do not claim that the force-free backbone alone
+reproduces long-time dynamics; the raw backbones fail the NVT screen (Table~3). The claim is that
+the fixed readout corrects the stationary measure of a frozen backbone. On water, the result is a model that is stable on two independent initial
+conditions, initial-condition independent in its partition, ACF, RDF, and VDOS, and more accurate
+than the published checkpoint on the RDFs and VDOS in our analysis.
+
+\input{../tables/table2_prior_art}
+
+The relationship to prior work is complementary rather than competitive. TrajCast established that
+force-free propagators can reproduce water physics \cite{trajcast}; our work explains when that
+success is fragile and adds a readout that makes the mode partition a design constraint rather
+than a lucky outcome. Structure-preserving action maps enforce symplectic or time-reversible
+structure and improve energy conservation and equipartition \cite{bigi_action}; they target
+mechanical structure, whereas the GLR targets the canonical NVT measure and the multi-lag velocity
+statistics. The two could be combined: an action map would supply a better backbone, and the GLR
+would enforce the mode partition on top of it. Learned velocity updates recover stability with a
+black-box LSTM and periodic injection \cite{mamd}; the GLR is interpretable, mode-resolved, and
+tied to the reference ACF, and it guarantees the partition rather than only delaying divergence.
+GLE thermostats provide the same memory-kernel and colored-noise physics
+\cite{ceriotti_prl,ceriotti_jctc}, and frequency-resolved thermostats can control selected modes
+\cite{zpe_thermostat}; the difference is the object. A GLE thermostat acts on the forces and
+velocities of an MD integrator. The GLR is a readout on a frozen force-free propagator, fitted from
+the reference ACF, with an explicit group-resolved variance guarantee and a diagnostic that motivates it.
+Stochastic and generative propagators offer a different route to equilibrium
+\cite{timewarp,mdgen}, at the cost of MCMC, an energy function, or a larger generative model; the
+GLR is a lightweight post-hoc readout.
+
+The diagnostic has implications beyond this method. Force-free propagators are usually selected and
+reported by one-step MAE, sometimes with a short rollout score. Our results show that this
+criterion can rank models in the wrong order. An ensemble-level, mode-resolved
+evaluation---kinetic partition, RDF, VDOS, and diffusion---is necessary to detect the failure. The
+same lesson applies to other learned dynamical maps: a low conditional-mean error does not imply a
+correct invariant measure, and a stable rollout does not imply a correct one. We therefore
+recommend that force-free MD papers report the mode partition and at least one long-time structural
+or dynamical observable, not only one-step errors.
+
+Several limitations define the boundary of the claim. First, the analytic guarantee covers the
+\emph{mean} mode kinetic partition and the velocity ACF, not the full joint position--velocity
+distribution. The deterministic per-step rescale fixes the mode kinetic energy to its canonical
+mean and suppresses its equilibrium fluctuations (total KE std 0.010 eV versus 0.440 eV in the
+reference). A stochastic-target variant restores the KE variance (0.437/0.429 eV), but its
+Green--Kubo integral (\(1.16\times10^{-9}\)) is inconsistent with the MSD (\(1.44\times10^{-9}\)):
+the extra fluctuations modify the negative translation-ACF tail. The deterministic target is
+therefore used for production because it preserves GK--MSD consistency; the joint
+KE-variance/transport problem remains open. The marginal velocity distribution is nevertheless
+close to the reference (component kurtosis 2.93/5.49/5.93 versus 3.04/5.62/5.57). The position
+marginal is learned by the backbone and validated empirically; the stochastic rescale guarantees
+the kinetic-energy marginal, not the full joint position--velocity distribution, which would
+require an energy-based sampler such as MCMC. Second,
+the readout requires a short reference NVT trajectory to fit the ACF. This is much cheaper than
+retraining and is available for most systems of interest, but it is a data requirement, not a free
+lunch. The fit uses only the mode velocity ACF; the RDF, VDOS, and diffusion are held out and are
+not used to fit any readout parameter. Relatedly, the FD-noise ablation is negative at
+\(\lambda=0.1\): removing the noise does not change the partition, RDF, VDOS, or \(D\). The memory
+kernel and the rescale are the load-bearing components; the noise is retained for theoretical
+consistency, not because the data require it. Third, we demonstrate one water model, two backbone
+architectures (relational and phase-space), and a second material (quartz). The readout is
+empirically backbone-agnostic across the two water backbones and transfers to a covalent solid
+through the variance-rescale component; the full memory kernel is water-specific because the 5 fs
+quartz backbone already has the correct mode ACF. A broader material sweep is still needed to
+establish cross-system generality. Fourth, the internal ACF at 500 fs remains too persistent for AR(10); AR(20) reduces
+the discrepancy but does not eliminate it. Fifth, the diffusion coefficient is 26\% below the
+reference on both 2.5 ns starts (1.39--1.41 versus 1.88\(\times10^{-9}\)). The Green--Kubo integral
+shows that the deficit is in the translation ACF, and the decoupled position update prevents a
+simple blend or displacement correction from closing it; a position-consistent readout or an
+end-to-end centre-of-mass head is future work. Sixth, the
+backbone uses a local 6 \AA{} cutoff and no
+long-range electrostatics; the GLR does not address long-range physics, and the water results
+should not be read as a claim about large-scale dielectric or interfacial behaviour. Seventh, a
+5 fs phonon-band extension to quartz is stable. Without the readout the 5 fs backbone cools to
+235 K; the stochastic phonon-band variance rescale (two seeds) sets 299.9 K, reproduces the total
+kinetic-energy variance (0.397/0.399 versus 0.4017 eV), improves the Si--O RDF from 0.271 to
+0.028, and preserves the phonon VDOS at 0.950/0.955. A coarser species partition gives 301.68 K, exact
+Si/O equipartition, total KE std 0.4012 eV, and VDOS 0.898/0.955. The deterministic rescale is an
+ablation: it fixes the mean but suppresses the kinetic-energy variance. The full species GLR
+(memory + noise) is a negative control: species velocity is not a phonon eigenbasis, and the
+readout collapses the VDOS to 0.07 even at 5 fs. A 30 fs backbone shows the same pattern more
+strongly. A 486-mode phonon-basis GLR is also negative: the basis is canonical, but the 5 fs
+backbone's mode ACF is already correct, so the AR innovations broaden the phonon lines (VDOS
+0.734/0.838). The variance-rescale component therefore generalizes across a covalent solid; the
+memory kernel is useful only when the backbone's mode ACF is wrong, and its basis must be
+physically meaningful. Finally, the 2.5 ns
+production runs use one seed per start; the 100 ps seed study is reported in the Results, and a
+second 2.5 ns seed would tighten the transport error.
+
+The outlook is straightforward. The readout can be trained jointly with the backbone, rather than
+fitted post hoc, which may improve the position marginal while retaining the partition guarantee.
+The memory kernel can be made system- and temperature-adaptive, and the mode decomposition can be
+extended to phonons or other collective coordinates. Combined with a structure-preserving backbone
+and a long-range operator, the same diagnostic-and-readout strategy could make force-free
+propagators reliable beyond water.

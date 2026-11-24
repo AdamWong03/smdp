@@ -1,0 +1,28 @@
+{
+  "checkpoint": "/data2/wyd/research/foundation_mlip_adaptation/reference/trajcast_published_water/published_checkpoint.pt",
+  "samples": 100,
+  "modes": {
+    "translation": {
+      "alpha_true": 0.9832513011774718,
+      "alpha_pred": -5345.640856189434,
+      "variance_ratio": 10123606696.975206,
+      "residual_over_reference": 10123616760.741806
+    },
+    "rotation": {
+      "alpha_true": 0.8330618293308609,
+      "alpha_pred": 5083.201277920709,
+      "variance_ratio": 2293486742.346569,
+      "residual_over_reference": 2293478267.5592704
+    },
+    "internal": {
+      "alpha_true": -0.5908646994433047,
+      "alpha_pred": 1911.402523987196,
+      "variance_ratio": 1577756781.186498,
+      "residual_over_reference": 1577755931.6029475
+    }
+  },
+  "mae_velocity": 107.95922664734368,
+  "rmse_velocity": 490.01775062911685,
+  "mae_displacement": 201.33837087234483,
+  "rmse_displacement": 877.8901009331843
+}

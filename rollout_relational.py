@@ -47,6 +47,8 @@ def main():
     parser.add_argument("--initial-frame", type=int, default=0)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--ensemble", choices=["nve", "nvt"], required=True)
+    parser.add_argument("--analysis-ensemble", choices=["nve", "nvt"], default=None,
+                        help="Override the ensemble tag stored for analysis without changing dynamics")
     parser.add_argument("--steps", type=int, required=True)
     parser.add_argument("--thermalization-steps", type=int, default=0)
     parser.add_argument("--thermostat-metadata", type=Path)
@@ -55,12 +57,143 @@ def main():
     parser.add_argument('--execution-note', default='GPU exclusivity not recorded')
     parser.add_argument('--dense-query-fs', type=float, default=0.,
                         help='Optional SMDP-R interior output; zero preserves original endpoint path')
+    parser.add_argument('--fd-readout', action='store_true',
+                        help='apply the fluctuation-dissipation velocity readout')
+    parser.add_argument('--position-consistent', action='store_true',
+                        help='integrate positions with the GLE velocity instead of the backbone displacement')
+    parser.add_argument('--driven-gle', action='store_true',
+                        help='AR memory/noise plus backbone drift, with position integration')
+    parser.add_argument('--langevin-drift', action='store_true',
+                        help='stable Langevin integrator with the backbone drift')
+    parser.add_argument('--langevin-gamma', type=float, default=0.1,
+                        help='friction coefficient in 1/fs for --langevin-drift')
+    parser.add_argument('--langevin-global-rescale', action='store_true',
+                        help='global Gamma/CSVR on the total KE in the Langevin integrator')
+    parser.add_argument('--fd-blend', type=float, default=1.0)
+    parser.add_argument('--fd-blend-translation', type=float, default=None)
+    parser.add_argument('--fd-blend-rotation', type=float, default=None)
+    parser.add_argument('--fd-blend-internal', type=float, default=None)
+    parser.add_argument('--fd-correct-displacement', action='store_true')
+    parser.add_argument('--fd-displacement-weight', type=float, default=None,
+                        help='Partial displacement correction weight (0=off, 1=full)')
+    parser.add_argument('--fd-translation-displacement-weight', type=float, default=0.0,
+                        help='Add only the translation-mode velocity correction to the displacement')
+    parser.add_argument('--fd-com-displacement-scale', type=float, default=1.0,
+                        help='Scale each molecule COM displacement by this factor (internal geometry unchanged)')
+    parser.add_argument('--fd-rescale', action='store_true')
+    parser.add_argument('--fd-stochastic-rescale', action='store_true')
+    parser.add_argument('--fd-rescale-tau', type=float, default=0.0,
+                        help='Weak-coupling time (fs) for stochastic rescale; 0 = fresh Gamma each step')
+    parser.add_argument('--no-fd-rescale', action='store_true')
+    parser.add_argument('--fd-global-rescale', action='store_true',
+                        help='global Gamma/CSVR rescale of the total kinetic energy')
+    parser.add_argument('--glr-noise-off', action='store_true')
+    parser.add_argument('--glr-slow-tau', type=float, default=0.0,
+                        help='translation slow-mode relaxation time (fs)')
+    parser.add_argument('--glr-slow-weight', type=float, default=0.0,
+                        help='translation slow-mode weight in the ACF')
+    parser.add_argument('--glr-coefficients', type=Path)
+    parser.add_argument('--species-glr-coefficients', type=Path)
+    parser.add_argument('--phonon-glr-basis', type=Path,
+                        help='phonon_basis.npz from the finite-difference Hessian')
+    parser.add_argument('--phonon-glr-coefficients', type=Path,
+                        help='per-mode AR coefficients (ar10_diagnostics.npz)')
+    parser.add_argument('--phonon-memory-off', action='store_true',
+                        help='phonon variance rescale only; no AR memory')
+    parser.add_argument('--phonon-rescale-partition',
+                        choices=['mode', 'bands', 'species', 'global', 'none'],
+                        default='species',
+                        help='granularity of the stochastic KE rescale')
+    parser.add_argument('--phonon-static-scale', type=Path,
+                        help='fixed per-mode amplitude calibration (mode_static_scale.npz)')
     args = parser.parse_args()
+    torch.manual_seed(args.seed)
     if args.output.exists() or args.output.with_suffix(".summary.json").exists():
         raise FileExistsError(args.output)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     device = torch.device(args.device)
     model, saved = load_relational(args.checkpoint, device)
+    if args.phonon_glr_basis:
+        from phonon_glr import PhononBasis, PhononGLRReadout, PhononGLRTransition
+        basis = PhononBasis(args.phonon_glr_basis, args.phonon_glr_coefficients)
+        readout = None
+        if not args.phonon_memory_off:
+            if not basis.has_coefficients:
+                raise ValueError('--phonon-glr-coefficients is required unless '
+                                 '--phonon-memory-off is set')
+            readout = PhononGLRReadout(
+                basis.coefficients, basis.prediction_error,
+                basis.target_variance, use_noise=not args.glr_noise_off)
+        static_scale = None
+        if args.phonon_static_scale:
+            static_scale = np.load(args.phonon_static_scale)['scale']
+        model = PhononGLRTransition(
+            model, basis, readout=readout, blend=args.fd_blend,
+            rescale=((args.fd_rescale or not args.phonon_memory_off)
+                     and not args.no_fd_rescale),
+            stochastic_rescale=args.fd_stochastic_rescale,
+            rescale_tau=args.fd_rescale_tau,
+            rescale_partition=args.phonon_rescale_partition,
+            static_scale=static_scale).to(device)
+    elif args.species_glr_coefficients:
+        from species_glr import SpeciesGLRReadout, SpeciesGLRTransition
+        data = json.loads(args.species_glr_coefficients.read_text())
+        species = [int(s) for s in data['species']]
+        readout = SpeciesGLRReadout(
+            [data['modes'][str(s)]['coefficients'] for s in species],
+            [data['modes'][str(s)]['prediction_error_ratio'] for s in species],
+            species,
+            [data['modes'][str(s)]['dof'] for s in species],
+            use_noise=not args.glr_noise_off)
+        model = SpeciesGLRTransition(model, readout, blend=args.fd_blend).to(device)
+    elif args.fd_readout or args.glr_coefficients or args.langevin_drift:
+        from fd_readout import FDTransition
+        translation = (args.fd_blend_translation
+                       if args.fd_blend_translation is not None else args.fd_blend)
+        rotation = (args.fd_blend_rotation
+                    if args.fd_blend_rotation is not None else args.fd_blend)
+        internal = (args.fd_blend_internal
+                    if args.fd_blend_internal is not None else args.fd_blend)
+        blend = (translation, rotation, internal)
+        readout = None
+        if args.glr_coefficients:
+            from glr_readout import GLRReadout
+            data = json.loads(args.glr_coefficients.read_text())
+            keys = ('translation', 'rotation', 'internal')
+            readout = GLRReadout(
+                [data['modes'][key]['coefficients'] for key in keys],
+                [data['modes'][key]['prediction_error_ratio'] for key in keys],
+                use_noise=not args.glr_noise_off,
+                slow_tau=args.glr_slow_tau,
+                slow_weight=args.glr_slow_weight,
+                horizon_fs=float(model.cfg.horizon_fs))
+        if args.langevin_drift:
+            from langevin_drift import LangevinDriftTransition
+            model = LangevinDriftTransition(
+                model, gamma=args.langevin_gamma,
+                global_rescale=args.langevin_global_rescale).to(device)
+        elif args.driven_gle:
+            if readout is None:
+                raise ValueError('--driven-gle requires --glr-coefficients')
+            from driven_gle import DrivenGLETransition
+            model = DrivenGLETransition(model, readout=readout).to(device)
+        elif args.position_consistent:
+            if readout is None:
+                raise ValueError('--position-consistent requires --glr-coefficients')
+            from position_consistent import PositionConsistentTransition
+            model = PositionConsistentTransition(
+                model, readout=readout, blend=args.fd_blend).to(device)
+        else:
+            model = FDTransition(model, readout=readout, blend=blend,
+                                 correct_displacement=args.fd_correct_displacement,
+                                 displacement_weight=args.fd_displacement_weight,
+                                 translation_displacement_weight=args.fd_translation_displacement_weight,
+                                 com_displacement_scale=args.fd_com_displacement_scale,
+                                 stochastic_rescale=args.fd_stochastic_rescale,
+                                 rescale_tau=args.fd_rescale_tau,
+                                 global_rescale=args.fd_global_rescale,
+                                 rescale=((args.fd_rescale or bool(args.glr_coefficients))
+                                          and not args.no_fd_rescale)).to(device)
     dt = model.cfg.horizon_fs
     if args.dense_query_fs:
         if not hasattr(model, 'query') or args.dense_query_fs!=1. or not float(dt).is_integer():
@@ -89,7 +222,8 @@ def main():
     failure = None
     completed = 0
     with h5py.File(args.output, "x") as output:
-        output.attrs.update(ensemble=args.ensemble, timestep_fs=dt, requested_steps=args.steps,
+        stored_ensemble = args.analysis_ensemble or args.ensemble
+        output.attrs.update(ensemble=stored_ensemble, timestep_fs=dt, requested_steps=args.steps,
                             thermalization_steps=args.thermalization_steps, completed_steps=0,
                             stable=False, failure_reason="", checkpoint=str(args.checkpoint),
                             checkpoint_sha256=checksum, seed=args.seed,
@@ -151,7 +285,8 @@ def main():
                     segment_q = queried['positions'].cpu().numpy()
                     segment_v = queried['velocities'].cpu().numpy()
                 else:
-                    qn, vn = step(model, q, v, cell, z, masses, device, builder=neighbors)
+                    qn, vn = step(model, q, v, cell, z, masses, device, builder=neighbors,
+                                  molecule_ids=molecule_ids)
                 torch.cuda.synchronize(device); model_seconds += time.perf_counter()-tic
                 q, v = qn.cpu().numpy(), vn.cpu().numpy()
                 pre = temperature(v, masses)

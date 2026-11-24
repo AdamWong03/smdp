@@ -1,0 +1,117 @@
+{
+  "labels": "/data2/wyd/research/foundation_mlip_adaptation/experiments/onpolicy_pilot_250k_test_20261121/diagnostic_labels.h5",
+  "samples": 160,
+  "modes": {
+    "translation": {
+      "alpha_true": 0.9788059962558109,
+      "alpha_pred": 0.9784352766291031,
+      "variance_ratio": 1.0001725788776,
+      "ke_input_eV": 1.3085762274606891,
+      "ke_true_eV": 1.3126228303473266,
+      "ke_pred_eV": 1.3128493613221
+    },
+    "rotation": {
+      "alpha_true": 0.8186544183557072,
+      "alpha_pred": 0.8182990350711389,
+      "variance_ratio": 0.9996297739572264,
+      "ke_input_eV": 1.4883718508135968,
+      "ke_true_eV": 1.4944126847429275,
+      "ke_pred_eV": 1.4938594142483848
+    },
+    "internal": {
+      "alpha_true": -0.8192243178710399,
+      "alpha_pred": -0.8199298368684875,
+      "variance_ratio": 1.0014504255441872,
+      "ke_input_eV": 4.483933383197741,
+      "ke_true_eV": 4.476242603471926,
+      "ke_pred_eV": 4.4827350600859805
+    }
+  },
+  "windows": {
+    "0-1ps": {
+      "translation": {
+        "alpha_true": 0.9834094926266398,
+        "alpha_pred": 0.98365915731584,
+        "variance_ratio": 1.000300814508823
+      },
+      "rotation": {
+        "alpha_true": 0.8187080819696897,
+        "alpha_pred": 0.8184795082398394,
+        "variance_ratio": 0.9993099266104521
+      },
+      "internal": {
+        "alpha_true": -0.6030377008121166,
+        "alpha_pred": -0.6032047392860374,
+        "variance_ratio": 0.9999746322253659
+      }
+    },
+    "1-5ps": {
+      "translation": {
+        "alpha_true": 0.9824560043742793,
+        "alpha_pred": 0.981979648757629,
+        "variance_ratio": 0.9994639874418213
+      },
+      "rotation": {
+        "alpha_true": 0.8264146012412912,
+        "alpha_pred": 0.8261819968149812,
+        "variance_ratio": 0.9991020502693159
+      },
+      "internal": {
+        "alpha_true": -0.6840819037789868,
+        "alpha_pred": -0.6844393759815863,
+        "variance_ratio": 1.0000876619449932
+      }
+    },
+    "5-20ps": {
+      "translation": {
+        "alpha_true": 0.9740891503596362,
+        "alpha_pred": 0.973162640690466,
+        "variance_ratio": 0.9996033897985348
+      },
+      "rotation": {
+        "alpha_true": 0.8268459613814322,
+        "alpha_pred": 0.8265365522311738,
+        "variance_ratio": 0.9999579670818761
+      },
+      "internal": {
+        "alpha_true": -0.8462219483061948,
+        "alpha_pred": -0.8468738801216233,
+        "variance_ratio": 1.0013631579193798
+      }
+    },
+    "20-50ps": {
+      "translation": {
+        "alpha_true": 0.9675921881268856,
+        "alpha_pred": 0.9671319093188315,
+        "variance_ratio": 1.0017680065756205
+      },
+      "rotation": {
+        "alpha_true": 0.8006127319463218,
+        "alpha_pred": 0.7996189821278216,
+        "variance_ratio": 0.9995392565838643
+      },
+      "internal": {
+        "alpha_true": -0.886587423568758,
+        "alpha_pred": -0.8876797902191832,
+        "variance_ratio": 1.0023348188623946
+      }
+    },
+    "50-100ps": {
+      "translation": {
+        "alpha_true": 0.9666203601169734,
+        "alpha_pred": 0.9651397356616905,
+        "variance_ratio": 1.0016307955075798
+      },
+      "rotation": {
+        "alpha_true": 0.8033984000837171,
+        "alpha_pred": 0.8029735972008994,
+        "variance_ratio": 1.0013099387435653
+      },
+      "internal": {
+        "alpha_true": -0.8990478220442197,
+        "alpha_pred": -0.8998464591389946,
+        "variance_ratio": 1.0020641815625306
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+% Table 4 — Cross-material: quartz at 5 fs, phonon-band stochastic variance rescale.
+\begin{table}[t]
+\centering
+\small
+\caption{Cross-material test. The 5 fs quartz backbone is trained on the same NVE data and
+evaluated against the 15 ns NVT reference. The phonon-band stochastic variance rescale sets the
+canonical temperature and total kinetic-energy variance, improves the Si--O RDF, and preserves
+the phonon VDOS. The quoted band row is the mean of two seeds (T=299.8/299.9 K; VDOS O/Si
+0.953/0.949 and 0.947/0.962; mode KE within 10\% 78.1\%/76.2\%). A coarser species partition gives statistically consistent structure and VDOS
+with exact Si/O equipartition. The deterministic rescale is an ablation: it fixes the mean but
+suppresses the kinetic-energy variance. The full species GLR (memory + noise) and the full
+phonon-mode GLR are negative controls. The phonon-mode control uses the correct eigenbasis, but
+the 5 fs backbone's mode ACF is already correct, so the AR innovations broaden the phonon lines.
+The 30 fs deterministic row is shown for the horizon comparison; its kinetic-energy variance was
+not measured.}
+\label{tab:quartz}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Quartz & $T$ (K) & KE std (eV) & Si/O KE per atom (eV) & RDF Si--O / O--O / Si--Si & VDOS O / Si \\
+\midrule
+5 fs baseline & 235.3 & 0.4355 & 0.0298 / 0.0305 & 0.271 / 0.096 / 0.133 & 0.918 / 0.944 \\
+\textbf{5 fs phonon-band stochastic rescale} & \textbf{299.9} & \textbf{0.398} & \textbf{0.03846 / 0.03855} & \textbf{0.028 / 0.016 / 0.033} & \textbf{0.950 / 0.955} \\
+5 fs species stochastic rescale (control) & 301.68 & 0.4012 & 0.03872 / 0.03877 & 0.0245 / 0.0169 / 0.0380 & 0.898 / 0.955 \\
+5 fs deterministic species rescale (ablation) & 301.86 & 0.0036 & 0.03878 / 0.03878 & 0.078 / 0.022 / 0.055 & 0.866 / 0.914 \\
+5 fs full species GLR (negative) & 301.86 & --- & 0.03878 / 0.03878 & 0.529 / 0.263 / 0.441 & 0.074 / 0.067 \\
+5 fs full phonon GLR (negative) & 301.9 & 0.4024 & 0.03872 / 0.03877 & 0.197 / 0.044 / 0.083 & 0.734 / 0.838 \\
+30 fs deterministic rescale & 301.9 & --- & 0.03878 / 0.03878 & 0.149 / 0.024 / 0.051 & 0.838 / 0.835 \\
+\bottomrule
+\end{tabular}}
+\end{table}

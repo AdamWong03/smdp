@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage[super,comma,sort&compress]{natbib}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{lineno}
+\graphicspath{{../figures/}}
+\setlength{\emergencystretch}{2em}
+
+\title{Stationary-measure correction for force-free molecular dynamics via a
+mode-resolved generalized Langevin readout}
+\author{[Author list and affiliations to be supplied]}
+\date{}
+
+\begin{document}
+\maketitle
+\linenumbers
+
+\begin{abstract}
+Force-free direct propagators can accelerate molecular dynamics by large factors, but their
+long-time equilibrium statistics are unreliable. We show that pointwise one-step accuracy is
+neither necessary nor sufficient for long-time fidelity: a published propagator with a large
+pointwise error reproduces the canonical water ensemble, while a pointwise-accurate model fails.
+The failure is a mode-resolved stationary-measure problem, not an NVE energy problem. We
+introduce a fixed mode-resolved generalized Langevin readout (GLR): a frozen propagator supplies
+the displacement, while per-mode AR($p$) memory kernels fitted from the reference velocity
+autocorrelation and exact group-resolved variance rescaling enforce the canonical mean kinetic
+partition by construction, with a stochastic target that restores the kinetic-energy marginal
+(Gamma-distributed); the joint position--velocity distribution is not guaranteed. The
+readout algorithm is fixed; the backbone and the physics-defined mode basis are the only plug-ins.
+On water, the GLR matches multi-lag velocity
+correlations, and is stable and initial-condition independent. Applied to two different frozen
+backbones---a relational propagator and a phase-space operator---it makes both stable and
+canonically partitioned; in a covalent solid with a 5 fs backbone, a stochastic phonon-band
+variance rescale restores the canonical kinetic-energy variance, enforces Si/O equipartition,
+improves the Si--O RDF, and preserves the phonon VDOS. At
+100 ps, it improves the
+O--H RDF from 0.118 to 0.104 and the O VDOS from 0.937 to 0.964 over the published checkpoint; at
+2.5 ns the O--H RDF reaches 0.038. It yields a diffusion coefficient of
+1.39--1.41 $\times 10^{-9}$ m$^2$ s$^{-1}$ on two starts,
+within 26\% of the reference 1.84--1.88 $\times 10^{-9}$ m$^2$ s$^{-1}$ and far closer than the
+AR(1) readout (3.59 $\times 10^{-9}$). The readout is training-free, force-free, and applicable
+to other frozen propagators in principle.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_results}
+\input{sections/03_discussion}
+\input{sections/04_methods}
+
+\section*{AI use disclosure}
+[To be completed by the authors following the Nature Portfolio AI-use policy.]
+
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
+
+\end{document}

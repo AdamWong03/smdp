@@ -1,0 +1,95 @@
+\section{Introduction}
+
+Molecular dynamics (MD) is the workhorse for connecting microscopic interactions to the
+macroscopic behaviour of liquids, solids, and biological assemblies. Its central limitation is
+time: the 1--2 fs integration step required for stable dynamics restricts routine simulations to
+nanoseconds, while many phenomena of interest---diffusion, nucleation, conformational transitions,
+and slow relaxation---unfold over microseconds to milliseconds. Machine-learned interatomic
+potentials have reduced the cost of the force evaluation, but they retain the sequential
+integrator and therefore the same step-count bottleneck.
+
+A more radical route is to learn the propagator itself. Instead of evaluating forces and
+integrating Newton's equations, a direct propagator maps a state at time \(t\) to a state at
+\(t+\Delta t\) with \(\Delta t\) several times the stable integration step. Because the map is
+force-free, it can in principle be evaluated at a fraction of the cost of an MD step and can be
+rolled out autoregressively. TrajCast demonstrated that this idea is viable for liquid water: an
+equivariant message-passing network trained on 5 fs pairs reproduces the oxygen--oxygen radial
+distribution function (RDF), the vibrational density of states (VDOS), and the diffusion
+coefficient under a global thermostat \cite{trajcast}. The result is an important existence proof:
+faithful long-time water physics is possible without forces.
+
+What the existence proof does not provide is a guarantee. A direct propagator is trained on
+one-step pairs, usually by minimizing a displacement or velocity error. The quantity that matters
+at long times, however, is the stationary measure of the composed map---the distribution of
+positions and velocities that the autoregressive rollout visits after transients have decayed.
+One-step accuracy constrains a conditional mean; it says little about the invariant measure of a
+nonlinear, stochastic, or thermostatted iteration. The gap is familiar in spirit from generative
+modelling, where a low reconstruction error does not imply a correct sample distribution, but it
+has not been diagnosed systematically for force-free MD propagators.
+
+Here we show that the gap is real and that it has a specific structure. Using water as a test
+system, we compare a published TrajCast checkpoint with our own direct propagator. The published
+model has a one-step position error about fifteen times larger than ours on held-out transitions,
+yet it reproduces the canonical mode partition, RDF, and VDOS, whereas our pointwise-better model
+develops a large mode imbalance and fails the same 100 ps NVT screen. The ranking by one-step
+error is therefore not just noisy---it can be inverted. A second diagnostic removes another
+plausible explanation: 25 ps NVE energy drift does not order the models either. The published
+model heats strongly in NVE and still passes NVT; our most NVE-stable model fails NVT. The
+relevant object is the composed propagator plus thermostat, and the relevant failure is a bias in
+the mode-resolved stationary measure, not a one-step error or an energy-integration error. This
+is an existence proof from two models, not a controlled correlation: the checkpoints differ in
+architecture and training data, so the inversion establishes that one-step accuracy is neither
+necessary nor sufficient, not that it is generally anti-correlated with ensemble fidelity.
+
+Existing remedies attack different parts of this problem. Global stochastic thermostats, such as
+CSVR, control the total kinetic energy but not its distribution among molecular translation,
+rotation, and internal motion \cite{csvr}. Structure-preserving learned maps enforce symplectic or
+time-reversible structure and improve energy conservation and equipartition \cite{bigi_action},
+but they are deterministic and target mechanical structure rather than the canonical NVT measure.
+Learned velocity updates recover stability by injecting an LSTM prediction periodically
+\cite{mamd}, but the update is a black box and is not tied to the equilibrium mode partition.
+Generalized Langevin equation (GLE) thermostats provide memory kernels and colored noise with the
+correct fluctuation--dissipation relation \cite{ceriotti_prl,ceriotti_jctc}, and
+frequency-resolved thermostats can control selected modes \cite{zpe_thermostat}, but these are
+thermostats for an MD integrator, not readouts for a frozen force-free propagator. Stochastic and
+generative propagators offer another route---Timewarp accelerates dynamics with learned
+time-coarsening \cite{timewarp}, and generative models such as MDGen sample trajectory
+distributions \cite{mdgen}---at the cost of MCMC, an energy function, or a substantially larger
+generative model.
+
+We take a different decomposition. A frozen force-free backbone is responsible for structure: it
+supplies the displacement \(\Delta q_t\). A lightweight, mode-resolved generalized-Langevin
+readout (GLR) is responsible for thermodynamics: it supplies the velocity that enters the next
+backbone call and the kinetic diagnostics. The readout decomposes the velocity into molecular
+translation, rotation, and internal modes; fits a per-mode AR(\(p\)) memory kernel to the
+reference velocity autocorrelation by Yule--Walker; injects fluctuation--dissipation-consistent
+noise with the prediction-error variance; and rescales each mode or group to its canonical kinetic-energy target
+energy \(N_a k_B T/2\) at every step. The partition is therefore enforced by construction, while
+the memory kernel matches the multi-lag dynamics that a single gain cannot capture. The backbone
+is not retrained, and the readout is fitted from a short reference NVT trajectory.
+
+We apply the GLR to SPC/Fw water \cite{spcfw} and compare it with the published TrajCast
+checkpoint, our 250k direct propagator, an AR(1) readout, and several negative controls. The GLR
+is stable for 100 ps from two independent initial conditions, is initial-condition independent in
+its partition, ACF, RDF, and VDOS, and reproduces the O--O, O--H, and H--H RDFs and the O VDOS
+more closely than the published checkpoint in our analysis. The 2.5 ns production run tests the
+diffusion coefficient---the last long-time observable---and the ablations isolate the roles of
+the memory order, the FD noise, the variance rescale, and the displacement coupling. The result is
+a practical route, demonstrated here on water, for making a force-free propagator
+thermodynamically consistent without retraining it, and a diagnostic that explains when and why
+such a propagator will fail.
+
+\subsection*{Contributions}
+
+\begin{enumerate}
+\item A diagnostic showing that pointwise one-step accuracy is neither necessary nor sufficient
+  for long-time equilibrium, and that NVE energy stability is not the discriminating variable.
+\item Evidence that the failure is a mode-resolved stationary-measure bias of the composed
+  propagator plus thermostat.
+\item A mode-resolved AR(\(p\)) FD readout with exact group-resolved variance rescaling that
+  guarantees the canonical mean kinetic partition (and the marginal with the stochastic target)
+  and matches multi-lag mode ACFs on a frozen force-free
+  propagator.
+\item Water results at or beyond the published TrajCast checkpoint on RDF and VDOS, with diffusion
+  and initial-condition independence tested at 2.5 ns, plus ablations that isolate each component.
+\end{enumerate}

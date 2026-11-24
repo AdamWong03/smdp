@@ -1,0 +1,113 @@
+{
+  "reference_eV": [
+    2.459,
+    2.502,
+    2.45
+  ],
+  "models": [
+    {
+      "name": "v0",
+      "one_step_position_mae_A": 0.000359,
+      "partition_eV": [
+        0.111,
+        0.808,
+        6.338
+      ],
+      "partition_error_eV": 2.643333333333333,
+      "longest_stable_nvt_ps": 2750.0,
+      "partition_pass": false,
+      "note": "stable, wrong partition"
+    },
+    {
+      "name": "250k",
+      "one_step_position_mae_A": 0.000297,
+      "partition_eV": [
+        0.538,
+        0.786,
+        6.044
+      ],
+      "partition_error_eV": 2.410333333333333,
+      "longest_stable_nvt_ps": 150.0,
+      "partition_pass": false,
+      "note": "same bias"
+    },
+    {
+      "name": "Current-Only",
+      "one_step_position_mae_A": 0.00032,
+      "partition_eV": [
+        0.646,
+        0.535,
+        6.384
+      ],
+      "partition_error_eV": 2.5713333333333335,
+      "longest_stable_nvt_ps": 150.0,
+      "partition_pass": false,
+      "note": "same bias"
+    },
+    {
+      "name": "Native ep145",
+      "one_step_position_mae_A": 0.0001037,
+      "partition_eV": [
+        3.256,
+        3.105,
+        1.041
+      ],
+      "partition_error_eV": 0.9363333333333334,
+      "longest_stable_nvt_ps": 150.0,
+      "partition_pass": false,
+      "note": "opposite bias"
+    },
+    {
+      "name": "M0",
+      "one_step_position_mae_A": 0.000206,
+      "partition_eV": [
+        3.373,
+        3.27,
+        1.0
+      ],
+      "partition_error_eV": 1.0440000000000003,
+      "longest_stable_nvt_ps": 150.0,
+      "partition_pass": false,
+      "note": "independent start fails"
+    },
+    {
+      "name": "FDR v1",
+      "one_step_position_mae_A": 0.000297,
+      "partition_eV": [
+        2.482,
+        2.533,
+        2.392
+      ],
+      "partition_error_eV": 0.03733333333333352,
+      "longest_stable_nvt_ps": 2500.0,
+      "partition_pass": true,
+      "note": "AR(1)"
+    },
+    {
+      "name": "GLR",
+      "one_step_position_mae_A": 0.000297,
+      "partition_eV": [
+        2.482,
+        2.526,
+        2.399
+      ],
+      "partition_error_eV": 0.03266666666666677,
+      "longest_stable_nvt_ps": 2500.0,
+      "partition_pass": true,
+      "note": "D \u221226%"
+    },
+    {
+      "name": "Published",
+      "one_step_position_mae_A": 0.004754,
+      "partition_eV": [
+        2.505,
+        2.463,
+        2.444
+      ],
+      "partition_error_eV": 0.03033333333333325,
+      "longest_stable_nvt_ps": 2500.0,
+      "partition_pass": true,
+      "note": "published checkpoint"
+    }
+  ]
+}

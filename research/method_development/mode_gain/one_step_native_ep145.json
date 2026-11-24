@@ -1,0 +1,28 @@
+{
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/trajcast_native/best.pt",
+  "samples": 1250,
+  "modes": {
+    "translation": {
+      "alpha_true": 0.9813279418240907,
+      "alpha_pred": 0.9820082027075705,
+      "variance_ratio": 1.0017063053640187,
+      "residual_over_reference": 2.6187334762961663e-05
+    },
+    "rotation": {
+      "alpha_true": 0.8362913709981593,
+      "alpha_pred": 0.8359046405559735,
+      "variance_ratio": 0.9989922644529761,
+      "residual_over_reference": 2.8649158220568818e-05
+    },
+    "internal": {
+      "alpha_true": -0.5550852648406607,
+      "alpha_pred": -0.55518352837045,
+      "variance_ratio": 0.9993372605415421,
+      "residual_over_reference": 2.6982399288959017e-05
+    }
+  },
+  "mae_velocity": 4.511798626647331e-05,
+  "rmse_velocity": 6.325879446428377e-05,
+  "mae_displacement": 0.0001037197696041508,
+  "rmse_displacement": 0.00014399249321049392
+}

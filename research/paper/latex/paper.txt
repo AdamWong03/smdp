@@ -1,0 +1,949 @@
+     Thermodynamically consistent force-free molecular dynamics via a
+              mode-resolved generalized Langevin readout
+                                  [Author list and affiliations to be supplied]
+
+
+ 1                                                     Abstract
+ 2             Force-free direct propagators can accelerate molecular dynamics by large factors, but their
+ 3         long-time equilibrium statistics are unreliable. We show that pointwise one-step accuracy is
+ 4         neither necessary nor sufficient for long-time fidelity: a published propagator with a large point-
+ 5         wise error reproduces the canonical water ensemble, while a pointwise-accurate model fails. The
+ 6         failure is a mode-resolved stationary-measure problem, not an NVE energy problem. We in-
+ 7         troduce a mode-resolved generalized Langevin readout (GLR): a frozen propagator supplies the
+ 8         displacement, while per-mode AR(p) memory kernels fitted from the reference velocity autocor-
+ 9         relation, fluctuation–dissipation-consistent noise, and exact per-mode variance rescaling enforce
+10         the canonical mean kinetic partition by construction. On water, the GLR matches multi-lag
+11         velocity correlations, reproduces the O–O/O–H/H–H radial distribution functions with RMSEs
+12         of 0.031/0.038/0.028 and the O vibrational-density-of-states overlap of 0.953, better than the
+13         published checkpoint (0.043/0.118/0.096 and 0.937), is stable and initial-condition independent,
+14         and yields a diffusion coefficient of 1.39–1.41 ×10−9 m2 s−1 on two starts, within 26% of the
+15         reference 1.84–1.88 ×10−9 m2 s−1 and far closer than the AR(1) readout (3.59 ×10−9 ). The
+16         readout is backbone-agnostic, training-free, and force-free.
+
+
+17   1    Introduction
+18   Molecular dynamics (MD) is the workhorse for connecting microscopic interactions to the macro-
+19   scopic behaviour of liquids, solids, and biological assemblies. Its central limitation is time: the
+20   1–2 fs integration step required for stable dynamics restricts routine simulations to nanoseconds,
+21   while many phenomena of interest—diffusion, nucleation, conformational transitions, and slow
+22   relaxation—unfold over microseconds to milliseconds. Machine-learned interatomic potentials have
+23   reduced the cost of the force evaluation, but they retain the sequential integrator and therefore the
+24   same step-count bottleneck.
+25       A more radical route is to learn the propagator itself. Instead of evaluating forces and integrating
+26   Newton’s equations, a direct propagator maps a state at time t to a state at t + ∆t with ∆t several
+27   times the stable integration step. Because the map is force-free, it can in principle be evaluated at
+28   a fraction of the cost of an MD step and can be rolled out autoregressively. TrajCast demonstrated
+29   that this idea is viable for liquid water: an equivariant message-passing network trained on 5 fs
+30   pairs reproduces the oxygen–oxygen radial distribution function (RDF), the vibrational density of
+31   states (VDOS), and the diffusion coefficient under a global thermostat 1 . The result is an important
+32   existence proof: faithful long-time water physics is possible without forces.
+33       What the existence proof does not provide is a guarantee. A direct propagator is trained on
+34   one-step pairs, usually by minimizing a displacement or velocity error. The quantity that matters at
+35   long times, however, is the stationary measure of the composed map—the distribution of positions
+36   and velocities that the autoregressive rollout visits after transients have decayed. One-step accuracy
+37   constrains a conditional mean; it says little about the invariant measure of a nonlinear, stochastic,
+
+                                                           1
+38   or thermostatted iteration. The gap is familiar in spirit from generative modelling, where a low
+39   reconstruction error does not imply a correct sample distribution, but it has not been diagnosed
+40   systematically for force-free MD propagators.
+41       Here we show that the gap is real and that it has a specific structure. Using water as a test sys-
+42   tem, we compare a published TrajCast checkpoint with our own direct propagator. The published
+43   model has a one-step position error about fifteen times larger than ours on held-out transitions, yet
+44   it reproduces the canonical mode partition, RDF, and VDOS, whereas our pointwise-better model
+45   develops a large mode imbalance and fails the same 100 ps NVT screen. The ranking by one-step
+46   error is therefore not just noisy—it can be inverted. A second diagnostic removes another plausible
+47   explanation: 25 ps NVE energy drift does not order the models either. The published model heats
+48   strongly in NVE and still passes NVT; our most NVE-stable model fails NVT. The relevant object
+49   is the composed propagator plus thermostat, and the relevant failure is a bias in the mode-resolved
+50   stationary measure, not a one-step error or an energy-integration error.
+51       Existing remedies attack different parts of this problem. Global stochastic thermostats, such
+52   as CSVR, control the total kinetic energy but not its distribution among molecular translation,
+53   rotation, and internal motion 2 . Structure-preserving learned maps enforce symplectic or time-
+54   reversible structure and improve energy conservation and equipartition 3 , but they are deterministic
+55   and target mechanical structure rather than the canonical NVT measure. Learned velocity updates
+56   recover stability by injecting an LSTM prediction periodically 4 , but the update is a black box and
+57   is not tied to the equilibrium mode partition. Generalized Langevin equation (GLE) thermostats
+58   provide memory kernels and colored noise with the correct fluctuation–dissipation relation 5,6 , and
+59   frequency-resolved thermostats can control selected modes 7 , but these are thermostats for an MD
+60   integrator, not readouts for a frozen force-free propagator. Stochastic and generative propagators
+61   offer another route—Timewarp accelerates dynamics with learned time-coarsening 8 , and generative
+62   models such as MDGen sample trajectory distributions 9 —at the cost of MCMC, an energy function,
+63   or a substantially larger generative model.
+64       We take a different decomposition. A frozen force-free backbone is responsible for structure: it
+65   supplies the displacement ∆qt . A lightweight, mode-resolved generalized-Langevin readout (GLR)
+66   is responsible for thermodynamics: it supplies the velocity that enters the next backbone call and
+67   the kinetic diagnostics. The readout decomposes the velocity into molecular translation, rotation,
+68   and internal modes; fits a per-mode AR(p) memory kernel to the reference velocity autocorrelation
+69   by Yule–Walker; injects fluctuation–dissipation-consistent noise with the prediction-error variance;
+70   and rescales each mode to its canonical mean kinetic energy Na kB T /2 at every step. The partition
+71   is therefore enforced by construction, while the memory kernel matches the multi-lag dynamics
+72   that a single gain cannot capture. The backbone is not retrained, and the readout is fitted from a
+73   short reference NVT trajectory.
+74       We apply the GLR to SPC/Fw water 10 and compare it with the published TrajCast checkpoint,
+75   our 250k direct propagator, an AR(1) readout, and several negative controls. The GLR is stable
+76   for 100 ps from two independent initial conditions, is initial-condition independent in its partition,
+77   ACF, RDF, and VDOS, and reproduces the O–O, O–H, and H–H RDFs and the O VDOS more
+78   closely than the published checkpoint in our analysis. The 2.5 ns production run tests the diffusion
+79   coefficient—the last long-time observable—and the ablations isolate the roles of the memory order,
+80   the FD noise, the variance rescale, and the displacement coupling. The result is a general recipe for
+81   making a force-free propagator thermodynamically consistent without retraining it, and a diagnostic
+82   that explains when and why such a propagator will fail.
+
+
+
+
+                                                       2
+ 83   Contributions
+ 84       1. A diagnostic showing that pointwise one-step accuracy is neither necessary nor sufficient for
+ 85          long-time equilibrium, and that NVE energy stability is not the discriminating variable.
+
+ 86       2. Evidence that the failure is a mode-resolved stationary-measure bias of the composed propa-
+ 87          gator plus thermostat.
+
+ 88       3. A mode-resolved AR(p) FD readout with exact per-mode variance rescaling that guarantees
+ 89          the canonical mean kinetic partition and matches multi-lag mode ACFs on a frozen force-free
+ 90          propagator.
+
+ 91       4. Water results at or beyond the published TrajCast checkpoint on RDF and VDOS, with
+ 92          diffusion and initial-condition independence tested at 2.5 ns, plus ablations that isolate each
+ 93          component.
+
+
+ 94   2     Results
+ 95   2.1    Pointwise accuracy does not order long-time fidelity
+ 96   We first asked whether the conventional training objective—one-step displacement or velocity error
+ 97   on held-out transitions—predicts the long-time behaviour of a force-free propagator. We compared
+ 98   two models trained on the same SPC/Fw water data: our 250k relational propagator and the
+ 99   published TrajCast water checkpoint. On 1,250 held-out transitions, the published checkpoint has
+100   a mean absolute position error of 4.75 × 10−3 Å and a velocity error of 1.63 × 10−3 Å fs−1 . The
+101   250k model is about fifteen times more accurate pointwise (2.97 × 10−4 Å and 1.09 × 10−4 Å fs−1 ).
+102   If one-step accuracy controlled long-time fidelity, the 250k model should be the better sampler.
+103       It is not. Under the same 100 ps NVT protocol (300 K, CSVR, 5 fs), the published checkpoint
+104   reproduces the canonical kinetic partition—translation 2.505 eV, rotation 2.463 eV, internal 2.444
+105   eV against the 2.5 ns reference means of 2.459, 2.502, and 2.450 eV (the first 100 ps reference block
+106   is an outlier at 2.373/2.430/2.609 eV)—and gives O–O, O–H, and H–H RDF RMSEs of 0.043,
+107   0.118, and 0.096. The 250k model, despite its lower one-step error, collapses the collective modes
+108   and overheats the internal mode: translation 0.538 eV, rotation 0.786 eV, internal 6.044 eV. Its
+109   RDF RMSEs are 0.646, 1.312, and 0.249. The total kinetic energy is close to the target in both
+110   cases; the distribution across modes is not. A pointwise-better model is a worse sampler, and the
+111   failure is invisible to the training loss.
+112       The inversion is not a peculiarity of one checkpoint. A 20k-step prefix of the same architecture
+113   is even more pointwise accurate but becomes unstable in NVT after about 50 ps. A native TrajCast
+114   architecture trained to only about 10% of its schedule has a pointwise error three times smaller than
+115   the 250k model and fails in the opposite direction—translation 3.256 eV, rotation 3.105 eV, internal
+116   1.041 eV. The sign of the mode bias is architecture- and training-dependent, but its presence is
+117   not.
+
+118   2.2    NVE energy drift is a red herring
+119   A natural second hypothesis is that the failing models inject energy and heat, and that a better
+120   energy integrator would fix the ensemble. We tested this directly with 25 ps NVE rollouts from
+121   the same initial state. The published checkpoint heats from 302 K to 476 K; the 250k model
+122   cools from 302 K to 271 K; the NVT-pair fine-tuned M0 model heats to 387 K. The ordering by
+123   NVE drift is essentially the reverse of the ordering by NVT fidelity: the model that heats the
+
+                                                        3
+124   most passes the NVT screen, and the most NVE-stable model fails it. Energy conservation and
+125   canonical sampling are different properties of the composed map. A force-free propagator can be
+126   a poor energy integrator and a good thermostat, or vice versa; NVE drift cannot be used as a
+127   surrogate for the stationary measure.
+
+128   2.3   The failure is a mode-resolved partition bias
+129   The two diagnostics point to a common variable: the distribution of kinetic energy among molecular
+130   modes. Figure 1c shows the mode kinetic energy relative to the reference for all models. The failing
+131   models are not simply hot or cold. They are partitioned: the 250k family is collectively cold and
+132   internally hot (translation 0.23, rotation 0.32, internal 2.32 of the reference), the native/M0 family
+133   is collectively hot and internally cold (1.37, 1.28, 0.40), and the published checkpoint is close to the
+134   reference on all three (1.06, 1.01, 0.94). The total temperature is approximately 300 K in every case.
+135   A global thermostat holds the scalar temperature while leaving the vector of mode temperatures
+136   biased.
+137       This resolves the apparent paradox. The one-step loss is dominated by the conditional mean
+138   of the displacement, which is insensitive to a slow redistribution of kinetic energy across modes.
+139   The NVE trajectory measures the total energy budget, which can drift without changing the mode
+140   partition in the same way. The NVT stationary measure is the object that sees the bias, and the
+141   mode partition is its most informative low-dimensional projection.
+
+142   2.4   Stability is not correctness
+143   The distinction matters because long rollouts are often used as the acceptance test. Figure 1d plots
+144   the longest stable NVT run against the partition verdict. The phase-space v0 model is stable for
+145   2.75 ns and has a partition of 0.111/0.808/6.338 eV; the 250k and Current-Only models are stable
+146   for 150 ps with the same bias. Stability without partition correctness is a long-lived wrong answer,
+147   not a success. Conversely, short-horizon fixes can destabilize: the M0 endpoint fine-tune passes on
+148   the val 04 start but blows up at 130 ps on an independent start, and the 5-step CSRV moment loss
+149   blows up at 4.3 ps. The acceptance criterion must be the stationary measure, not the absence of a
+150   numerical crash.
+151       These results define the design requirement for a remedy. The propagator must be paired with
+152   a readout that controls the mode-resolved kinetic partition and the multi-lag dynamics, not just
+153   the total temperature or a single-lag gain. The readout should not require retraining the backbone,
+154   and it should be evaluated on the same long-time observables that expose the failure. The next
+155   section introduces such a readout.
+
+156   2.5   A mode-resolved generalized Langevin readout
+157   The diagnostic says that the missing object is a mode-resolved stationary measure. We therefore
+158   leave the backbone unchanged and add a readout whose job is to enforce that measure. The
+159   architecture is deliberately asymmetric. The frozen backbone supplies the displacement ∆qt ; the
+160   readout supplies the velocity vt that enters the next backbone call and the kinetic diagnostics. The
+161   position update remains
+                                                 qt+1 = qt + ∆qt ,                                      (1)
+162   so the learned displacement stays in distribution and the readout is not integrated as a sec-
+163   ond position update. We tested the obvious alternative—adding the velocity correction to the
+
+
+
+                                                         4
+             mean |mode partition − reference| (eV)
+                                                            pointwise accuracy does not order ensemble fidelity                                        25 ps NVE energy drift is not the criterion
+                                                      3.5
+                                                                                                                                                 500          Published
+                                                      3.0                                                                                                     M0                                                     476 K
+
+                                                                                                                                                 450          250k
+                                                      2.5
+
+
+
+
+                                                                                                                               temperature (K)
+                                                                    250k
+                                                      2.0                                                                                        400
+                                                                                                                                                                                                                     387 K
+                                                      1.5
+                                                                 Native ep145                                                                    350
+                                                      1.0                    GLR moves the
+                                                                             same backbone
+                                                      0.5                                                                                        300
+                                                             partition correct                    Published
+                                                                                 GLR                                                                                                                                 271 K
+                                                      0.0
+                                                                                                                                                 250
+                                                            10−4                          10−3                                                         0           5        10          15             20        25
+                                                                          one-step position MAE (Å)                                                                        NVE time (ps)
+
+
+                                                            mode kinetic energy / reference                                                            stability alone is not correctness
+                                                       v0          0.05                0.32           2.59
+                                                                                                                      1.6                         v0
+                                       250k                        0.22                0.31           2.47               Published
+                                                                                                                      1.4
+       Current-Only                                                0.26                0.21           2.61                     FDR v1
+                                                                                                                      1.2
+                                                                                                                                                 GLR                                                        D −26%
+       Native ep145                                                1.32                1.24           0.42
+
+                                                                                                                            ratio
+                                                                                                                      1.0                        M0                                 indep. 130 ps
+                                                      M0           1.37                1.31           0.41
+                                                                                                                     Native
+                                                                                                                      0.8   ep145
+            FDR v1                                                 1.01                1.01           0.98
+                                                                                                                     Current-Only
+                                                                                                                      0.6
+                                                      GLR          1.01                1.01           0.98
+                                                                                                                                             250k
+                                                                                                                      0.4
+          Published                                                1.02                0.98           1.00                                 CSRV            blow-up
+                                                                                                                                                                                 100 ps screen
+
+                                                             translation           rotation         internal                                                 10   1
+                                                                                                                                                                             102                 103
+                                                                                                                                                                       longest stable NVT (ps)
+
+
+
+      Figure 1: Pointwise accuracy and short-horizon stability do not predict NVT fidelity. (a) One-step
+      position error versus mean absolute mode-partition error. The published checkpoint has a large
+      one-step error but a correct partition; the 250k model is pointwise better and fails. The GLR
+      moves the same 250k backbone to a correct partition without changing its position head. (b) 25
+      ps NVE temperature traces. (c) Mode kinetic energy relative to the reference NVT. (d) Longest
+      stable NVT run and the partition verdict.
+
+
+164   displacement—and it crashed at 24.8 ps (minimum interatomic distance 0.647 Å), confirming that
+165   the decoupling is a stability requirement rather than a stylistic choice.
+166       The readout decomposes the velocity into molecular translation, rotation, and internal modes,
+167   which are orthogonal under the mass-weighted inner product; the kinetic energy therefore splits
+168   exactly into three contributions. For each mode a, we fit an AR(p) process to the reference velocity
+169   autocorrelation by Yule–Walker,
+                                                                                                          p
+                                                                                                          X
+                                                                                              v a (t) =         cak v a (t − k∆t) + εa (t),                                                                            (2)
+                                                                                                          k=1
+
+170   and set the noise variance from the prediction-error ratio ρa : Var(εa ) = ρa Na kB T /2. This is the
+171   fluctuation–dissipation condition: the memory kernel and the noise amplitude are tied to the same
+172   reference ACF. The readout is not a single gain with an ad hoc noise level.
+173       The AR prediction and the FD noise are blended with the backbone velocity, vtblend = (1 −
+
+
+                                                                                                                     5
+174   λ)vtpred + λṽt with λ = 0.1, and each mode is rescaled to its canonical mean kinetic energy,
+                                                              s
+                                      X                                Na kB T /2
+                             vtGLR =     sa (vtblend )a , sa = 1 P            blend )a |2
+                                                                                          .            (3)
+                                      a                           2   i mi |(vt      i
+
+175   The total centre-of-mass velocity is projected out after the rescale. The construction guarantees
+176   the mean mode partition Ka = Na kB T /2 at every step and the AR(p) stationary ACF up to lag p.
+177   The position marginal is not guaranteed analytically; it is learned by the backbone and validated
+178   empirically. The per-step rescale also suppresses the equilibrium fluctuations of the mode kinetic
+179   energy (reference std about 0.24 eV versus about 0.002 eV in the readout), so the guarantee is
+180   on the first moment, not the full kinetic-energy distribution; the marginal velocity distribution is
+181   nevertheless close to the reference (component kurtosis 2.93/5.49/5.93 versus 3.04/5.62/5.57 for
+182   translation, rotation, and internal motion).
+183       The order p is the only structural knob. A single gain (AR(1)) matches the 5 fs correlation
+184   but not the 25–100 fs memory; it leaves the internal mode too persistent and produces the wrong
+185   O–H RDF. AR(10) matches the short- and mid-lag ACF, and AR(20) also captures the 100–200
+186   fs internal tail. The main configuration uses AR(10); the order sweep is reported as an ablation.
+187   The readout is fitted, not trained: it requires a short reference NVT trajectory (100 ps in our
+188   water experiments), but no backbone gradients, no forces, and no new labels. The cost is negligible
+189   compared with the backbone forward pass. The next section applies the readout to the same frozen
+190   250k backbone that failed the NVT screen without it.
+
+191   2.6   Water NVT
+192   We applied the GLR to the frozen 250k backbone that failed the NVT screen without it. The
+193   readout was fitted once from a 100 ps block of the reference NVT trajectory (500–600 ps) and
+194   then used unchanged in all rollouts. We ran 100 ps from the val 04 NVE initial condition and
+195   from an independent NVT trajectory (301.8 K), and a 2.5 ns production run from each start.
+196   The integration step is 5 fs; no external thermostat is applied—the GLR is the thermostat. We
+197   compare the mode kinetic partition, the mode velocity ACFs, the O–O/O–H/H–H RDFs, the H/O
+198   VDOS, and the molecular centre-of-mass MSD and diffusion coefficient against the reference NVT
+199   trajectory.
+200       Without the readout, the 250k backbone has translation 0.538 eV, rotation 0.786 eV, and
+201   internal 6.044 eV. With the GLR, the 100 ps partition is 2.482/2.526/2.399 eV from val 04 and
+202   2.445/2.490/2.362 eV from the independent start, against the 2.5 ns reference means of 2.459/2.502/2.450
+203   eV. The total temperature is 300.0 K in both runs. The two starts agree within the reference block-
+204   to-block scatter, so the stationary partition is not a property of the val 04 initial condition. The
+205   published checkpoint gives 2.505/2.463/2.444 eV, also correct but with a different mix of residuals.
+206       The per-mode ACFs tell the same story. The translation ACF matches the reference at 5,
+207   25, 100, and 500 fs (GLR 0.981/0.640/0.014/−0.030 versus reference 0.982/0.658/0.039/−0.019).
+208   The internal ACF matches at 5 fs (−0.575 versus −0.567) and reproduces the mid-lag oscillation;
+209   the 500 fs tail is still too persistent (0.312 versus 0.104), a known limitation of AR(10). The
+210   AR(20) fit removes most of that residual (internal 100/200 fs 0.147/0.068 versus 0.147/0.072) and
+211   is reported as an order ablation rather than the main configuration. The readout matches the
+212   multi-lag dynamics, not just a single 5 fs gain.
+213       The 100 ps RDFs are closer to the reference than the published checkpoint in our analysis:
+214   O–O 0.032 versus 0.043, O–H 0.104 versus 0.118, H–H 0.026 versus 0.096. The independent start
+215   gives 0.036/0.098/0.027, essentially the same. The O VDOS overlap is 0.964 versus 0.937 for the
+
+
+                                                       6
+        a
+            Structure path
+
+
+
+                                frozen force-free                                           position update
+             state
+             qt, vt                backbone fθ                         Δqt                  qt + 1 = qt + Δqt
+                                    (no forces)                                              → next step
+
+
+
+
+                                            pred
+                                          vt
+        b
+            Thermodynamics path
+                                                     pred                      mode           translation
+                                                    vt
+                                                                              decomp.
+
+
+                                                                                               rotation
+                                                                                                                AR(p) memory
+                                                        blend                pred
+                                                                                                                 + FD noise        per-mode
+                                                    v           = (1 − λ)v          + λṽ                        (ρa-scaled)
+                                                                   λ = 0.1                                                          rescale
+                                                                                               internal
+
+
+
+                                                                                                                               vtGLR
+                                                                                                                                  +1
+        The readout is not integrated as a second position update: it supplies the velocity                                Ka = NakBT/2
+        that enters the next backbone call and the kinetic diagnostics. The rescale enforces
+        Ka = NakBT/2 per mode; the AR(p) stationarity matches the reference ACF.
+
+
+                                                                                                                               to next state
+
+
+
+
+      Figure 2: The GLR architecture. The frozen backbone supplies the displacement; the readout
+      supplies the velocity that enters the next backbone call. The AR(p) memory kernel is fitted from
+      the reference ACF, the FD noise variance follows from the prediction error, and the per-mode
+      rescale enforces Ka = Na kB T /2. The readout is not integrated as a second position update.
+
+
+216   published checkpoint; the H VDOS overlap is 0.848 versus 0.624. The H comparison is sensitive to
+217   our reference H-stretch frequency (the published model scores 0.624 here while the paper reports
+218   about 0.99 with its own reference), so we treat the O VDOS and the RDFs as the robust comparisons
+219   and report the H number with that caveat. At 2.5 ns the RDFs improve further to O–O 0.031,
+220   O–H 0.038, and H–H 0.028, and the O VDOS is 0.953; the longer run resolves the O–H distribution
+221   more accurately than the 100 ps screen.
+222       The improvement over the AR(1) readout is large and diagnostic. FDR v1, which has the
+223   correct partition but only a single gain, gives O–O 0.062, O–H 0.301, H–H 0.110 and H/O VDOS
+224   0.807/0.851. The AR(10) memory kernel improves O–H by a factor of three and the H VDOS by
+225   four points. The memory order, not the global temperature, is what controls the O–H spectrum.
+226       The 2.5 ns run remains stable (temperature 299.99 K, minimum interatomic distance above
+227   0.93 Å) and shows no sign of the slow collective drift that characterized the un-readout models.
+228   The 8-block diffusion analysis gives D = 1.406 ± 0.155 × 10−9 m2 s−1 , against 1.883 ± 0.306 × 10−9
+229   for the reference: the GLR is 25% low. The published checkpoint is 16% high (2.18×10−9 ). The
+230   FDR v1 fast tail (3.59×10−9 ) is absent, so the GLR fixes the qualitative failure of the AR(1)
+
+
+                                                                                     7
+      Table 1: Long-time NVT behaviour of force-free propagators and readouts on SPC/Fw water.
+      Partition is translation/rotation/internal kinetic energy; the reference is the 2.5 ns NVT mean
+      (2.459/2.502/2.450 eV). The first 100 ps reference block is an outlier (2.373/2.430/2.609 eV); using
+      it would exaggerate the GLR/published residuals but not change the ranking. RDF is RMSE
+      against the reference NVT; VDOS is the overlap. Diffusion is from 2.5 ns rollouts where available.
+      “Stable” is the longest NVT run without a safety stop; a stable run can still have the wrong
+      partition.
+      Method                Stable NVT          Partition (eV)         O–O / O–H / H–H RDF          VDOS (H/O)      D (10−9 m2 s−
+      Reference                 2.5 ns      2.459 / 2.502 / 2.450             0/0/0                     1/1            1.84–1.88
+      v0                       2.75 ns      0.111 / 0.808 / 6.338       0.944 / 1.409 / 0.229       0.356 / 0.236       0.0003
+      250k                     150 ps       0.538 / 0.786 / 6.044       0.646 / 1.312 / 0.249       0.406 / 0.487          —
+      Current-Only             150 ps       0.646 / 0.535 / 6.384       0.631 / 1.345 / 0.232       0.348 / 0.600          —
+      Native ep145             150 ps       3.256 / 3.105 / 1.041       0.180 / 1.584 / 0.074       0.683 / 0.905          —
+      M0                       150 ps       3.373 / 3.270 / 1.000       0.191 / 1.790 / 0.082       0.668 / 0.888          —
+      FDR v1 (AR1)              2.5 ns      2.482 / 2.533 / 2.392       0.062 / 0.301 / 0.110       0.807 / 0.851         3.59
+      GLR (AR10)               2.5 ns      2.482 / 2.526 / 2.399       0.031 / 0.038 / 0.028       0.847 / 0.953      1.39–1.41
+      Published TrajCast        2.5 ns      2.505 / 2.463 / 2.444       0.043 / 0.118 / 0.096       0.624 / 0.937         2.18
+      a
+       M0 passes on the val 04 start but blows up at 130 ps on an independent start.
+      b
+       GLR diffusion is 26% below the reference on two starts (independent 2.5 ns: RDF 0.028/0.044/0.027, VDOS
+      0.847/0.953, D 1.39); partition, RDF, and VDOS pass.
+      H VDOS overlap is sensitive to the reference H-stretch frequency; O VDOS and the RDFs are the robust
+      comparisons.
+
+
+
+231   readout but undershoots the reference. The independent 2.5 ns run gives an essentially identical
+232   result: partition 2.482/2.527/2.398 eV, RDFs 0.028/0.044/0.027, H/O VDOS 0.847/0.953, and
+233   D = 1.393 ± 0.079 × 10−9 . The two 2.5 ns starts agree on the stationary measure, including
+234   the 26% diffusion deficit; the deficit is a property of the decoupled architecture, not of the initial
+235   condition.
+236       The Green–Kubo integral of the mass-weighted translation ACF gives 1.42×10−9 for the GLR
+237   and 1.84×10−9 for the reference, in agreement with the MSD values. The position update is
+238   therefore consistent with the readout velocity; the deficit is in the translation ACF integral. The
+239   AR(10) translation ACF is −0.032 at 100 fs while the reference is +0.039; the AR(20) fit matches
+240   this lag. A mixed readout with translation AR(20) and rotation/internal AR(10) raises the Green–
+241   Kubo estimate to 1.61×10−9 at 100 ps but does not close the gap in the MSD. Increasing the
+242   translation blend or adding a translation-only displacement correction does not help; the decoupled
+243   position update remains the limiting factor. We therefore report the 25% deviation as a limitation
+244   rather than claiming exact diffusion recovery.
+245       The GLR is the first configuration in this study that combines (i) a stable 2.5 ns NVT run, (ii)
+246   a canonical mean mode partition, (iii) multi-lag ACF agreement, and (iv) RDF and VDOS at or
+247   beyond the published checkpoint. Its diffusion coefficient is 25% low but qualitatively correct, and
+248   far closer than the AR(1) readout. It does so with a frozen backbone and a readout fitted from 100
+249   ps of reference data. The remaining questions—seed error bars, the internal long tail, the diffusion
+250   deficit, and a second system—are addressed in the ablations and discussion.
+
+
+
+
+                                                            8
+                      a      canonical partition                          b       translation ACF                        c     internal ACF                              d       vibrational DOS
+                              reference         GLR indep.                1.0                                            0.4
+                      3.0                                                                                                                                                1.0                           GLR
+                              GLR               published                                                                                                                                              published
+                                                                                                                                                                                                       reference
+                      2.5                                                 0.8                                            0.2
+                                                                                                                                                                         0.8
+       mode KE (eV)
+
+
+
+
+                                                                                                                                                           VDOS (arb.)
+                      2.0                                                 0.6                                            0.0
+                                                                                                                                                                         0.6
+
+
+
+
+                                                                 αtrans
+
+
+
+
+                                                                                                             αint
+                      1.5                                                                                             −0.2
+                                                                          0.4
+                                                                                                                                                                         0.4
+                      1.0                                                                                             −0.4
+                                                                          0.2
+                                                                                      reference                                                                          0.2
+                      0.5                                                             GLR                             −0.6
+                                                                          0.0         GLR indep.
+                      0.0                                                                                                                                                0.0
+                              trans       rot         int                          101          102         103                 101      102         103                         0              50              100
+                                                                                             lag (fs)                                 lag (fs)                                         frequency (THz)
+
+
+
+
+                      e      O–O RDF                                      f       O–H RDF                                g     H–H RDF                                   h       diffusion
+                      3.5                                                 30
+                                                GLR                                                                      3.0                                             350              GLR
+                                                published                                                                                                                                 GLR indep.
+                      3.0
+                                                reference                 25                                                                                             300              reference
+                                                                                                                         2.5
+                      2.5
+                                                                          20                                                                                             250
+                                                                                                                         2.0
+
+
+
+
+                                                                                                                                                       MSD (Å2)
+                      2.0                                                                                                                                                            D: GLR 1.41, indep. 1.39
+                                                                                                                                                                         200         ref 1.88
+       g(r)
+
+
+
+
+                                                                  g(r)
+
+
+
+
+                                                                                                                  g(r)
+
+
+
+                                                                          15                                             1.5                                                         (10−9 m2 s−1)
+                      1.5                                                                                                                                                150
+                                                                          10                                             1.0
+                      1.0                                                                                                                                                100
+
+                      0.5                                                     5                                          0.5                                              50
+
+                      0.0                                                     0                                          0.0                                                 0
+
+                                   3              4          5                           2              4                       1                2                               0              50              100
+                                          r (Å)                                               r (Å)                                    r (Å)                                                 lag (ps)
+
+
+
+      Figure 3: Water NVT results. (a) Mode kinetic partition. (b, c) Translation and internal ACFs. (d)
+      Vibrational DOS (normalized). (e–g) O–O, O–H, and H–H RDFs. (h) Molecular-COM MSD and
+      the 2.5 ns diffusion. The GLR is compared with the reference and, where available, the published
+      checkpoint.
+
+
+251   2.7                   Ablations
+252   The AR(1) readout is the natural minimal thermostat: one gain per mode, fitted to the 5 fs
+253   correlation. It holds the mean partition once the variance is rescaled, but it does not reproduce
+254   the multi-lag dynamics. At 100 ps, the O–H RDF RMSE is 0.312 for the GLR AR(1), 0.301 for
+255   FDR v1, 0.131 for AR(5), 0.104 for AR(10), and 0.117 for AR(20); the O–H RDF is the clearest
+256   signature. The AR(1) internal ACF decays monotonically from −0.567 to zero, while the reference
+257   oscillates and crosses zero near 25 fs; the AR(10) kernel reproduces the oscillation. The AR(20)
+258   kernel also captures the 100–200 fs tail (internal 100/200 fs 0.147/0.068 versus 0.147/0.072), at
+259   the cost of a longer history and a larger coefficient vector, but its better long-lag ACF does not
+260   translate into a better short-window O–H. AR(10) therefore remains the main configuration; the
+261   order sweep shows the qualitative improvement from AR(1) to AR(10) rather than a monotone
+262   gain with order.
+263       The ablation that removes the per-step rescale isolates the partition guarantee. In the AR(1)
+264   readout, removing the rescale collapses the total kinetic energy and cools the system to about
+
+
+                                                                                                                  9
+265   14 K. With the GLR readout, the no-rescale run is stable but cools to 172 K; the partition is
+266   0.763/0.649/2.839 eV, the RDFs degrade to 0.398/0.474/0.279, and the H/O VDOS overlaps fall
+267   to 0.432/0.608. The rescale is not a cosmetic normalization; it is the step that makes the mode
+268   kinetic energy a design constraint rather than a by-product of the backbone and the noise.
+269       Contrary to our expectation, removing the FD noise did not degrade the 100 ps structure: the
+270   partition is unchanged (2.482/2.526/2.399 eV), the RDFs are 0.034/0.098/0.026, the H/O VDOS
+271   overlaps are 0.849/0.962, and the 10–80 ps diffusion estimate is 1.55×10−9 (versus 1.45×10−9
+272   with noise). At the small blend λ = 0.1, the backbone and the variance rescale provide enough
+273   fluctuation that the noise term is not the empirical driver. The memory kernel and the rescale are
+274   the load-bearing components; the FD noise is part of the theoretical construction and may matter
+275   at larger blend or for the one-point velocity distribution, but we do not claim it is necessary on the
+276   basis of this ablation.
+277       For the AR(1) readout, increasing the internal blend from 0.1 to 1.0 makes the O–H RDF
+278   worse (0.957 versus 0.301) and the VDOS worse (H/O 0.618/0.613 versus 0.807/0.851). A larger
+279   admixture of a single-gain readout does not fix the spectrum; it replaces the backbone’s internal
+280   bias with the readout’s wrong long-lag dynamics. The blend is kept at 0.1 to preserve the position
+281   head; the memory kernel, not the blend, does the work.
+282       Adding the velocity correction to the displacement—the obvious way to make positions and
+283   velocities consistent—crashes at 24.8 ps (minimum distance 0.647 Å) while the temperature remains
+284   at 300 K. The failure is structural, not thermal: the correction injects a displacement increment that
+285   the backbone’s next state cannot absorb. The decoupled scheme is therefore a stability requirement,
+286   and the method does not simply integrate the readout velocity.
+287       Three 100 ps seeds give the same partition (2.482/2.526/2.399 eV) and a narrow spread in the
+288   structural metrics: O–H 0.104/0.111/0.110, O–O 0.032/0.034/0.033, H VDOS 0.848/0.854/0.846,
+289   and O VDOS 0.964/0.966/0.959. The 2.5 ns O–H improvement to 0.038 is therefore a sampling
+290   effect of the longer trajectory, not a seed fluctuation. The frozen-vs-end-to-end backbone compar-
+291   ison and a second system are left to future work: the present paper is a water method paper, and
+292   the claim is architectural rather than universal.
+
+
+293   3    Discussion
+294   We have shown that the long-time failure of force-free molecular dynamics propagators is not
+295   primarily a one-step accuracy problem. A published propagator with a fifteen-fold larger pointwise
+296   error reproduces the canonical water ensemble, while a pointwise-better model develops a large
+297   mode imbalance and fails the same NVT screen. The failure is also not an energy-drift problem:
+298   the model that heats most strongly in NVE passes NVT, and the most NVE-stable model fails.
+299   The discriminating object is the mode-resolved stationary measure of the composed propagator
+300   plus thermostat. This diagnostic is, to our knowledge, the first systematic demonstration of the
+301   pointwise–ensemble decoupling for force-free MD, and it changes what a training or acceptance
+302   criterion should measure.
+303       The remedy follows from the diagnosis. A frozen backbone supplies the structure—the displace-
+304   ment that determines the position marginal—while a mode-resolved generalized-Langevin readout
+305   supplies the velocity that enters the next backbone call. The readout fits a per-mode AR(p) mem-
+306   ory kernel to the reference velocity autocorrelation, injects noise with the fluctuation–dissipation
+307   consistent variance, and rescales each mode to its canonical mean kinetic energy at every step. The
+308   partition is guaranteed by construction; the memory kernel matches the multi-lag dynamics that a
+309   single gain cannot. The backbone is not retrained, and the readout is fitted from a short reference
+
+
+                                                       10
+       a                                  internal memory kernel                                                 b                          O–H RDF: memory order matters
+                                              reference
+                                                                                                                                                                                                GLR
+                                    0.4       AR(1)                                    AR(10)                                         30
+                                                                                                                                                                                                FDR v1 (AR1)
+                                                                                                                                                                                                reference
+                                    0.2                                                                                               25
+
+                                    0.0                                                                                               20
+
+
+
+
+                                                                                                                             gOH(r)
+                                                                                                                                                                    RMSE
+           αint
+
+
+
+
+                                                                                                                                      15                            0.104 (GLR)
+                            −0.2                                                                                                                                    0.301 (AR1)
+
+                                                                                                                                      10
+                            −0.4
+                                                                                                                                       5
+                            −0.6
+                                                                                                                                       0
+                                          0      25       50    75     100       125    150      175   200                                 0.8        1.0   1.2     1.4    1.6        1.8     2.0      2.2      2.4
+                                                                      lag (fs)                                                                                             r (Å)
+
+
+       c                                  displacement correction is unstable                                    d                          memory order and rescale
+
+                                    1.1                                                                                     6 × 10−1
+                                                                                                                                                                                                        0.474
+             minimum distance (Å)
+
+
+
+
+                                    1.0                                                                                     4 × 10−1
+
+
+
+                                                                                                             O–H RDF RMSE
+                                                                                                                                                 0.312
+                                                                                                                            3 × 10−1
+                                    0.9
+
+                                                                                                                            2 × 10−1
+                                    0.8
+                                                                                                                                                            0.131
+                                                                                                                                                                    published    0.117
+                                    0.7                                                                                                                               0.104
+                                                                                                                                                                                            0.098
+                                                                                                                                      −1
+                                                                                                                                10
+                                    0.6
+                                          0           5        10       15         20           25     30                                        p1         p5         0          0          off         off
+                                                                                                                                                                     p1         p2
+                                                                                                                                                                                         ise         ale
+                                                                     time (ps)                                                                                                        no         resc
+
+
+
+
+      Figure 4: Ablations. (a) Internal ACF for AR(1), AR(10), and AR(20) against the reference. (b)
+      O–H RDF for the AR(1) and AR(10) readouts. (c) Minimum interatomic distance for the direct
+      displacement-correction variant, which stops at 24.8 ps. (d) Rescale, noise, and seed ablations.
+
+
+310   NVT trajectory. On water, the result is a model that is stable on two independent initial conditions,
+311   initial-condition independent in its partition, ACF, RDF, and VDOS, and more accurate than the
+312   published checkpoint on the RDFs and VDOS in our analysis.
+313       The relationship to prior work is complementary rather than competitive. TrajCast established
+314   that force-free propagators can reproduce water physics 1 ; our work explains when that success
+315   is fragile and adds a readout that makes the mode partition a design constraint rather than a
+316   lucky outcome. Structure-preserving action maps enforce symplectic or time-reversible structure
+317   and improve energy conservation and equipartition 3 ; they target mechanical structure, whereas
+318   the GLR targets the canonical NVT measure and the multi-lag velocity statistics. The two could
+319   be combined: an action map would supply a better backbone, and the GLR would enforce the
+320   mode partition on top of it. Learned velocity updates recover stability with a black-box LSTM
+321   and periodic injection 4 ; the GLR is interpretable, mode-resolved, and tied to the reference ACF,
+322   and it guarantees the partition rather than only delaying divergence. GLE thermostats provide the
+323   same memory-kernel and colored-noise physics 5,6 , and frequency-resolved thermostats can control
+324   selected modes 7 ; the difference is the object. A GLE thermostat acts on the forces and velocities of
+325   an MD integrator. The GLR is a readout on a frozen force-free propagator, fitted from the reference
+326   ACF, with an explicit per-mode variance guarantee and a diagnostic that motivates it. Stochastic
+327   and generative propagators offer a different route to equilibrium 8,9 , at the cost of MCMC, an energy
+
+
+                                                                                                            11
+328   function, or a larger generative model; the GLR is a lightweight post-hoc readout.
+329       The diagnostic has implications beyond this method. Force-free propagators are usually selected
+330   and reported by one-step MAE, sometimes with a short rollout score. Our results show that this
+331   criterion can rank models in the wrong order. An ensemble-level, mode-resolved evaluation—kinetic
+332   partition, RDF, VDOS, and diffusion—is necessary to detect the failure. The same lesson applies
+333   to other learned dynamical maps: a low conditional-mean error does not imply a correct invariant
+334   measure, and a stable rollout does not imply a correct one. We therefore recommend that force-free
+335   MD papers report the mode partition and at least one long-time structural or dynamical observable,
+336   not only one-step errors.
+337       Several limitations define the boundary of the claim. First, the analytic guarantee covers the
+338   mean mode kinetic partition and the velocity ACF, not the full joint position–velocity distri-
+339   bution. The per-step rescale fixes the mode kinetic energy to its canonical mean and therefore
+340   suppresses its equilibrium fluctuations (reference std about 0.24 eV versus about 0.002 eV in the
+341   readout). The marginal velocity distribution is nevertheless close to the reference (component
+342   kurtosis 2.93/5.49/5.93 versus 3.04/5.62/5.57), so the fixed-norm constraint does not distort the
+343   one-point velocity statistics. The position marginal is learned by the backbone and validated empir-
+344   ically; a full canonical guarantee, including the correct kinetic-energy fluctuations, would require a
+345   stochastic rescale or an energy-based sampler such as MCMC. Second, the readout requires a short
+346   reference NVT trajectory to fit the ACF. This is much cheaper than retraining and is available
+347   for most systems of interest, but it is a data requirement, not a free lunch. The fit uses only the
+348   mode velocity ACF; the RDF, VDOS, and diffusion are held out and are not used to fit any read-
+349   out parameter. Third, we demonstrate one water model and one backbone family. The method
+350   is backbone-agnostic in principle, but a second backbone and a second system are needed to es-
+351   tablish generality. Fourth, the internal ACF at 500 fs remains too persistent for AR(10); AR(20)
+352   reduces the discrepancy but does not eliminate it. Fifth, the diffusion coefficient is 26% below
+353   the reference on both 2.5 ns starts (1.39–1.41 versus 1.88×10−9 ). The Green–Kubo integral shows
+354   that the deficit is in the translation ACF, and the decoupled position update prevents a simple
+355   blend or displacement correction from closing it; a position-consistent readout or an end-to-end
+356   centre-of-mass head is future work. Sixth, the backbone uses a local 6 Å cutoff and no long-range
+357   electrostatics; the GLR does not address long-range physics, and the water results should not be
+358   read as a claim about large-scale dielectric or interfacial behaviour. Finally, the current production
+359   runs use a single seed; seed and block error bars are needed before the numerical claims are final.
+360       The outlook is straightforward. The readout can be trained jointly with the backbone, rather
+361   than fitted post hoc, which may improve the position marginal while retaining the partition guar-
+362   antee. The memory kernel can be made system- and temperature-adaptive, and the mode decom-
+363   position can be extended to phonons or other collective coordinates. Combined with a structure-
+364   preserving backbone and a long-range operator, the same diagnostic-and-readout strategy could
+365   make force-free propagators reliable beyond water.
+
+
+366   4     Methods
+367   4.1   Reference data and force-free backbone
+368   We use the flexible SPC/Fw water model 10 with 64 molecules (192 atoms) in a periodic cubic cell.
+369   The NVE training data, the NVT reference, and the independent NVT trajectory are described in
+370   the main text. The reference NVT trajectory is 2.5 ns at 300 K with a CSVR thermostat 2 , a 50
+371   fs thermostat damping time, and a 0.5 fs saving interval; the readout is fitted on a 100 ps block
+372   starting at 500 ps (20,000 frames at a 5 fs stride). The fit uses only the mode velocity ACF. The
+
+                                                       12
+373   RDF, VDOS, and diffusion are not used to fit any readout parameter and are held out as evaluation
+374   observables. The independent NVT trajectory uses a different initial condition and seed: 100 ps of
+375   thermalization followed by 500 ps of production at 300 K, with the first production frame at 301.8
+376   K. The reference data are read-only; no reference force is used during propagation.
+377        The backbone is a relational equivariant message-passing network with a 6 Å cutoff, 192 scalar
+378   channels, 48 vector channels, 96 edge channels, 16 radial channels, and a 5 fs horizon. It is trained
+379   on 5 fs pairs from the NVE trajectories (5,000 training, 1,250 validation, and 1,000 test graphs)
+380   by minimizing a normalized endpoint position and velocity loss, with batch size 8, a learning rate
+381   of 3 × 10−4 , warmup–cosine scheduling, gradient clipping at 10, and 250,000 optimizer steps. The
+382   selected checkpoint is epoch 398 (2,357,616 parameters). The published TrajCast water checkpoint 1
+383   has 2,258,856 parameters, uses the native e3nn backend 11 and a 5 fs horizon, and is evaluated under
+384   the same 100 ps protocol with its native CSVR thermostat. In the GLR experiments the backbone
+385   is frozen: no backbone parameter is updated, and the readout is fitted separately.
+
+386   4.2    Mode decomposition
+                                                       −1                             −1
+                                     P                    P                              P
+387   For each molecule m, let Mm =    i∈m mi , Rm = Mm      i∈m mi ri , and Vm = Mm      i∈m mi vi .
+388   With rmi = ri − Rm (minimum image) and vmi = vi − Vm , the angular velocity is
+                               X                       X                         
+                            −1
+                      ωm = Im    mi rmi × vmi ,   Im =     mi |rmi |2 1 − rmi rmi
+                                                                               T
+                                                                                    ,          (4)
+                                   i∈m                                   i∈m
+
+389   using a pseudo-inverse for linear molecules. The three mass-weighted modes are
+                             vitrans = Vm ,          virot = ωm × rmi ,
+                                                                 viint = vmi − virot .           (5)
+      They are orthogonal under the mass-weighted inner product, so K = a Ka with Ka = 12 i mi |via |2 .
+                                                                          P               P
+390
+
+391   The mode degrees of freedom are Ntrans = 3Nmol − 3, Nrot = 3Nmol , and Nint = 3Natom − 6Nmol .
+
+392   4.3    Mode-resolved AR(p) readout
+393   For each mode a, the reference velocity autocorrelation is
+                                                 mi ⟨v a (t) · via (t + ℓ∆t)⟩
+                                              P
+                                     αa (ℓ) = i P i             a     2
+                                                                              .                        (6)
+                                                      i mi ⟨|vi (t)| ⟩
+
+394   We fit an AR(p) process by Yule–Walker,
+                                            p
+                                            X
+                                v a (t) =         cak v a (t − k∆t) + εa (t),      Ra ca = ra ,        (7)
+                                            k=1
+
+395   where (Ra )ij = αa (|i − j|) and (ra )k = αa (k). The prediction-error ratio is
+                                                    p
+                                                    X
+                                     ρa = 1 −             cak αa (k) = Var(εa )/ Var(v a ).            (8)
+                                                    k=1
+
+396   The fluctuation–dissipation condition fixes the noise variance,
+                                                   Var(εa ) = ρa Na kB T /2.                           (9)
+397   At each step a fresh Gaussian field is decomposed into the three modes and each mode component
+398   is rescaled to this target noise kinetic energy before it is added to the AR prediction. The main
+399   configuration uses p = 10; the order ablation uses p = 1, 5, 20.
+
+                                                                 13
+400   4.4   Readout, blend, and variance rescaling
+401   The readout velocity is
+                                                     p
+                                                                              !
+                                                   X X
+                                           ṽt =             cak vt−k
+                                                                  a
+                                                                      + εat       .                    (10)
+                                                   a   k=1
+402   It is blended with the backbone velocity,
+                                           vtblend = (1 − λ)vtpred + λṽt ,                            (11)
+403   with λ = 0.1, and each mode is rescaled to its canonical mean kinetic energy:
+                                                             s
+                                   X                                Na kB T /2
+                           vtGLR =    sa (vtblend )a ,  sa = 1 P           blend )a |2
+                                                                                       .               (12)
+                                   a                           2   i mi |(vt      i
+
+404   The total centre-of-mass velocity is projected out after the rescale. The position update remains
+405   qt+1 = qt + ∆qt , where ∆qt is the backbone displacement; the readout is not integrated as a second
+406   position update. We tested the alternative qt+1 = qt +∆qt +∆t(vtGLR −vtpred ) and partial translation-
+407   only and molecule-COM variants in the ablation. The full correction is unstable, and the partial
+408   variants do not close the diffusion gap without breaking the MSD–Green–Kubo consistency or the
+409   RDF (see main text and Supplementary Information).
+
+410   4.5   Rollout protocol and metrics
+411   All rollouts use a 5 fs horizon, no external thermostat, and the same safety stop as the production
+412   screens (minimum interatomic distance 0.65 Å, pre-thermostat temperature 3000 K). The 100 ps
+413   screens (20,000 steps) use the val 04 NVE frame and the independent NVT frame as initial condi-
+414   tions; the 2.5 ns production runs (500,000 steps) start from the same frames with no thermalization.
+415   The seeds are 2026110401 (val 04), 2026110402 (independent), and 2026110401/02/03 for the seed
+416   study. The published checkpoint is run with its native CSVR thermostat under the same 100 ps
+417   protocol; its 2.5 ns diffusion is taken from the published value because the native float64 rollout is
+418   prohibitively slow on our contended GPU.
+419       The mode kinetic partition is the mean Ka over the production window. The ACF is computed
+420   from the mode velocities with the same mass-weighted estimator as the fit, at lags 5–1000 fs. RDFs
+421   are computed on 512 uniformly spaced frames with a 6 Å maximum radius. VDOS overlaps use the
+422   same block spectral estimator as the reference: six blocks of 4.096 ps, a 100 THz Nyquist frequency,
+423   and a Hann window. The diffusion coefficient is obtained from the molecular centre-of-mass mean-
+424   squared displacement with time-origin averaging, eight blocks, a 50 fs sampling cadence, and a
+425   linear fit over 10–100 ps per block; the global centre-of-mass drift is removed. For 2.5 ns, each
+426   block is 312.5 ps long. The diffusion coefficient is D = slope/6 × 10−8 m2 s−1 when the MSD is
+427   in Å2 and the lag in ps. Error bars are block means and standard deviations; the seed study uses
+428   three independent noise realizations.
+429       The GLR rollout costs 15.4 ns day−1 end-to-end on an NVIDIA RTX PRO 6000 Blackwell
+430   GPU for 100 ps, with a peak memory of 185 MB and 2.36M parameters. The readout adds a mode
+431   decomposition and a p-step history per step; it is negligible compared with the backbone forward
+432   pass.
+
+433   4.6   Baselines and controls
+434   The structure-only control is the 250k backbone without the readout. FDR v1 is the AR(1) readout
+435   with the same blend and rescale. M0 is the 250k backbone fine-tuned on 5 fs pairs from the reference
+
+                                                         14
+436   NVT trajectory. The CSRV control is the 5-step moment-loss rollout. The native ep145 checkpoint
+437   is a partially trained TrajCast architecture and is reported as a diagnostic, not a fair architecture
+438   baseline. The published TrajCast checkpoint is the external baseline.
+
+439   4.7   Statistics and reproducibility
+440   The reference partition has substantial block-to-block scatter: the first 100 ps block gives 2.373/2.430/2.609
+441   eV, while the 2.5 ns mean is 2.459/2.502/2.450 eV. We therefore use the 2.5 ns mean for long-time
+442   partition comparisons and report the 100 ps block separately. All error bars are block means and
+443   standard deviations over eight contiguous blocks unless stated otherwise. The diffusion fits use the
+444   same eight-block protocol and report the block mean and standard deviation; the fit quality is sum-
+445   marized by R2 . The seed study repeats the full 100 ps rollout with independent noise realizations
+446   and reports the seed-to-seed spread of the partition, RDF, VDOS, and diffusion. The reference tra-
+447   jectories are read-only; the rollout code writes a new HDF5 file and refuses to overwrite an existing
+448   one. Each rollout records the checkpoint SHA-256, the seed, the initial frame, the integration step,
+449   and the safety-stop status. No reference force is used during propagation; the reference forces are
+450   used only in the independent energy verification of the NVT trajectory.
+
+451   4.8   Computational cost
+452   The GLR rollout costs 15.4 ns day−1 end-to-end on an NVIDIA RTX PRO 6000 Blackwell GPU
+453   for a 100 ps run, with a peak memory of 185 MB. The readout adds a mode decomposition and
+454   a p-step history per step; the cost is negligible compared with the backbone forward pass. The
+455   published native checkpoint is about an order of magnitude slower in our environment because it
+456   uses float64 and the native e3nn path, which is why its 2.5 ns baseline is taken from the published
+457   value rather than re-run.
+
+458   4.9   Data and code availability
+459   The reference NVT trajectory, the independent NVT trajectory, and the rollout trajectories are
+460   available at [repository/DOI to be supplied]. The published TrajCast checkpoint is available from
+461   the IBM Hugging Face repository ibm-research/trajcast.models-arxiv2025. The GLR read-
+462   out, the Yule–Walker fit, and the rollout code are available at [repository URL to be supplied]. No
+463   reference force is used during propagation.
+
+
+464   References
+465    [1] Fabian L. Thiemann, Thiago Reschützegger, Massimiliano Esposito, Tseden Taddese, Juan D.
+466        Olarte-Plata, and Fausto Martelli. Force-free molecular dynamics through autoregres-
+467        sive equivariant networks. Nature Machine Intelligence, 8:764–776, 2026. doi: 10.1038/
+468        s42256-026-01227-7. arXiv:2503.23794.
+
+469    [2] Giovanni Bussi, Davide Donadio, and Michele Parrinello. Canonical sampling through velocity
+470        rescaling. The Journal of Chemical Physics, 126:014101, 2007. doi: 10.1063/1.2408420.
+
+471    [3] Filippo Bigi, Johannes Spies, and Michele Ceriotti. Learning the action for long-time-step
+472        simulations of molecular dynamics. Physical Review Letters, 136:237301, 2026. doi: 10.1103/
+473        shj2-hyw8. arXiv:2508.01068.
+
+
+
+                                                        15
+474    [4] Guy W. Dayhoff and Sameer Varma. Velocity updates from machine learning for stable molec-
+475        ular dynamics integration. AIP Advances, 16(1):015205, 2026. doi: 10.1063/5.0301419.
+
+476    [5] Michele Ceriotti, Giovanni Bussi, and Michele Parrinello. Langevin equation with colored
+477        noise for constant-temperature molecular dynamics simulations. Physical Review Letters, 102:
+478        020601, 2009. doi: 10.1103/PhysRevLett.102.020601.
+
+479    [6] Michele Ceriotti, Giovanni Bussi, and Michele Parrinello. Colored-noise thermostats à la carte.
+480        Journal of Chemical Theory and Computation, 6:1170–1180, 2010. doi: 10.1021/ct900563s.
+
+481    [7] Sriram Ganeshan, R. Ramı́rez, and M. V. Fernández-Serra. Simulation of quantum zero-point
+482        effects in water using a frequency-dependent thermostat. Physical Review B, 87:134207, 2013.
+483        doi: 10.1103/PhysRevB.87.134207.
+
+484    [8] Leon Klein, Andrew Y. K. Foong, Tor Erlend Fjelde, Bruno Mlodozeniec, Marc Brockschmidt,
+485        Sebastian Nowozin, Frank Noé, and Ryota Tomioka. Timewarp: Transferable acceleration of
+486        molecular dynamics by learning time-coarsened dynamics. In Advances in Neural Information
+487        Processing Systems, volume 36, 2023. arXiv:2302.01170.
+
+488    [9] Bowen Jing, Hannes Stärk, Tommi Jaakkola, and Bonnie Berger. Generative modeling of
+489        molecular dynamics trajectories. In Advances in Neural Information Processing Systems, vol-
+490        ume 37, 2024. arXiv:2409.17808.
+
+491   [10] Yujie Wu, Harald L. Tepper, and Gregory A. Voth. Flexible simple point-charge water model
+492        with improved liquid-state properties. The Journal of Chemical Physics, 124:024503, 2006.
+493        doi: 10.1063/1.2136877.
+
+494   [11] Mario Geiger and Tess Smidt. e3nn: Euclidean neural networks, 2022.
+
+
+
+
+                                                       16
+
