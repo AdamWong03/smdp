@@ -13,6 +13,17 @@ priority optimization is a **self-consistent stochastic GLE readout** (GK-constr
 + FD-consistent colored noise) that removes the ad-hoc variance rescale and targets the
 variance/GK–MSD/diffusion trade-off. The first step is an offline kernel fit; no backbone training.
 
+**2026-11-27 update (supersedes earlier wording):** §10 reports the position–velocity and
+calibration audits. The 8-block 2.5 ns analysis gives GK/MSD **0.958** (deterministic GLR),
+**1.058** (stochastic GLR), and **1.052** (reference); the earlier "stochastic GLR breaks GK/MSD"
+was a first-block fluctuation, not a systematic 2.5 ns result. The D deficit is a **common low-D
+bias**, not a GK/MSD inconsistency. The production GLR is **not a self-consistent propagator**:
+positions come from the backbone displacement, velocities from the readout; the corrected velocity
+is not integrated. The AR(10) Yule–Walker fit uses only **0–50 fs** (`--maxlag 40` is only the
+reported ACF length); independent 100/200 ps calibration gives the same coefficients and the same
+2.3–2.5× integral overprediction. The bottleneck is the 0–50 fs local AR fit plus the readout
+coupling, not the calibration-trajectory length or leakage.
+
 **Execution update (2026-11-26):** the offline study shows that **3 DHO modes + slow mode are
 sufficient** on the 25-block mean ACF (integral 14.34 vs 14.45 fs); 4–6 modes improve the ACF
 shape but not the integral. The dominant problem is the **calibration window**: the 100 ps
@@ -750,7 +761,8 @@ readout**, then a two-start 100 ps water test.
 
 - Exact D recovery / a "25% low" claim without full-reference uncertainty and a recalibrated
   readout.
-- Full KE variance for deterministic GLR (mean-only); stochastic GLR GK/MSD inconsistency.
+- Full KE variance for deterministic GLR (mean-only); a systematic stochastic GK/MSD claim
+  (the 8-block ratio is 1.058; the larger kinematic residual is real).
 - One-rule cross-material claim (water memory vs quartz no memory).
 - Official TrajCast 2.5 ns (running) and converged native TrajCast (ep145/1500 is not fair).
 - 2.5 ns quartz; external action-map/FlashMD comparisons; a clean held-out reference test.
@@ -883,8 +895,10 @@ number before that file exists.
 | stochastic GLR | 299.97 | 7.4058 | **0.2520** | **1.435 ± 0.130** | 0.0276 | 0.949/0.852 |
 
 Deterministic GLR recovers the mean partition but suppresses the KE variance. Stochastic GLR
-restores the variance but does **not** fix D (still ~24% low) and has a known GK/MSD consistency
-problem. The GLE was intended to fix both; its offline gate failed.
+restores the variance; both leave D 22–25% low. The earlier "stochastic GK/MSD inconsistency" was
+a first-block fluctuation; the 8-block GK/MSD ratio is **1.058** (reference 1.052), so it is not a
+systematic 2.5 ns break. The stochastic rescale does increase the kinematic residual (3.8% vs
+1.3%). The GLE was intended to fix both; its offline gate failed.
 
 ### 9.7 Final decision
 
@@ -909,10 +923,12 @@ referenced, not copied.
 has large 100 ps block uncertainty; short calibration biases D; the 3-mode continuous fit's
 apparent success is a 5 fs aliasing artifact; the exact 2×2 discrete implementation is verified.
 
-**Not ready:** exact D recovery; full KE variance for deterministic GLR; stochastic GLR GK/MSD
-consistency; one-rule cross-material claim; official TrajCast 2.5 ns (running); converged native
-TrajCast; 2.5 ns quartz; external action-map/FlashMD comparisons; clean held-out test; the new
-GLE readout (offline gate failed).
+**Not ready:** exact D recovery; full KE variance for deterministic GLR; a systematic stochastic
+GK/MSD claim (the 8-block ratio is 1.058; the larger kinematic residual is real); a
+self-consistent position/velocity scheme; a 0–50 fs AR fit that predicts autonomous D; one-rule
+cross-material claim; official TrajCast 2.5 ns (running); converged native TrajCast; 2.5 ns
+quartz; external action-map/FlashMD comparisons; clean held-out test; the new GLE readout
+(offline gate failed).
 
 ---
 
