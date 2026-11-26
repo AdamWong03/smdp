@@ -157,6 +157,11 @@ The independent `train_nvt_200ps` reference shows the same ACF (5 fs 0.9816/0.98
 a calibration-block artifact. The exact discrete 5-mode process's long-time ACF (RMSE 0.047)
 and D (+1.0%) are correct; the failure is the **short-time (5 fs) kernel shape**.
 
+PSD/realizability/stability: the 5-mode ACF's real FFT is non-negative (min **0.500** at 0.5 fs,
+**0.508** at 5 fs); `Q_d` min eigenvalue **1.4e-7 > 0**; `A_d` spectral radius **0.991 < 1**.
+The exact discrete FDT is satisfied. The failure is the short-time shape, not realizability or
+stability.
+
 **Decision: the offline gate did not pass. No 100 ps GLE rollout was started.** The failure is
 classified as **kernel identification at 5 fs**; the discrete implementation is verified, and
 the neural coupling was not exercised.

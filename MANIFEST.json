@@ -1,5 +1,5 @@
 {
-  "created": "2026-11-26T16:21:17.741523+00:00",
+  "created": "2026-11-26T16:23:08.898988+00:00",
   "snapshot": "/data2/wyd/research/foundation_mlip_adaptation/reproducibility/snapshot_20261127",
   "description": "Reproducible snapshot of the GLR/GLE audit, 2026-11-27. Large trajectories are referenced in data_sources.json.",
   "seeds": {
@@ -399,20 +399,20 @@
     {
       "original_path": "experiments/published_trajcast_2p5ns_20261126/run.log",
       "snapshot_path": "logs/published_trajcast_2p5ns_partial_run.log",
-      "size_bytes": 17786,
-      "sha256": "316e311bc1fb2a6d311bc9bc848723f09eecd351caa3277cca92dbaf32ca98be"
+      "size_bytes": 17888,
+      "sha256": "b0beb91411cbdc4f67d104ebeb43bfaa4c6e0d365e5b4e7c36cfa65927c9d88b"
     },
     {
       "original_path": "SMDP_ICML2027_STATUS_AUDIT.md",
       "snapshot_path": "docs/SMDP_ICML2027_STATUS_AUDIT.md",
-      "size_bytes": 58447,
-      "sha256": "095243cb1a526a68881d59ba8a1f35c2614f785c7096ecf851d72b97ab91073f"
+      "size_bytes": 58756,
+      "sha256": "3c2b72cba339167834ca07bb58828a274c133da678063967f487813f9160f2be"
     },
     {
       "original_path": "paper/CLAIM_BOUNDARY.md",
       "snapshot_path": "docs/CLAIM_BOUNDARY.md",
-      "size_bytes": 5255,
-      "sha256": "83d6f7cb226ff5cf637906948d8d147928a47e373daf322f7edd951fbff0b73f"
+      "size_bytes": 5752,
+      "sha256": "41bea45878137934454f21370e850dd986f52193d5990fc097c46451abb73769"
     },
     {
       "original_path": "reproducibility/build_snapshot_20261127.py",
@@ -423,8 +423,8 @@
     {
       "original_path": "(snapshot README)",
       "snapshot_path": "README.md",
-      "size_bytes": 15952,
-      "sha256": "cf32f763192bee2f59e918925612f5ffffa62c51db53f4abb45ec6dfad2e5fac"
+      "size_bytes": 16250,
+      "sha256": "ef842ec5c1d593f13fcc5b55ce9edf880fce555d5e0f697a239f19b902fa6db0"
     }
   ],
   "missing": [],
@@ -435,7 +435,7 @@
       "exists": true,
       "size_bytes": 23205934562,
       "mtime": "2026-10-21T01:53:10.113313+00:00",
-      "sha256": null,
+      "sha256": "1021472bf4490ba49dee96af3849a7493a7dff12255287efdd843d699f2a4877",
       "note": "calibration + evaluation; 0.5 fs storage; 5,000,001 frames"
     },
     {
@@ -444,7 +444,7 @@
       "exists": true,
       "size_bytes": 2492837498,
       "mtime": "2026-11-24T15:10:49.072781+00:00",
-      "sha256": null,
+      "sha256": "6481d6520aa19bf1b7a2f28f84c53c8aa42bf0514adcf2a1b8ab106253ab3ead",
       "note": "independent NVT trajectory used for ACF validation"
     },
     {

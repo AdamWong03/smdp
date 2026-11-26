@@ -7,7 +7,7 @@
       "exists": true,
       "size_bytes": 23205934562,
       "mtime": "2026-10-21T01:53:10.113313+00:00",
-      "sha256": null,
+      "sha256": "1021472bf4490ba49dee96af3849a7493a7dff12255287efdd843d699f2a4877",
       "note": "calibration + evaluation; 0.5 fs storage; 5,000,001 frames"
     },
     {
@@ -16,7 +16,7 @@
       "exists": true,
       "size_bytes": 2492837498,
       "mtime": "2026-11-24T15:10:49.072781+00:00",
-      "sha256": null,
+      "sha256": "6481d6520aa19bf1b7a2f28f84c53c8aa42bf0514adcf2a1b8ab106253ab3ead",
       "note": "independent NVT trajectory used for ACF validation"
     },
     {

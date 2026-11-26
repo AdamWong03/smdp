@@ -35,6 +35,12 @@ The paper **does not** claim:
 
 ## What is locked
 
+- Unified method definition (same algorithm, material-specific basis): choose an orthogonal,
+  physically defined mode basis (molecular translation/rotation/internal for water; phonon bands
+  for quartz); fit each mode ACF on a reference NVT trajectory; apply AR(\(m\)) memory only where
+  the backbone ACF is wrong; rescale the mode KE to the canonical target; blend \(\lambda=0.1\);
+  project out the COM. The basis is material-specific; the algorithm and parameter-selection rule
+  are shared.
 - The readout algorithm: physics-defined mode basis, AR(10) memory where the backbone ACF is
   wrong, group-resolved variance rescale, blend \(\lambda=0.1\), COM projection,
   \(q'=q+\Delta q\).

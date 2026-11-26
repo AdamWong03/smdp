@@ -809,6 +809,10 @@ constrain the discrete Green–Kubo integral. Best candidates:
 - The frequency-bounded generalized fits restore the discrete D but cannot reproduce the 5/25 fs
   shoulder. The 5-mode 5 fs ACF is 0.726 vs 0.982 (error 0.255); the 25 fs is 0.536 vs 0.659
   (error 0.123). The 6-mode adds 3 parameters and improves the key RMSE by only 0.003.
+- **PSD/realizability/stability:** the 5-mode ACF's real FFT is non-negative (min **0.500** at
+  0.5 fs, **0.508** at 5 fs); `Q_d` min eigenvalue **1.4e-7 > 0**; `A_d` spectral radius
+  **0.991 < 1**. The exact discrete FDT is satisfied. The failure is the short-time shape, not
+  realizability or stability.
 - **Mode count is not the bottleneck; the 3–6 mode DHO+slow family is not identifiable at 5 fs.**
 
 ### 9.3 Independent-reference confirmation

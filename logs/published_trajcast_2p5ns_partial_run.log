@@ -146,3 +146,4 @@ cuequivariance or cuequivariance_torch is not available. Cuequivariance accelera
 {"step": 79000, "total": 510000, "temperature_K": 281.68995632756537, "elapsed_s": 13065.523638448212}
 {"step": 80000, "total": 510000, "temperature_K": 330.10518266258885, "elapsed_s": 13383.3162213061}
 {"step": 81000, "total": 510000, "temperature_K": 297.2665141032938, "elapsed_s": 13682.931174556259}
+{"step": 82000, "total": 510000, "temperature_K": 309.72499533744593, "elapsed_s": 13823.71668631304}
