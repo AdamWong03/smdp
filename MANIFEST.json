@@ -1,5 +1,5 @@
 {
-  "created": "2026-11-26T16:20:32.383744+00:00",
+  "created": "2026-11-26T16:21:17.741523+00:00",
   "snapshot": "/data2/wyd/research/foundation_mlip_adaptation/reproducibility/snapshot_20261127",
   "description": "Reproducible snapshot of the GLR/GLE audit, 2026-11-27. Large trajectories are referenced in data_sources.json.",
   "seeds": {
@@ -405,14 +405,20 @@
     {
       "original_path": "SMDP_ICML2027_STATUS_AUDIT.md",
       "snapshot_path": "docs/SMDP_ICML2027_STATUS_AUDIT.md",
-      "size_bytes": 58445,
-      "sha256": "c2290baebf4ab2828fac54a3293f7fea046cf9a823104e1d7e04bbe574a05dba"
+      "size_bytes": 58447,
+      "sha256": "095243cb1a526a68881d59ba8a1f35c2614f785c7096ecf851d72b97ab91073f"
     },
     {
       "original_path": "paper/CLAIM_BOUNDARY.md",
       "snapshot_path": "docs/CLAIM_BOUNDARY.md",
       "size_bytes": 5255,
       "sha256": "83d6f7cb226ff5cf637906948d8d147928a47e373daf322f7edd951fbff0b73f"
+    },
+    {
+      "original_path": "reproducibility/build_snapshot_20261127.py",
+      "snapshot_path": "docs/build_snapshot_20261127.py",
+      "size_bytes": 11443,
+      "sha256": "d39ce22f81f1fd70e26af7a5ac6770d4ae24269dfc12a3e2f4c9d4ec3d57f04a"
     },
     {
       "original_path": "(snapshot README)",

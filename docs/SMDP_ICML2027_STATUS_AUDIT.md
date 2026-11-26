@@ -615,7 +615,7 @@ The current `paper/` artifacts are NMI-aligned (`NMI_ALIGNMENT.md`, target NMI).
   5 fs horizon, 50 ps thermalization + **2.5 ns production** (510,000 steps).
 - Output: `experiments/published_trajcast_2p5ns_20261126/trajectory.h5`.
 - PID 3840811 on GPU 3; at 2026-11-27 00:xx it was at step ~75,000/510,000, ~3.5 h elapsed,
-  ETA ~20 h. The 100 ps control already PASSed; the 2.5 ns result is pending. Do not report a
+  ETA ~20 h. The 100 ps control completed stably; the 2.5 ns result is pending. Do not report a
   2.5 ns number before it completes. `analyze_when_done.sh` will run the analysis automatically
   and write `analysis/trajcast_2p5ns_report.json`.
 
