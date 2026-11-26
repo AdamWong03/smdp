@@ -1,0 +1,65 @@
+{
+  "100a": {
+    "ar_spectral_radius": 0.8553982461568671,
+    "ar_integral_fs": 32.62826132603915,
+    "actual_integral_fs": 12.948900076732757,
+    "ar_over_actual_integral": 2.519770878815203,
+    "local_rmse": 0.05493367649916978,
+    "long_rmse": 0.014777170496706172
+  },
+  "100b": {
+    "ar_spectral_radius": 0.8525552272962905,
+    "ar_integral_fs": 33.46891936386201,
+    "actual_integral_fs": 14.67051593811768,
+    "ar_over_actual_integral": 2.2813730277134536,
+    "local_rmse": 0.05178406916918386,
+    "long_rmse": 0.012826097137221272
+  },
+  "200": {
+    "ar_spectral_radius": 0.8530846961120115,
+    "ar_integral_fs": 33.071140478099665,
+    "actual_integral_fs": 13.819034881550783,
+    "ar_over_actual_integral": 2.3931584775324337,
+    "local_rmse": 0.05313237038092211,
+    "long_rmse": 0.013696187814896872
+  }
+}
+cross {
+  "100a_to_100a": {
+    "local_rmse": 0.05493367649916978,
+    "long_rmse": 0.014777170496706172
+  },
+  "100a_to_100b": {
+    "local_rmse": 0.054765909209033,
+    "long_rmse": 0.012826115465763229
+  },
+  "100a_to_200": {
+    "local_rmse": 0.054741474202316384,
+    "long_rmse": 0.013696202370008003
+  },
+  "100b_to_100a": {
+    "local_rmse": 0.052351449154634425,
+    "long_rmse": 0.014777152556778835
+  },
+  "100b_to_100b": {
+    "local_rmse": 0.05178406916918386,
+    "long_rmse": 0.012826097137221272
+  },
+  "100b_to_200": {
+    "local_rmse": 0.05195462728665902,
+    "long_rmse": 0.013696184120007919
+  },
+  "200_to_100a": {
+    "local_rmse": 0.0534350169700809,
+    "long_rmse": 0.014777156188890457
+  },
+  "200_to_100b": {
+    "local_rmse": 0.05305205078777342,
+    "long_rmse": 0.012826100848011852
+  },
+  "200_to_200": {
+    "local_rmse": 0.05313237038092211,
+    "long_rmse": 0.013696187814896872
+  }
+}
+wrote /data2/wyd/research/foundation_mlip_adaptation/experiments/calibration_dependence_20261127.json

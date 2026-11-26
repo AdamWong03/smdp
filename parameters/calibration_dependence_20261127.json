@@ -1,0 +1,230 @@
+{
+  "calibration_data": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/physical_reference/train_nvt_200ps/production.h5",
+  "fit_script": "code/h1h2/fit_glr.py",
+  "fit_order": 10,
+  "fit_stride_fs": 5.0,
+  "actual_yule_walker_window_fs": 50.0,
+  "reported_maxlag_fs": 200.0,
+  "note": "fit_glr.py solves Yule-Walker with ACF lags 0..order (0-50 fs for order 10, stride 5 fs). --maxlag=40 only extends the reported ACF to 200 fs; it does not constrain the coefficients. The 100-500 fs negative dip is therefore outside the fit.",
+  "windows": {
+    "100a": {
+      "window_ps": [
+        0.0,
+        100.0
+      ],
+      "fit": "/data2/wyd/research/foundation_mlip_adaptation/experiments/calib_independent_100a_20261127/glr_coefficients.json",
+      "yule_walker_lags_fs": [
+        0.0,
+        50.0
+      ],
+      "reported_maxlag_fs": 200.0,
+      "ar_spectral_radius": 0.8553982461568671,
+      "ar_stable": true,
+      "ar_integral_fs": 32.62826132603915,
+      "actual_integral_fs": 12.948900076732757,
+      "ar_over_actual_integral": 2.519770878815203,
+      "ar_key": [
+        0.9815387265078247,
+        0.6571711339482658,
+        -0.03915894127033222,
+        0.00197487102303865,
+        1.5525026534500165e-07,
+        2.89471874032252e-14,
+        1.5406128574173356e-28,
+        6.402996358617797e-69
+      ],
+      "actual_key": [
+        0.9815878058972296,
+        0.6573354678097835,
+        0.031448262809287086,
+        -0.08220011678519475,
+        -0.028595664043867954,
+        0.007408608457921653,
+        0.0004825970895578476,
+        -0.0007860096812113276
+      ],
+      "key_fs": [
+        5.0,
+        25.0,
+        100.0,
+        200.0,
+        500.0,
+        1000.0,
+        2000.0,
+        5000.0
+      ],
+      "local_rmse": 0.05493367649916978,
+      "long_rmse": 0.014777170496706172,
+      "ar_green_kubo_D_m2_s": null
+    },
+    "100b": {
+      "window_ps": [
+        100.0,
+        200.0
+      ],
+      "fit": "/data2/wyd/research/foundation_mlip_adaptation/experiments/calib_independent_100b_20261127/glr_coefficients.json",
+      "yule_walker_lags_fs": [
+        0.0,
+        50.0
+      ],
+      "reported_maxlag_fs": 200.0,
+      "ar_spectral_radius": 0.8525552272962905,
+      "ar_stable": true,
+      "ar_integral_fs": 33.46891936386201,
+      "actual_integral_fs": 14.67051593811768,
+      "ar_over_actual_integral": 2.2813730277134536,
+      "ar_key": [
+        0.9817026472989502,
+        0.6604001260068993,
+        -0.031225714650010426,
+        0.0016167320304214593,
+        1.1816772400584589e-07,
+        9.052667812208288e-15,
+        -1.9271994865449847e-28,
+        -5.107624552147041e-70
+      ],
+      "actual_key": [
+        0.9817517348830928,
+        0.6605652673082941,
+        0.04081056810235669,
+        -0.07279498455276151,
+        -0.02535776256830137,
+        0.0019279975983728845,
+        -0.0026935752001761553,
+        -0.002010082976634406
+      ],
+      "key_fs": [
+        5.0,
+        25.0,
+        100.0,
+        200.0,
+        500.0,
+        1000.0,
+        2000.0,
+        5000.0
+      ],
+      "local_rmse": 0.05178406916918386,
+      "long_rmse": 0.012826097137221272,
+      "ar_green_kubo_D_m2_s": null
+    },
+    "200": {
+      "window_ps": [
+        0.0,
+        200.0
+      ],
+      "fit": "/data2/wyd/research/foundation_mlip_adaptation/experiments/calib_independent_200_20261127/glr_coefficients.json",
+      "yule_walker_lags_fs": [
+        0.0,
+        50.0
+      ],
+      "reported_maxlag_fs": 200.0,
+      "ar_spectral_radius": 0.8530846961120115,
+      "ar_stable": true,
+      "ar_integral_fs": 33.071140478099665,
+      "actual_integral_fs": 13.819034881550783,
+      "ar_over_actual_integral": 2.3931584775324337,
+      "ar_key": [
+        0.9816457937040132,
+        0.6588630626657498,
+        -0.03470689752080034,
+        0.001718665423808101,
+        1.2567544331546473e-07,
+        1.4158664967145356e-14,
+        -1.67099794128539e-28,
+        4.42236790362154e-70
+      ],
+      "actual_key": [
+        0.9816703354605902,
+        0.6589454308341238,
+        0.03612409456581493,
+        -0.07749723135452057,
+        -0.02696193669648795,
+        0.004532036480130149,
+        -0.0010537294588859989,
+        -0.0013189900932836006
+      ],
+      "key_fs": [
+        5.0,
+        25.0,
+        100.0,
+        200.0,
+        500.0,
+        1000.0,
+        2000.0,
+        5000.0
+      ],
+      "local_rmse": 0.05313237038092211,
+      "long_rmse": 0.013696187814896872,
+      "ar_green_kubo_D_m2_s": null
+    }
+  },
+  "cross_window": {
+    "100a_to_100a": {
+      "local_rmse": 0.05493367649916978,
+      "long_rmse": 0.014777170496706172
+    },
+    "100a_to_100b": {
+      "local_rmse": 0.054765909209033,
+      "long_rmse": 0.012826115465763229
+    },
+    "100a_to_200": {
+      "local_rmse": 0.054741474202316384,
+      "long_rmse": 0.013696202370008003
+    },
+    "100b_to_100a": {
+      "local_rmse": 0.052351449154634425,
+      "long_rmse": 0.014777152556778835
+    },
+    "100b_to_100b": {
+      "local_rmse": 0.05178406916918386,
+      "long_rmse": 0.012826097137221272
+    },
+    "100b_to_200": {
+      "local_rmse": 0.05195462728665902,
+      "long_rmse": 0.013696184120007919
+    },
+    "200_to_100a": {
+      "local_rmse": 0.0534350169700809,
+      "long_rmse": 0.014777156188890457
+    },
+    "200_to_100b": {
+      "local_rmse": 0.05305205078777342,
+      "long_rmse": 0.012826100848011852
+    },
+    "200_to_200": {
+      "local_rmse": 0.05313237038092211,
+      "long_rmse": 0.013696187814896872
+    }
+  },
+  "production": {
+    "fit": "/data2/wyd/research/foundation_mlip_adaptation/experiments/glr_fit_20261122/glr_coefficients.json",
+    "audit": "/data2/wyd/research/foundation_mlip_adaptation/experiments/glr_coefficients_audit_20261127.json",
+    "ar_spectral_radius": 0.85522352563262,
+    "ar_integral_fs": 33.239066277847385,
+    "ar_key": [
+      0.9815714143979425,
+      0.657840677848527,
+      -0.031617443364654385,
+      0.0015695245231373272,
+      1.4779524018903444e-07,
+      -6.0388851116564855e-15,
+      5.743807370038676e-29,
+      4.2621817758148797e-69
+    ],
+    "note": "No reference path/start/duration recorded in the artifact."
+  },
+  "autonomous_glr": {
+    "D_msd_m2_s": 1.4756e-09,
+    "D_msd_std_m2_s": 2.28e-10,
+    "D_gk_m2_s": 1.3917e-09,
+    "D_gk_std_m2_s": 1.266e-10,
+    "source": "experiments/position_velocity_audit_20261127.json, 8 blocks",
+    "reference_D_msd_m2_s": 1.8903e-09,
+    "reference_D_gk_m2_s": 1.9433e-09
+  },
+  "interpretation": {
+    "calibration_length_effect": "100 ps vs 200 ps changes the AR(10) coefficients only slightly; the AR spectral radius is 0.853-0.855 and the AR integral is 32.6-33.5 fs in all three independent windows.",
+    "short_window_inconsistency": "The AR integral is 2.26-2.32x the actual 5 ps ACF integral of the same calibration window; the AR-implied D is ~4.4e-9 vs the actual window D ~1.8-2.0e-9 and the autonomous GLR D ~1.4e-9.",
+    "transfer_failure": "The AR fit overpredicts D, while the autonomous GLR underpredicts it. The offline AR ACF is not the effective velocity/position dynamics of the coupled rollout."
+  }
+}

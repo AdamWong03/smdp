@@ -10,7 +10,13 @@
     "stride_fs": 5.0,
     "order": 10,
     "maxlag_frames": 40,
-    "maxlag_fs": 200.0
+    "maxlag_fs": 200.0,
+    "yule_walker_lags_fs": [
+      0.0,
+      50.0
+    ],
+    "reported_maxlag_fs": 200.0,
+    "note": "The Yule-Walker system uses ACF lags 0..order (0-50 fs for order 10 at 5 fs). --maxlag=40 only extends the reported ACF to 200 fs; it does not constrain the coefficients."
   },
   "recorded_metadata": {
     "reference_path": null,
@@ -193,7 +199,7 @@
   },
   "data_roles": {
     "calibration": "one 100 ps reference NVT block, 5 fs stride, 200 fs ACF window; the production artifact does not record which block",
-    "validation": "disjoint 100 ps blocks of the same 2.5 ns trajectory; independent train_nvt_200ps and independent_nvt_500ps trajectories available",
+    "validation": "independent train_nvt_200ps: 100 ps blocks 0-100 and 100-200, plus the full 200 ps; used for calibration dependence, not for the 2.5 ns final evaluation",
     "test": "none. The 2.5 ns evaluation reference is the same trajectory that contains the calibration block, so calibration/evaluation overlap is unresolved."
   },
   "what_the_readout_needs": {
@@ -209,5 +215,85 @@
     "reference_translation_KE_mean_eV": 2.462893160280178,
     "reference_translation_KE_std_eV": 0.2534296274688026,
     "note": "Deterministic GLR recovers the mean partition but suppresses the KE variance; the 25% D deficit is at least partly calibration-window bias and needs the full-reference uncertainty to interpret."
+  },
+  "independent_calibration_200ps": {
+    "data": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/physical_reference/train_nvt_200ps/production.h5",
+    "windows": {
+      "100a": {
+        "window_ps": [
+          0.0,
+          100.0
+        ],
+        "ar_spectral_radius": 0.8553982461568671,
+        "ar_integral_fs": 32.62826132603915,
+        "actual_integral_fs": 12.948900076732757,
+        "ar_over_actual_integral": 2.519770878815203,
+        "local_rmse": 0.05493367649916978,
+        "long_rmse": 0.014777170496706172
+      },
+      "100b": {
+        "window_ps": [
+          100.0,
+          200.0
+        ],
+        "ar_spectral_radius": 0.8525552272962905,
+        "ar_integral_fs": 33.46891936386201,
+        "actual_integral_fs": 14.67051593811768,
+        "ar_over_actual_integral": 2.2813730277134536,
+        "local_rmse": 0.05178406916918386,
+        "long_rmse": 0.012826097137221272
+      },
+      "200": {
+        "window_ps": [
+          0.0,
+          200.0
+        ],
+        "ar_spectral_radius": 0.8530846961120115,
+        "ar_integral_fs": 33.071140478099665,
+        "actual_integral_fs": 13.819034881550783,
+        "ar_over_actual_integral": 2.3931584775324337,
+        "local_rmse": 0.05313237038092211,
+        "long_rmse": 0.013696187814896872
+      }
+    },
+    "cross_window": {
+      "100a_to_100a": {
+        "local_rmse": 0.05493367649916978,
+        "long_rmse": 0.014777170496706172
+      },
+      "100a_to_100b": {
+        "local_rmse": 0.054765909209033,
+        "long_rmse": 0.012826115465763229
+      },
+      "100a_to_200": {
+        "local_rmse": 0.054741474202316384,
+        "long_rmse": 0.013696202370008003
+      },
+      "100b_to_100a": {
+        "local_rmse": 0.052351449154634425,
+        "long_rmse": 0.014777152556778835
+      },
+      "100b_to_100b": {
+        "local_rmse": 0.05178406916918386,
+        "long_rmse": 0.012826097137221272
+      },
+      "100b_to_200": {
+        "local_rmse": 0.05195462728665902,
+        "long_rmse": 0.013696184120007919
+      },
+      "200_to_100a": {
+        "local_rmse": 0.0534350169700809,
+        "long_rmse": 0.014777156188890457
+      },
+      "200_to_100b": {
+        "local_rmse": 0.05305205078777342,
+        "long_rmse": 0.012826100848011852
+      },
+      "200_to_200": {
+        "local_rmse": 0.05313237038092211,
+        "long_rmse": 0.013696187814896872
+      }
+    },
+    "note": "100 ps and 200 ps independent fits give the same AR(10) coefficients, spectral radius 0.853-0.855, and AR integral 32.6-33.5 fs. The 50 fs Yule-Walker window, not the calibration-trajectory length, is the bottleneck. The AR-implied D (~4.4e-9) is much larger than the actual independent-window D (~1.8-2.0e-9) and the autonomous GLR D (~1.4e-9)."
   }
 }

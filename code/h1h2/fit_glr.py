@@ -30,7 +30,12 @@ def main():
     parser.add_argument('--maxlag', type=int, default=40)
     args = parser.parse_args()
     with h5py.File(args.trajectory, 'r') as handle:
-        dt = float(handle.attrs['integration_dt_fs'])
+        # Stored cadence, not the integration step: some reference files use
+        # 0.5 fs integration but 1.0 fs output.  Fall back to the integration
+        # step for older files without output_interval_fs.
+        dt = float(handle.attrs.get(
+            'output_interval_fs',
+            handle.attrs.get('integration_dt_fs', args.stride_fs)))
         stride = int(round(args.stride_fs/dt))
         start = int(round(args.start_ps*1000/dt))
         count = int(round(args.duration_ps*1000/dt))

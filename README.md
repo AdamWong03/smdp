@@ -11,9 +11,16 @@
 - **Official IBM published TrajCast 2.5 ns is still running.** A watcher will run the same
   `analyze_water.py` protocol when it finishes. Do not report a 2.5 ns number before
   `trajectory.summary.json` and `analysis/trajcast_2p5ns_report.json` exist.
-- **The GLR 25% D deficit is at least partly calibration-window bias.** The 25×100 ps reference
-  ACF integrals span 10.94–18.00 fs (mean 14.45, std 1.86); the production GLR was fitted on a
-  100 ps block with a 200 fs ACF window.
+- **The GLR 22–25% D deficit is a common low-D bias, not a GK/MSD inconsistency.** The 25×100 ps
+  reference ACF integrals span 10.94–18.00 fs (mean 14.45, std 1.86). The production GLR's
+  Yule–Walker fit uses only **0–50 fs**; `--maxlag 40` only extends the reported ACF to 200 fs.
+  A 100/200 ps independent calibration gives the same AR(10) and the same 2.3–2.5× integral
+  overprediction, so calibration length is not the bottleneck.
+- **Position and velocity are decoupled in the production GLR.** Positions come from the
+  backbone displacement; velocities come from the GLR readout. The corrected velocity does not
+  participate in position propagation. The midpoint kinematic residual is 1.0% (reference),
+  1.3% (deterministic GLR), 3.8% (stochastic GLR) of `h|v|`; this is a principled limitation,
+  but it does not explain the 22–25% D deficit.
 
 ## 1. What is in this snapshot
 
@@ -119,17 +126,34 @@ CV is ~13%, so a single 100 ps block is not a D target.
 
 - `glr_coefficients.json` records **no reference path, start time, duration, or ACF window**.
 - `fit_glr.py` defaults: start 500 ps, duration 100 ps, stride 5 fs, maxlag 40 frames (200 fs),
-  order 10. The production fit is **inferred** to be block 5 (500–600 ps), not recorded.
-  `glr_fit_heldout0_20261122` is block 0.
-- The translation AR(10) is stable (spectral radius 0.855) and matches the reference at 5/25 fs
+  order 10. **The Yule–Walker fit actually uses only ACF lags 0..10 (0–50 fs at 5 fs stride);
+  `maxlag=40` only extends the reported ACF to 200 fs, it does not constrain the coefficients.**
+  The production fit is inferred to be block 5 (500–600 ps), not recorded.
+- The translation AR(10) is stable (spectral radius 0.855) and matches 5/25 fs
   (0.9816/0.6578), but it misses the 100–500 fs negative dip:
   - AR: 100 fs −0.0316, 200 fs +0.0016
   - reference: 100 fs +0.0391, 200 fs −0.0781
 - Extrapolating the AR recursion to 5 ps gives a translation integral of **33.24 fs**, 2.30× the
-  25-block mean. The 200 fs fit window cannot constrain D. This is a **fit-window/provenance
-  gap**, not proof that the readout cannot recover D.
-- Calibration/evaluation overlap is unresolved: the 2.5 ns evaluation reference contains the
-  calibration block. Validation should use disjoint blocks or the independent NVT trajectories.
+  25-block mean. The 0–50 fs Yule–Walker window cannot constrain the 100–500 fs dip or D.
+- Independent `train_nvt_200ps` calibration (never the 2.5 ns test trajectory):
+
+| window | AR radius | AR integral (fs) | actual 5 ps integral (fs) | ratio | local RMSE (≤200 fs) | long RMSE (≥500 fs) |
+|---|---:|---:|---:|---:|---:|---:|
+| 100 ps, 0–100 | 0.8554 | 32.63 | 12.95 | 2.52× | 0.055 | 0.015 |
+| 100 ps, 100–200 | 0.8526 | 33.47 | 14.67 | 2.28× | 0.052 | 0.013 |
+| 200 ps, 0–200 | 0.8531 | 33.07 | 13.82 | 2.39× | 0.053 | 0.014 |
+| production | 0.8552 | 33.24 | — | 2.30× vs 25-block | — | — |
+
+100 vs 200 ps calibration does not change the AR(10) coefficients, stability, or the 2.3–2.5×
+integral overprediction; the **50 fs local fit** is the bottleneck, not the calibration-trajectory
+length. The production fit is reproducible from independent data; its missing metadata is a
+documentation gap, not evidence of a bad fit.
+- **Offline vs autonomous:** AR-implied D ~4.4×10⁻⁹ m²/s; independent-window D ~1.8–2.0×10⁻⁹;
+  autonomous GLR D ~1.4–1.5×10⁻⁹. The AR overpredicts D, the coupled rollout underpredicts it;
+  improving the offline AR ACF alone does not transfer to the autonomous simulation.
+- Calibration/evaluation overlap: the production fit likely used the 2.5 ns trajectory. The
+  independent 200 ps gives the same coefficients, so leakage is not driving the low D, but the
+  paper should record the calibration window and use a held-out trajectory.
 
 ### 5.3 GLE offline gate — failed
 
@@ -202,8 +226,35 @@ waits for `trajectory.summary.json`, runs `analyze_water.py` with the same proto
 | official TrajCast 2.5 ns | pending | pending | pending | pending | pending | pending |
 
 Deterministic GLR recovers the mean partition but suppresses the KE variance. Stochastic GLR
-restores the variance but does **not** fix D (still ~24% low) and has a known GK/MSD consistency
-problem. The GLE was intended to fix both; its offline gate failed.
+restores the variance; both leave D 22–25% low. The earlier "stochastic GLR breaks GK/MSD" claim
+is **not systematic over 2.5 ns**: the 8-block GK/MSD ratio is 0.958 (deterministic), 1.058
+(stochastic), 1.052 (reference). The stochastic rescale increases the kinematic residual
+(1.3% → 3.8%), but not a 20% GK/MSD offset. The GLE was intended to fix both; its offline gate
+failed.
+
+### 5.6 Position–velocity consistency
+
+The production GLR uses **positions from the backbone displacement** and **velocities from the
+GLR readout**; the corrected velocity does not participate in position propagation. The
+`--fd-correct-displacement` test crashed at 24.8 ps (min distance 0.647 Å), so the decoupled
+scheme was adopted as a stability requirement. This is a principled inconsistency, not merely an
+implementation detail.
+
+Eight 100 ps blocks (0, 300, …, 2100 ps), same 5 fs discrete rule:
+
+| trajectory | D_MSD (10⁻⁹ m²/s) | D_GK (10⁻⁹ m²/s) | GK/MSD | midpoint residual / h\|v\| |
+|---|---:|---:|---:|---:|
+| reference 2.5 ns | 1.890 ± 0.410 | 1.943 ± 0.253 | 1.052 | 0.010 |
+| deterministic GLR 2.5 ns | 1.476 ± 0.228 | 1.392 ± 0.127 | 0.958 | 0.013 |
+| stochastic GLR 2.5 ns | 1.350 ± 0.243 | 1.403 ± 0.136 | 1.058 | 0.038 |
+| raw 250k backbone 100 ps | ~0 (no diffusive regime) | 0.012 | — | 0.031 |
+
+The reference block-to-block D std is 22%; a single 100 ps block cannot resolve a 20–25%
+difference. The deterministic GLR's GK and MSD agree; its D deficit is a **common low-D bias**,
+not a GK/MSD inconsistency. The 1.3% deterministic kinematic residual cannot explain a 22% D
+deficit. The stochastic residual is 3× larger, but its 8-block GK/MSD ratio is still ~1.06. The
+raw backbone has no diffusion; the GLR restores D to ~1.4–1.5×10⁻⁹, a real improvement but still
+below the reference.
 
 ## 6. Five questions
 
@@ -213,10 +264,12 @@ translation-KE excess, ~6.3% internal-KE deficit, O–O RDF RMSE 0.043, and H VD
 These are 100 ps numbers; the 2.5 ns run is still in progress and must not be pre-empted.
 
 **Q2. Does GLR need extra long-time reference statistics?**
-Yes. The 25-block reference ACF integral has mean 14.45 fs, std 1.86 fs, min 10.94, max 18.00.
-The production fit used a 100 ps block and a 200 fs window, missing the 100–500 fs negative dip.
-A ≥500 ps multi-block mean (preferably the full 2.5 ns) and a D-constrained fit are needed. The
-readout needs no reference forces at inference; the extra data is offline MD only.
+Yes, but calibration *length* is not the main bottleneck. The 25-block reference ACF integral is
+14.45 ± 1.86 fs. The production Yule–Walker fit uses only **0–50 fs**; independent 100 ps and
+200 ps fits give the same AR(10) (radius 0.853–0.855) and the same 2.3–2.5× integral
+overprediction. A longer calibration trajectory alone will not fix D; a longer fit window and a
+D-constrained fit are needed. The readout needs no reference forces at inference; extra MD is
+offline only.
 
 **Q3. Does the new GLE improve full autonomous dynamics, not just the ACF fit?**
 Not tested. The offline gate failed: the 5-mode generalized kernel matches D (+1.0%) and the
@@ -234,7 +287,10 @@ one-step accuracy is neither necessary nor sufficient for long-time ensemble fid
 stability is a red herring for NVT — is the paper's conceptual contribution. The GLR is
 "training-free for the backbone" but **not data-free**: it needs an offline reference NVT ACF.
 The new GLE attempt does not add a new ML architecture; it is a physics-based readout whose
-5 fs kernel is not identifiable.
+5 fs kernel is not identifiable. The GLR is **not a self-consistent propagator**: positions come
+from the backbone, velocities from the readout; D is 22–25% low; the AR(10) is a 0–50 fs local
+fit. The paper should present it as a post-hoc readout with explicit limitations, not a new GLE
+solver or a SOTA dynamical model.
 
 **Q5. What is ready for the ICML main text, and what is not?**
 Ready: the pointwise-vs-ensemble diagnostic; the published TrajCast paradox and the 250k
@@ -242,12 +298,16 @@ counterexample; NVE energy stability is a red herring; deterministic GLR mean pa
 at 2.5 ns (two starts); backbone-agnostic v0 + GLR 100 ps; quartz 5 fs phonon-band stochastic
 rescale (two seeds); component ablations (rescale necessary, FD noise not necessary at λ=0.1,
 memory needed for water but not quartz 5 fs); the new reference-ACF/D block-uncertainty and
-calibration-window diagnostic.
+calibration-window diagnostic; the position-velocity audit and the independent 100/200 ps
+calibration reproducibility.
 Not ready: exact D recovery or a bare "25% low" claim without full-reference uncertainty and a
-recalibrated readout; full KE variance for deterministic GLR; stochastic GLR GK/MSD consistency;
-a one-rule cross-material claim; the official TrajCast 2.5 ns (pending); a converged native
-TrajCast (ep145/1500 is not a fair baseline); 2.5 ns quartz; external action-map/FlashMD
-comparisons; a clean held-out reference test; and the new GLE (offline gate failed).
+recalibrated readout; full KE variance for deterministic GLR; the "stochastic GLR breaks GK/MSD"
+claim as a systematic 2.5 ns statement (the 8-block ratio is 1.06); a self-consistent
+position/velocity dynamics (the corrected velocity is not integrated); a 0–50 fs AR fit that
+predicts the autonomous D; a one-rule cross-material claim; the official TrajCast 2.5 ns
+(pending); a converged native TrajCast (ep145/1500 is not a fair baseline); 2.5 ns quartz;
+external action-map/FlashMD comparisons; a clean held-out reference test; and the new GLE
+(offline gate failed).
 
 ## 7. Claim boundary
 
@@ -258,6 +318,12 @@ comparisons; a clean held-out reference test; and the new GLE (offline gate fail
 - Do **not** use the incomplete native TrajCast ep145/1500 as a fair external baseline.
 - Do **not** claim mode decomposition, AR, or FDT as novel by themselves.
 - Do **not** claim the GLE improves autonomous dynamics; it was not run.
+- Do **not** claim the GLR is a self-consistent dynamical propagator: positions come from the
+  backbone, velocities from the readout; the corrected velocity is not integrated.
+- Do **not** claim stochastic GLR systematically breaks GK/MSD over 2.5 ns: the 8-block ratio is
+  1.06, within the reference block variability. Do report its larger kinematic residual (3.8%).
+- Do **not** claim the AR(10) offline ACF predicts autonomous D: it uses 0–50 fs, overpredicts the
+  integral by 2.3–2.5×, while the coupled rollout underpredicts D.
 - The official TrajCast 2.5 ns result is pending; the 100 ps control is context only.
 
 ## 8. Deliberately not run
