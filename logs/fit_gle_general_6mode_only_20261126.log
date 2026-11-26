@@ -1,0 +1,15 @@
+{
+  "modes": 6,
+  "integral_fs": 14.592102128515883,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.009980453078273,
+  "rmse_mean": 0.03462690039174296,
+  "rmse_key": 0.09729456809074295,
+  "max_abs_key": 0.24731816175531562,
+  "discrete_min_eigenvalue": 1.4496295547956694e-07,
+  "discrete_spectral_radius_max": 0.9910685598227399,
+  "n_parameters": 19,
+  "jacobian_condition": 550564668.4472708
+}
+kinds ['underdamped', 'underdamped', 'underdamped', 'underdamped', 'underdamped', 'underdamped', 'slow'] periods [114.72, 929.33, 355.31, 26.38, 592.26, 146.32, 0.0] weights [0.0389, 0.04, 0.1672, 0.453, 0.0654, 0.2355, 0.0]
+wrote experiments/fit_gle_general_6mode_only_20261126.json

@@ -1,0 +1,213 @@
+{
+  "artifact": "experiments/glr_fit_20261122/glr_coefficients.json",
+  "sha256": "a6e65965e9a7a00250ad8ab71a8986799ee2c32ac77ffb15eb92791ee015682d",
+  "size_bytes": 10823,
+  "created_mtime": "2026-11-22T01:01:47+08:00",
+  "fit_script": "code/h1h2/fit_glr.py",
+  "fit_script_defaults": {
+    "start_ps": 500.0,
+    "duration_ps": 100.0,
+    "stride_fs": 5.0,
+    "order": 10,
+    "maxlag_frames": 40,
+    "maxlag_fs": 200.0
+  },
+  "recorded_metadata": {
+    "reference_path": null,
+    "start_ps": null,
+    "duration_ps": null,
+    "maxlag_fs": null
+  },
+  "inferred_calibration": {
+    "likely_reference": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/physical_reference/nvt_2p5ns/production.h5",
+    "likely_start_ps": 500.0,
+    "likely_duration_ps": 100.0,
+    "likely_blocks": "block 5 (500-600 ps) if the fit used script defaults",
+    "confidence": "inferred from script defaults, not recorded in the artifact",
+    "heldout0_artifact": "experiments/glr_fit_heldout0_20261122/glr_coefficients.json",
+    "heldout0_block": "0-100 ps",
+    "heldout0_sha256": "f467f661e6f288f38be796539779b2fe535958240029080daccc627d8523b4cd"
+  },
+  "reference_acf_block_statistics": {
+    "n_blocks": 25,
+    "block_ps": 100.0,
+    "mean_fs": 14.447905485736165,
+    "std_fs": 1.8636227074483418,
+    "sem_fs": 0.3727245414896684,
+    "min_fs": 10.935595657198354,
+    "max_fs": 18.003389579020226,
+    "block0_fs": 11.340519607642237,
+    "block1_fs": 14.467379221038,
+    "block5_fs": 13.381164268306708,
+    "source": "experiments/reference_acf_blocks_20261126.json"
+  },
+  "ar_audit": {
+    "translation": {
+      "coefficients": [
+        2.308761878451949,
+        -1.591939801111875,
+        -0.3003404484481395,
+        1.212364628464357,
+        -0.9240900039330778,
+        0.056678088794764894,
+        0.5938251243983305,
+        -0.5365621658218452,
+        0.1729067483946116,
+        -0.009461644136050756
+      ],
+      "prediction_error_ratio": 0.004239891495927184,
+      "ar_spectral_radius": 0.85522352563262,
+      "ar_stable": true,
+      "integral_fs": 33.239066277847385,
+      "integral_ratio_to_block_mean": 2.300614875330059,
+      "key_fs": [
+        5.0,
+        25.0,
+        100.0,
+        200.0,
+        500.0,
+        1000.0,
+        2000.0,
+        5000.0
+      ],
+      "acf_key": [
+        0.9815714143979425,
+        0.657840677848527,
+        -0.031617443364654385,
+        0.0015695245231373272,
+        1.4779524018903444e-07,
+        -6.0388851116564855e-15,
+        5.743807370038676e-29,
+        4.2621817758148797e-69
+      ],
+      "reference_acf_key": [
+        0.9815714143979425,
+        0.657840677848527,
+        0.039130019358144245,
+        -0.07813889990656113,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "rotation": {
+      "coefficients": [
+        1.8743418563838055,
+        -1.4408320178376304,
+        0.19605932903851186,
+        0.3785084362773698,
+        -0.3813720024857881,
+        0.054883755121016925,
+        0.12052767378787416,
+        -0.11831349612179073,
+        0.014027114803129348,
+        -0.0232508578905358
+      ],
+      "prediction_error_ratio": 0.05761833131319416,
+      "ar_spectral_radius": 0.9007484855747535,
+      "ar_stable": true,
+      "integral_fs": 1.3602277982610045,
+      "integral_ratio_to_block_mean": 0.09414705817420405,
+      "key_fs": [
+        5.0,
+        25.0,
+        100.0,
+        200.0,
+        500.0,
+        1000.0,
+        2000.0,
+        5000.0
+      ],
+      "acf_key": [
+        0.8384505801645473,
+        -0.5403608501574799,
+        -0.052425112016236744,
+        -0.005266458144434376,
+        -7.864850741362283e-06,
+        -2.804364154795787e-10,
+        -3.6395239094955455e-19,
+        -2.538460617876454e-46
+      ],
+      "reference_acf_key": [
+        0.8384505801645473,
+        -0.5403608501574799,
+        -0.0417645050856721,
+        -0.003047388133823251,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "internal": {
+      "coefficients": [
+        -0.7720411786958691,
+        -0.5824091365843775,
+        -1.0987254382024016,
+        -0.4753226787183239,
+        -0.17739813358757947,
+        -0.5194614222596932,
+        -0.3032016536824503,
+        -0.25861567788336326,
+        -0.05146729170718368,
+        -0.09474486048925834
+      ],
+      "prediction_error_ratio": 0.11463573985064102,
+      "ar_spectral_radius": 0.9834918085698204,
+      "ar_stable": true,
+      "integral_fs": 0.010075207868218064,
+      "integral_ratio_to_block_mean": 0.0006973472991060823,
+      "key_fs": [
+        5.0,
+        25.0,
+        100.0,
+        200.0,
+        500.0,
+        1000.0,
+        2000.0,
+        5000.0
+      ],
+      "acf_key": [
+        -0.5670302388686174,
+        0.11717365090817373,
+        0.19689534967953357,
+        0.10286327034852519,
+        -0.09700157373903529,
+        0.021047767237904753,
+        0.0003661961545271218,
+        -3.617782606301051e-08
+      ],
+      "reference_acf_key": [
+        -0.5670302388686174,
+        0.11717365090817373,
+        0.14728369580822728,
+        0.07155235623488501,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "note": "The AR(10) reproduces the reference ACF at 5/25 fs but misses the 100-500 fs negative dip; extrapolating the AR recursion to 5 ps gives a translation integral of 33.24 fs, 2.3x the 25-block mean. The 200 fs fit window cannot constrain the long-time D. This is a fit-window provenance gap, not a proof that the readout cannot recover D."
+  },
+  "data_roles": {
+    "calibration": "one 100 ps reference NVT block, 5 fs stride, 200 fs ACF window; the production artifact does not record which block",
+    "validation": "disjoint 100 ps blocks of the same 2.5 ns trajectory; independent train_nvt_200ps and independent_nvt_500ps trajectories available",
+    "test": "none. The 2.5 ns evaluation reference is the same trajectory that contains the calibration block, so calibration/evaluation overlap is unresolved."
+  },
+  "what_the_readout_needs": {
+    "reference_nvt_ps": ">=500 ps multi-block mean ACF, preferably the full 2.5 ns; 100 ps is not enough for D",
+    "reference_forces_at_inference": false,
+    "mode_basis": "molecular topology for water; phonon Hessian / mode basis for quartz",
+    "target": "k_B T / 2 per mode; Green-Kubo integral for D",
+    "extra_md_cost": "offline only; no extra MD at inference"
+  },
+  "production_glr_2p5ns_result_context": {
+    "translation_KE_mean_eV": 2.4817650023615134,
+    "translation_KE_std_eV": 0.0017106164966978325,
+    "reference_translation_KE_mean_eV": 2.462893160280178,
+    "reference_translation_KE_std_eV": 0.2534296274688026,
+    "note": "Deterministic GLR recovers the mean partition but suppresses the KE variance; the 25% D deficit is at least partly calibration-window bias and needs the full-reference uncertainty to interpret."
+  }
+}

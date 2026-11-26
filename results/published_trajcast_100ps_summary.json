@@ -1,0 +1,12 @@
+{
+  "completed_steps": 30000,
+  "requested_steps": 20000,
+  "production_steps": 20000,
+  "simulated_ps": 150.0,
+  "stable": true,
+  "failure_reason": null,
+  "selected_epoch": 0,
+  "checkpoint": "/data2/wyd/research/foundation_mlip_adaptation/reference/trajcast_published_water/published_checkpoint.pt",
+  "elapsed_seconds": 4417.050800210098,
+  "peak_cuda_bytes": 2299122176
+}

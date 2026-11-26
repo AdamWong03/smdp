@@ -1,0 +1,18 @@
+{
+  "coefficients": "experiments/glr_fit_20261122/glr_coefficients.json",
+  "order": 10,
+  "stride_fs": 5.0,
+  "metadata_present": {
+    "reference": false,
+    "start_ps": false,
+    "duration_ps": false,
+    "maxlag": false
+  },
+  "reference_block_mean_fs": 14.447905485736165,
+  "reference_block_std_fs": 1.8636227074483418,
+  "reference_block_min_fs": 10.935595657198354,
+  "reference_block_max_fs": 18.003389579020226
+}
+translation radius 0.8552 stable True integral 33.2391 ratio 2.3006 key [0.9816, 0.6578, -0.0316, 0.0016, 0.0, -0.0, 0.0, 0.0]
+rotation radius 0.9007 stable True integral 1.3602 ratio 0.0941 key [0.8385, -0.5404, -0.0524, -0.0053, -0.0, -0.0, -0.0, -0.0]
+internal radius 0.9835 stable True integral 0.0101 ratio 0.0007 key [-0.567, 0.1172, 0.1969, 0.1029, -0.097, 0.021, 0.0004, -0.0]

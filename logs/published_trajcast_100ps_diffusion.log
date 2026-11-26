@@ -1,0 +1,1 @@
+{"task": "diffusion", "completed": false, "failure_reason": "ValueError: MSD block shorter than frozen 100 ps fit limit", "elapsed_s": 1.0758604099974036}

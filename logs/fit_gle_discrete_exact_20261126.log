@@ -1,0 +1,57 @@
+{
+  "modes": 3,
+  "integral_fs": 14.593624245649202,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.010085805174798,
+  "rmse_mean": 0.04264591638361023,
+  "rmse_key": 0.30105958891538886,
+  "max_abs_key": 0.7901589768425803,
+  "discrete_min_eigenvalue": 1.6016902823606433e-05,
+  "discrete_spectral_radius_max": 0.964780733648586,
+  "n_parameters": 10,
+  "jacobian_condition": 5388500370.6830225
+}
+periods [12.57, 436.29, 135.91] weights [0.571, 0.2147, 0.2143, 0.0]
+{
+  "modes": 4,
+  "integral_fs": 14.588244606107843,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.0097134578095228,
+  "rmse_mean": 0.04271335876611172,
+  "rmse_key": 0.29182758698107153,
+  "max_abs_key": 0.7472886145441819,
+  "discrete_min_eigenvalue": 1.3941816043835656e-05,
+  "discrete_spectral_radius_max": 0.9657944239863471,
+  "n_parameters": 13,
+  "jacobian_condition": 11003288364.264166
+}
+periods [12.57, 61.63, 451.53, 134.02] weights [0.5352, 0.0406, 0.2057, 0.2185, 0.0]
+{
+  "modes": 5,
+  "integral_fs": 14.614194949342266,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.011509589661302,
+  "rmse_mean": 0.04211856141428193,
+  "rmse_key": 0.22538274063116523,
+  "max_abs_key": 0.6280012636290442,
+  "discrete_min_eigenvalue": 1.8721187032432262e-07,
+  "discrete_spectral_radius_max": 0.9899281259692254,
+  "n_parameters": 16,
+  "jacobian_condition": 1278342010.899441
+}
+periods [63.62, 880.12, 47.66, 129.7, 504.36] weights [0.1188, 0.0407, 0.4281, 0.2928, 0.1195, 0.0]
+{
+  "modes": 6,
+  "integral_fs": 14.662529593565068,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.0148550326579024,
+  "rmse_mean": 0.03542687831095551,
+  "rmse_key": 0.25397551447029854,
+  "max_abs_key": 0.6818074599804824,
+  "discrete_min_eigenvalue": 1.8372825007756135e-07,
+  "discrete_spectral_radius_max": 0.9902999798873318,
+  "n_parameters": 19,
+  "jacobian_condition": 498488815.4511059
+}
+periods [24.32, 914.86, 556.13, 341.54, 12.57, 136.93] weights [0.0065, 0.0448, 0.0795, 0.1323, 0.4684, 0.2685, 0.0]
+wrote experiments/fit_gle_discrete_exact_20261126.json

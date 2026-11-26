@@ -1,0 +1,69 @@
+/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/fit_gle_general.py:55: RuntimeWarning: overflow encountered in cosh
+  out[over] = np.exp(-g * x) * (np.cosh(k * x) + g / k * np.sinh(k * x))
+/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/fit_gle_general.py:55: RuntimeWarning: overflow encountered in sinh
+  out[over] = np.exp(-g * x) * (np.cosh(k * x) + g / k * np.sinh(k * x))
+/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/fit_gle_general.py:55: RuntimeWarning: overflow encountered in add
+  out[over] = np.exp(-g * x) * (np.cosh(k * x) + g / k * np.sinh(k * x))
+/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/fit_gle_general.py:55: RuntimeWarning: invalid value encountered in multiply
+  out[over] = np.exp(-g * x) * (np.cosh(k * x) + g / k * np.sinh(k * x))
+/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/fit_gle_general.py:55: RuntimeWarning: overflow encountered in multiply
+  out[over] = np.exp(-g * x) * (np.cosh(k * x) + g / k * np.sinh(k * x))
+/data2/wyd/tmp_opencode/env_mace/lib/python3.11/site-packages/scipy/optimize/_numdiff.py:686: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+{
+  "modes": 3,
+  "integral_fs": 14.547035862889027,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.0068612282417493,
+  "rmse_mean": 0.04832920622489531,
+  "rmse_key": 0.14071864871968362,
+  "max_abs_key": 0.375335078165386,
+  "discrete_min_eigenvalue": 3.3436985429699087e-05,
+  "discrete_spectral_radius_max": 0.9781504421035111,
+  "n_parameters": 10,
+  "jacobian_condition": 18824076644.64203
+}
+kinds ['underdamped', 'underdamped', 'underdamped', 'slow'] periods [25.15, 141.49, 380.61, 0.0] weights [0.63, 0.1106, 0.2595, 0.0]
+{
+  "modes": 4,
+  "integral_fs": 14.565899840037211,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.0081668830418038,
+  "rmse_mean": 0.04447744019176014,
+  "rmse_key": 0.12483556983761065,
+  "max_abs_key": 0.3197691969422223,
+  "discrete_min_eigenvalue": 1.5301702281680822e-05,
+  "discrete_spectral_radius_max": 0.9841972735902565,
+  "n_parameters": 13,
+  "jacobian_condition": 6630942094.596536
+}
+kinds ['underdamped', 'underdamped', 'underdamped', 'underdamped', 'slow'] periods [384.25, 110.6, 25.89, 144.1, 0.0] weights [0.2594, 0.0363, 0.5655, 0.1388, 0.0]
+{
+  "modes": 5,
+  "integral_fs": 14.570794251638537,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.0085056457507762,
+  "rmse_mean": 0.042565963016473946,
+  "rmse_key": 0.11045753571641026,
+  "max_abs_key": 0.2941422165227001,
+  "discrete_min_eigenvalue": 3.092682869885532e-07,
+  "discrete_spectral_radius_max": 0.9879556013076501,
+  "n_parameters": 16,
+  "jacobian_condition": 1266124674.2849402
+}
+kinds ['underdamped', 'underdamped', 'underdamped', 'underdamped', 'underdamped', 'slow'] periods [137.15, 24.64, 363.28, 29.0, 846.64, 0.0] weights [0.2089, 0.2627, 0.2093, 0.2683, 0.0509, 0.0]
+{
+  "modes": 6,
+  "integral_fs": 2220.979197835746,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 153.72326459557954,
+  "rmse_mean": 0.5126863410845244,
+  "rmse_key": 0.7930466159573081,
+  "max_abs_key": 1.0270753323974464,
+  "discrete_min_eigenvalue": 3.09276212223976e-07,
+  "discrete_spectral_radius_max": 0.997912245978885,
+  "n_parameters": 19,
+  "jacobian_condition": 4889941536.646748
+}
+kinds ['underdamped', 'overdamped', 'underdamped', 'underdamped', 'underdamped', 'underdamped', 'slow'] periods [846.64, inf, 137.15, 24.64, 29.0, 363.28, 0.0] weights [0.0509, 0.0, 0.2089, 0.2627, 0.2683, 0.2093, 0.0]
+wrote experiments/fit_gle_general_20261126.json

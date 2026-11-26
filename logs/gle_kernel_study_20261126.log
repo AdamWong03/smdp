@@ -1,0 +1,50 @@
+calibration ACF integral 11.3405 fs; validation integral 14.4674 fs
+{
+  "modes": 3,
+  "integral_model_fs": 11.28782117090218,
+  "integral_validation_fs": 14.467379221038,
+  "rmse_calibration": 0.012824705648023895,
+  "rmse_validation": 0.03300670474540126,
+  "psd_min_real": 0.5002065235857827,
+  "discrete_min_eig_gap": 0.01063713257996346,
+  "discrete_rmse_vs_model": 40.72337189505597,
+  "n_parameters": 10,
+  "jacobian_condition": 49458990459.25998
+}
+{
+  "modes": 4,
+  "integral_model_fs": 11.372040430478581,
+  "integral_validation_fs": 14.467379221038,
+  "rmse_calibration": 0.010667907313178335,
+  "rmse_validation": 0.025951475693113325,
+  "psd_min_real": 0.5002061450134183,
+  "discrete_min_eig_gap": 0.007638900957086969,
+  "discrete_rmse_vs_model": 60.185885494094386,
+  "n_parameters": 13,
+  "jacobian_condition": 163819695461.44424
+}
+{
+  "modes": 5,
+  "integral_model_fs": 11.373827902642772,
+  "integral_validation_fs": 14.467379221038,
+  "rmse_calibration": 0.010737562873435233,
+  "rmse_validation": 0.025897608801887215,
+  "psd_min_real": 0.500216216170104,
+  "discrete_min_eig_gap": 0.007612700124919769,
+  "discrete_rmse_vs_model": 59.566281132754796,
+  "n_parameters": 16,
+  "jacobian_condition": 38148561559.73469
+}
+{
+  "modes": 6,
+  "integral_model_fs": 11.390163407269112,
+  "integral_validation_fs": 14.467379221038,
+  "rmse_calibration": 0.008029387049072563,
+  "rmse_validation": 0.018264253131823394,
+  "psd_min_real": 0.50018615461616,
+  "discrete_min_eig_gap": 0.0031841425070082696,
+  "discrete_rmse_vs_model": 88.97329750765023,
+  "n_parameters": 19,
+  "jacobian_condition": 18502550875.956043
+}
+wrote experiments/gle_kernel_study_20261126.json

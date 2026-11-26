@@ -1,0 +1,43 @@
+{
+  "modes": 3,
+  "integral_fs": 14.547035862067299,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.006861228184874,
+  "rmse_mean": 0.04832920618379429,
+  "rmse_key": 0.14071864875557227,
+  "max_abs_key": 0.3753350781035717,
+  "discrete_min_eigenvalue": 3.343698522528202e-05,
+  "discrete_spectral_radius_max": 0.9781504420810209,
+  "n_parameters": 10,
+  "jacobian_condition": 17960634788.460785
+}
+kinds ['underdamped', 'underdamped', 'underdamped', 'slow'] periods [380.61, 141.49, 25.15, 0.0] weights [0.2595, 0.1106, 0.63, 0.0]
+{
+  "modes": 4,
+  "integral_fs": 14.586547852980019,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.0095960184250046,
+  "rmse_mean": 0.040709904350604835,
+  "rmse_key": 0.11516448049808622,
+  "max_abs_key": 0.29625218193425407,
+  "discrete_min_eigenvalue": 3.022522087293752e-07,
+  "discrete_spectral_radius_max": 0.9880853514785843,
+  "n_parameters": 13,
+  "jacobian_condition": 4309759901.782262
+}
+kinds ['underdamped', 'underdamped', 'underdamped', 'underdamped', 'slow'] periods [361.0, 846.6, 25.77, 136.4, 0.0] weights [0.2049, 0.0504, 0.5196, 0.2252, 0.0]
+{
+  "modes": 5,
+  "integral_fs": 14.59142914510284,
+  "integral_ref_fs": 14.44790548573617,
+  "integral_ratio": 1.0099338730799676,
+  "rmse_mean": 0.0354098161068614,
+  "rmse_key": 0.1003598878399179,
+  "max_abs_key": 0.25540933675235833,
+  "discrete_min_eigenvalue": 1.40962380529036e-07,
+  "discrete_spectral_radius_max": 0.9911293035167457,
+  "n_parameters": 16,
+  "jacobian_condition": 1366347934.5379648
+}
+kinds ['underdamped', 'underdamped', 'underdamped', 'underdamped', 'underdamped', 'slow'] periods [936.9, 26.13, 346.63, 137.91, 599.61, 0.0] weights [0.0398, 0.4594, 0.1638, 0.2744, 0.0626, 0.0]
+wrote experiments/fit_gle_general_overdamped_20261126.json

@@ -1,0 +1,71 @@
+block 0 integral 11.340519607642237
+block 1 integral 14.467379221038
+block 2 integral 18.003389579020226
+block 3 integral 11.980346655347184
+block 4 integral 10.935595657198354
+block 5 integral 13.381164268306708
+block 6 integral 14.31978266531285
+block 7 integral 12.99549360268466
+block 8 integral 16.923746757556746
+block 9 integral 14.4626586414489
+block 10 integral 15.84023516397197
+block 11 integral 14.692493374536886
+block 12 integral 15.003578625455201
+block 13 integral 15.11800287536165
+block 14 integral 16.89033288756419
+block 15 integral 15.034110035912246
+block 16 integral 14.936564990352531
+block 17 integral 15.382018437106067
+block 18 integral 15.801957070924779
+block 19 integral 15.422649837452422
+block 20 integral 16.13110859382184
+block 21 integral 15.429527637263906
+block 22 integral 11.868599839679073
+block 23 integral 11.527084784639893
+block 24 integral 13.309296333805618
+mean integral 14.44790548573617
+{
+  "modes": 3,
+  "integral_model_fs": 14.337767324684432,
+  "rmse_calibration": 0.012829030383327921,
+  "psd_min_real": 0.5001444810753014,
+  "discrete_min_eig_gap": 0.02430177257671562,
+  "discrete_rmse_vs_model": 43.24627646894852,
+  "n_parameters": 10,
+  "jacobian_condition": 238680122034.0051,
+  "predicted_D_scale_vs_block0": 1.2740073634721203
+}
+{
+  "modes": 4,
+  "integral_model_fs": 14.641830747657767,
+  "rmse_calibration": 0.040968416168609016,
+  "psd_min_real": 0.5000118013183287,
+  "discrete_min_eig_gap": 0.00985640721549752,
+  "discrete_rmse_vs_model": 34.79507890542974,
+  "n_parameters": 13,
+  "jacobian_condition": 774189013.5625814,
+  "predicted_D_scale_vs_block0": 1.2740073634721203
+}
+{
+  "modes": 5,
+  "integral_model_fs": 14.421643744248854,
+  "rmse_calibration": 0.010184981480042793,
+  "psd_min_real": 0.5001708031835752,
+  "discrete_min_eig_gap": 0.010723631144685664,
+  "discrete_rmse_vs_model": 62.352663253227625,
+  "n_parameters": 16,
+  "jacobian_condition": 702782918073.3461,
+  "predicted_D_scale_vs_block0": 1.2740073634721203
+}
+{
+  "modes": 6,
+  "integral_model_fs": 14.443197417670142,
+  "rmse_calibration": 0.007083278192022467,
+  "psd_min_real": 0.5001412635542432,
+  "discrete_min_eig_gap": 0.004173908185532982,
+  "discrete_rmse_vs_model": 91.18589073682813,
+  "n_parameters": 19,
+  "jacobian_condition": 20134274048.249176,
+  "predicted_D_scale_vs_block0": 1.2740073634721203
+}
+wrote experiments/gle_kernel_study_mean_20261126.json

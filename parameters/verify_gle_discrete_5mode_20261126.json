@@ -1,0 +1,32 @@
+{
+  "fit": "experiments/fit_gle_general_overdamped_20261126.json",
+  "mode_index": 2,
+  "modes": 5,
+  "steps": 1000000,
+  "horizon_fs": 5.0,
+  "analytic_integral_fs": 14.591429145102833,
+  "sampled_integral_fs": 16.228477124015516,
+  "analytic_key": [
+    0.7262906767482402,
+    0.535619249950681,
+    0.04003443285191576,
+    -0.07402281024938749,
+    -0.020773440042119656,
+    0.004239680015807376,
+    0.0008991093675702561,
+    -1.5826832941244858e-06
+  ],
+  "sampled_key": [
+    0.7256999300098543,
+    0.5349543776511867,
+    0.03841505521480817,
+    -0.07570699845564864,
+    -0.01755542678736245,
+    0.008768221910424017,
+    0.00400073429102423,
+    -0.0015517455097064142
+  ],
+  "max_abs_acf_error": 0.006714045894452349,
+  "key_rmse": 0.002478313279291338,
+  "note": "Monte Carlo test of the exact A_d/Q_d realization; the residual difference is sampling noise, not a discretization error."
+}

@@ -1,0 +1,116 @@
+{
+  "label": "Official IBM published TrajCast water, 100 ps control (5 fs)",
+  "summary": {
+    "completed_steps": 30000,
+    "requested_steps": 20000,
+    "production_steps": 20000,
+    "simulated_ps": 150.0,
+    "stable": true,
+    "failure_reason": null,
+    "selected_epoch": 0,
+    "checkpoint": "/data2/wyd/research/foundation_mlip_adaptation/reference/trajcast_published_water/published_checkpoint.pt",
+    "elapsed_seconds": 4417.050800210098,
+    "peak_cuda_bytes": 2299122176
+  },
+  "protocol": {
+    "checkpoint": "/data2/wyd/research/foundation_mlip_adaptation/reference/trajcast_published_water/published_checkpoint.pt",
+    "initial_state": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/physical_reference/nvt_2p5ns/production.h5 frame 0",
+    "thermostat": "CSVR 300 K, Tdamp 50 fs",
+    "thermalization_ps": 50.0,
+    "production_ps": 100.0,
+    "analysis_frames": 2000
+  },
+  "temperature_K": {
+    "SMDP": 300.1918748735255,
+    "reference": 300.19421085046633
+  },
+  "temperature_std_K": {
+    "SMDP": 17.682312436569152,
+    "reference": 17.889572094604354
+  },
+  "partition_eV": {
+    "translation_eV": {
+      "TrajCast": 2.505003441956363,
+      "reference": 2.372521689598859
+    },
+    "rotation_eV": {
+      "TrajCast": 2.462587523040433,
+      "reference": 2.430219286887062
+    },
+    "internal_eV": {
+      "TrajCast": 2.4437441072928645,
+      "reference": 2.6086517679437238
+    },
+    "total_KE_eV": {
+      "TrajCast": 7.411335072289661,
+      "reference": 7.411392744429644
+    }
+  },
+  "partition_std_eV": {
+    "translation_eV": {
+      "TrajCast": 0.25818523784523295,
+      "reference": 0.23913784492514734
+    },
+    "rotation_eV": {
+      "TrajCast": 0.2505009961321367,
+      "reference": 0.234241467054614
+    },
+    "internal_eV": {
+      "TrajCast": 0.25426668549177683,
+      "reference": 0.2499366083923299
+    },
+    "total_KE_eV": {
+      "TrajCast": 0.43655259615384784,
+      "reference": 0.44166955934052377
+    }
+  },
+  "rdf_rmse": {
+    "8-8": 0.04307135763052119,
+    "8-1": 0.11804525353937038,
+    "1-1": 0.09573991510057174
+  },
+  "rdf_peak": {
+    "8-8": {
+      "position_A": {
+        "model": 2.75,
+        "reference": 2.716666666666667
+      },
+      "height": {
+        "model": 3.1226464045921443,
+        "reference": 3.345542405775889
+      }
+    },
+    "8-1": {
+      "position_A": {
+        "model": 1.0166666666666666,
+        "reference": 1.0166666666666666
+      },
+      "height": {
+        "model": 28.359258212830873,
+        "reference": 28.89585025142907
+      }
+    },
+    "1-1": {
+      "position_A": {
+        "model": 1.6833333333333333,
+        "reference": 1.6833333333333333
+      },
+      "height": {
+        "model": 3.09608148212439,
+        "reference": 2.762752729667335
+      }
+    }
+  },
+  "vdos_overlap": {
+    "1": 0.6240565739756847,
+    "8": 0.9370096487249449
+  },
+  "vacf_rmse": {
+    "1": 0.09177461111228025,
+    "8": 0.0150271589353485
+  },
+  "diffusion": {
+    "available": false,
+    "reason": "100 ps common block is below the frozen 100 ps MSD fit limit; formal D pending the 2.5 ns run"
+  }
+}

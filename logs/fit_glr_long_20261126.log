@@ -1,0 +1,33 @@
+{
+  "order": 10,
+  "integral_fs": 292.65321046076224,
+  "mean_integral_fs": 14.44790548573617,
+  "ratio_to_mean": 20.25575338582377,
+  "rmse_key": 1.9110557003361277,
+  "prediction_error_ratio": 0.003842199381146938
+}
+{
+  "order": 20,
+  "integral_fs": 339.1267619555462,
+  "mean_integral_fs": 14.44790548573617,
+  "ratio_to_mean": 23.47238236645113,
+  "rmse_key": 1.9949697915798268,
+  "prediction_error_ratio": 0.0035329045616148136
+}
+{
+  "order": 40,
+  "integral_fs": 293.8802558849365,
+  "mean_integral_fs": 14.44790548573617,
+  "ratio_to_mean": 20.34068233454825,
+  "rmse_key": 1.9953919406933436,
+  "prediction_error_ratio": 0.003501923286713615
+}
+{
+  "order": 80,
+  "integral_fs": 244.63806422745893,
+  "mean_integral_fs": 14.44790548573617,
+  "ratio_to_mean": 16.93242418210585,
+  "rmse_key": 1.9958109834761117,
+  "prediction_error_ratio": 0.003479820672430245
+}
+wrote

@@ -1,0 +1,90 @@
+{
+  "accepted": true,
+  "frames": [
+    {
+      "frame": 0,
+      "requested_frame": 0,
+      "thermo_index": 0,
+      "coordinate_source": "wrapped+image_flags",
+      "energy_error_eV": -0.00030939366484616926,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006031270561364688,
+      "force_max_error_eV_A": 0.003546009881917264
+    },
+    {
+      "frame": 14285,
+      "requested_frame": 14285,
+      "thermo_index": 14285,
+      "coordinate_source": "wrapped+image_flags",
+      "energy_error_eV": 3.0739164621707005e-05,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0005283147161515529,
+      "force_max_error_eV_A": 0.002175892160827697
+    },
+    {
+      "frame": 28571,
+      "requested_frame": 28571,
+      "thermo_index": 28571,
+      "coordinate_source": "wrapped+image_flags",
+      "energy_error_eV": -0.0009126651946331776,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006540696325643716,
+      "force_max_error_eV_A": 0.003371533129822968
+    },
+    {
+      "frame": 42857,
+      "requested_frame": 42857,
+      "thermo_index": 42857,
+      "coordinate_source": "wrapped+image_flags",
+      "energy_error_eV": -0.0003139684405759624,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006011155615813773,
+      "force_max_error_eV_A": 0.004244961282830566
+    },
+    {
+      "frame": 57142,
+      "requested_frame": 57142,
+      "thermo_index": 57142,
+      "coordinate_source": "wrapped+image_flags",
+      "energy_error_eV": -0.00042761538609070726,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0006872447514345613,
+      "force_max_error_eV_A": 0.003403345182795947
+    },
+    {
+      "frame": 71428,
+      "requested_frame": 71428,
+      "thermo_index": 71428,
+      "coordinate_source": "wrapped+image_flags",
+      "energy_error_eV": 0.00014743993275700973,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0005812938725598198,
+      "force_max_error_eV_A": 0.0033180123068733414
+    },
+    {
+      "frame": 85714,
+      "requested_frame": 85714,
+      "thermo_index": 85714,
+      "coordinate_source": "wrapped+image_flags",
+      "energy_error_eV": -9.584293216846618e-06,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0005871891491663689,
+      "force_max_error_eV_A": 0.004453922872899446
+    },
+    {
+      "frame": 100000,
+      "requested_frame": 100000,
+      "thermo_index": 100000,
+      "coordinate_source": "wrapped+image_flags",
+      "energy_error_eV": 0.00024884714130024577,
+      "force_available": true,
+      "force_RMSE_eV_A": 0.0005762901612372897,
+      "force_max_error_eV_A": 0.003396947367578451
+    }
+  ],
+  "tolerances": {
+    "energy_eV": 0.001,
+    "max_force_eV_A": 0.02
+  },
+  "rationale": "Reference verification uses stored wrapped coordinates + image flags; fixes float32 unwrapped reconstruction at frame 28571. Tolerance unchanged; E1 negative result unchanged."
+}

@@ -1,0 +1,36 @@
+{
+  "modes": 3,
+  "integral_fs": 14.591433822819507,
+  "mean_integral_fs": 14.44790548573617,
+  "ratio": 1.0099341968443134,
+  "rmse_mean": 0.3122724513786884,
+  "rmse_block0": 0.3113432661804224,
+  "rmse_block1": 0.3119795177926712,
+  "min_eig_gap": 0.03538102117194064,
+  "min_innovation_variance": 3.862279256695471e-09,
+  "jacobian_condition": 2988715321.7013745
+}
+{
+  "modes": 4,
+  "integral_fs": 14.586055771801641,
+  "mean_integral_fs": 14.44790548573617,
+  "ratio": 1.0095619594273968,
+  "rmse_mean": 0.30333128291930445,
+  "rmse_block0": 0.30229947739756596,
+  "rmse_block1": 0.30301801954434604,
+  "min_eig_gap": 0.03435612269955324,
+  "min_innovation_variance": 8.63005037760179e-08,
+  "jacobian_condition": 204638139.96053755
+}
+{
+  "modes": 5,
+  "integral_fs": 14.579317500492897,
+  "mean_integral_fs": 14.44790548573617,
+  "ratio": 1.0090955754719233,
+  "rmse_mean": 0.2623391287465727,
+  "rmse_block0": 0.26130316472076165,
+  "rmse_block1": 0.2620468454668212,
+  "min_eig_gap": 0.010347803961335278,
+  "min_innovation_variance": 7.908077806805249e-07,
+  "jacobian_condition": 19149772.778084025
+}

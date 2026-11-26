@@ -1,0 +1,50 @@
+{
+  "note": "Large read-only artifacts; not copied.",
+  "artifacts": [
+    {
+      "role": "reference_nvt_2p5ns",
+      "path": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/physical_reference/nvt_2p5ns/production.h5",
+      "exists": true,
+      "size_bytes": 23205934562,
+      "mtime": "2026-10-21T01:53:10.113313+00:00",
+      "sha256": null,
+      "note": "calibration + evaluation; 0.5 fs storage; 5,000,001 frames"
+    },
+    {
+      "role": "independent_nvt_200ps",
+      "path": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/physical_reference/train_nvt_200ps/production.h5",
+      "exists": true,
+      "size_bytes": 2492837498,
+      "mtime": "2026-11-24T15:10:49.072781+00:00",
+      "sha256": null,
+      "note": "independent NVT trajectory used for ACF validation"
+    },
+    {
+      "role": "independent_nvt_500ps_dump",
+      "path": "/data2/wyd/research/foundation_mlip_adaptation/experiments/independent_nvt_500ps_20261121/production.lammpstrj.gz",
+      "exists": true,
+      "size_bytes": 714695507,
+      "mtime": "2026-11-21T04:30:14.530314+00:00",
+      "sha256": "638030788acfc3814fbcdf367fbfb6f4348bfdcf24cb496bdcca9abc1ae341af",
+      "note": "LAMMPS NVT independent start; text dump"
+    },
+    {
+      "role": "water_topology",
+      "path": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/equilibration/snapshots/water_5.data",
+      "exists": true,
+      "size_bytes": 30310,
+      "mtime": "2026-10-20T08:56:42.535457+00:00",
+      "sha256": "75c58257976387d11278c8f1e0c073f102fb4403a8e468ebcb26c26c4451322b",
+      "note": "SPC/Fw topology; 64 molecules, 192 atoms"
+    },
+    {
+      "role": "published_trajcast_checkpoint",
+      "path": "/data2/wyd/research/foundation_mlip_adaptation/reference/trajcast_published_water/published_checkpoint.pt",
+      "exists": true,
+      "size_bytes": 18719751,
+      "mtime": "2026-11-21T02:04:23.891834+00:00",
+      "sha256": "a7f189542d655b7675ebc74bfce11b4e36772e68b448fae4ba5a3f1eb15a62ea",
+      "note": "IBM published water e3nn state; SHA256 known"
+    }
+  ]
+}

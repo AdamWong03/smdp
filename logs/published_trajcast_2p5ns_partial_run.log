@@ -1,0 +1,148 @@
+/data1/wyd/envs/mlip/lib/python3.12/site-packages/e3nn/o3/_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+/usr/lib/python3.12/ast.py:407: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  return visitor(node)
+{"step": 1000, "total": 510000, "temperature_K": 293.78508670176035, "elapsed_s": 119.15170790208504}
+{"step": 2000, "total": 510000, "temperature_K": 275.4812641330414, "elapsed_s": 217.9793148478493}
+{"step": 3000, "total": 510000, "temperature_K": 297.35858416093134, "elapsed_s": 316.89147707726806}
+{"step": 4000, "total": 510000, "temperature_K": 341.328974639242, "elapsed_s": 415.7437297431752}
+{"step": 5000, "total": 510000, "temperature_K": 289.3177062107961, "elapsed_s": 514.421752335038}
+{"step": 6000, "total": 510000, "temperature_K": 286.3709571904841, "elapsed_s": 612.8055406371132}
+{"step": 7000, "total": 510000, "temperature_K": 302.95805695458506, "elapsed_s": 711.2537563382648}
+{"step": 8000, "total": 510000, "temperature_K": 298.89046281264257, "elapsed_s": 809.9278404531069}
+{"step": 9000, "total": 510000, "temperature_K": 298.81373322056027, "elapsed_s": 908.5554912639782}
+{"step": 10000, "total": 510000, "temperature_K": 304.7658240386677, "elapsed_s": 1007.6336566922255}
+{"step": 11000, "total": 510000, "temperature_K": 316.5654016048234, "elapsed_s": 1106.3762180129997}
+{"step": 12000, "total": 510000, "temperature_K": 322.8585992649026, "elapsed_s": 1206.7968063992448}
+{"step": 13000, "total": 510000, "temperature_K": 318.50178662523376, "elapsed_s": 1306.1741443169303}
+{"step": 14000, "total": 510000, "temperature_K": 281.85425239903753, "elapsed_s": 1404.7051138542593}
+{"step": 15000, "total": 510000, "temperature_K": 299.2689934874321, "elapsed_s": 1503.4767852439545}
+{"step": 16000, "total": 510000, "temperature_K": 326.1803654254427, "elapsed_s": 1602.7022597389296}
+{"step": 17000, "total": 510000, "temperature_K": 305.9159177640998, "elapsed_s": 1701.5067625171505}
+{"step": 18000, "total": 510000, "temperature_K": 311.73637132435124, "elapsed_s": 1824.6411030068994}
+{"step": 19000, "total": 510000, "temperature_K": 293.5335934143077, "elapsed_s": 1939.2116981241852}
+{"step": 20000, "total": 510000, "temperature_K": 268.8059409518548, "elapsed_s": 2037.8372488841414}
+{"step": 21000, "total": 510000, "temperature_K": 308.134950858567, "elapsed_s": 2136.765640974045}
+{"step": 22000, "total": 510000, "temperature_K": 267.1023782737471, "elapsed_s": 2287.193872379139}
+{"step": 23000, "total": 510000, "temperature_K": 295.3594596756295, "elapsed_s": 2475.9275186411105}
+{"step": 24000, "total": 510000, "temperature_K": 287.99429638120904, "elapsed_s": 2637.4220884190872}
+{"step": 25000, "total": 510000, "temperature_K": 265.4047781020193, "elapsed_s": 2737.8767527039163}
+{"step": 26000, "total": 510000, "temperature_K": 285.8691900417892, "elapsed_s": 2837.656595283188}
+{"step": 27000, "total": 510000, "temperature_K": 267.77678846846476, "elapsed_s": 2936.7431516498327}
+{"step": 28000, "total": 510000, "temperature_K": 306.1685467384212, "elapsed_s": 3035.9889993928373}
+{"step": 29000, "total": 510000, "temperature_K": 317.12109475969805, "elapsed_s": 3134.9656560360454}
+{"step": 30000, "total": 510000, "temperature_K": 300.22903959714927, "elapsed_s": 3233.76696957089}
+{"step": 31000, "total": 510000, "temperature_K": 279.65096637469395, "elapsed_s": 3332.7296509840526}
+{"step": 32000, "total": 510000, "temperature_K": 299.295649350026, "elapsed_s": 3434.8965000249445}
+{"step": 33000, "total": 510000, "temperature_K": 304.53509455854845, "elapsed_s": 3533.6381933749653}
+{"step": 34000, "total": 510000, "temperature_K": 318.47398547878936, "elapsed_s": 3633.320969484281}
+{"step": 35000, "total": 510000, "temperature_K": 285.35687041607457, "elapsed_s": 3872.651313418988}
+{"step": 36000, "total": 510000, "temperature_K": 287.76003468100225, "elapsed_s": 4190.0282571921125}
+{"step": 37000, "total": 510000, "temperature_K": 336.55942297889885, "elapsed_s": 4385.679134323262}
+{"step": 38000, "total": 510000, "temperature_K": 285.91359340395985, "elapsed_s": 4698.698006155901}
+{"step": 39000, "total": 510000, "temperature_K": 282.1508085201155, "elapsed_s": 5018.895593402907}
+{"step": 40000, "total": 510000, "temperature_K": 308.3959994747241, "elapsed_s": 5273.330028200056}
+{"step": 41000, "total": 510000, "temperature_K": 317.7511722549174, "elapsed_s": 5493.398524607997}
+{"step": 42000, "total": 510000, "temperature_K": 262.7764678638923, "elapsed_s": 5810.474747618195}
+{"step": 43000, "total": 510000, "temperature_K": 327.0799821395988, "elapsed_s": 6131.4079876509495}
+{"step": 44000, "total": 510000, "temperature_K": 292.9028275712948, "elapsed_s": 6450.3411750961095}
+{"step": 45000, "total": 510000, "temperature_K": 287.4133473878729, "elapsed_s": 6760.22631839104}
+{"step": 46000, "total": 510000, "temperature_K": 334.7918442514629, "elapsed_s": 7081.06866285624}
+{"step": 47000, "total": 510000, "temperature_K": 305.0430498540134, "elapsed_s": 7398.465553723276}
+{"step": 48000, "total": 510000, "temperature_K": 308.5733263343291, "elapsed_s": 7717.287551408168}
+{"step": 49000, "total": 510000, "temperature_K": 302.29469327954484, "elapsed_s": 7835.49693018198}
+{"step": 50000, "total": 510000, "temperature_K": 279.7621154222584, "elapsed_s": 7934.674189112149}
+{"step": 51000, "total": 510000, "temperature_K": 298.61611871726785, "elapsed_s": 8033.897485374007}
+{"step": 52000, "total": 510000, "temperature_K": 311.48474372303207, "elapsed_s": 8136.692944270093}
+{"step": 53000, "total": 510000, "temperature_K": 305.5892101833018, "elapsed_s": 8241.127160215285}
+{"step": 54000, "total": 510000, "temperature_K": 322.9629284983423, "elapsed_s": 8341.923413651995}
+{"step": 55000, "total": 510000, "temperature_K": 340.20373102825243, "elapsed_s": 8440.990618044045}
+{"step": 56000, "total": 510000, "temperature_K": 315.06536840249066, "elapsed_s": 8540.427803338971}
+{"step": 57000, "total": 510000, "temperature_K": 291.1232552767659, "elapsed_s": 8639.318754469976}
+{"step": 58000, "total": 510000, "temperature_K": 294.8936491124393, "elapsed_s": 8738.82367000496}
+{"step": 59000, "total": 510000, "temperature_K": 315.43673347379547, "elapsed_s": 8838.252904008143}
+{"step": 60000, "total": 510000, "temperature_K": 261.90957888791405, "elapsed_s": 8937.601655111182}
+{"step": 61000, "total": 510000, "temperature_K": 297.21402120392366, "elapsed_s": 9037.271492121276}
+{"step": 62000, "total": 510000, "temperature_K": 290.76451576390906, "elapsed_s": 9136.481489010155}
+{"step": 63000, "total": 510000, "temperature_K": 295.7240023163702, "elapsed_s": 9240.20599897718}
+{"step": 64000, "total": 510000, "temperature_K": 298.1913217906537, "elapsed_s": 9400.775834702887}
+{"step": 65000, "total": 510000, "temperature_K": 321.18596246555313, "elapsed_s": 9715.419738870114}
+{"step": 66000, "total": 510000, "temperature_K": 319.99941595214773, "elapsed_s": 10033.677269727923}
+{"step": 67000, "total": 510000, "temperature_K": 303.87571934803395, "elapsed_s": 10352.062513595913}
+{"step": 68000, "total": 510000, "temperature_K": 317.54323180055076, "elapsed_s": 10668.821585541125}
+{"step": 69000, "total": 510000, "temperature_K": 301.0120445645355, "elapsed_s": 10991.499696812127}
+{"step": 70000, "total": 510000, "temperature_K": 317.98774418087714, "elapsed_s": 11313.098526026122}
+{"step": 71000, "total": 510000, "temperature_K": 298.89271720352025, "elapsed_s": 11630.630760719068}
+{"step": 72000, "total": 510000, "temperature_K": 279.57714637843293, "elapsed_s": 11948.725231308956}
+{"step": 73000, "total": 510000, "temperature_K": 314.4805848309019, "elapsed_s": 12106.664136567153}
+{"step": 74000, "total": 510000, "temperature_K": 314.2383866040358, "elapsed_s": 12389.675318637863}
+{"step": 75000, "total": 510000, "temperature_K": 294.66412455659827, "elapsed_s": 12611.385694851168}
+{"step": 76000, "total": 510000, "temperature_K": 297.2291368305174, "elapsed_s": 12710.139109683223}
+{"step": 77000, "total": 510000, "temperature_K": 285.4235690842997, "elapsed_s": 12808.791909250896}
+{"step": 78000, "total": 510000, "temperature_K": 276.55707421507094, "elapsed_s": 12907.411601275206}
+{"step": 79000, "total": 510000, "temperature_K": 281.68995632756537, "elapsed_s": 13065.523638448212}
+{"step": 80000, "total": 510000, "temperature_K": 330.10518266258885, "elapsed_s": 13383.3162213061}
+{"step": 81000, "total": 510000, "temperature_K": 297.2665141032938, "elapsed_s": 13682.931174556259}
