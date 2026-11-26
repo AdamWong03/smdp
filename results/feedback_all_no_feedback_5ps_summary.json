@@ -1,0 +1,17 @@
+{
+  "mode": "all_no_feedback",
+  "completed_steps": 1000,
+  "requested_steps": 1000,
+  "simulated_ps": 5.0,
+  "stable": true,
+  "failure_reason": "",
+  "elapsed_seconds": 398.6724139759317,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+  "initial_trajectory": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5",
+  "initial_frame": 0,
+  "seed": 2026110401,
+  "T_mean": 307.37675551205456,
+  "T_std": 21.068335708087762,
+  "execution_note": "velocity feedback intervention: all_no_feedback, 5 ps, matched val_04 frame 0",
+  "summary_note": "backfilled after the post-run summary bug; dynamics completed 1000/1000 steps"
+}

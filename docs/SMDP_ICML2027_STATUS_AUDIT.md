@@ -17,12 +17,16 @@ variance/GK–MSD/diffusion trade-off. The first step is an offline kernel fit; 
 calibration audits. The 8-block 2.5 ns analysis gives GK/MSD **0.958** (deterministic GLR),
 **1.058** (stochastic GLR), and **1.052** (reference); the earlier "stochastic GLR breaks GK/MSD"
 was a first-block fluctuation, not a systematic 2.5 ns result. The D deficit is a **common low-D
-bias**, not a GK/MSD inconsistency. The production GLR is **not a self-consistent propagator**:
-positions come from the backbone displacement, velocities from the readout; the corrected velocity
-is not integrated. The AR(10) Yule–Walker fit uses only **0–50 fs** (`--maxlag 40` is only the
-reported ACF length); independent 100/200 ps calibration gives the same coefficients and the same
-2.3–2.5× integral overprediction. The bottleneck is the 0–50 fs local AR fit plus the readout
-coupling, not the calibration-trajectory length or leakage.
+bias**, not a GK/MSD inconsistency. The production GLR is a **closed-loop velocity-feedback
+readout**: the current-step displacement comes from the backbone, but `v_new` is the next state
+and drives future backbone calls; the one-step probe changes the next displacement by **~62%** of
+`dq0`. The local `q–v` equality does not hold (1.3%/3.8% midpoint residual), but that alone does
+not mean the closed-loop dynamics is inconsistent. The AR(10) Yule–Walker fit uses only **0–50 fs**
+(`--maxlag 40` is only the reported ACF length); independent 100/200 ps calibration gives the
+same coefficients and the same 2.3–2.5× integral overprediction. The offline AR **overpredicts** D
+while the autonomous rollout **underpredicts** it, so the offline integral alone cannot identify
+the autonomous D; the 0–50 fs fit is a strong candidate contributor, and the feedback intervention
+tests the coupling.
 
 **Execution update (2026-11-26):** the offline study shows that **3 DHO modes + slow mode are
 sufficient** on the 25-block mean ACF (integral 14.34 vs 14.45 fs); 4–6 modes improve the ACF
@@ -943,15 +947,33 @@ quartz; external action-map/FlashMD comparisons; clean held-out test; the new GL
 
 The production GLR commands use `--fd-blend 0.1 --fd-rescale`, with
 `displacement_weight=0`, `translation_displacement_weight=0`, and **no**
-`--fd-correct-displacement`, `--position-consistent`, or `--driven-gle`. The corrected velocity
-therefore **does not participate in position propagation**. This is a principled inconsistency:
-the velocity is not the time derivative of the position.
+`--fd-correct-displacement`, `--position-consistent`, or `--driven-gle`. The **current-step**
+displacement is therefore the backbone displacement, not `h v_new`. However, `v_new` is written
+to `output['velocities']` and becomes `v_{t+1}`; the next `step(model, q_{t+1}, v_{t+1})` sends
+it back into the frozen backbone, and the readout history is updated with `v_new`. The loop is
+**closed**. The correct statement is: the local equality `q_{t+1}-q_t = h v_new` does not hold,
+but the corrected velocity does participate in future position propagation through the next
+backbone call and the AR history. It must not be described as a post-hoc trajectory correction.
 
 The history is explicit: `--fd-correct-displacement` crashed at **24.8 ps** (4,969 steps, minimum
-distance 0.647 Å), so the decoupled scheme was adopted as a stability requirement
-(`method_development/FD_READOUT_20261121.md`, `method_development/CURRENT_METHOD_STATUS.md`). The
-`--position-consistent` and `--driven-gle` transitions exist but were not used for the production
-2.5 ns runs.
+distance 0.647 Å), so the decoupled current-step displacement was adopted as a stability
+requirement (`method_development/FD_READOUT_20261121.md`,
+`method_development/CURRENT_METHOD_STATUS.md`). The `--position-consistent` and `--driven-gle`
+transitions exist but were not used for the production 2.5 ns runs.
+
+**One-step feedback probe (2026-11-27).** Production checkpoint, production GLR coefficients,
+deterministic readout, same `FDTransition`; at a matched state, `v_new` is fed to a second
+backbone call at the same `q_t` and the next displacement is compared with the `v_pred` call:
+
+| state | correction / v_pred | next displacement change / dq0 | next v_pred change / v_pred | cosine(correction, v_pred) |
+|---|---:|---:|---:|---:|
+| val_04 frame 0 | 0.218 | **0.632** | **1.131** | −0.032 |
+| GLR 2.5 ns frame 20,000 (100 ps) | 0.209 | **0.617** | **1.143** | −0.041 |
+
+The correction is ~21% of `v_pred`, but the next backbone displacement changes by ~62% of `dq0`
+and the next velocity by ~113% of `v_pred`. The feedback is strong and nearly orthogonal to the
+current velocity. This directly confirms the closed-loop coupling and invalidates the earlier
+"post-hoc correction" reading.
 
 ### 10.2 Kinematic residual and GK/MSD
 
@@ -981,11 +1003,15 @@ for the raw 250k backbone.
   D to ~1.4–1.5×10⁻⁹ m²/s. This is a real improvement over the raw backbone, but still 22–25%
   below the reference.
 
-**Conclusion:** the production GLR is **not a self-consistent dynamical propagator**; positions
-come from the backbone, velocities from the readout. The measured mismatch is small for the
-deterministic readout (1.3% of `h|v|`) and larger for the stochastic readout (3.8%), but it does
-**not** explain the D deficit. Do not claim a physical violation from a GK/MSD difference alone;
-do state that the decoupled scheme is a principled methodological limitation.
+**Conclusion:** the production GLR is a **closed-loop velocity-feedback readout**, not a post-hoc
+trajectory correction. The current-step displacement is the backbone displacement; `v_new` is
+the next state and drives future backbone calls. The measured local `q–v` mismatch is 1.3%
+(deterministic) and 3.8% (stochastic); it is a local kinematic discretization issue, not proof of
+no closed-loop dynamics. The 8-block GK/MSD ratios are 0.958/1.058 (reference 1.052); the D
+deficit is a **common low-D bias**, not a GK/MSD inconsistency. The feedback intervention
+(running) will quantify how much the corrected-velocity feedback contributes to position
+dynamics and D recovery; do not infer that from the local residual or the offline AR integral
+alone.
 
 ### 10.3 Calibration dependence and leakage
 
@@ -1039,21 +1065,30 @@ comparison:
 - GLR 2.5 ns: D 1.48 (MSD) / 1.39 (GK) vs reference 1.89/1.94; RDF 0.031; VDOS 0.953/0.847;
   deterministic mean partition good but KE variance suppressed; stochastic variance restored.
 - **Extra calibration cost:** GLR needs a 100–200 ps reference NVT ACF (offline only; no
-  reference forces). The 200 ps independent test shows the 50 fs AR window is the bottleneck, so
-  simply buying a longer calibration trajectory will not fix D. The official TrajCast needs
-  large-scale training/compute; the GLR is much cheaper but not exact.
+  reference forces). The 200 ps independent test shows the 50 fs AR window is a strong candidate
+  contributor; a longer calibration trajectory alone does not change the AR fit. Whether it is the
+  dominant cause of the autonomous D deficit requires the coupled feedback test, not the offline
+  integral alone. The official TrajCast needs large-scale training/compute; the GLR is much cheaper
+  but not exact.
 - **Independent method contribution:** the GLR readout restores diffusion from ~0 (raw backbone)
   to ~1.4–1.5×10⁻⁹ m²/s and restores partition/RDF/VDOS on a frozen backbone; the
   pointwise-vs-ensemble diagnostic and the backbone-agnostic v0+GLR/quartz transfer are the
-  strongest claims. The method is a **readout**, not a self-consistent propagator; the D deficit
-  and decoupled position/velocity are principled limitations.
+  strongest claims. The method is a **closed-loop velocity-feedback readout**, not a post-hoc
+  correction: the current-step displacement is the backbone displacement, but `v_new` is the next
+  state and drives future backbone calls; the one-step probe changes the next displacement by
+  ~62% from a ~21% velocity correction. The local `q–v` equality does not hold (1.3%/3.8%
+  midpoint residual); D is 22–25% low; the 0–50 fs AR fit is a strong candidate contributor, but
+  the offline integral alone does not identify the autonomous D.
 - **Paper viability:** improving the GLR's own raw backbone is **not sufficient** for an ICML
-  method paper. The decisive missing number is the official TrajCast 2.5 ns D/MSD. If TrajCast is
-  clearly better on D/VDOS, the defensible paper is a diagnostic/negative-result + lightweight
-  readout paper, not a SOTA method claim. If the GLR is competitive on RDF/VDOS and much cheaper,
-  a methods paper with explicit limitations is possible. Do not start a new backbone or GLR
-  architecture; the current evidence does not justify a final method-experiment round before the
-  TrajCast 2.5 ns result.
+  method paper. The existing ablations support rescale (strong), memory (p1 vs p10/p20), and
+  translation blend 0.1; FD noise is needed for the KE variance, not for D; the internal-mode 1.0
+  ablation is missing. The 100 ps seed spread is 1.26–1.71×10⁻⁹ (~27%), comparable to the D
+  deficit, so do not claim a precise 25% method failure. The decisive missing number is the
+  official TrajCast 2.5 ns D/MSD. If TrajCast is clearly better on D/VDOS, the defensible paper is
+  a diagnostic/negative-result + lightweight readout paper, not a SOTA method claim. If the GLR is
+  competitive on RDF/VDOS and much cheaper, a methods paper with explicit limitations is possible.
+  Do not start a new backbone or GLR architecture; the current evidence does not justify a final
+  method-experiment round before the TrajCast 2.5 ns result.
 
 ### 10.5 Artifacts
 
@@ -1064,3 +1099,126 @@ comparison:
 - `code/h1h2/position_velocity_audit.py`, `code/h1h2/calibration_dependence.py`
 - `experiments/glr_provenance_20261127.json` updated with the 0–50 fs Yule–Walker window and the
   independent 100/200 ps results.
+
+### 10.6 Existing-ablation necessity audit (no rerun)
+
+The existing 100 ps trajectories were re-analyzed with the same `position_velocity_audit.py`
+MSD/GK/kinematic metrics. No rollout was repeated.
+
+| run | D_MSD (10⁻⁹) | D_GK (10⁻⁹) | RDF O–O/O–H/H–H | VDOS O/H | comment |
+|---|---:|---:|---:|---:|---|
+| `glr_100ps` (det) | 1.711 | 1.528 | 0.032/0.104/0.026 | 0.964/0.848 | partition std 0.002 |
+| `glr_noise_off` (det) | 1.623 | 1.473 | 0.034/0.098/0.026 | 0.962/0.849 | partition std 0.002 |
+| `glr_stoch_full` | 1.417 | 1.382 | 0.036/0.114/0.022 | 0.957/0.854 | partition std 0.253 |
+| `glr_rescale_off` | 0.001 | 0.021 | 0.398/0.474/0.279 | 0.608/0.432 | T=172 K; collapse |
+| `glr_ltrans0.3` | 0.883 | 1.092 | 0.061/0.105/0.027 | 0.911/0.848 | residual 0.018 |
+| `glr_ltrans0.5` | 0.969 | 1.024 | 0.095/0.102/0.033 | 0.865/0.853 | residual 0.030 |
+| `glr_p1` | 4.249 | 4.545 | 0.089/0.312/0.105 | 0.896/0.809 | no memory; 2.5× D |
+| `glr_p5` | 1.837 | 1.655 | 0.041/0.131/0.022 | 0.965/0.867 | close to p10 |
+| `glr_p20` | 1.549 | 1.465 | 0.035/0.117/0.021 | 0.964/0.859 | not better than p10 |
+| `glr_seed2` | 1.257 | 1.386 | 0.034/0.111/0.026 | 0.966/0.854 | seed spread |
+| `glr_seed3` | 1.252 | 1.277 | 0.033/0.110/0.026 | 0.959/0.846 | seed spread |
+
+**What is supported:**
+
+- **Rescale is necessary** (removing it collapses T, partition, RDF, VDOS, and D).
+- **Memory is necessary for water** (AR(1) is 2.5× too diffusive and structurally worse; AR(5)
+  is close to AR(10); AR(20) is not better). The p=1 result supports the memory claim; p=10 vs
+  p=20 is not distinguishable.
+- **FD noise is not necessary for D** at λ=0.1 (deterministic 1.62–1.71 vs stochastic 1.42); it
+  **is** necessary for the KE variance (partition std 0.002 vs 0.253).
+- **The 0.1 translation blend is supported** (0.3/0.5 lower D, worse RDF/VDOS, larger residual).
+
+**What is not supported:**
+
+- A full **mode-decomposition necessity** claim: the internal-mode 1.0 ablation
+  (`glr_int10_100ps_20261122`) is missing; only the translation blend is covered.
+- A precise 22–25% D deficit: the 100 ps seed spread is **1.26–1.71×10⁻⁹ (27%)**, comparable to
+  the deficit. Report the deficit with seed/block uncertainty; do not use a single seed as proof
+  of a method failure.
+
+### 10.7 Velocity-feedback intervention (2026-11-27)
+
+One-step probe (same process/state):
+
+| state | correction / v_pred | next displacement change / dq0 | next v_pred change / v_pred |
+|---|---:|---:|---:|
+| val_04 frame 0 | 0.218 | **0.632** | **1.131** |
+| GLR 2.5 ns frame 20,000 | 0.209 | **0.617** | **1.143** |
+
+Matched 5 ps separate-process runs (same checkpoint, GLR coefficients, initial state, 5 fs):
+
+| mode | T mean ± std (K) | translation / rotation / internal KE (eV) | early MSD slope 1–5 ps (Å²/ps) | early D (10⁻⁹ m²/s) |
+|---|---:|---:|---:|---:|
+| `full` | **300.000 ± 0.000014** | 2.481 / 2.521 / 2.401 | 0.800 | 1.333 |
+| `no_feedback` | **308.18 ± 20.40** | 2.099 / 2.124 / 3.375 | 0.433 | 0.721 |
+| `all_no_feedback` | **307.38 ± 21.07** | 2.155 / 2.180 / 3.268 | 0.418 | 0.696 |
+| `thermostat_only` | **300.000 ± 0.000014** | 2.481 / 2.541 / 2.381 | 1.334 | 2.224 |
+
+**Robust observations:**
+
+- The full GLR and the thermostat-only control hold T = 300.000 K; removing the feedback of the
+  corrected/rescaled velocity (`no_feedback`, `all_no_feedback`) heats to ~307–308 K in 5 ps and
+  distorts the partition (translation/rotation down, internal up). The feedback is the thermostat,
+  not a cosmetic correction.
+- At matched T, `thermostat_only` has a larger early MSD slope (1.334) than `full` (0.800); the
+  AR/blend readout reduces early diffusion. The `no_feedback` slope is lower (0.433), but its T and
+  partition are off, so it is not a clean transport comparison.
+
+**Critical caveat:** two independent full-feedback processes from the same initial state diverged
+by **5.18 Å** in position and 0.115 Å/fs in velocity by 5 ps (partial 10 ps full vs the 5 ps full).
+The backbone/GLR system is chaotic and CUDA non-determinism is amplified. Therefore the 1.45 Å
+`full` vs `no_feedback` position divergence in **separate processes** cannot be attributed to the
+feedback alone. A same-process paired control is required.
+
+**Paired control (same process, shared frozen backbone, identical initial state):**
+
+- branches: `full`, `full_control` (chaos floor), `no_feedback`, `thermostat_only`;
+- `full_control` measures the numerical floor; the feedback effect is the excess divergence of
+  `no_feedback`/`thermostat_only` over that floor;
+- run at 500 steps (2.5 ps), same checkpoint/coefficients/seed.
+
+The paired result is the clean feedback isolation; the separate-process T/partition result above
+is the robust thermodynamic evidence. The 5 ps runs are a mechanism test, not a long-time D
+measurement.
+
+**Paired 500-step T log (dynamics completed; final partition assertion failed on a 3.6e-8 eV
+float roundoff, so the JSON was not written):**
+
+| step window | full T (K) | no_feedback T (K) |
+|---|---:|---:|
+| 100 | 300.00001 | 277.74 |
+| 200 | 300.00002 | 298.04 |
+| 300 | 300.00002 | 293.73 |
+| 400 | 300.00001 | 311.25 |
+| 500 | 300.00001 | 304.61 |
+
+The full branch is stable at 300 K in the same process; the no_feedback branch swings over
+277–311 K. This is a clean paired thermodynamic result: the corrected/rescaled velocity feedback
+is the thermostat. The 200-step paired rerun (same branches, partition fallback) writes the
+full-vs-full chaos floor and the no_feedback/thermostat_only divergence; the 500-step log is
+retained as the longer T evidence.
+
+**Paired 200-step result (same process; `full_control` is the chaos floor):**
+
+| branch | T mean ± std (K) | translation/rotation/internal KE (eV) | final RMS position from full (Å) | final RMS velocity from full (Å/fs) |
+|---|---:|---:|---:|---:|
+| `full` | **300.000015 ± 0.000014** | 2.4818 / 2.5970 / 2.3278 | 0 | 0 |
+| `full_control` | 300.000014 ± 0.000015 | 2.4818 / 2.5968 / 2.3280 | **0.00047** | **0.000045** |
+| `no_feedback` | **287.92 ± 13.87** | 2.0704 / 2.3089 / 2.4026 | **0.7005** | **0.01838** |
+| `thermostat_only` | **300.000010 ± 0.000013** | 2.4818 / 2.6493 / 2.2755 | **0.7142** | **0.01843** |
+
+- The same-process full-vs-full floor is **0.00047 Å / 0.000045 Å/fs** over 1 ps. The
+  no_feedback and thermostat-only branches diverge by **0.70/0.71 Å**, ~1,500× the floor. The
+  feedback/readout effect is real, not CUDA chaos.
+- `no_feedback` is not thermostatted (T 287.9 K, partition distorted); `thermostat_only` holds
+  300 K but differs from full by 0.714 Å and has a different rotation/internal partition. Thus the
+  AR/blend readout itself, not only the feedback path, changes the trajectory at matched T.
+- The 200-step COM-MSD field was NaN due to an interpolation bug; the 5 ps separate early MSD
+  (full 1.333, no_feedback 0.721, thermostat_only 2.224 ×10⁻⁹ m²/s) is the available early
+  transport indicator and is **not** a formal D. The long-time paired D remains unmeasured; do
+  not infer the AR as the sole cause of the autonomous D deficit from this 1 ps result.
+- The one-step and paired results correct the earlier overstatement: the production GLR is a
+  closed-loop velocity-feedback controller; the current-step displacement is the backbone
+  displacement, but `v_new` drives the next backbone and the AR history. The local `q–v`
+  inequality is a discretization choice, not proof of no closed-loop dynamics.

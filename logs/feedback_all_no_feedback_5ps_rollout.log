@@ -1,0 +1,24 @@
+/data1/wyd/envs/mlip/lib/python3.12/site-packages/e3nn/o3/_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+{"mode": "all_no_feedback", "step": 1000, "total": 1000, "T": 331.67557387674384, "elapsed_s": 398.6724139759317}
+Traceback (most recent call last):
+  File "/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/feedback_probe.py", line 340, in <module>
+    main()
+  File "/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/feedback_probe.py", line 336, in main
+    rollout(args)
+  File "/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/feedback_probe.py", line 296, in rollout
+    T_mean=float(np.mean(temperature_ds[1:completed + 1])) if completed else None,
+                         ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "/data1/wyd/envs/mlip/lib/python3.12/site-packages/h5py/_hl/dataset.py", line 872, in __getitem__
+    return self._fast_reader.read(args)
+           ^^^^^^^^^^^^^^^^^
+  File "/data1/wyd/envs/mlip/lib/python3.12/site-packages/h5py/_hl/dataset.py", line 610, in _fast_reader
+    rdr = _selector.Reader(self.id)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "h5py/_selector.pyx", line 328, in h5py._selector.Reader.__cinit__
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5d.pyx", line 372, in h5py.h5d.DatasetID.get_space
+RuntimeError: Unable to synchronously get dataspace (identifier is not of specified type)

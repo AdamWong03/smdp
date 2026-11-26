@@ -1,5 +1,5 @@
 {
-  "created": "2026-11-26T17:44:35.565768+00:00",
+  "created": "2026-11-26T20:08:44.512524+00:00",
   "snapshot": "/data2/wyd/research/foundation_mlip_adaptation/reproducibility/snapshot_20261127",
   "description": "Reproducible snapshot of the GLR/GLE audit, 2026-11-27. Large trajectories are referenced in data_sources.json.",
   "seeds": {
@@ -95,6 +95,30 @@
       "snapshot_path": "code/h1h2/calibration_dependence.py",
       "size_bytes": 7867,
       "sha256": "8c61618a3239b113232caac8d5be1802548cb43d3f46ce11974af98eb05e1b77"
+    },
+    {
+      "original_path": "code/h1h2/feedback_probe.py",
+      "snapshot_path": "code/h1h2/feedback_probe.py",
+      "size_bytes": 14931,
+      "sha256": "2b054fb1f2da8ee750576d3befcf3b6ef98572e5776322885ef7075c9903b891"
+    },
+    {
+      "original_path": "code/h1h2/paired_feedback.py",
+      "snapshot_path": "code/h1h2/paired_feedback.py",
+      "size_bytes": 8457,
+      "sha256": "387f5728683f75c070bd85a7956e956059f94f1ba4e7b9dfe8c7deb6ad64f986"
+    },
+    {
+      "original_path": "code/h1h2/analyze_feedback.py",
+      "snapshot_path": "code/h1h2/analyze_feedback.py",
+      "size_bytes": 6051,
+      "sha256": "2108ee9d8c9ef6f16c0d666826aa0e7479e8d814437689c5887a4b65353c9a89"
+    },
+    {
+      "original_path": "code/h1h2/audit_glr_ablations.py",
+      "snapshot_path": "code/h1h2/audit_glr_ablations.py",
+      "size_bytes": 3761,
+      "sha256": "62244971f414b8f5d70f2af62d1195e33994219fb5d18afce30988ec34f97dad"
     },
     {
       "original_path": "code/h1h2/physics/spcfw.py",
@@ -349,6 +373,36 @@
       "sha256": "fe6ce18de57d6ab1b1660e5c9173afb07d738af874a5d3cdde0092ec75c2ec57"
     },
     {
+      "original_path": "experiments/feedback_probe_initial_20261127.json",
+      "snapshot_path": "parameters/feedback_probe_initial_20261127.json",
+      "size_bytes": 725,
+      "sha256": "d7af64dab4bd477434b6b90f3feab9808249597962b311486265ebd405c1da07"
+    },
+    {
+      "original_path": "experiments/feedback_probe_glr100ps_20261127.json",
+      "snapshot_path": "parameters/feedback_probe_glr100ps_20261127.json",
+      "size_bytes": 663,
+      "sha256": "482c7b98d4d38c8cf554b1d3d4f884f52faacf3e4fad6d6dfa3b918ad5ed98d5"
+    },
+    {
+      "original_path": "experiments/glr_ablation_audit_20261127.json",
+      "snapshot_path": "parameters/glr_ablation_audit_20261127.json",
+      "size_bytes": 11981,
+      "sha256": "ce752193a59164e2426b1659fc47d7b779973a60696f142113a22dd4844a71d5"
+    },
+    {
+      "original_path": "experiments/feedback_intervention_analysis_20261127.json",
+      "snapshot_path": "parameters/feedback_intervention_analysis_20261127.json",
+      "size_bytes": 4841,
+      "sha256": "0cf88ec7f3c3c25175359e218432e69fd63e2e673402051742ec640b892b6ac3"
+    },
+    {
+      "original_path": "experiments/paired_feedback_200steps_20261127.json",
+      "snapshot_path": "parameters/paired_feedback_200steps_20261127.json",
+      "size_bytes": 3467,
+      "sha256": "4734f880b4014c01a34acba8a2fe6300033f8df4f2395938b8b7700cbe37c51b"
+    },
+    {
       "original_path": "experiments/glr_2p5ns_20261122/analysis/glr_2p5ns_report.json",
       "snapshot_path": "results/glr_2p5ns_report_deterministic.json",
       "size_bytes": 7080,
@@ -383,6 +437,36 @@
       "snapshot_path": "results/reference_verification_fixed_e1_motion.json",
       "size_bytes": 2903,
       "sha256": "37f50a160adeb6fb0e2f0fcb641c9f6d9e658bb57571c6e61df1915570be1864"
+    },
+    {
+      "original_path": "experiments/feedback_full_5ps_20261127/trajectory.summary.json",
+      "snapshot_path": "results/feedback_full_5ps_summary.json",
+      "size_bytes": 741,
+      "sha256": "4924f64abafd070f8a662993a943a16933dfd04af8e230a54978a80eff8c6787"
+    },
+    {
+      "original_path": "experiments/feedback_no_feedback_5ps_20261127/trajectory.summary.json",
+      "snapshot_path": "results/feedback_no_feedback_5ps_summary.json",
+      "size_bytes": 750,
+      "sha256": "f79082f53d1db6cf0fa6d65b12225f0d1736c43c6f044e51ded6e69509203e49"
+    },
+    {
+      "original_path": "experiments/feedback_all_no_feedback_5ps_20261127/trajectory.summary.json",
+      "snapshot_path": "results/feedback_all_no_feedback_5ps_summary.json",
+      "size_bytes": 758,
+      "sha256": "6b128c6e09a77720b65a467aa497b288692d5b45a395eca2e6e0c84decdbd2d7"
+    },
+    {
+      "original_path": "experiments/feedback_thermostat_only_5ps_20261127/trajectory.summary.json",
+      "snapshot_path": "results/feedback_thermostat_only_5ps_summary.json",
+      "size_bytes": 759,
+      "sha256": "867315bffb19d022a679ea531917b066e9cc536cdb3108cf614c3c3cb4a9e13e"
+    },
+    {
+      "original_path": "experiments/feedback_full_100ps_20261127/partial_status.json",
+      "snapshot_path": "results/feedback_full_100ps_partial_status.json",
+      "size_bytes": 768,
+      "sha256": "2f138ebc091244ad12290d1164ccef03bd8aa517baf455c7e6ac82d7c66711b5"
     },
     {
       "original_path": "experiments/reference_acf_blocks_20261126.log",
@@ -459,8 +543,8 @@
     {
       "original_path": "experiments/published_trajcast_2p5ns_20261126/run.log",
       "snapshot_path": "logs/published_trajcast_2p5ns_partial_run.log",
-      "size_bytes": 21893,
-      "sha256": "184bfa3ac99891ca8ea709d9ceccf69f9774ba9bec8604f0c3b83a8a7644e745"
+      "size_bytes": 23227,
+      "sha256": "d635c725c1420271bb95b287fdc19718185afe1cbd78e6e1f8edef07c433cea8"
     },
     {
       "original_path": "experiments/position_velocity_audit_20261127.log",
@@ -511,28 +595,100 @@
       "sha256": "50ffb6fb5124a28abc2637b6b887cc83b0ba855a957e1f3faad73aaf0700eb7d"
     },
     {
+      "original_path": "experiments/feedback_probe_initial_20261127.log",
+      "snapshot_path": "logs/feedback_probe_initial_20261127.log",
+      "size_bytes": 1080,
+      "sha256": "4a1c6141c3aadd4523fad64143fee5eda7e8eaee903f0c6610730b182c970b26"
+    },
+    {
+      "original_path": "experiments/feedback_probe_glr100ps_20261127.log",
+      "snapshot_path": "logs/feedback_probe_glr100ps_20261127.log",
+      "size_bytes": 1018,
+      "sha256": "1edd47b593948fda04456813de328cfc54a3a3033a3258348a1381ba27bb5372"
+    },
+    {
+      "original_path": "experiments/glr_ablation_audit_20261127.log",
+      "snapshot_path": "logs/glr_ablation_audit_20261127.log",
+      "size_bytes": 1835,
+      "sha256": "b5da9f1887fb42660b8449ad9bec1ac0fbd72ecb223306198853688a4f2291b4"
+    },
+    {
+      "original_path": "experiments/glr_ltrans_analysis_20261127.log",
+      "snapshot_path": "logs/glr_ltrans_analysis_20261127.log",
+      "size_bytes": 657,
+      "sha256": "7bd6df289a85cb9d7fc021e58540eae1636f565bb76f04bd986dc723dbd72c52"
+    },
+    {
+      "original_path": "experiments/feedback_full_5ps_20261127/rollout.log",
+      "snapshot_path": "logs/feedback_full_5ps_rollout.log",
+      "size_bytes": 1848,
+      "sha256": "361a7ef6348db764ecde997c0c71220561f618be6c107c2382f3d2d1de4d247f"
+    },
+    {
+      "original_path": "experiments/feedback_no_feedback_5ps_20261127/rollout.log",
+      "snapshot_path": "logs/feedback_no_feedback_5ps_rollout.log",
+      "size_bytes": 1854,
+      "sha256": "f1089dc77051cd956a1898aa0782f2aca00374b304b39ec6f2b22ba7db02fd03"
+    },
+    {
+      "original_path": "experiments/feedback_all_no_feedback_5ps_20261127/rollout.log",
+      "snapshot_path": "logs/feedback_all_no_feedback_5ps_rollout.log",
+      "size_bytes": 1858,
+      "sha256": "1c09d8948e3cfad50e87a3c6f1fff85f34e16e9a7a187997b3b6546a9bed2aae"
+    },
+    {
+      "original_path": "experiments/feedback_thermostat_only_5ps_20261127/rollout.log",
+      "snapshot_path": "logs/feedback_thermostat_only_5ps_rollout.log",
+      "size_bytes": 1858,
+      "sha256": "29f017b8d230f308074ed98eb7ed7150acfec83978aef521ed04616635887776"
+    },
+    {
+      "original_path": "experiments/feedback_intervention_analysis_20261127.log",
+      "snapshot_path": "logs/feedback_intervention_analysis_20261127.log",
+      "size_bytes": 4951,
+      "sha256": "2180f4287a725c0596094df5f3f48d8e91f894e62a06e502746e50c28029e976"
+    },
+    {
+      "original_path": "experiments/paired_feedback_500steps_20261127.log",
+      "snapshot_path": "logs/paired_feedback_500steps_20261127.log",
+      "size_bytes": 2207,
+      "sha256": "656aa2405c4d0dccc123cc059a71d6b4f822b813c264341c2c533d1b7ce61c77"
+    },
+    {
+      "original_path": "experiments/paired_feedback_200steps_20261127.log",
+      "snapshot_path": "logs/paired_feedback_200steps_20261127.log",
+      "size_bytes": 4127,
+      "sha256": "d7cad271f844863abf13a7b1e9006dd41e4a6a01cebb9f3241bb55db578f17c6"
+    },
+    {
       "original_path": "SMDP_ICML2027_STATUS_AUDIT.md",
       "snapshot_path": "docs/SMDP_ICML2027_STATUS_AUDIT.md",
-      "size_bytes": 68928,
-      "sha256": "72ff5470ebe8143019be5c32b55026dbc45c860d197e36a76b35a536268018c6"
+      "size_bytes": 79254,
+      "sha256": "05db28e2f05a4d7dd972212358dacd46257da9d98e7073d5572211d66da15ff9"
     },
     {
       "original_path": "paper/CLAIM_BOUNDARY.md",
       "snapshot_path": "docs/CLAIM_BOUNDARY.md",
-      "size_bytes": 7429,
-      "sha256": "c43b8b94bf9aaaa7f683514b2f06fdab1f74a44b555412be1bb342241d0d20fd"
+      "size_bytes": 10910,
+      "sha256": "e373c5cd3eb79e9e8f3af660e20b04cd5371e23b9a8c352a24502f8672e7c373"
     },
     {
       "original_path": "reproducibility/build_snapshot_20261127.py",
       "snapshot_path": "docs/build_snapshot_20261127.py",
-      "size_bytes": 13412,
-      "sha256": "2a9eea040bd42ac3aa2c63c8503125e22c90c9cd034cbf5256706b6895942b71"
+      "size_bytes": 16135,
+      "sha256": "a84dbb9b42587a3d8b23a192319112db9077a770262b1ce0a6b21cedcf524049"
+    },
+    {
+      "original_path": "method_development/GLR_STATE_TRANSITION_20261127.md",
+      "snapshot_path": "docs/GLR_STATE_TRANSITION_20261127.md",
+      "size_bytes": 4885,
+      "sha256": "70821118209b8b8639f968cbc86cebf43827e303e49336871995db991b50c2dd"
     },
     {
       "original_path": "(snapshot README)",
       "snapshot_path": "README.md",
-      "size_bytes": 21097,
-      "sha256": "6c473fdd92d2d0cd9e91beb87a5d56ebdb63895f66e2ff1d5760475657a0f491"
+      "size_bytes": 26274,
+      "sha256": "f56d1a4e8f4753a23a251c127c201885300a96aaf586100a330265dd04e9e087"
     }
   ],
   "missing": [],

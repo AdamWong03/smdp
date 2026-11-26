@@ -28,6 +28,10 @@ CODE = [
     "code/h1h2/reference_acf_blocks.py",
     "code/h1h2/position_velocity_audit.py",
     "code/h1h2/calibration_dependence.py",
+    "code/h1h2/feedback_probe.py",
+    "code/h1h2/paired_feedback.py",
+    "code/h1h2/analyze_feedback.py",
+    "code/h1h2/audit_glr_ablations.py",
     "code/h1h2/physics/spcfw.py",
     "code/h1h2/physics/units.py",
     "code/h1h2/scripts/native_nvt_screen.py",
@@ -99,6 +103,16 @@ PARAMETERS = [
      "parameters/calib_independent_100b_ar_audit.json"),
     ("experiments/calib_independent_200_20261127/ar_audit.json",
      "parameters/calib_independent_200_ar_audit.json"),
+    ("experiments/feedback_probe_initial_20261127.json",
+     "parameters/feedback_probe_initial_20261127.json"),
+    ("experiments/feedback_probe_glr100ps_20261127.json",
+     "parameters/feedback_probe_glr100ps_20261127.json"),
+    ("experiments/glr_ablation_audit_20261127.json",
+     "parameters/glr_ablation_audit_20261127.json"),
+    ("experiments/feedback_intervention_analysis_20261127.json",
+     "parameters/feedback_intervention_analysis_20261127.json"),
+    ("experiments/paired_feedback_200steps_20261127.json",
+     "parameters/paired_feedback_200steps_20261127.json"),
 ]
 
 RESULTS = [
@@ -117,6 +131,16 @@ RESULTS = [
     ("experiments/e1_motion_20k_20261120/physics/nve_val_20ps/analysis/"
      "reference_verification_fixed.json",
      "results/reference_verification_fixed_e1_motion.json"),
+    ("experiments/feedback_full_5ps_20261127/trajectory.summary.json",
+     "results/feedback_full_5ps_summary.json"),
+    ("experiments/feedback_no_feedback_5ps_20261127/trajectory.summary.json",
+     "results/feedback_no_feedback_5ps_summary.json"),
+    ("experiments/feedback_all_no_feedback_5ps_20261127/trajectory.summary.json",
+     "results/feedback_all_no_feedback_5ps_summary.json"),
+    ("experiments/feedback_thermostat_only_5ps_20261127/trajectory.summary.json",
+     "results/feedback_thermostat_only_5ps_summary.json"),
+    ("experiments/feedback_full_100ps_20261127/partial_status.json",
+     "results/feedback_full_100ps_partial_status.json"),
 ]
 
 LOGS = [
@@ -162,6 +186,28 @@ LOGS = [
      "logs/calib_independent_100b_ar_audit.log"),
     ("experiments/calib_independent_200_20261127/ar_audit.log",
      "logs/calib_independent_200_ar_audit.log"),
+    ("experiments/feedback_probe_initial_20261127.log",
+     "logs/feedback_probe_initial_20261127.log"),
+    ("experiments/feedback_probe_glr100ps_20261127.log",
+     "logs/feedback_probe_glr100ps_20261127.log"),
+    ("experiments/glr_ablation_audit_20261127.log",
+     "logs/glr_ablation_audit_20261127.log"),
+    ("experiments/glr_ltrans_analysis_20261127.log",
+     "logs/glr_ltrans_analysis_20261127.log"),
+    ("experiments/feedback_full_5ps_20261127/rollout.log",
+     "logs/feedback_full_5ps_rollout.log"),
+    ("experiments/feedback_no_feedback_5ps_20261127/rollout.log",
+     "logs/feedback_no_feedback_5ps_rollout.log"),
+    ("experiments/feedback_all_no_feedback_5ps_20261127/rollout.log",
+     "logs/feedback_all_no_feedback_5ps_rollout.log"),
+    ("experiments/feedback_thermostat_only_5ps_20261127/rollout.log",
+     "logs/feedback_thermostat_only_5ps_rollout.log"),
+    ("experiments/feedback_intervention_analysis_20261127.log",
+     "logs/feedback_intervention_analysis_20261127.log"),
+    ("experiments/paired_feedback_500steps_20261127.log",
+     "logs/paired_feedback_500steps_20261127.log"),
+    ("experiments/paired_feedback_200steps_20261127.log",
+     "logs/paired_feedback_200steps_20261127.log"),
 ]
 
 DOCS = [
@@ -169,6 +215,8 @@ DOCS = [
     ("paper/CLAIM_BOUNDARY.md", "docs/CLAIM_BOUNDARY.md"),
     ("reproducibility/build_snapshot_20261127.py",
      "docs/build_snapshot_20261127.py"),
+    ("method_development/GLR_STATE_TRANSITION_20261127.md",
+     "docs/GLR_STATE_TRANSITION_20261127.md"),
 ]
 
 

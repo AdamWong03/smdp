@@ -1,0 +1,27 @@
+/data1/wyd/envs/mlip/lib/python3.12/site-packages/e3nn/o3/_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+{"step": 100, "total": 500, "elapsed_s": 159.6464549768716, "full_T": 300.00001034097215, "nofb_T": 277.73636945082353}
+{"step": 200, "total": 500, "elapsed_s": 318.3323078318499, "full_T": 300.00001497277333, "nofb_T": 298.0380196620725}
+{"step": 300, "total": 500, "elapsed_s": 476.1337972311303, "full_T": 300.0000192098369, "nofb_T": 293.7338318149015}
+{"step": 400, "total": 500, "elapsed_s": 631.7504674317315, "full_T": 300.00001330198836, "nofb_T": 311.24850130528773}
+{"step": 500, "total": 500, "elapsed_s": 789.8902425291017, "full_T": 300.00001311841834, "nofb_T": 304.609385227982}
+Traceback (most recent call last):
+  File "/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/paired_feedback.py", line 163, in <module>
+    main()
+  File "/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/paired_feedback.py", line 137, in main
+    partition = motion_partition(branch["q"], branch["v"], cell, z, masses, molecules)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data2/wyd/research/foundation_mlip_adaptation/code/h1h2/physics/water_motion.py", line 51, in motion_partition
+    np.testing.assert_allclose(translation+rotation+internal, total, rtol=1e-9, atol=1e-9)
+  File "/data1/wyd/envs/mlip/lib/python3.12/site-packages/numpy/testing/_private/utils.py", line 1715, in assert_allclose
+    assert_array_compare(compare, actual, desired, err_msg=str(err_msg),
+  File "/data1/wyd/envs/mlip/lib/python3.12/site-packages/numpy/testing/_private/utils.py", line 921, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Not equal to tolerance rtol=1e-09, atol=1e-09
+
+Mismatched elements: 1 / 1 (100%)
+Max absolute difference among violations: 3.61644856e-08
+Max relative difference among violations: 4.88273888e-09
+ ACTUAL: array(7.406598)
+ DESIRED: array(7.406598)

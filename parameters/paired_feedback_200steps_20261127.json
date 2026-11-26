@@ -1,0 +1,95 @@
+{
+  "steps": 200,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+  "initial": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5",
+  "initial_frame": 0,
+  "seed": 2026110401,
+  "branches": {
+    "full": {
+      "mode": "full",
+      "T_mean": 300.0000150204689,
+      "T_std": 1.4084752754715116e-05,
+      "final_partition": {
+        "translation_eV": 2.4817918373800656,
+        "rotation_eV": 2.5970356600594178,
+        "internal_eV": 2.32777114894611,
+        "total_KE_eV": 7.406598646385594
+      },
+      "msd": {
+        "msd_0p5ps_A2": null,
+        "msd_end_A2": null,
+        "msd_end_ps": 1.0,
+        "early_slope_A2_ps": null,
+        "early_D_m2_s": null
+      },
+      "final_rms_position_from_full_A": null,
+      "final_rms_velocity_from_full_A_fs": null,
+      "max_rms_position_from_full_A": null
+    },
+    "full_control": {
+      "mode": "full",
+      "T_mean": 300.0000136110614,
+      "T_std": 1.4566516261210654e-05,
+      "final_partition": {
+        "translation_eV": 2.48179205061691,
+        "rotation_eV": 2.5967762822177174,
+        "internal_eV": 2.3280298436353712,
+        "total_KE_eV": 7.406598176469999
+      },
+      "msd": {
+        "msd_0p5ps_A2": null,
+        "msd_end_A2": null,
+        "msd_end_ps": 1.0,
+        "early_slope_A2_ps": null,
+        "early_D_m2_s": null
+      },
+      "final_rms_position_from_full_A": 0.0004713874077424407,
+      "final_rms_velocity_from_full_A_fs": 4.504331809584983e-05,
+      "max_rms_position_from_full_A": 0.0004713874077424407
+    },
+    "no_feedback": {
+      "mode": "no_feedback",
+      "T_mean": 287.9164785171355,
+      "T_std": 13.867512081525451,
+      "final_partition": {
+        "translation_eV": 2.0703845599203996,
+        "rotation_eV": 2.3089115660958295,
+        "internal_eV": 2.4025510188849113,
+        "total_KE_eV": 6.781847142915305
+      },
+      "msd": {
+        "msd_0p5ps_A2": null,
+        "msd_end_A2": null,
+        "msd_end_ps": 1.0,
+        "early_slope_A2_ps": null,
+        "early_D_m2_s": null
+      },
+      "final_rms_position_from_full_A": 0.70049649477005,
+      "final_rms_velocity_from_full_A_fs": 0.018382152542471886,
+      "max_rms_position_from_full_A": 0.70049649477005
+    },
+    "thermostat_only": {
+      "mode": "thermostat_only",
+      "T_mean": 300.0000104603366,
+      "T_std": 1.3329898451384568e-05,
+      "final_partition": {
+        "translation_eV": 2.481791874730515,
+        "rotation_eV": 2.649285332854531,
+        "internal_eV": 2.275520734093679,
+        "total_KE_eV": 7.406597947018011
+      },
+      "msd": {
+        "msd_0p5ps_A2": null,
+        "msd_end_A2": null,
+        "msd_end_ps": 1.0,
+        "early_slope_A2_ps": null,
+        "early_D_m2_s": null
+      },
+      "final_rms_position_from_full_A": 0.7141661643981934,
+      "final_rms_velocity_from_full_A_fs": 0.01842593029141426,
+      "max_rms_position_from_full_A": 0.7141661643981934
+    }
+  },
+  "note": "Same-process paired branches share the frozen backbone and initial state. full_control is the numerical chaos floor; feedback effect is the excess divergence of no_feedback/thermostat_only over that floor.",
+  "msd_note": "200-step COM-MSD interpolation produced NaN; replaced with null. Use the 5 ps separate early MSD (full 1.333, no_feedback 0.721, thermostat_only 2.224e-9) as a non-formal-D indicator."
+}

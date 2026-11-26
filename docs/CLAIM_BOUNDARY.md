@@ -64,9 +64,13 @@ The paper **does not** claim:
 
 ## Position–velocity and calibration audit (2026-11-27)
 
-- Production GLR: positions from the backbone displacement, velocities from the readout; the
-  corrected velocity does **not** participate in position propagation. `--fd-correct-displacement`
-  crashed at 24.8 ps. This is a principled inconsistency, not just an implementation detail.
+- Production GLR is a **closed-loop velocity-feedback readout**, not a post-hoc correction: the
+  current-step displacement is the backbone displacement, but `v_new` is the next velocity state
+  and drives the next backbone call (and the AR history). The one-step probe changes the next
+  backbone displacement by **~62%** of `dq0` from a ~21% velocity correction. The local
+  `q_{t+1}-q_t = h v_new` equality does not hold (midpoint residual 1.3%/3.8%), but that is a local
+  kinematic discretization issue, not proof of no closed-loop dynamics. `--fd-correct-displacement`
+  crashed at 24.8 ps and was not used.
 - Eight 100 ps blocks: reference D_MSD 1.890 ± 0.410, D_GK 1.943 ± 0.253, GK/MSD 1.052;
   deterministic GLR 1.476 ± 0.228 / 1.392 ± 0.127, ratio 0.958; stochastic GLR 1.350 ± 0.243 /
   1.403 ± 0.136, ratio 1.058. The midpoint kinematic residual is 1.0% (reference), 1.3%
@@ -79,6 +83,49 @@ The paper **does not** claim:
   transfer to the coupled rollout.
 - Raw 250k backbone: D_MSD ~0; GLR restores D to ~1.4–1.5×10⁻⁹. This is a real improvement over
   the raw backbone, but not reference-level.
+
+## Velocity-feedback intervention (2026-11-27)
+
+- One-step probe: a ~21% `v_new−v_pred` correction changes the next backbone displacement by
+  ~62% of `dq0` and the next velocity by ~113% of `v_pred`; the correction is nearly orthogonal to
+  the current velocity. The loop is closed; do not call it a post-hoc correction.
+- 5 ps separate controls: full and thermostat-only hold 300.000 K; no_feedback/all_no_feedback
+  heat to ~307–308 K and distort the translation/rotation/internal partition. The corrected/
+  rescaled velocity feedback is the thermostat.
+- **Caveat:** two independent full runs from the same state diverged 5.18 Å by 5 ps (CUDA
+  non-determinism/chaos). Separate-process position divergence is not a clean feedback measure.
+  A same-process paired 200-step control gives a full-vs-full floor of **0.00047 Å / 0.000045
+  Å/fs**; no_feedback and thermostat_only diverge by **0.70/0.71 Å** (~1,500× the floor). The
+  feedback/readout effect is real. The 500-step paired T log shows full 300.000 K vs no_feedback
+  277–311 K.
+- `no_feedback` is not thermostatted (T 287.9 K at 1 ps, partition distorted); `thermostat_only`
+  holds 300 K but differs from full by 0.714 Å and a different rotation/internal partition. The
+  AR/blend readout itself, not only the feedback path, changes the trajectory at matched T.
+- The 5 ps early MSD is a mechanism check, not a long-time D. At matched T, thermostat-only has a
+  larger early slope than full; AR/blend reduces early diffusion. Do not report a 5 ps D, and do
+  not infer the AR as the sole cause of the long-time D deficit from this 1 ps result.
+
+## Existing-ablation necessity audit (2026-11-27)
+
+No rollout was rerun; the existing 100 ps trajectories were re-analyzed with the same MSD/GK
+metrics.
+
+- **Rescale is necessary:** without it, T = 172 K, partition 0.76/0.65/2.84 eV, O–O RDF 0.398,
+  VDOS 0.431/0.608, D ≈ 0. This is a strong, unambiguous ablation.
+- **Memory is necessary for water:** AR(1) gives D 4.25/4.55 ×10⁻⁹ (2.5× too high), O–O RDF
+  0.089, O–H 0.312, VDOS 0.809/0.896. AR(5) is close to AR(10); AR(20) is not better than AR(10).
+  The p=1 result supports the memory claim; p=10 vs p=20 is not distinguishable.
+- **FD noise is not necessary for D at λ=0.1:** deterministic (noise-off) D 1.62/1.47; stochastic
+  1.42/1.38; the difference is within seed/block variability. It **is** necessary for the KE
+  variance: deterministic partition std 0.002 eV vs stochastic 0.253 eV.
+- **Mode blend is only partially supported:** translation blend 0.1 gives D 1.62–1.71, O–O RDF
+  0.032–0.034, VDOS 0.849/0.964; blend 0.3/0.5 gives D 0.88/0.97, O–O RDF 0.061/0.095, VDOS
+  0.848/0.911 and 0.853/0.865, with larger kinematic residuals. The 0.1 translation blend is
+  supported; the internal-mode 1.0 ablation (`glr_int10_100ps`) is missing, so a full
+  "mode decomposition is necessary" claim is not established.
+- **Seed variability:** 100 ps D_MSD is 1.26–1.71 ×10⁻⁹ across seeds, ~27% spread. The 22–25%
+  deficit is within this seed/block variability; it should be reported with uncertainty, not as a
+  precise method failure.
 
 ## GLE gate (2026-11-27)
 

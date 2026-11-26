@@ -1,0 +1,17 @@
+/data1/wyd/envs/mlip/lib/python3.12/site-packages/e3nn/o3/_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+{
+  "rms_v_pred_A_fs": 0.012518148869276047,
+  "rms_v_new_A_fs": 0.012682760134339333,
+  "rms_correction_A_fs": 0.002620004117488861,
+  "correction_over_v_pred": 0.2092964498863946,
+  "rms_dq0_A": 0.05702308937907219,
+  "rms_dq_change_A": 0.035171445459127426,
+  "dq_change_over_dq0": 0.6167930542191135,
+  "rms_v_pred_change_A_fs": 0.01430786494165659,
+  "v_pred_change_over_v_pred": 1.1429697067090436,
+  "correction_cosine": -0.04140660539269447,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+  "initial": "experiments/glr_2p5ns_20261122/trajectory.h5",
+  "initial_frame": 20000
+}

@@ -1,0 +1,14 @@
+{
+  "path": "/data2/wyd/research/foundation_mlip_adaptation/experiments/feedback_full_100ps_20261127/trajectory.h5",
+  "completed_steps": 2000,
+  "requested_steps": 20000,
+  "simulated_ps": 10.0,
+  "stable": false,
+  "reason": "killed after 2,000/20,000 steps because GPU 5 was heavily contended; partial record preserved, not overwritten",
+  "note": "first 10 ps are valid and can be compared with the 5 ps feedback controls; not a formal 100 ps result",
+  "mode": "full",
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+  "initial": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5",
+  "initial_frame": 0,
+  "seed": 2026110401
+}

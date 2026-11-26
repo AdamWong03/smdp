@@ -1,0 +1,10 @@
+{"task": "motion", "completed": true, "failure_reason": null, "elapsed_s": 0.7792885899543762}
+{"task": "rdf", "completed": true, "failure_reason": null, "elapsed_s": 8.376252113841474}
+VDOS model: 6/6 blocks
+VDOS reference: 6/6 blocks
+{"task": "vdos", "completed": true, "failure_reason": null, "elapsed_s": 3.8860988039523363}
+{"task": "motion", "completed": true, "failure_reason": null, "elapsed_s": 0.6111490149050951}
+{"task": "rdf", "completed": true, "failure_reason": null, "elapsed_s": 8.425160687882453}
+VDOS model: 6/6 blocks
+VDOS reference: 6/6 blocks
+{"task": "vdos", "completed": true, "failure_reason": null, "elapsed_s": 3.936576445121318}

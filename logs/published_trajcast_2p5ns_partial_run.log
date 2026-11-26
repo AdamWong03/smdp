@@ -186,3 +186,16 @@ cuequivariance or cuequivariance_torch is not available. Cuequivariance accelera
 {"step": 119000, "total": 510000, "temperature_K": 297.5734773417047, "elapsed_s": 17744.86768128909}
 {"step": 120000, "total": 510000, "temperature_K": 321.08793946369843, "elapsed_s": 18131.407463032287}
 {"step": 121000, "total": 510000, "temperature_K": 301.5443874244616, "elapsed_s": 18652.984986913856}
+{"step": 122000, "total": 510000, "temperature_K": 287.8505173407564, "elapsed_s": 19156.43910911912}
+{"step": 123000, "total": 510000, "temperature_K": 311.01184806187115, "elapsed_s": 19672.5252493429}
+{"step": 124000, "total": 510000, "temperature_K": 318.5525813460223, "elapsed_s": 20187.145827664994}
+{"step": 125000, "total": 510000, "temperature_K": 343.3752377583703, "elapsed_s": 20700.783199953847}
+{"step": 126000, "total": 510000, "temperature_K": 339.35728396134243, "elapsed_s": 21220.576303086244}
+{"step": 127000, "total": 510000, "temperature_K": 294.9956414539323, "elapsed_s": 21572.229277473874}
+{"step": 128000, "total": 510000, "temperature_K": 308.8063598549534, "elapsed_s": 22097.838721903972}
+{"step": 129000, "total": 510000, "temperature_K": 310.4390230324426, "elapsed_s": 22639.324532635976}
+{"step": 130000, "total": 510000, "temperature_K": 292.04872008362577, "elapsed_s": 23346.094497776125}
+{"step": 131000, "total": 510000, "temperature_K": 305.404667185551, "elapsed_s": 24104.459392932244}
+{"step": 132000, "total": 510000, "temperature_K": 322.99327458151896, "elapsed_s": 24872.5623360062}
+{"step": 133000, "total": 510000, "temperature_K": 263.1316501269597, "elapsed_s": 25668.094172365032}
+{"step": 134000, "total": 510000, "temperature_K": 281.95510868531, "elapsed_s": 26575.31105558388}
