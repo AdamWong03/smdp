@@ -1,5 +1,5 @@
 {
-  "created": "2026-11-26T20:08:44.512524+00:00",
+  "created": "2026-11-27T05:30:15.042553+00:00",
   "snapshot": "/data2/wyd/research/foundation_mlip_adaptation/reproducibility/snapshot_20261127",
   "description": "Reproducible snapshot of the GLR/GLE audit, 2026-11-27. Large trajectories are referenced in data_sources.json.",
   "seeds": {
@@ -39,8 +39,8 @@
     {
       "original_path": "code/h1h2/gle_kernel_study.py",
       "snapshot_path": "code/h1h2/gle_kernel_study.py",
-      "size_bytes": 10864,
-      "sha256": "8837d9468ed2c9ddd4f671540d9946593067daff81abb797b468783056fb5a42"
+      "size_bytes": 11077,
+      "sha256": "6d7e572e5933f34b61d503dd6d489b4201463db724b85cb4336dc971cfa72358"
     },
     {
       "original_path": "code/h1h2/gle_kernel_study_mean.py",
@@ -99,8 +99,8 @@
     {
       "original_path": "code/h1h2/feedback_probe.py",
       "snapshot_path": "code/h1h2/feedback_probe.py",
-      "size_bytes": 14931,
-      "sha256": "2b054fb1f2da8ee750576d3befcf3b6ef98572e5776322885ef7075c9903b891"
+      "size_bytes": 17545,
+      "sha256": "698ff7c6b43590e00af1a6113ffe34f646e5a8d22c072e56e6d972a02d4ff697"
     },
     {
       "original_path": "code/h1h2/paired_feedback.py",
@@ -231,8 +231,8 @@
     {
       "original_path": "experiments/published_trajcast_2p5ns_20261126/analyze_when_done.sh",
       "snapshot_path": "configs/experiments/published_trajcast_2p5ns_20261126/analyze_when_done.sh",
-      "size_bytes": 3017,
-      "sha256": "ac25f71118f7ab05dbf2c82a1163f32c3bfdd12d41485bfbac466fc5dd1b26e1"
+      "size_bytes": 3095,
+      "sha256": "ccdb5385a80e767b14eaefa8057e888e41bd4664d1e798be400673f7ee4d1fce"
     },
     {
       "original_path": "experiments/glr_fit_20261122/glr_coefficients.json",
@@ -403,6 +403,18 @@
       "sha256": "4734f880b4014c01a34acba8a2fe6300033f8df4f2395938b8b7700cbe37c51b"
     },
     {
+      "original_path": "experiments/rescale_only_100ps_metrics_20261127.json",
+      "snapshot_path": "parameters/rescale_only_100ps_metrics_20261127.json",
+      "size_bytes": 575,
+      "sha256": "5f32716886cdf6b1641da07d6af6291a587cde6a3d01dfa621214258eb3dc183"
+    },
+    {
+      "original_path": "experiments/translation_acf_100ps_comparison_20261127.json",
+      "snapshot_path": "parameters/translation_acf_100ps_comparison_20261127.json",
+      "size_bytes": 1703,
+      "sha256": "f1106c3855cd996547447eda11ef99dffd41469201b8e32ab31f30a1cf48bbab"
+    },
+    {
       "original_path": "experiments/glr_2p5ns_20261122/analysis/glr_2p5ns_report.json",
       "snapshot_path": "results/glr_2p5ns_report_deterministic.json",
       "size_bytes": 7080,
@@ -467,6 +479,54 @@
       "snapshot_path": "results/feedback_full_100ps_partial_status.json",
       "size_bytes": 768,
       "sha256": "2f138ebc091244ad12290d1164ccef03bd8aa517baf455c7e6ac82d7c66711b5"
+    },
+    {
+      "original_path": "experiments/rescale_only_val04_100ps_20261127/trajectory.summary.json",
+      "snapshot_path": "results/rescale_only_val04_100ps_summary.json",
+      "size_bytes": 630,
+      "sha256": "06dedcc2cc016f0f607bb0989066b27bdda2185aae9af8a70183840a60ff9e0c"
+    },
+    {
+      "original_path": "experiments/rescale_only_independent_100ps_20261127/trajectory.summary.json",
+      "snapshot_path": "results/rescale_only_independent_100ps_summary.json",
+      "size_bytes": 630,
+      "sha256": "2d65e8761715e8798fc6193fb4c74a049988ae0223f00d539d29422a2318f5b7"
+    },
+    {
+      "original_path": "experiments/rescale_only_val04_100ps_20261127/analysis/motion.json",
+      "snapshot_path": "results/rescale_only_val04_100ps_motion.json",
+      "size_bytes": 17745,
+      "sha256": "83b968212f5e5dc376fbd2fae94b0fc0a10021ba5f2f0264f8710770e6816d3a"
+    },
+    {
+      "original_path": "experiments/rescale_only_val04_100ps_20261127/analysis/rdf.json",
+      "snapshot_path": "results/rescale_only_val04_100ps_rdf.json",
+      "size_bytes": 1223,
+      "sha256": "7b953e5a04b3a6f00e4517486347fdc7ddcd3a707ecf0728c15758264962bdb4"
+    },
+    {
+      "original_path": "experiments/rescale_only_val04_100ps_20261127/analysis/vdos.json",
+      "snapshot_path": "results/rescale_only_val04_100ps_vdos.json",
+      "size_bytes": 1107,
+      "sha256": "08652d67d02b010d269ec02a92a1871487b542e72644cb5513dd26e7f3b69493"
+    },
+    {
+      "original_path": "experiments/rescale_only_independent_100ps_20261127/analysis/motion.json",
+      "snapshot_path": "results/rescale_only_independent_100ps_motion.json",
+      "size_bytes": 17753,
+      "sha256": "0b1e06cc9e4dd010e5378654094fdfc6843dbef9e2b58b0ef73bdb0340917390"
+    },
+    {
+      "original_path": "experiments/rescale_only_independent_100ps_20261127/analysis/rdf.json",
+      "snapshot_path": "results/rescale_only_independent_100ps_rdf.json",
+      "size_bytes": 1223,
+      "sha256": "31021862e2380d984185320fbc9632b72119215b83ffae5a5a769d21419eb81b"
+    },
+    {
+      "original_path": "experiments/rescale_only_independent_100ps_20261127/analysis/vdos.json",
+      "snapshot_path": "results/rescale_only_independent_100ps_vdos.json",
+      "size_bytes": 1106,
+      "sha256": "2a09aca3e2b75935124ed23f6d8acdc73d89e276b92562ee4d8cd37c8149c9e7"
     },
     {
       "original_path": "experiments/reference_acf_blocks_20261126.log",
@@ -543,8 +603,8 @@
     {
       "original_path": "experiments/published_trajcast_2p5ns_20261126/run.log",
       "snapshot_path": "logs/published_trajcast_2p5ns_partial_run.log",
-      "size_bytes": 23227,
-      "sha256": "d635c725c1420271bb95b287fdc19718185afe1cbd78e6e1f8edef07c433cea8"
+      "size_bytes": 32665,
+      "sha256": "a051cd8ccceb90b226f54b583c9440b19455cb53643fcec7768bc5ce8411ece1"
     },
     {
       "original_path": "experiments/position_velocity_audit_20261127.log",
@@ -661,22 +721,34 @@
       "sha256": "d7cad271f844863abf13a7b1e9006dd41e4a6a01cebb9f3241bb55db578f17c6"
     },
     {
+      "original_path": "experiments/rescale_only_val04_100ps_20261127/rollout.log",
+      "snapshot_path": "logs/rescale_only_val04_100ps_rollout.log",
+      "size_bytes": 3230,
+      "sha256": "12347d0832a29ef7188a627bf372438cde727cbb6809afc49a991198c2a79ce8"
+    },
+    {
+      "original_path": "experiments/rescale_only_independent_100ps_20261127/rollout.log",
+      "snapshot_path": "logs/rescale_only_independent_100ps_rollout.log",
+      "size_bytes": 3234,
+      "sha256": "da246457fc22d9a8334d53bfc199638fe265559931e4b66fab298dc86cc90857"
+    },
+    {
       "original_path": "SMDP_ICML2027_STATUS_AUDIT.md",
       "snapshot_path": "docs/SMDP_ICML2027_STATUS_AUDIT.md",
-      "size_bytes": 79254,
-      "sha256": "05db28e2f05a4d7dd972212358dacd46257da9d98e7073d5572211d66da15ff9"
+      "size_bytes": 82882,
+      "sha256": "88c56050a7288b8aa4840d2d151d4618bd3cec41e80213bd59d7d5a76a2cfa53"
     },
     {
       "original_path": "paper/CLAIM_BOUNDARY.md",
       "snapshot_path": "docs/CLAIM_BOUNDARY.md",
-      "size_bytes": 10910,
-      "sha256": "e373c5cd3eb79e9e8f3af660e20b04cd5371e23b9a8c352a24502f8672e7c373"
+      "size_bytes": 12342,
+      "sha256": "9d3d6de0fe6aead7ff0fc1115f56e5b9b9f6f24d4b4e336610554de6d045ef2b"
     },
     {
       "original_path": "reproducibility/build_snapshot_20261127.py",
       "snapshot_path": "docs/build_snapshot_20261127.py",
-      "size_bytes": 16135,
-      "sha256": "a84dbb9b42587a3d8b23a192319112db9077a770262b1ce0a6b21cedcf524049"
+      "size_bytes": 17885,
+      "sha256": "9afd5c22abdd85c4dd6778ead969e0db35071bdc79b8a3306d33472350835244"
     },
     {
       "original_path": "method_development/GLR_STATE_TRANSITION_20261127.md",
@@ -685,10 +757,22 @@
       "sha256": "70821118209b8b8639f968cbc86cebf43827e303e49336871995db991b50c2dd"
     },
     {
+      "original_path": "experiments/UNIFIED_COMPARISON_20261127.md",
+      "snapshot_path": "docs/UNIFIED_COMPARISON_20261127.md",
+      "size_bytes": 8381,
+      "sha256": "872e606c01fc1bf6a0fc9fb43389fd027a81dc94523eae0b00ce414bbf913ddc"
+    },
+    {
+      "original_path": "experiments/D_PROVENANCE_20261127.md",
+      "snapshot_path": "docs/D_PROVENANCE_20261127.md",
+      "size_bytes": 7598,
+      "sha256": "60e031f2ab9c4f1b0930c95b63d3311115baa5ccfec32b6dcca5aea6cf59d21d"
+    },
+    {
       "original_path": "(snapshot README)",
       "snapshot_path": "README.md",
-      "size_bytes": 26274,
-      "sha256": "f56d1a4e8f4753a23a251c127c201885300a96aaf586100a330265dd04e9e087"
+      "size_bytes": 27799,
+      "sha256": "a814c8873ddd636041aa9ca53fed315037fae3ecd2208d59aa22033eb980c353"
     }
   ],
   "missing": [],

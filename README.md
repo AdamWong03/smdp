@@ -16,6 +16,11 @@
   Yule–Walker fit uses only **0–50 fs**; `--maxlag 40` only extends the reported ACF to 200 fs.
   A 100/200 ps independent calibration gives the same AR(10) and the same 2.3–2.5× integral
   overprediction, so calibration length is not the bottleneck.
+- **The fair no-AR `rescale_only` baseline over-diffuses at 100 ps:** D_MSD 2.67–2.82 vs full
+  1.62–1.71 and reference block 0 1.69; translation ACF integral 17.3–17.5 fs vs full 10.8–11.0
+  and reference 11.34. AR memory is necessary for the 100 ps ACF/D/RDF. But it is **not uniformly
+  better**: the baseline has a better H VDOS (0.941 vs 0.848) and lower H VACF error (0.024 vs
+  0.073). The method is a trade-off. A matching 2.5 ns baseline is running on val_04.
 - **The production GLR is a closed-loop velocity-feedback readout.** The current-step displacement
   is the backbone displacement, but `v_new` is the next velocity state and drives the next
   backbone call (and the AR history). A one-step probe with a ~21% velocity correction changes the
@@ -327,6 +332,23 @@ choice); FD noise is not necessary for D but is necessary for the KE variance (p
 **Not supported:** a full mode-decomposition necessity claim (the internal-mode 1.0 ablation is
 missing); a precise 22–25% D deficit (the 100 ps seed spread is 1.26–1.71×10⁻⁹, ~27%, comparable
 to the deficit).
+
+### 5.8 Fair no-AR-memory baseline (100 ps)
+
+`rescale_only`: frozen backbone + same mode basis + same per-mode canonical target + COM
+projection, no AR coefficients/ACF/readout history. Two independent starts:
+
+| run | D_MSD (10⁻⁹) | ACF integral 0–5 ps (fs) | RDF O–O/O–H | VDOS O/H |
+|---|---:|---:|---:|---:|
+| reference block 0 | 1.692 | 11.341 | — | — |
+| full deterministic | 1.62–1.71 | 10.8–11.0 | 0.032–0.036 / 0.098–0.104 | 0.963 / 0.848–0.851 |
+| `rescale_only` | **2.67–2.82** | **17.3–17.5** | 0.038–0.042 / 0.122–0.131 | 0.972–0.975 / **0.941** |
+
+The simple rescale over-diffuses and has a 100 fs ACF shoulder that is too high; AR memory is
+necessary for the 100 ps ACF/D and O–O/O–H RDF. But AR memory is **not uniformly better**: the
+simple baseline has a better H VDOS (0.941 vs 0.848) and lower H VACF error (0.024 vs
+0.073–0.076). The method is a trade-off, not a free improvement. A matching 2.5 ns `rescale_only`
+baseline is running on val_04; do not fill its number before it exists.
 
 ## 6. Five questions
 

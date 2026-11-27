@@ -30,13 +30,16 @@ from fit_velocity_gle import KEY_LAGS, dho, model_acf, model_integral, unpack
 def translation_acf(path: Path, start_ps: float, duration_ps: float,
                     stride_fs: float = 5.0, max_lag_fs: float = 5000.0):
     with h5py.File(path, "r") as handle:
-        dt = float(handle.attrs.get("output_interval_fs", 0.5))
+        dt = float(handle.attrs.get("output_interval_fs",
+                                    handle.attrs.get("timestep_fs", stride_fs)))
         stride = max(1, int(round(stride_fs / dt)))
         start = int(round(start_ps * 1000 / dt))
         n = int(round(duration_ps * 1000 / stride_fs))
         selection = slice(start, start + n * stride, stride)
-        q = np.asarray(handle["positions_unwrapped_A"][selection], dtype=np.float64)
-        v = np.asarray(handle["velocities_A_per_fs"][selection], dtype=np.float64)
+        pos_key = "positions" if "positions" in handle else "positions_unwrapped_A"
+        vel_key = "velocities" if "velocities" in handle else "velocities_A_per_fs"
+        q = np.asarray(handle[pos_key][selection], dtype=np.float64)
+        v = np.asarray(handle[vel_key][selection], dtype=np.float64)
         masses = np.asarray(handle["masses_u"][:], dtype=np.float64)
         molecules = np.asarray(handle["molecule_ids"][:], dtype=np.int64)
     unique = np.unique(molecules)

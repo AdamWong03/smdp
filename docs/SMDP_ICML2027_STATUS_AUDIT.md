@@ -1222,3 +1222,49 @@ retained as the longer T evidence.
   closed-loop velocity-feedback controller; the current-step displacement is the backbone
   displacement, but `v_new` drives the next backbone and the AR history. The local `q–v`
   inequality is a discretization choice, not proof of no closed-loop dynamics.
+
+### 10.8 Fair no-AR-memory baseline (100 ps, 2026-11-27)
+
+The missing fair baseline was implemented as `rescale_only`: frozen backbone + the same
+physics-defined mode basis + the same per-mode canonical target + COM projection, but **no AR
+coefficients, no ACF calibration and no readout history**. It is not AR(1) and not
+`rescale_off`; it is the simple statistical rescaling control. Code: `feedback_probe.py
+--mode rescale_only`; runs: `experiments/rescale_only_{val04,independent}_100ps_20261127/`.
+
+| run | initial | T (K) | trans/rot/int KE (eV) | RDF O–O/O–H/H–H | VDOS O/H | D_MSD (10⁻⁹) | D_GK (10⁻⁹) | ACF integral 0–5 ps (fs) |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| reference block 0 | N/A | 300.19 ± 17.89 | 2.373/2.430/2.609 | — | — | **1.692** | **1.502** | **11.341** |
+| full deterministic | val_04 | 299.99 ± 0.553* | 2.482/2.526/2.399 | 0.0322/0.1043/0.0256 | 0.964/0.848 | **1.711** | 1.528 | **11.036** |
+| `rescale_only` | val_04 | 299.99 ± 0.553* | 2.482/2.543/2.382 | 0.0383/0.1215/0.0232 | 0.972/0.941 | **2.818** | 2.392 | **17.278** |
+| full deterministic | independent | 300.001 ± 0.041* | 2.482/2.526/2.398 | 0.0358/0.0981/0.0268 | 0.963/0.851 | **1.659** | 1.494 | **10.790** |
+| `rescale_only` | independent | 300.001 ± 0.041* | 2.482/2.544/2.381 | 0.0415/0.1314/0.0233 | 0.975/0.941 | **2.669** | 2.422 | **17.496** |
+
+\* deterministic rescale: the total T/KE distribution is the same fixed target for full and
+baseline; the AR memory redistributes the fixed total among modes, it does not create the KE
+variance. The 0.553/0.041 K values are the `motion.json` instantaneous/std statistic; the paired
+1–5 ps full/thermostat-only T std is ~1e-5 K. The stochastic GLR (Gamma target) has T std 17.84 K
+and partition std 0.253 eV, matching the reference; the deterministic full/baseline do not.
+
+**Interpretation:**
+
+- The simple rescale **over-diffuses**: D_MSD 2.67–2.82 vs full 1.62–1.71 and reference block 0
+  1.69; the translation ACF integral is 17.3–17.5 fs vs full 10.8–11.0 and reference 11.34. The
+  100 fs ACF shoulder is too high (0.055–0.062 vs 0.031). AR memory is necessary to reproduce the
+  reference ACF/D at 100 ps.
+- **The AR memory is not uniformly better.** The simple baseline has a better H VDOS (0.941 vs
+  0.848) and lower H VACF error (0.024 vs 0.073–0.076); its RDF O–H is worse (0.122–0.131 vs
+  0.098–0.104). The full GLR is better on D, ACF, O–O and O–H RDF; the simple baseline is better
+  on H VDOS/VACF. The method's contribution is a **trade-off**, not a free improvement.
+- The matching 2.5 ns `rescale_only` baseline is running on val_04 (500k steps, GPU 5; one long
+  start; the two 100 ps starts cover initial-state independence). It will decide whether the
+  simple scaling's 100 ps over-diffusion persists at long time or converges to the reference.
+  Do not fill a 2.5 ns baseline number before it exists.
+- The official TrajCast 2.5 ns is still running; no 2.5 ns number. The 100 ps official control
+  (H VDOS 0.624, RDF 0.0431) is worse than both GLR variants on H VDOS and O–O RDF; the 2.5 ns
+  D/MSD comparison is pending.
+
+**Paper consequence:** the simple scaling is not a drop-in replacement; AR memory has a
+measurable 100 ps ACF/D/RDF benefit. But the H VDOS/VACF cost and the 22–25% 2.5 ns D deficit
+mean the method cannot claim uniform physical improvement. If the 2.5 ns baseline is closer to
+the reference than the full GLR, the AR memory's long-time necessity is not supported and the
+paper must say so. The decision waits for the 2.5 ns baseline and the official TrajCast 2.5 ns.

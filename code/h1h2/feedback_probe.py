@@ -37,6 +37,7 @@ from torch import nn
 
 from glr_readout import GLRReadout
 from fd_readout import FDTransition
+from motion_loss import decompose_modes
 from periodic import PeriodicGraphBuilder
 from physics.units import KB_EV_PER_K, KINETIC_TO_EV
 from relational_inference import load_relational, vesin_graph
@@ -59,6 +60,67 @@ class CaptureBase(nn.Module):
     def forward(self, data, return_context=False):
         output = self.base(data, return_context=True)
         output["backbone_velocity"] = output["velocities"]
+        return output
+
+    def validate_graph(self, data):
+        return self.base.validate_graph(data) if hasattr(self.base, "validate_graph") else None
+
+    def set_diagnostics(self, enabled):
+        if hasattr(self.base, "set_diagnostics"):
+            self.base.set_diagnostics(enabled)
+
+    def diagnostics(self):
+        return self.base.diagnostics() if hasattr(self.base, "diagnostics") else []
+
+
+class RescaleOnlyTransition(nn.Module):
+    """Fair no-AR-memory baseline: frozen backbone + per-mode canonical rescale.
+
+    Uses the same mode basis, mode degrees of freedom, temperature target and
+    COM projection as the deterministic GLR, but no AR coefficients, no ACF
+    calibration and no readout history.
+    """
+
+    def __init__(self, base, temperature=300.0):
+        super().__init__()
+        self.base = base
+        self.cfg = base.cfg
+        self.rms_targets = base.rms_targets
+        self.temperature = float(temperature)
+        for parameter in self.base.parameters():
+            parameter.requires_grad_(False)
+
+    def reset(self):
+        return None
+
+    def forward(self, data, return_context=False):
+        output = self.base(data, return_context=True)
+        v_pred = output["velocities"]
+        dq = output["displacements"]
+        masses = data.atomic_masses.reshape(-1)
+        molecules = data.molecule_ids.reshape(-1)
+        part = decompose_modes(data.pos, v_pred, masses, molecules, data.cell)
+        n_mol = int(molecules.max()) + 1
+        n_atoms = len(masses)
+        dofs = (3 * n_mol - 3, 3 * n_mol, 3 * n_atoms - 6 * n_mol)
+        keys = ("translation", "rotation", "internal")
+        rescaled = torch.zeros_like(v_pred)
+        for index, key in enumerate(keys):
+            norm = 0.5 * KINETIC_TO_EV * torch.sum(
+                masses[:, None] * part[key].square())
+            target = 0.5 * dofs[index] * KB_EV_PER_K * self.temperature
+            scale = torch.sqrt(torch.clamp(target / norm.clamp_min(1e-12), max=1e6))
+            rescaled = rescaled + scale * part[key]
+        com_v = (masses[:, None] * rescaled).sum(0) / masses.sum()
+        rescaled = rescaled - com_v
+        com_dq = (masses[:, None] * dq).sum(0) / masses.sum()
+        dq = dq - com_dq
+        output["positions"] = data.pos + dq
+        output["velocities"] = rescaled
+        output["displacements"] = dq
+        output["rescale_only"] = True
+        if return_context:
+            output["context"] = output.get("context", {})
         return output
 
     def validate_graph(self, data):
@@ -128,6 +190,8 @@ def build_model(checkpoint, coefficients, device, mode):
     base, _ = load_relational(Path(checkpoint), device)
     if mode == "raw":
         return base
+    if mode == "rescale_only":
+        return RescaleOnlyTransition(base).to(device)
     capture = CaptureBase(base)
     readout = load_readout(coefficients, float(base.cfg.horizon_fs))
     blend = 0.0 if mode == "thermostat_only" else 0.1
@@ -315,7 +379,7 @@ def main():
     parser.add_argument("--glr-coefficients", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--mode", choices=["full", "no_feedback", "all_no_feedback",
-                                           "thermostat_only", "raw"],
+                                           "thermostat_only", "rescale_only", "raw"],
                         default="full")
     parser.add_argument("--steps", type=int, default=20000)
     parser.add_argument("--seed", type=int, default=2026110401)

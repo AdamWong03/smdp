@@ -127,6 +127,29 @@ metrics.
   deficit is within this seed/block variability; it should be reported with uncertainty, not as a
   precise method failure.
 
+## Fair no-AR-memory baseline (2026-11-27)
+
+`rescale_only`: frozen backbone + same mode basis + same per-mode canonical target + COM
+projection, but no AR coefficients, no ACF calibration and no readout history. It is not AR(1)
+and not rescale-off. Two independent 100 ps starts:
+
+| run | D_MSD (10⁻⁹) | ACF integral 0–5 ps (fs) | RDF O–O/O–H | VDOS O/H |
+|---|---:|---:|---:|---:|
+| reference block 0 | 1.692 | 11.341 | — | — |
+| full deterministic | 1.62–1.71 | 10.8–11.0 | 0.032–0.036 / 0.098–0.104 | 0.963 / 0.848–0.851 |
+| `rescale_only` | **2.67–2.82** | **17.3–17.5** | 0.038–0.042 / 0.122–0.131 | 0.972–0.975 / **0.941** |
+
+- The simple rescale **over-diffuses** and has a 100 fs ACF shoulder that is too high. AR memory
+  is necessary for the 100 ps ACF/D and O–O/O–H RDF.
+- The AR memory is **not uniformly better**: `rescale_only` has a better H VDOS (0.941 vs
+  0.848–0.851) and lower H VACF error (0.024 vs 0.073–0.076). The method is a trade-off, not a
+  free improvement.
+- A matching 2.5 ns `rescale_only` baseline is running on val_04 (one long start; two 100 ps
+  starts cover initial-state independence). Do not fill a 2.5 ns baseline number before it
+  exists. If it is closer to the reference than the full GLR, the AR memory's long-time necessity
+  is not supported and the paper must say so.
+- The official TrajCast 2.5 ns is still running; no 2.5 ns D/VDOS number.
+
 ## GLE gate (2026-11-27)
 
 The bounded 4–6 mode DHO+slow GLE study was executed and **failed the offline gate**:

@@ -9,7 +9,8 @@ RUN=$ROOT/experiments/published_trajcast_2p5ns_20261126
 REF=$DATA/data/smdp_reference_md_v1/water/physical_reference/nvt_2p5ns/production.h5
 TOP=$DATA/data/smdp_reference_md_v1/water/equilibration/snapshots/water_5.data
 
-for _ in $(seq 1 288); do
+# 720 * 5 min = 60 h; the run is GPU-contended and may take longer than 24 h.
+for _ in $(seq 1 720); do
   if [ -f "$RUN/trajectory.summary.json" ]; then
     break
   fi

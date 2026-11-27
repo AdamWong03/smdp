@@ -113,6 +113,10 @@ PARAMETERS = [
      "parameters/feedback_intervention_analysis_20261127.json"),
     ("experiments/paired_feedback_200steps_20261127.json",
      "parameters/paired_feedback_200steps_20261127.json"),
+    ("experiments/rescale_only_100ps_metrics_20261127.json",
+     "parameters/rescale_only_100ps_metrics_20261127.json"),
+    ("experiments/translation_acf_100ps_comparison_20261127.json",
+     "parameters/translation_acf_100ps_comparison_20261127.json"),
 ]
 
 RESULTS = [
@@ -141,6 +145,22 @@ RESULTS = [
      "results/feedback_thermostat_only_5ps_summary.json"),
     ("experiments/feedback_full_100ps_20261127/partial_status.json",
      "results/feedback_full_100ps_partial_status.json"),
+    ("experiments/rescale_only_val04_100ps_20261127/trajectory.summary.json",
+     "results/rescale_only_val04_100ps_summary.json"),
+    ("experiments/rescale_only_independent_100ps_20261127/trajectory.summary.json",
+     "results/rescale_only_independent_100ps_summary.json"),
+    ("experiments/rescale_only_val04_100ps_20261127/analysis/motion.json",
+     "results/rescale_only_val04_100ps_motion.json"),
+    ("experiments/rescale_only_val04_100ps_20261127/analysis/rdf.json",
+     "results/rescale_only_val04_100ps_rdf.json"),
+    ("experiments/rescale_only_val04_100ps_20261127/analysis/vdos.json",
+     "results/rescale_only_val04_100ps_vdos.json"),
+    ("experiments/rescale_only_independent_100ps_20261127/analysis/motion.json",
+     "results/rescale_only_independent_100ps_motion.json"),
+    ("experiments/rescale_only_independent_100ps_20261127/analysis/rdf.json",
+     "results/rescale_only_independent_100ps_rdf.json"),
+    ("experiments/rescale_only_independent_100ps_20261127/analysis/vdos.json",
+     "results/rescale_only_independent_100ps_vdos.json"),
 ]
 
 LOGS = [
@@ -208,6 +228,10 @@ LOGS = [
      "logs/paired_feedback_500steps_20261127.log"),
     ("experiments/paired_feedback_200steps_20261127.log",
      "logs/paired_feedback_200steps_20261127.log"),
+    ("experiments/rescale_only_val04_100ps_20261127/rollout.log",
+     "logs/rescale_only_val04_100ps_rollout.log"),
+    ("experiments/rescale_only_independent_100ps_20261127/rollout.log",
+     "logs/rescale_only_independent_100ps_rollout.log"),
 ]
 
 DOCS = [
@@ -217,6 +241,10 @@ DOCS = [
      "docs/build_snapshot_20261127.py"),
     ("method_development/GLR_STATE_TRANSITION_20261127.md",
      "docs/GLR_STATE_TRANSITION_20261127.md"),
+    ("experiments/UNIFIED_COMPARISON_20261127.md",
+     "docs/UNIFIED_COMPARISON_20261127.md"),
+    ("experiments/D_PROVENANCE_20261127.md",
+     "docs/D_PROVENANCE_20261127.md"),
 ]
 
 

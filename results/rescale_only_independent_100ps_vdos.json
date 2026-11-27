@@ -1,0 +1,44 @@
+{
+  "completed": true,
+  "metrics": {
+    "nyquist_THz": 100.0,
+    "cadence_fs": 5.0,
+    "elements": {
+      "1": {
+        "overlap": 0.941178890637165,
+        "block_overlap": {
+          "mean": 0.9373041435419243,
+          "std": 0.007501548790805388,
+          "variance": 5.627323426083379e-05,
+          "block_mean_std": 0.007501548790805388,
+          "blocks": 6
+        }
+      },
+      "8": {
+        "overlap": 0.9751074240654427,
+        "block_overlap": {
+          "mean": 0.971291924735934,
+          "std": 0.006271583077434621,
+          "variance": 3.933275429716431e-05,
+          "block_mean_std": 0.006271583077434621,
+          "blocks": 6
+        }
+      }
+    },
+    "interpretation": "Matched sampled NVT production spectra",
+    "VACF": {
+      "1": {
+        "normalized_curve_RMSE": 0.023790880722332857,
+        "windows": 6,
+        "maximum_lag_fs": 1000.0
+      },
+      "8": {
+        "normalized_curve_RMSE": 0.010331936523825856,
+        "windows": 6,
+        "maximum_lag_fs": 1000.0
+      }
+    }
+  },
+  "failure_reason": null,
+  "elapsed_s": 3.989557831082493
+}
