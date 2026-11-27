@@ -1,5 +1,5 @@
 {
-  "created": "2026-11-27T07:07:55.441676+00:00",
+  "created": "2026-11-27T07:09:07.782060+00:00",
   "snapshot": "/data2/wyd/research/foundation_mlip_adaptation/reproducibility/snapshot_20261127",
   "description": "Reproducible snapshot of the GLR/GLE audit, 2026-11-27. Large trajectories are referenced in data_sources.json.",
   "seeds": {
@@ -831,8 +831,8 @@
     {
       "original_path": "experiments/D_PROVENANCE_20261127.md",
       "snapshot_path": "docs/D_PROVENANCE_20261127.md",
-      "size_bytes": 9093,
-      "sha256": "0c3f4b33116ff1e98391d5323a49bb576c338d381ced3869bc66a857257ea98c"
+      "size_bytes": 9115,
+      "sha256": "76bf61929da928e8449e4cbaeae6e1da6d4aed30415571aae6a4295a29dec3be"
     },
     {
       "original_path": "(snapshot README)",
