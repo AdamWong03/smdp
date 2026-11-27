@@ -81,12 +81,13 @@ class RescaleOnlyTransition(nn.Module):
     calibration and no readout history.
     """
 
-    def __init__(self, base, temperature=300.0):
+    def __init__(self, base, temperature=300.0, stochastic_rescale=False):
         super().__init__()
         self.base = base
         self.cfg = base.cfg
         self.rms_targets = base.rms_targets
         self.temperature = float(temperature)
+        self.stochastic_rescale = bool(stochastic_rescale)
         for parameter in self.base.parameters():
             parameter.requires_grad_(False)
 
@@ -108,7 +109,15 @@ class RescaleOnlyTransition(nn.Module):
         for index, key in enumerate(keys):
             norm = 0.5 * KINETIC_TO_EV * torch.sum(
                 masses[:, None] * part[key].square())
-            target = 0.5 * dofs[index] * KB_EV_PER_K * self.temperature
+            if self.stochastic_rescale:
+                concentration = torch.as_tensor(
+                    0.5 * dofs[index], dtype=norm.dtype, device=norm.device)
+                rate = torch.as_tensor(
+                    1.0 / (KB_EV_PER_K * self.temperature),
+                    dtype=norm.dtype, device=norm.device)
+                target = torch.distributions.Gamma(concentration, rate).sample()
+            else:
+                target = 0.5 * dofs[index] * KB_EV_PER_K * self.temperature
             scale = torch.sqrt(torch.clamp(target / norm.clamp_min(1e-12), max=1e6))
             rescaled = rescaled + scale * part[key]
         com_v = (masses[:, None] * rescaled).sum(0) / masses.sum()
@@ -192,6 +201,8 @@ def build_model(checkpoint, coefficients, device, mode):
         return base
     if mode == "rescale_only":
         return RescaleOnlyTransition(base).to(device)
+    if mode == "stochastic_rescale_only":
+        return RescaleOnlyTransition(base, stochastic_rescale=True).to(device)
     capture = CaptureBase(base)
     readout = load_readout(coefficients, float(base.cfg.horizon_fs))
     blend = 0.0 if mode == "thermostat_only" else 0.1
@@ -379,7 +390,8 @@ def main():
     parser.add_argument("--glr-coefficients", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--mode", choices=["full", "no_feedback", "all_no_feedback",
-                                           "thermostat_only", "rescale_only", "raw"],
+                                           "thermostat_only", "rescale_only",
+                                           "stochastic_rescale_only", "raw"],
                         default="full")
     parser.add_argument("--steps", type=int, default=20000)
     parser.add_argument("--seed", type=int, default=2026110401)

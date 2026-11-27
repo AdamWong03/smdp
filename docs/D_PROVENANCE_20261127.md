@@ -85,3 +85,20 @@ thermostat_only 2.224); these are 1–5 ps non-diffusive indicators, not long-ti
   calibration data is not justified.
 - Official TrajCast requires large-scale training data/compute; the 100 ps control is the
   completed official comparison, and the 2.5 ns result is pending.
+
+## Additional 100 ps stochastic/rescale-only entries (2026-11-27)
+
+| D | run | initial | length | estimator | window / blocks | seed | source |
+|---:|---|---|---:|---|---|---:|---|
+| **1.417** | stochastic GLR 100 ps | val_04 | 100 ps | `block_metrics` MSD | 10–100 ps, 1 block | 2026110401 | `glr_stoch_full_100ps_20261122` |
+| 1.382 | same | val_04 | 100 ps | `block_metrics` GK | 0–5 ps, 1 block | 2026110401 | same |
+| **1.895** | stochastic GLR 100 ps | independent | 100 ps | `block_metrics` MSD | 10–100 ps, 1 block | 2026110402 | `glr_stoch_independent_100ps_20261122` |
+| 1.467 | same | independent | 100 ps | `block_metrics` GK | 0–5 ps, 1 block | 2026110402 | same |
+| pending | stochastic rescale-only | val_04 | 100 ps | `block_metrics` | 10–100 ps, 1 block | 2026110401 | `stochastic_rescale_only_val04_100ps_20261127` |
+| pending | stochastic rescale-only | independent | 100 ps | `block_metrics` | 10–100 ps, 1 block | 2026110402 | `stochastic_rescale_only_independent_100ps_20261127` |
+| pending | deterministic rescale-only | val_04 | 2.5 ns | MSD-std/GK-audit | 10–100 ps, 8 blocks | 2026110401 | `rescale_only_val04_2p5ns_20261127` |
+
+The stochastic 100 ps independent D_MSD **1.895** vs the stochastic 2.5 ns independent D_MSD
+**1.387** is a concrete demonstration of single-100-ps block noise; do not treat the 100 ps
+number as a 2.5 ns estimate. The same 100 ps trajectory is not an independent replica of its
+own 8 blocks; the block errors are correlated.

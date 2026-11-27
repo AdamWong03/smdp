@@ -1,0 +1,38 @@
+/data1/wyd/envs/mlip/lib/python3.12/site-packages/e3nn/o3/_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+{"mode": "stochastic_rescale_only", "step": 1000, "total": 20000, "T": 288.6582314793346, "elapsed_s": 64.14830383425578}
+{"mode": "stochastic_rescale_only", "step": 2000, "total": 20000, "T": 326.7101261076015, "elapsed_s": 131.60220959829167}
+{"mode": "stochastic_rescale_only", "step": 3000, "total": 20000, "T": 324.3247172303546, "elapsed_s": 212.4648817651905}
+{"mode": "stochastic_rescale_only", "step": 4000, "total": 20000, "T": 287.64643132784687, "elapsed_s": 271.63166956044734}
+{"mode": "stochastic_rescale_only", "step": 5000, "total": 20000, "T": 307.7249523558544, "elapsed_s": 315.97731048008427}
+{"mode": "stochastic_rescale_only", "step": 6000, "total": 20000, "T": 299.0745598132351, "elapsed_s": 365.96832399535924}
+{"mode": "stochastic_rescale_only", "step": 7000, "total": 20000, "T": 317.4106937348388, "elapsed_s": 409.8744996022433}
+{"mode": "stochastic_rescale_only", "step": 8000, "total": 20000, "T": 294.4784644909174, "elapsed_s": 452.78261845139787}
+{"mode": "stochastic_rescale_only", "step": 9000, "total": 20000, "T": 300.1686019670251, "elapsed_s": 495.92164105921984}
+{"mode": "stochastic_rescale_only", "step": 10000, "total": 20000, "T": 276.70393512135075, "elapsed_s": 539.248306622263}
+{"mode": "stochastic_rescale_only", "step": 11000, "total": 20000, "T": 306.11781579525706, "elapsed_s": 585.5378899252973}
+{"mode": "stochastic_rescale_only", "step": 12000, "total": 20000, "T": 310.8930719144817, "elapsed_s": 630.565293897409}
+{"mode": "stochastic_rescale_only", "step": 13000, "total": 20000, "T": 267.1620439949583, "elapsed_s": 704.5711442031898}
+{"mode": "stochastic_rescale_only", "step": 14000, "total": 20000, "T": 300.4909984774684, "elapsed_s": 747.7634520791471}
+{"mode": "stochastic_rescale_only", "step": 15000, "total": 20000, "T": 316.08768833343333, "elapsed_s": 792.1589392530732}
+{"mode": "stochastic_rescale_only", "step": 16000, "total": 20000, "T": 309.4463828784542, "elapsed_s": 910.8575987080112}
+{"mode": "stochastic_rescale_only", "step": 17000, "total": 20000, "T": 280.7224773571656, "elapsed_s": 1032.98900853144}
+{"mode": "stochastic_rescale_only", "step": 18000, "total": 20000, "T": 299.273057935913, "elapsed_s": 1127.0320947901346}
+{"mode": "stochastic_rescale_only", "step": 19000, "total": 20000, "T": 307.3109686727555, "elapsed_s": 1252.769601191394}
+{"mode": "stochastic_rescale_only", "step": 20000, "total": 20000, "T": 275.867541409548, "elapsed_s": 1359.0902111311443}
+{
+  "mode": "stochastic_rescale_only",
+  "completed_steps": 20000,
+  "requested_steps": 20000,
+  "simulated_ps": 100.0,
+  "stable": true,
+  "failure_reason": null,
+  "elapsed_seconds": 1359.0921568041667,
+  "checkpoint": "/data1/wyd/research/foundation_mlip_adaptation/experiments/water6_reference_20261113/dsrt_radius6/best.pt",
+  "initial_trajectory": "/data1/wyd/research/foundation_mlip_adaptation/data/smdp_reference_md_v1/water/raw_nve/val_04/trajectory.h5",
+  "initial_frame": 0,
+  "seed": 2026110401,
+  "T_mean": 299.9007062005471,
+  "T_std": 17.592171031644824,
+  "execution_note": "stochastic rescale-only no-AR baseline, val04, 100 ps, seed 2026110401"
+}

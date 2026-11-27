@@ -1268,3 +1268,40 @@ measurable 100 ps ACF/D/RDF benefit. But the H VDOS/VACF cost and the 22–25% 2
 mean the method cannot claim uniform physical improvement. If the 2.5 ns baseline is closer to
 the reference than the full GLR, the AR memory's long-time necessity is not supported and the
 paper must say so. The decision waits for the 2.5 ns baseline and the official TrajCast 2.5 ns.
+
+### 10.9 Stochastic no-AR baseline (100 ps, 2026-11-27)
+
+`stochastic_rescale_only`: same frozen backbone, mode basis, Gamma per-mode target, COM
+projection, two independent starts; **no AR coefficients/history/noise**. Seeds 2026110401
+(val_04) and 2026110402 (independent). GPU 4; elapsed 1,359 s / 702 s (non-strict, shared GPU).
+
+| run | initial | T (K) | trans/rot/int KE (eV) | RDF O–O/O–H/H–H | VDOS O/H | D_MSD (10⁻⁹) | D_GK (10⁻⁹) | ACF integral (fs) |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| stochastic full | val_04 | 300.159 ± 17.84 | 2.483/2.530/2.397 | 0.0355/0.1141/0.0218 | 0.957/0.854 | **1.417** | **1.382** | **9.992** |
+| stochastic no-AR | val_04 | 299.168 ± 16.94 | 2.474/2.547/2.365 | 0.0329/0.1357/0.0176 | 0.976/0.951 | **1.928** | **2.254** | **16.279** |
+| stochastic full | independent | 299.815 ± 17.86 | 2.488/2.527/2.387 | 0.0376/0.1112/0.0225 | 0.964/0.857 | **1.895** | **1.467** | **10.592** |
+| stochastic no-AR | independent | 299.663 ± 17.51 | 2.484/2.542/2.372 | 0.0358/0.1484/0.0197 | 0.981/0.946 | **1.948** | **2.011** | **14.532** |
+| reference block 0 | — | 300.19 ± 17.89 | 2.373/2.430/2.609 | — | — | **1.692** | **1.502** | **11.341** |
+
+**Interpretation:**
+
+- The AR memory's **ACF/GK benefit persists under stochastic**: full ACF 9.99–10.59 vs no-AR
+  14.53–16.28 (reference block 0 11.34); full GK 1.38–1.47 vs no-AR 2.01–2.25 (reference block 0
+  1.50). The full is closer to the reference on both starts.
+- The **MSD benefit is not uniform**: val_04 full 1.42 vs no-AR 1.93 (clear); independent full
+  1.90 vs no-AR 1.95 (nearly tied, within single-100-ps block noise; the same stochastic run's
+  100 ps independent D is 1.90 vs its 2.5 ns D 1.39). Do not use the independent 100 ps MSD as a
+  precise AR effect.
+- The **H/O VDOS cost persists and is larger under stochastic**: no-AR H VDOS 0.946–0.951,
+  O 0.976–0.981; full H 0.854–0.857, O 0.957–0.964. H VACF 0.019–0.021 (no-AR) vs 0.067–0.069
+  (full). AR improves O–H RDF (0.111–0.114 vs 0.136–0.148); no-AR is better on O–O/H–H RDF.
+- The stochastic rescale restores the canonical KE distribution in both full and no-AR (T std
+  16.9–17.9 K, partition std 0.25); the AR memory does not create the KE variance. The stochastic
+  full total-KE mean is closer to the reference (7.411/7.403 vs 7.386/7.398); the difference is
+  within the 100 ps sample error.
+- **Conclusion:** AR memory has a reproducible 100 ps benefit on translation ACF/GK and O–H RDF
+  under both deterministic and stochastic rescaling; it consistently degrades H/O VDOS and
+  H VACF. The stochastic MSD at the independent start is nearly tied; the 100 ps block noise is
+  large. The 2.5 ns deterministic rescale-only is running; the stochastic 2.5 ns no-AR baseline
+  was not run. The long-time stochastic AR benefit is therefore unmeasured; the final paper
+  decision must wait for the deterministic 2.5 ns baseline and the official TrajCast 2.5 ns.

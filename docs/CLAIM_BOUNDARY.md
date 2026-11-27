@@ -144,10 +144,18 @@ and not rescale-off. Two independent 100 ps starts:
 - The AR memory is **not uniformly better**: `rescale_only` has a better H VDOS (0.941 vs
   0.848–0.851) and lower H VACF error (0.024 vs 0.073–0.076). The method is a trade-off, not a
   free improvement.
-- A matching 2.5 ns `rescale_only` baseline is running on val_04 (one long start; two 100 ps
-  starts cover initial-state independence). Do not fill a 2.5 ns baseline number before it
-  exists. If it is closer to the reference than the full GLR, the AR memory's long-time necessity
-  is not supported and the paper must say so.
+- **Stochastic no-AR baseline (100 ps, two starts):** full ACF 9.99–10.59 vs no-AR 14.53–16.28
+  (reference block 0 11.34); full GK 1.38–1.47 vs no-AR 2.01–2.25 (reference 1.50). The AR
+  ACF/GK benefit persists under stochastic. The MSD benefit is clear on val_04 (1.42 vs 1.93) but
+  nearly tied on independent (1.90 vs 1.95), within single-100-ps block noise. The H/O VDOS cost
+  persists: no-AR H 0.946–0.951, O 0.976–0.981; full H 0.854–0.857, O 0.957–0.964. O–H RDF is
+  better with AR; O–O/H–H RDF is better without. The stochastic rescale restores the canonical KE
+  distribution in both; the AR memory does not create the KE variance.
+- A matching 2.5 ns deterministic `rescale_only` baseline is running on val_04 (one long start;
+  two 100 ps starts cover initial-state independence). A stochastic 2.5 ns no-AR baseline was not
+  run; its long-time benefit is unmeasured. Do not fill a 2.5 ns baseline number before it exists.
+  If the deterministic baseline is closer to the reference than the full GLR, the AR memory's
+  long-time necessity is not supported and the paper must say so.
 - The official TrajCast 2.5 ns is still running; no 2.5 ns D/VDOS number.
 
 ## GLE gate (2026-11-27)

@@ -1,5 +1,5 @@
 {
-  "created": "2026-11-27T05:30:15.042553+00:00",
+  "created": "2026-11-27T07:07:55.441676+00:00",
   "snapshot": "/data2/wyd/research/foundation_mlip_adaptation/reproducibility/snapshot_20261127",
   "description": "Reproducible snapshot of the GLR/GLE audit, 2026-11-27. Large trajectories are referenced in data_sources.json.",
   "seeds": {
@@ -99,8 +99,8 @@
     {
       "original_path": "code/h1h2/feedback_probe.py",
       "snapshot_path": "code/h1h2/feedback_probe.py",
-      "size_bytes": 17545,
-      "sha256": "698ff7c6b43590e00af1a6113ffe34f646e5a8d22c072e56e6d972a02d4ff697"
+      "size_bytes": 18248,
+      "sha256": "50e06a9ba624b5bd7776d276aa9be90030d1b3adec3442da5168a38d4996ed10"
     },
     {
       "original_path": "code/h1h2/paired_feedback.py",
@@ -411,8 +411,14 @@
     {
       "original_path": "experiments/translation_acf_100ps_comparison_20261127.json",
       "snapshot_path": "parameters/translation_acf_100ps_comparison_20261127.json",
-      "size_bytes": 1703,
-      "sha256": "f1106c3855cd996547447eda11ef99dffd41469201b8e32ab31f30a1cf48bbab"
+      "size_bytes": 3093,
+      "sha256": "4f21c91a522424d0b314cba40d7136c0ba58b932685acb671b0e57ffdce8fa29"
+    },
+    {
+      "original_path": "experiments/stochastic_rescale_only_100ps_metrics_20261127.json",
+      "snapshot_path": "parameters/stochastic_rescale_only_100ps_metrics_20261127.json",
+      "size_bytes": 485,
+      "sha256": "d72191ed45e02abe011e881474d8f4cb435042803c5d0150faa0f21eaf1319ba"
     },
     {
       "original_path": "experiments/glr_2p5ns_20261122/analysis/glr_2p5ns_report.json",
@@ -529,6 +535,54 @@
       "sha256": "2a09aca3e2b75935124ed23f6d8acdc73d89e276b92562ee4d8cd37c8149c9e7"
     },
     {
+      "original_path": "experiments/stochastic_rescale_only_val04_100ps_20261127/trajectory.summary.json",
+      "snapshot_path": "results/stochastic_rescale_only_val04_100ps_summary.json",
+      "size_bytes": 666,
+      "sha256": "ac70356c0840a358c359b9781223a3cc4afda05fb94f89d40c85db5ac1306a5d"
+    },
+    {
+      "original_path": "experiments/stochastic_rescale_only_independent_100ps_20261127/trajectory.summary.json",
+      "snapshot_path": "results/stochastic_rescale_only_independent_100ps_summary.json",
+      "size_bytes": 663,
+      "sha256": "1e42f4ff486e3df1d9c8ee08b0a6724be17001f0f07f8b3fd5bba44a39af62b8"
+    },
+    {
+      "original_path": "experiments/stochastic_rescale_only_val04_100ps_20261127/analysis/motion.json",
+      "snapshot_path": "results/stochastic_rescale_only_val04_100ps_motion.json",
+      "size_bytes": 17629,
+      "sha256": "43b9b756f94220ddb6a55f488dc3d42a3d9134bd38a4807e80d5df9c40f785bf"
+    },
+    {
+      "original_path": "experiments/stochastic_rescale_only_val04_100ps_20261127/analysis/rdf.json",
+      "snapshot_path": "results/stochastic_rescale_only_val04_100ps_rdf.json",
+      "size_bytes": 1212,
+      "sha256": "dcfa79225e172c470e330a9e94224ff98d63ff6d632dc6e81eb38e76f2a0e86a"
+    },
+    {
+      "original_path": "experiments/stochastic_rescale_only_val04_100ps_20261127/analysis/vdos.json",
+      "snapshot_path": "results/stochastic_rescale_only_val04_100ps_vdos.json",
+      "size_bytes": 1108,
+      "sha256": "ae48308d3a18840888e71f9f769db544be8dc4aeb291fa61655832d7a2eef015"
+    },
+    {
+      "original_path": "experiments/stochastic_rescale_only_independent_100ps_20261127/analysis/motion.json",
+      "snapshot_path": "results/stochastic_rescale_only_independent_100ps_motion.json",
+      "size_bytes": 17616,
+      "sha256": "eb3d26973e37e55c24c8146ce019e4ca9445730ded855c8c5e81e8cb967265ff"
+    },
+    {
+      "original_path": "experiments/stochastic_rescale_only_independent_100ps_20261127/analysis/rdf.json",
+      "snapshot_path": "results/stochastic_rescale_only_independent_100ps_rdf.json",
+      "size_bytes": 1211,
+      "sha256": "b8af64081c178bf4927f6e55d7eb21d742b17d82c604ce346def527a8da6518d"
+    },
+    {
+      "original_path": "experiments/stochastic_rescale_only_independent_100ps_20261127/analysis/vdos.json",
+      "snapshot_path": "results/stochastic_rescale_only_independent_100ps_vdos.json",
+      "size_bytes": 1108,
+      "sha256": "0a8998b798f4f0fd1d5886c5b14b23b5ab527bbb4c4ec6fa6042d31e8c429020"
+    },
+    {
       "original_path": "experiments/reference_acf_blocks_20261126.log",
       "snapshot_path": "logs/reference_acf_blocks_20261126.log",
       "size_bytes": 9129,
@@ -603,8 +657,8 @@
     {
       "original_path": "experiments/published_trajcast_2p5ns_20261126/run.log",
       "snapshot_path": "logs/published_trajcast_2p5ns_partial_run.log",
-      "size_bytes": 32665,
-      "sha256": "a051cd8ccceb90b226f54b583c9440b19455cb53643fcec7768bc5ce8411ece1"
+      "size_bytes": 34716,
+      "sha256": "a9bd0dc5aed612b467bb97508e662a59b48c31138ff6c5b4a989951a401b6293"
     },
     {
       "original_path": "experiments/position_velocity_audit_20261127.log",
@@ -733,22 +787,34 @@
       "sha256": "da246457fc22d9a8334d53bfc199638fe265559931e4b66fab298dc86cc90857"
     },
     {
+      "original_path": "experiments/stochastic_rescale_only_val04_100ps_20261127/rollout.log",
+      "snapshot_path": "logs/stochastic_rescale_only_val04_100ps_rollout.log",
+      "size_bytes": 3479,
+      "sha256": "6a5ea55ea2b79cff5db605b26117a5c191d0d54d91d31703e477a981df5fe8df"
+    },
+    {
+      "original_path": "experiments/stochastic_rescale_only_independent_100ps_20261127/rollout.log",
+      "snapshot_path": "logs/stochastic_rescale_only_independent_100ps_rollout.log",
+      "size_bytes": 3478,
+      "sha256": "baff665174abc903d59534bc0bd4eca38a0abb91bb9534d0a1d34e2022052f88"
+    },
+    {
       "original_path": "SMDP_ICML2027_STATUS_AUDIT.md",
       "snapshot_path": "docs/SMDP_ICML2027_STATUS_AUDIT.md",
-      "size_bytes": 82882,
-      "sha256": "88c56050a7288b8aa4840d2d151d4618bd3cec41e80213bd59d7d5a76a2cfa53"
+      "size_bytes": 85875,
+      "sha256": "198d5b70dac51e88d6dfe4479fffabdda7ed7b1109f05526a10fcb47d7973f68"
     },
     {
       "original_path": "paper/CLAIM_BOUNDARY.md",
       "snapshot_path": "docs/CLAIM_BOUNDARY.md",
-      "size_bytes": 12342,
-      "sha256": "9d3d6de0fe6aead7ff0fc1115f56e5b9b9f6f24d4b4e336610554de6d045ef2b"
+      "size_bytes": 13133,
+      "sha256": "af055c84a6b1b53b02ccb70df33750b65a8795fbd54cace786c1b0a476faabb3"
     },
     {
       "original_path": "reproducibility/build_snapshot_20261127.py",
       "snapshot_path": "docs/build_snapshot_20261127.py",
-      "size_bytes": 17885,
-      "sha256": "9afd5c22abdd85c4dd6778ead969e0db35071bdc79b8a3306d33472350835244"
+      "size_bytes": 19563,
+      "sha256": "08fbd33b883814346e33e09f29061e5f3bbc4c3985e790d6fe405fc1b9cc2c0d"
     },
     {
       "original_path": "method_development/GLR_STATE_TRANSITION_20261127.md",
@@ -759,20 +825,20 @@
     {
       "original_path": "experiments/UNIFIED_COMPARISON_20261127.md",
       "snapshot_path": "docs/UNIFIED_COMPARISON_20261127.md",
-      "size_bytes": 8381,
-      "sha256": "872e606c01fc1bf6a0fc9fb43389fd027a81dc94523eae0b00ce414bbf913ddc"
+      "size_bytes": 11072,
+      "sha256": "987bd9b62b3b375cf63fd70e64944f8c621c3fcf025829be1cf28ac2a80aadbe"
     },
     {
       "original_path": "experiments/D_PROVENANCE_20261127.md",
       "snapshot_path": "docs/D_PROVENANCE_20261127.md",
-      "size_bytes": 7598,
-      "sha256": "60e031f2ab9c4f1b0930c95b63d3311115baa5ccfec32b6dcca5aea6cf59d21d"
+      "size_bytes": 9093,
+      "sha256": "0c3f4b33116ff1e98391d5323a49bb576c338d381ced3869bc66a857257ea98c"
     },
     {
       "original_path": "(snapshot README)",
       "snapshot_path": "README.md",
-      "size_bytes": 27799,
-      "sha256": "a814c8873ddd636041aa9ca53fed315037fae3ecd2208d59aa22033eb980c353"
+      "size_bytes": 29316,
+      "sha256": "fb78584621becda7178f2c3a9a5d92854bc725959a9305f9528cbae93e33e893"
     }
   ],
   "missing": [],

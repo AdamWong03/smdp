@@ -21,6 +21,11 @@
   and reference 11.34. AR memory is necessary for the 100 ps ACF/D/RDF. But it is **not uniformly
   better**: the baseline has a better H VDOS (0.941 vs 0.848) and lower H VACF error (0.024 vs
   0.073). The method is a trade-off. A matching 2.5 ns baseline is running on val_04.
+- **Stochastic no-AR baseline:** the AR ACF/GK benefit persists (full ACF 9.99–10.59 vs no-AR
+  14.53–16.28; full GK 1.38–1.47 vs no-AR 2.01–2.25), but the MSD benefit is clear only on
+  val_04 (1.42 vs 1.93) and nearly tied on independent (1.90 vs 1.95), within 100 ps block noise.
+  The H/O VDOS cost persists and is larger under stochastic (no-AR H 0.946–0.951, O 0.976–0.981
+  vs full H 0.854–0.857, O 0.957–0.964). The stochastic 2.5 ns no-AR baseline was not run.
 - **The production GLR is a closed-loop velocity-feedback readout.** The current-step displacement
   is the backbone displacement, but `v_new` is the next velocity state and drives the next
   backbone call (and the AR history). A one-step probe with a ~21% velocity correction changes the
@@ -347,8 +352,24 @@ projection, no AR coefficients/ACF/readout history. Two independent starts:
 The simple rescale over-diffuses and has a 100 fs ACF shoulder that is too high; AR memory is
 necessary for the 100 ps ACF/D and O–O/O–H RDF. But AR memory is **not uniformly better**: the
 simple baseline has a better H VDOS (0.941 vs 0.848) and lower H VACF error (0.024 vs
-0.073–0.076). The method is a trade-off, not a free improvement. A matching 2.5 ns `rescale_only`
-baseline is running on val_04; do not fill its number before it exists.
+0.073–0.076). The method is a trade-off, not a free improvement.
+
+**Stochastic no-AR baseline (Gamma target, same mode/target, no AR):**
+
+| run | D_MSD (10⁻⁹) | D_GK (10⁻⁹) | ACF integral (fs) | RDF O–O/O–H | VDOS O/H |
+|---|---:|---:|---:|---:|---:|
+| stochastic full val_04 | 1.417 | 1.382 | 9.992 | 0.036/0.114 | 0.957/0.854 |
+| stochastic no-AR val_04 | 1.928 | 2.254 | 16.279 | 0.033/0.136 | 0.976/0.951 |
+| stochastic full independent | 1.895 | 1.467 | 10.592 | 0.038/0.111 | 0.964/0.857 |
+| stochastic no-AR independent | 1.948 | 2.011 | 14.532 | 0.036/0.148 | 0.981/0.946 |
+| reference block 0 | 1.692 | 1.502 | 11.341 | — | — |
+
+The AR ACF/GK benefit **persists under stochastic** (full closer to reference on both starts);
+the MSD benefit is clear on val_04 (1.42 vs 1.93) but nearly tied on independent (1.90 vs 1.95),
+within single-100-ps block noise. The H/O VDOS cost persists and is larger: no-AR H 0.946–0.951,
+O 0.976–0.981 vs full H 0.854–0.857, O 0.957–0.964. A matching 2.5 ns deterministic `rescale_only`
+baseline is running on val_04; a stochastic 2.5 ns no-AR baseline was **not run** (not authorized).
+Do not fill its long-time number before it exists.
 
 ## 6. Five questions
 

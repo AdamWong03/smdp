@@ -117,6 +117,8 @@ PARAMETERS = [
      "parameters/rescale_only_100ps_metrics_20261127.json"),
     ("experiments/translation_acf_100ps_comparison_20261127.json",
      "parameters/translation_acf_100ps_comparison_20261127.json"),
+    ("experiments/stochastic_rescale_only_100ps_metrics_20261127.json",
+     "parameters/stochastic_rescale_only_100ps_metrics_20261127.json"),
 ]
 
 RESULTS = [
@@ -161,6 +163,22 @@ RESULTS = [
      "results/rescale_only_independent_100ps_rdf.json"),
     ("experiments/rescale_only_independent_100ps_20261127/analysis/vdos.json",
      "results/rescale_only_independent_100ps_vdos.json"),
+    ("experiments/stochastic_rescale_only_val04_100ps_20261127/trajectory.summary.json",
+     "results/stochastic_rescale_only_val04_100ps_summary.json"),
+    ("experiments/stochastic_rescale_only_independent_100ps_20261127/trajectory.summary.json",
+     "results/stochastic_rescale_only_independent_100ps_summary.json"),
+    ("experiments/stochastic_rescale_only_val04_100ps_20261127/analysis/motion.json",
+     "results/stochastic_rescale_only_val04_100ps_motion.json"),
+    ("experiments/stochastic_rescale_only_val04_100ps_20261127/analysis/rdf.json",
+     "results/stochastic_rescale_only_val04_100ps_rdf.json"),
+    ("experiments/stochastic_rescale_only_val04_100ps_20261127/analysis/vdos.json",
+     "results/stochastic_rescale_only_val04_100ps_vdos.json"),
+    ("experiments/stochastic_rescale_only_independent_100ps_20261127/analysis/motion.json",
+     "results/stochastic_rescale_only_independent_100ps_motion.json"),
+    ("experiments/stochastic_rescale_only_independent_100ps_20261127/analysis/rdf.json",
+     "results/stochastic_rescale_only_independent_100ps_rdf.json"),
+    ("experiments/stochastic_rescale_only_independent_100ps_20261127/analysis/vdos.json",
+     "results/stochastic_rescale_only_independent_100ps_vdos.json"),
 ]
 
 LOGS = [
@@ -232,6 +250,10 @@ LOGS = [
      "logs/rescale_only_val04_100ps_rollout.log"),
     ("experiments/rescale_only_independent_100ps_20261127/rollout.log",
      "logs/rescale_only_independent_100ps_rollout.log"),
+    ("experiments/stochastic_rescale_only_val04_100ps_20261127/rollout.log",
+     "logs/stochastic_rescale_only_val04_100ps_rollout.log"),
+    ("experiments/stochastic_rescale_only_independent_100ps_20261127/rollout.log",
+     "logs/stochastic_rescale_only_independent_100ps_rollout.log"),
 ]
 
 DOCS = [

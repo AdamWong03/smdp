@@ -14,6 +14,8 @@ the same measurement.
 | stochastic GLR | val_04 frame 0 | 2026110401 | 299.969 ± 17.84 | 7.4058 | 2.4830 / 2.5252 / 2.3977 | 0.0276 / 0.0540 / 0.0237 | 0.949 / 0.852 | **1.435 ± 0.130** | **1.403 ± 0.136** |
 | deterministic GLR | independent frame 0 | 2026110402 | 300.0005 | 7.4066 | 2.4818 / 2.5271 / 2.3977 | 0.0281 / 0.0437 / 0.0265 | 0.953 / 0.847 | **1.393 ± 0.079** | 1.419 ± 0.078 (audit) |
 | stochastic GLR | independent frame 0 | 2026110402 | 300.084 | 7.4087 | 2.4821 / 2.5284 / 2.3981 | 0.0280 / 0.0483 / 0.0266 | 0.950 / 0.853 | **1.387 ± 0.125** | 1.343 ± 0.031 (audit) |
+| deterministic rescale-only | val_04 frame 0 | 2026110401 | **pending** | pending | pending | pending | pending | **pending** | **pending** |
+| stochastic rescale-only 2.5 ns | — | — | **not run** | — | — | — | — | — | — |
 | official TrajCast 2.5 ns | frame 0 | 2026110401 | **pending** | pending | pending | pending | pending | **pending** | **pending** |
 
 \* The deterministic `motion.json` T std is the instantaneous 0.391 K; the block-mean std is
@@ -31,9 +33,13 @@ the table below.
 | reference block 0 | N/A | N/A | 300.19 ± 17.89† | 2.373 / 2.430 / 2.609 | — | — | **1.692** (one block) | **1.502** (one block) |
 | deterministic GLR (`glr_100ps`) | val_04 | 2026110401 | 299.99 ± 0.553* | 2.482 / 2.526 / 2.399 | 0.0322 / 0.1043 / 0.0256 | 0.964 / 0.848 | **1.711** | 1.528 |
 | deterministic GLR (`glr_noise_off`) | val_04 | 2026110401 | 299.99 ± 0.553* | 2.482 / 2.526 / 2.399 | 0.0336 / 0.0979 / 0.0255 | 0.962 / 0.849 | **1.623** | 1.473 |
-| deterministic GLR | independent | 2026110402 | pending analysis | pending | pending | pending | **1.659** | **1.494** |
+| deterministic GLR | independent | 2026110402 | 300.001 ± 0.041* | 2.482 / 2.526 / 2.398 | 0.0358 / 0.0981 / 0.0268 | 0.963 / 0.851 | **1.659** | **1.494** |
+| stochastic GLR | val_04 | 2026110401 | 300.159 ± 17.84 | 2.483 / 2.530 / 2.397 | 0.0355 / 0.1141 / 0.0218 | 0.957 / 0.854 | **1.417** | **1.382** |
+| stochastic GLR | independent | 2026110402 | 299.815 ± 17.86 | 2.488 / 2.527 / 2.387 | 0.0376 / 0.1112 / 0.0225 | 0.964 / 0.857 | **1.895** | **1.467** |
 | rescale-only baseline | val_04 | 2026110401 | 299.988 ± 0.553* | 2.482 / 2.543 / 2.382 | 0.0383 / 0.1215 / 0.0232 | 0.972 / 0.941 | **2.818** | **2.392** |
 | rescale-only baseline | independent | 2026110401 | 300.001 ± 0.041* | 2.482 / 2.544 / 2.381 | 0.0415 / 0.1314 / 0.0233 | 0.975 / 0.941 | **2.669** | **2.422** |
+| stochastic rescale-only | val_04 | 2026110401 | 299.168 ± 16.94 | 2.474 / 2.547 / 2.365 | 0.0329 / 0.1357 / 0.0176 | 0.976 / 0.951 | **1.928** | **2.254** |
+| stochastic rescale-only | independent | 2026110402 | 299.663 ± 17.51 | 2.484 / 2.542 / 2.372 | 0.0358 / 0.1484 / 0.0197 | 0.981 / 0.946 | **1.948** | **2.011** |
 | official TrajCast 100 ps | frame 0 | 2026110401 | 300.19 ± 17.68 | 2.505 / 2.463 / 2.444 | 0.0431 / 0.1180 / 0.0957 | 0.937 / 0.624 | not reported‡ | not reported‡ |
 
 † Reference block 0 T/partition from the first 100 ps of the 2.5 ns reference; the 2.5 ns mean T
@@ -54,6 +60,10 @@ higher. Do not claim a 25% deficit from a 100 ps comparison.
 | rescale-only val_04 | 0.9819 | 0.6622 | **0.0620** | −0.0621 | −0.0258 | **17.278** |
 | deterministic GLR independent | 0.9807 | 0.6421 | **0.0110** | −0.0810 | −0.0242 | **10.790** |
 | rescale-only independent | 0.9819 | 0.6622 | **0.0548** | −0.0615 | −0.0258 | **17.496** |
+| stochastic GLR val_04 | 0.9777 | 0.6308 | **0.0058** | −0.0867 | −0.0218 | **9.992** |
+| stochastic GLR independent | 0.9781 | 0.6382 | **0.0113** | −0.0797 | −0.0255 | **10.592** |
+| stochastic rescale-only val_04 | 0.9792 | 0.6588 | **0.0583** | −0.0663 | −0.0230 | **16.279** |
+| stochastic rescale-only independent | 0.9792 | 0.6582 | **0.0485** | −0.0695 | −0.0235 | **14.532** |
 
 The full GLR matches the reference block-0 ACF and its 0–5 ps integral (10.8–11.0 vs 11.34 fs).
 The rescale-only baseline has a 100 fs shoulder that is too high (0.055–0.062 vs 0.031) and an
@@ -102,8 +112,23 @@ See `experiments/D_PROVENANCE_20261127.md`:
 - **But the AR memory is not uniformly better:** rescale-only has a better H VDOS (0.941 vs
   0.848) and lower H VACF error (0.024 vs 0.073–0.076); its RDF O–H is worse (0.122–0.131 vs
   0.098–0.104). The method is a trade-off, not a free improvement.
-- The matching 2.5 ns rescale-only baseline is running on val_04 (one long start; the two 100 ps
-  starts cover initial-state independence). It will decide whether the simple scaling's
-  over-diffusion persists at long time or converges toward the reference. Do not fill a 2.5 ns
-  baseline number before it exists.
+- **Stochastic comparison:** full stochastic ACF integral 9.99–10.59 vs no-AR 14.53–16.28
+  (reference block 0 11.34); full GK D 1.38–1.47 vs no-AR 2.01–2.25 (reference block 0 1.50).
+  The AR memory's ACF/GK benefit **persists under stochastic**. The MSD benefit is clear on
+  val_04 (1.42 vs 1.93) but nearly tied on independent (1.90 vs 1.95), within the single-100-ps
+  block noise (the same stochastic run's 100 ps independent D is 1.90 vs its 2.5 ns D 1.39).
+- **H VDOS cost persists under stochastic:** no-AR 0.946–0.951 vs full 0.854–0.857; O VDOS
+  0.976–0.981 vs 0.957–0.964; H VACF 0.019–0.021 vs 0.067–0.069. The AR memory consistently
+  degrades the high-frequency H/O spectra. O–H RDF is better with AR (0.111–0.114 vs
+  0.136–0.148), while O–O/H–H RDF is better without AR.
+- **Deterministic vs stochastic conclusion:** the AR trade-off direction is the same; the
+  stochastic rescale restores the canonical KE distribution (T std 17.5–17.9 K, partition std
+  0.25), while the deterministic full/baseline have a fixed T/KE target. The stochastic full's
+  total-KE mean is closer to the reference than the baseline (7.411/7.403 vs 7.386/7.398); the
+  difference is within the 100 ps sample error.
+- The matching 2.5 ns deterministic rescale-only baseline is running on val_04 (one long start;
+  the two 100 ps starts cover initial-state independence). It will decide whether the simple
+  scaling's over-diffusion persists at long time or converges toward the reference. The
+  stochastic 2.5 ns rescale-only was **not run** (not authorized); its long-time AR benefit is
+  therefore unmeasured. Do not fill a 2.5 ns baseline number before it exists.
 - Official TrajCast 2.5 ns is still running; no 2.5 ns D/VDOS number is available yet.
