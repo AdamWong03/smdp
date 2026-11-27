@@ -1,0 +1,18 @@
+{
+  "trajcast_water_2k.pt": {
+    "sha256": "86406e89be6f800d5233c838a64943453e1772229e64352e33299b8443b0979c",
+    "bytes": 72992499
+  },
+  "trajcast_quartz_2k.pt": {
+    "sha256": "4b4a430c23a4c53d751a7d59b9d47d18dddba746cd0b1e4f90ad94de00bce035",
+    "bytes": 72992880
+  },
+  "trajcast_water_parity_1k.pt": {
+    "sha256": "a17e4ab4618df52d8bf936dd648555ce4f66f4c49e29de7faadf8507a1593f67",
+    "bytes": 36567966
+  },
+  "trajcast_water_smoke.pt": {
+    "sha256": "c3f2dbdad05f35031a564d0e1a1cb80f8ad3421b611bdd64bee04158482f421f",
+    "bytes": 72993642
+  }
+}
